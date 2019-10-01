@@ -23,7 +23,7 @@
 ============================================================================== */
 
 /// \file volume_io.h
-/// Contains functions reading and writing volumetric data using files in .DX format.
+/// \brief Functions reading and writing volumetric data using files using .DX format.
 /// \author Valerii Sukhorukov
 
 #ifndef UTILS_VOLUME_IO
@@ -32,7 +32,9 @@
 #include "misc.h"
 #include "msgr.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 /// \brief Writes 3d matrix to a file using .DX format.
@@ -49,8 +51,8 @@ template <typename K, typename L, typename T>
 static void save_as_DX(
 	const std::string& filename,
 	const vec3<K>& v,
-	A3<T> origin,		// origin and delta by value
-	A3<T> delta,
+	A3<T> origin,		// by value
+	A3<T> delta,		// by value
 	const std::string& units,
 	Msgr& msgr )
 {
