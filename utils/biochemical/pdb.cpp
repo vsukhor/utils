@@ -24,7 +24,9 @@
 
 #include "pdb.h"
 
+/// Library-wide.
 namespace Utils {
+/// \brief Biochemistry-related stuff.
 namespace Biochemical {
 
 float Pdb::scaling;		// convert nm <-> A; nanometers are used internally

@@ -43,7 +43,9 @@
 
 #include "core.h"
 
+/// Library-wide.
 namespace Utils {
+/// \brief Pseugo-random number generation.
 namespace Random {
 
 using namespace Common;

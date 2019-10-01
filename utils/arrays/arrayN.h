@@ -23,23 +23,29 @@
 ============================================================================== */
 
 /**
- * This class implements writing meshes in the GMV format.
- * For a full description of the GMV format and to obtain the
- * GMV software see http://www.generalmeshviewer.com
- *
- * \author Benjamin S. Kirk
- * \date 2004
- */
+* \file arrayN.h
+* \brief N-element constant-size arrays.
+* \author Valerii Sukhorukov
+*/
 
 #ifndef UTILS_ARRAYS_ARRAYN_H
 #define UTILS_ARRAYS_ARRAYN_H
 
 #include <fstream>
+
 #include "../common/misc.h"
 
+/// Library-wide.
 namespace Utils {
+/// Custom arrays.
 namespace Arrays {
 
+/// \brief Three-element arrays.
+/// \details This class specializes array template for N-element array of arithmetic types.
+/// Implements convenient arithmetics as well as some functionaity
+/// commonly used in N-dimensional geometric applications.
+/// \tparam N Array length.
+/// \tparam T Type of the elements.
 template <unsigned N, typename T>
 class array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
 								 std::greater_equal<>()(N,5)>> {
@@ -48,7 +54,7 @@ T n[N] = {};
 
 public:
 
-static constexpr auto ii {make_iota_array<int,N>()};
+static constexpr auto ii {make_iota_array<int,N>()};	///< compile-time indexes of the elements.
 
 
 constexpr array( const T m=static_cast<T>(0) ) noexcept {

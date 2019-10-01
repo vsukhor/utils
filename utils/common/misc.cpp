@@ -22,9 +22,17 @@
 
 ============================================================================== */
 
+/**
+* \file misc.h
+* A loose collection of functions of common use.
+* \author Valerii Sukhorukov
+*/
+
 #include "misc.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 #ifdef  _WIN32
@@ -32,6 +40,15 @@ const std::string SLASH {"\\"};
 #else
 const std::string SLASH {"/"};
 #endif
+
+std::string operator"" _str( long double number )
+{
+    return STR(number);
+}
+std::string operator"" _str( unsigned long long number )
+{
+    return STR(number);
+}
 
 long long assert_fun(
 	const char* EX,
@@ -43,16 +60,6 @@ long long assert_fun(
 			   "File " + file + ", Line " + std::to_string(line) + "\n" +
 			   "Reason: " + msg << std::endl;
 	std::abort();
-}
-
-
-std::string operator"" _str( long double number )
-{
-    return STR(number);
-}
-std::string operator"" _str( unsigned long long number )
-{
-    return STR(number);
 }
 
 bool file_exists( const std::string& name )
@@ -107,13 +114,8 @@ void copy_text_file(const std::string& from, const std::string& to)
 		ofs << line << std::endl;
 }
 
-template float avg<float>( std::vector<float> const& );
-template double avg<double>( std::vector<double> const& );
-
-inline double avg(std::vector<int> const& v )
-{
-    return 1.0 * std::accumulate(v.begin(), v.end(), 0LL) / v.size();
-}
+//template float avg<float>( std::vector<float> const& );
+//template double avg<double>( std::vector<double> const& );
 
 std::string trim( const std::string& str, const std::string& whitespace )
 {

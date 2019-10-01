@@ -22,6 +22,12 @@
 
 ============================================================================== */
 
+/**
+* \file array2.h
+* \brief Two-element arrays.
+* \author Valerii Sukhorukov
+*/
+
 #ifndef UTILS_ARRAYS_ARRAY2_H
 #define UTILS_ARRAYS_ARRAY2_H
 
@@ -32,11 +38,18 @@
 
 #include "../common/misc.h"
 
+/// Library-wide.
 namespace Utils {
+/// Custom arrays.
 namespace Arrays {
 
+/// \brief Two-element arrays.
+/// \details This class specializes array template for two-element array of arithmetic types.
+/// Implements convenient arithmetics as well as some functionaity
+/// commonly used in 2-dimensional geometric applications.
+/// \tparam T Type of the elements.
 template <typename T>
-class array<2,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
 
 T n[2] = {};
  
@@ -321,6 +334,7 @@ static constexpr array mean( const std::vector<array>& a ) noexcept {
 static constexpr array mean( const array a[], size_t i1, size_t i2 ) noexcept {
 	return sum(a, i1, i2) / (i2 - i1 + 1);
 }
+
 void read( std::ifstream& ist ) noexcept {
 	ist.read( reinterpret_cast<char*>(&n[0]), sizeof(T) );
 	ist.read( reinterpret_cast<char*>(&n[1]), sizeof(T) );

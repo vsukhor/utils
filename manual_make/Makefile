@@ -2,7 +2,7 @@
 # to override or supplement the environment variables
 # e.g., the call from the directory where the Makefile is, may look like:
 # make all AS=/usr/bin/as AR=/usr/bin/ar CC=/usr/local/gcc-9.1.0/bin/gcc-9.1.0
-# Alternatively, hardcode them directly in your local copy of this file.
+# Alternatively, $(AR), $(AS) and $(CC) may be hardcoded directly in the local copy of this file.
 #
 # To check the actual value of a variable $(VAR):
 # make print-VAR

@@ -39,13 +39,16 @@
 
 #include "msgr.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
+/// Exeption and exit handlers.
 namespace Exceptions {
 
 /**
 * Simple process termination as a global function.
-* Outputs message \p msg to \a Msgr.
+* \details Outputs message \p msg to \a Msgr.
 * \param msg Message to output.
 * \return EXIT_FAILURE
 * \see Msgr
@@ -56,7 +59,7 @@ int simple(const std::string& msg,
 // Simple Exceptions xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* Simple process termination with exception.
+* \brief Uncomplicated process termination with exception.
 */
 class Simple
 	: public std::exception {
@@ -64,26 +67,26 @@ class Simple
 public:
 
 	/**
-	* Default constructor.
+	* \brief Default constructor.
 	*/
 	Simple() = default;
 
 	/**
-	* Constructor for printing to a log record.
-	* Outputs message \p msg to \a Msgr sor tandard output (if \p msgr is nullptr).
+	* \brief Constructor for printing to a log record.
+	* \details Outputs message \p msg to \a Msgr sor tandard output (if \p msgr is nullptr).
 	* \param msg Message to output.
-	* \see Msgr
+	* \param msgr Output message processor.
 	*/
 	explicit Simple(const std::string& msg,
 					Msgr* msgr=nullptr);
 
 	/**
-	* Constructor template for message with parameter \u.
-	* Outputs message \p msg to \a Msgr.
+	* \brief Constructor template for message with parameter \u.
+	* \details Outputs message \p msg to \a Msgr.
+	* \tparam T Type of the essage parameter.
 	* \param msg Message to output.
 	* \param u Message parameter.
-	* \tparam T Type of the essage parameter.
-	* \see Msgr
+	* \param msgr Output message processor.
 	*/
 	template<typename T>
 	explicit Simple(const std::string& msg,

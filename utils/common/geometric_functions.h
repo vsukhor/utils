@@ -21,6 +21,13 @@
  SOFTWARE.
 
 ============================================================================== */
+
+/**
+* \file misc.h
+* \brief A collection of genetally useful geometric functions.
+* \author Valerii Sukhorukov
+*/
+
 #ifndef UTILS_COMMON_GEOMETRIC_FUNCTIONS
 #define UTILS_COMMON_GEOMETRIC_FUNCTIONS
 
@@ -28,22 +35,24 @@
 #include "msgr.h"
 #include "../arrays/all.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 using namespace Arrays;
 
 /**
 * \class Geometric geometric_functions.h
-* \brief A realtively loose collection of geometry-related static functions.
-* \tparam Floating point type.
+* \brief A loose collection of geometry-related static functions.
+* \tparam T Floating point type.
 */
 template <typename T>
 class Geometric {
 
 public:
 
-	/// Make sure that the template parameter is a floating type.
+	// Make sure that the template parameter is a floating type.
 	static_assert(std::is_floating_point<T>::value,
 				  "Class Geometric can only be instantiated with floating point types");
 
@@ -60,26 +69,30 @@ public:
 											  const A3<T>& e
 											 ) noexcept;
 	
-	/// Calculate area of an ellipse.
-	/// Its semi-major axes are \p a and \p b.
+	/// \brief Calculate area of an ellipse.
+	/// \param a, b Lengths of semi-major axes.
 	static constexpr T ellipse_area(const T a,
 									const T b
 									) noexcept;
 
 	/// \brief Calculate volume of an ellipsoid.
-	/// Its semi-major axes are \p a, \p b and \p c..
+	/// \param a, b, c  Lengths of semi-major axes.
 	static constexpr T ellipsoid_vol(const T a,
 									 const T b,
 									 const T c
 									 ) noexcept;
 	 
 	/// \brief Calculate volume of an elliptic cylinder.
-	/// Dimensions of the cylinder semi-major axes are \p a and \p b, the height is \p h.
-	static constexpr T elliptic_cylinder_vol(const T a, const T b, const T h) noexcept;
+	/// \param a, b Dimensions of the cylinder semi-major axes,
+	/// \param h Cylinder height.
+	static constexpr T elliptic_cylinder_vol(const T a,
+											 const T b,
+											 const T h
+											 ) noexcept;
 	
 	/// \brief Calculate volume of an ellipsoidal cap.
-	/// Semi-major axes of the ellipsoid are \p a , \p b , and \p c
-	/// The cap height is \p h : |h| < c.
+	/// \param a, b, c  Lengths of semi-major axes.
+	/// \param h The cap height (|h| < c).
 	static constexpr T ellipsoid_cap_vol(const T a,
 										 const T b,
 										 const T c,
@@ -87,35 +100,35 @@ public:
 										 ) noexcept;
 	 
 	/// \brief Calculate base area of an ellipsoidal cap.
-	/// Dimensions of semi-major axes of the ellipsoid are \p a , \p b , and \p c
-	/// The cap height is \p h : |h| < c.
+	/// \param a, b, c  Lengths of semi-major axes.
+	/// \param h The cap height (|h| < c).
 	static constexpr T ellipsoid_cap_base_area(const T a,
 											   const T b,
 											   const T c,
 											   const T h
 											   ) noexcept;
 	
-	/// Calculate surface area of a spheroid.
-	/// Spheroid is given by \p r  = {a, b, c}, a = b, i.e. (x^2+y^2)/a^2 + z^2/c^2 = 1.
+	/// \brief Calculate surface area of a spheroid.
+	/// \details Spheroid is given by \p r  = {a, b, c}, a = b, i.e. (x^2+y^2)/a^2 + z^2/c^2 = 1.
 	static constexpr T spheroid_surf_area(const A3<T>& r,	///< Spheroid dimensions at semi-major axes.
-										  Msgr& msgr		///< Printing utility.
-										  ) noexcept;
-	
-	/// \brief Unit normal on surface of an axis-aligned ellipsoid.
-	/// Calculate unit normal vector at point \p p on surface
+										  Msgr& msgr		///< Output message processor.
+										 ) noexcept;
+
+	/// \brief Unit normal on the surface of an axis-aligned ellipsoid.
+	/// \details Calculate unit normal vector at point \a p on surface
 	/// of an axis-aligned ellipsoid (x/a)^2 + (y/b)^2 + (z/c)^2 = 1 with dimensions \p r = {a,b,c}.
 	static constexpr A3<T> unormal_on_ellipsoid(const A3<T>& r,	///< Dimensions of an ellipsoid.
 												const A3<T>& p	///< Point on ellipsoid surface.
 												) noexcept;
 
 	/// \brief Determine symmetry axes of a spheroid.
-	/// The spheroid should be axis-aligned. Returns (-1, -1, -1) if spheroid is a shpere,
+	/// \details The spheroid should be axis-aligned. Returns (-1, -1, -1) if spheroid is a shpere,
 	/// otherwise (i, j, k) where (i,j) are axes indexes of unequal dimensions and k is index of the pole axis.
 	/// \param r Dimensions of the spheroid semi-major axes.
 	static A3<int> spheroid_axes_symmetry(const A3<T>& r) noexcept;
 
 	/// \brief Ellipse resulting from the horizontal plane cross-section of an ellipsoid.
-	/// Calculates dimensions {a, b} at semi-axes of an ellipse x^2/a^2 + y^2/b^2 = 1 resulting from
+	/// \details Calculates dimensions {a, b} at semi-axes of an ellipse x^2/a^2 + y^2/b^2 = 1 resulting from
 	/// the horizontal z = h plane cross-section of an ellipsoid x^2/e[0]^2 + y^2/e[1]^2 + z^2/e[2]^2 = 1
 	/// having dimensions \p e.
 	/// \return Semi-axes of the ellipsoid cross-section.
@@ -127,7 +140,7 @@ public:
 	// Line intersections ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	/// \brief Intersection of a line and an ellipsoid.
-	/// Find intersection of a line through a point \p v in the direction unit vector \p d and an ellipsoid.
+	/// \details Find intersection of a line through a point \p v in the direction unit vector \p d and an ellipsoid.
 	// The ellipsoid x^2/a^2 + y^2/b^2 + z^2/c^2 = 1 is given by its semi-axes e = {a, b, c}.
 	static constexpr T intersection_line_ellipsoid(const A3<T>& v,	///< Point on a line.
 												   const A3<T>& e,	///< Ellipsoid semi-axes.
@@ -144,7 +157,7 @@ public:
 												 ) noexcept;
 
 	/// \brief Intersection of a line and a rotated ellipse centered at the origin.
-	/// The line is given by a point \p v = (v0, v1) in plane and a direction vector \p d = (d0, d1).
+	/// \details The line is given by a point \p v = (v0, v1) in plane and a direction vector \p d = (d0, d1).
 	/// The ellipse is rotated counterclockwise through angle alpha about the origin, has semi-axes \p e = (a, b)
 	/// (x*cos(alpha) + ysin(alpha))^2 / a^2 + (x*sin(alpha) - y*cos(alpha))^2 / b^2 = 1.
 	/// \see https://www.maa.org/external_archive/joma/Volume8/Kalman/General.html
@@ -170,7 +183,7 @@ public:
 											   ) noexcept;
 
 	/// \brief Find intersection of a line and a plane.
-	/// The line is defined by a point \p p0 and direction vector \p d .
+	/// \details The line is defined by a point \p p0 and direction vector \p d .
 	/// The plane is defined by three points \p v1  \p v2  \p v3
 	/// \return Distance in direction \p d from \p p0 to the intersection point
 	static constexpr T intersection_line_plane(const A3<T>& p0,		///< Point on the line.
@@ -181,7 +194,7 @@ public:
 											   ) noexcept;
 
 	/// \brief Find intersection of a line and a plane.
-	/// The line is defined by a point \p p0 and direction vector \p d
+	/// \details The line is defined by a point \p p0 and direction vector \p d
 	/// The plane is defined by a point \p v and a normal \p n
 	/// \return Distance in direction \p d from \p p0 to the intersection point
 	static constexpr T intersection_line_plane(const A3<T>& p0,		///< Point on the line.
@@ -191,7 +204,7 @@ public:
 											   ) noexcept;
 
 	/// \brief Find intersection of a vertical line and a plane.
-	/// The line is defined by a point \p p0.
+	/// \details The line is defined by a point \p p0.
 	/// The plane is defined by a point \p v, and a unit normal vector \p n
 	/// \return Distance between \p p0 and the intersection point ( parallel or antiparallel to the line depending on \p sign )
 	static constexpr T intersection_vertical_line_plane( const A3<T>& p0,	///< Point on the line.
@@ -212,23 +225,23 @@ public:
 
 	// Rotations +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	/// Calculate rotation matrix for rotation over \p angle around a general axis \p n .
+	/// \brief Calculate rotation matrix for rotation over \p angle around a general axis \p n .
 	/// \param[in] n Direction of rotation axis.
 	/// \param[in] angle Rotation angle.
 	/// \param[out] rm Rotation matrix.
 	static constexpr void rotmat(const A3<T> n, const T angle, T rm[3][3]) noexcept;
 
-	/// Calculate rotation matrix for rotation over \p angle around an axis parallel to 'x'.
+	/// \brief Calculate rotation matrix for rotation over \p angle around an axis parallel to 'x'.
 	/// \param[in] angle Rotation angle.
 	/// \param[out] rm Rotation matrix.
 	static constexpr void rotmatx(const T angle, T rm[3][3]) noexcept;
 
-	/// Calculate rotation matrix for rotation over \p angle around an axis parallel to 'y'.
+	/// \brief Calculate rotation matrix for rotation over \p angle around an axis parallel to 'y'.
 	/// \param[in] angle Rotation angle.
 	/// \param[out] rm Rotation matrix.
 	static constexpr void rotmaty(const T angle, T rm[3][3]) noexcept;
 
-	/// Calculate rotation matrix for rotation over \p angle around an axis parallel to 'z'.
+	/// \brief Calculate rotation matrix for rotation over \p angle around an axis parallel to 'z'.
 	/// \param[in] angle Rotation angle.
 	/// \param[out] rm Rotation matrix.
 	static constexpr void rotmatz(const T angle, T rm[3][3]) noexcept;
@@ -245,9 +258,9 @@ public:
 
 	// Some conversions ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	///  Convert sphericl coordinates to cartesian coordinates.
+	/// Convert spherical coordinates to cartesian coordinates.
 	static constexpr A3<T> sph2cart(const T ph,			///< Inclination.
-						  			const T th			///< Azimuth.
+						  			const T th,			///< Azimuth.
 						  			const T rad=one<T>	///< Radius.
 						  			);
 
@@ -273,7 +286,7 @@ public:
 	// Closest points ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	/// \brief Point on a line closest to the origin.
-	/// Find point closest to the origin on the line that passes through point \p p in the direction \p d .
+	/// \details Find point closest to the origin on the line that passes through point \p p in the direction \p d .
 	/// The 3D line is defined with 6 Plücker coordinates L = (d, p × d),
 	/// where \p d is the direction of the line, and \p p is any point along the line.
 	/// \see https://math.stackexchange.com/questions/895385/point-on-an-ellipsoid-closest-to-line?noredirect=1&lq=1
@@ -283,7 +296,7 @@ public:
 										  ) noexcept;
 	
 	/// \brief Point on an ellipsoid closest to line.
-	/// Find point closest to line on an ellipsoid given by its semi-major axes \p e
+	/// \details Find point closest to line on an ellipsoid given by its semi-major axes \p e
 	/// Center of the ellipsoid (x/a)^2 + (y/b)^2 + (z/c)^2 = 1 with dimensions e = {a,b,c} is at the origin.
 	/// https://math.stackexchange.com/questions/895385/point-on-an-ellipsoid-closest-to-line?noredirect=1&lq=1
 	/// \return Point on an ellipsoid closest to line.
@@ -294,10 +307,10 @@ public:
 
 	// Projections +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	/// \brief Projection of a vector \p d to z=0 plane.
+	/// Projection of a vector \b d to z=0 plane.
 	static constexpr A3<T> proj2z0plane( const A3<T>& d ) noexcept;
 
-	/// \brief Projection of vector \p v on a plane defined by the normal \p n.
+	/// Projection of vector \b v on a plane defined by the normal \b n.
 	static constexpr A3<T> vector_proj2plane(const A3<T>& v,
 											 const A3<T>& n
 											 ) noexcept;
@@ -339,7 +352,7 @@ public:
 	// Points inside triangle ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	/// \brief Determines if a point is inside a 2D triangle.
-	/// Find out if point \p pt is inside triangle given by its vertexes \p v1, \p v2 and \p v3.
+	/// \details Find out if point \p pt is inside triangle given by its vertexes \p v1, \p v2 and \p v3.
 	/// https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
 	static bool point_in_triangle(const A2<T>& pt,
 								  const A2<T>& v1,
@@ -348,7 +361,7 @@ public:
 								  ) noexcept;
 
 	/// \brief Determines if a point is inside a 2D triangle.
-	/// Find out if point \p p is inside triangle given by its vertexes \p v1, \p v2 and \p v3.
+	/// \details Find out if point \p p is inside triangle given by its vertexes \p v1, \p v2 and \p v3.
 	/// https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
 	static bool point_in_triangle (const T* p,
 								   const T* v1,
@@ -804,7 +817,7 @@ intersection_line_cone( const A3<T>& w,
 //----------------------------------------------------------------------------------------------------------------------
 
 // projection of a vector 'd' to z=0 plane
-template <typename T> constexpr inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 proj2z0plane( const A3<T>& d ) noexcept
 {
@@ -854,7 +867,7 @@ rotmaty( T angle, T rm[3][3] ) noexcept
 	const A3<T> n {zero<T>, one<T>, zero<T>};
 	
 	const auto sia = std::sin(angle);
-	const auto coa = std::cos(angle)}
+	const auto coa = std::cos(angle);
 	
 	rm[0][0] = zero<T>;		rm[0][1] = zero<T>;								rm[0][2] = n[1]*sia; 
 	rm[1][0] = zero<T>;		rm[1][1] = n[1]*n[1] + (one<T>-n[1]*n[1])*coa;	rm[1][2] = zero<T>;
@@ -897,7 +910,7 @@ unormal_on_ellipsoid( const A3<T>& r, const A3<T>& p ) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 
 // given the dimensions of a 3D body, determine if all_sides_are_equal
-template <typename T> constexpr inline
+template <typename T> constexpr
 bool Geometric<T>::
 all_sides_are_equal( const A3<T>& e ) noexcept
 {
@@ -908,7 +921,7 @@ all_sides_are_equal( const A3<T>& e ) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 
 // given the dimensions of a 3D body, determine if two_sides_are_equal
-template <typename T> constexpr inline
+template <typename T> constexpr
 bool Geometric<T>::
 two_sides_are_equal( const A3<T>& e ) noexcept
 {
@@ -919,22 +932,23 @@ two_sides_are_equal( const A3<T>& e ) noexcept
 
 //----------------------------------------------------------------------------------------------------------------------
 
-template <typename T> inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 sph2cart( const T ph,		// inclination
 		  const T th,		// azimuth
 		  const T rad )
 {
-	return { std::cos(ph) * std::cos(th),
-			 std::cos(ph) * std::sin(th),
-			 std::sin(ph) } * rad;
+	const auto coph = std::cos(ph);
+	return A3<T>{ coph * std::cos(th),
+			      coph * std::sin(th),
+			  	  std::sin(ph) } * rad;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
 // conversion of spherical to cartesian coordinates
 // phi: inclination;   theta: azimuth
-template <typename T> constexpr inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 sphere2cart( const T r,
 			 const T theta,
@@ -950,7 +964,7 @@ sphere2cart( const T r,
 
 // conversion of polar to cartesian coordinates
 // phi: inclination;   theta: azimuth
-template <typename T> constexpr inline
+template <typename T> constexpr
 A2<T> Geometric<T>::
 polar2cart( const T r,
 			const T theta ) noexcept
@@ -962,7 +976,7 @@ polar2cart( const T r,
 //----------------------------------------------------------------------------------------------------------------------
 
 // point on the line closest to the origin
-template <typename T> constexpr inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 ptClosest2orgn( const A3<T>& p,
 				const A3<T>& d ) noexcept
@@ -976,7 +990,7 @@ ptClosest2orgn( const A3<T>& p,
 //----------------------------------------------------------------------------------------------------------------------
 
 // point on an ellipsoid closest to line
-template <typename T> constexpr inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 ellipsoid_closest_point2Line( const A3<T>& ptc2o,
 							  const A3<T>& elps ) noexcept
@@ -994,7 +1008,7 @@ ellipsoid_closest_point2Line( const A3<T>& ptc2o,
 //----------------------------------------------------------------------------------------------------------------------
 
 // projection of vector v on a plane given by the normal n
-template <typename T> constexpr inline
+template <typename T> constexpr
 A3<T> Geometric<T>::
 vector_proj2plane( const A3<T>& v,
 				   const A3<T>& n ) noexcept
@@ -1076,7 +1090,7 @@ squared_dist3D_Segment_to_Segment( const A3<T>& S10,
 
 //----------------------------------------------------------------------------------------------------------------------
 
-template <typename T>
+template <typename T> constexpr
 std::vector<A2<T>> Geometric<T>::
 hexagonal_lattice( const A2<T> orig,
 				   const T step,
@@ -1091,7 +1105,7 @@ hexagonal_lattice( const A2<T> orig,
 									 sign * static_cast<T>(j) * std::sin(pi<T>/three<T>)} * step);
 	};
 
-	point(0, 0);
+	add_point(0, 0);
 	for (szt j=1; j<=numLayers; j++) {
 		add_point(j, 1);
 		add_point(j, -1);

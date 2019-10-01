@@ -23,7 +23,7 @@
 ============================================================================== */
 
 /// \file core.h
-/// Contains class Core.
+/// \brief Contains class Random::Core.
 /// \author Valerii Sukhorukov
 
 #ifndef UTILS_RANDOM_CORE_H
@@ -38,7 +38,9 @@
 #include "../common/msgr.h"
 #include "../common/exceptions.h"
 
+/// Library-wide.
 namespace Utils {
+/// \brief Pseugo-random number generation.
 namespace Random {
 using namespace Common;
 

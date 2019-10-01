@@ -29,7 +29,9 @@
 */
  #include "msgr.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 Msgr::

@@ -22,39 +22,41 @@
 
 ============================================================================== */
 
-/// \file volume_io.h
-/// \brief Functions reading and writing volumetric data using files using .DX format.
+/// \file dx_io.h
+/// \brief Functions reading and writing volumetric data using .DX file format.
 /// \author Valerii Sukhorukov
 
-#ifndef UTILS_VOLUME_IO
-#define UTILS_VOLUME_IO
+#ifndef UTILS_VOLUMETRIC_DX_IO
+#define UTILS_VOLUMETRIC_DX_IO
 
 #include "misc.h"
 #include "msgr.h"
 
 /// Library-wide.
 namespace Utils {
-/// General stuff.
-namespace Common {
+/// Volume data io.
+namespace Volumetric {
 
-/// \brief Writes 3d matrix to a file using .DX format.
-/// \tparam K Type of the original data values.
-/// \tparam L Floating type used for recording.
-/// \tparam T Floating type used in dimensional description.
-/// \param filename Name of the file.
-/// \param v 3d matrix containing data to save.
-/// \param origin Position of the coordinate system origin.
-/// \param delta Step sizes in each dimension.
-/// \param units Length units used.
-/// \param msgr Output message processor.
+/**
+ * \brief Writes 3d matrix to a file using .DX format.
+ * \tparam K Type of the original data values.
+ * \tparam L Floating type used for recording.
+ * \tparam T Floating type used in dimensional description.
+ * \param filename Name of the file.
+ * \param v 3d matrix containing data to save.
+ * \param origin Position of the coordinate system origin.
+ * \param delta Step sizes in each dimension.
+ * \param units Length units used.
+ * \param msgr Output message processor.
+ */
 template <typename K, typename L, typename T>
-static void save_as_DX(
-	const std::string& filename,
-	const vec3<K>& v,
-	A3<T> origin,		// by value
-	A3<T> delta,		// by value
-	const std::string& units,
-	Msgr& msgr )
+void save_as_DX(
+		const std::string& filename,
+		const vec3<K>& v,
+		A3<T> origin,		// by value
+		A3<T> delta,		// by value
+		const std::string& units,
+		Msgr& msgr )
 {
 	if (units == "nm") {
 		delta *= ten<T>;
@@ -65,12 +67,14 @@ static void save_as_DX(
 	std::ofstream fout {filename};
 	if (!fout.is_open())
 		msgr.exit("Error while saving volume map: Unable to open file: "+filename);
-	std::cout << "Started writing to "+filename << std::endl;
+
+	msgr.print("Started writing to "+filename);
+
 	std::size_t npoints = v.size() * v[0].size() * v[0][0].size();
 
-	fout << std::string( "object 1 class gridpositions counts ") + STR(v.size()) + " "
-																 + STR(v[0].size()) + " "
-																 + STR(v[0][0].size()) << std::endl;
+	fout << std::string("object 1 class gridpositions counts ") + STR(v.size()) + " "
+																+ STR(v[0].size()) + " "
+																+ STR(v[0][0].size()) << std::endl;
 	fout << std::string("origin ") + STR(origin[0]) + " " + STR(origin[1]) + " " + STR(origin[2]) << std::endl;
 
 	fout << std::string("delta ") + STR(delta[0]) + " " + STR(0)        + " " + STR(0) << std::endl;
@@ -100,38 +104,44 @@ static void save_as_DX(
 	fout << std::endl;
 	fout << std::string("object \"distance (protein) [A]\" class field") << std::endl;
 	fout << std::endl;
-	std::cout << "Finished writing to "+filename << std::endl;
+
+	msgr.print("Finished writing to "+filename);
 }
 
-/// \brief Reads 3d volumetric data from a .DX format file into a matrix.
-/// \tparam K Type of the output data values.
-/// \tparam T Floating type used in the .DX records.
-/// \param filename Name of the file.
-/// \param[out] v 3d matrix containing data to save.
-/// \param[out] origin Position of the coordinate system origin.
-/// \param[out] delta Step sizes in each dimension.
-/// \param[in] bin Ddata dimensions.
-/// \param[in] units Length units used.
-/// \param msgr Output message processor.
+/**
+* \brief Reads 3d volumetric data from a .DX format file into a matrix.
+* \tparam K Type of the output data values.
+* \tparam T Floating type used in the .DX records.
+* \param filename Name of the file.
+* \param[out] v 3d matrix containing data to save.
+* \param[out] origin Position of the coordinate system origin.
+* \param[out] delta Step sizes in each dimension.
+* \param[in] bin Ddata dimensions.
+* \param[in] units Length units used.
+* \param msgr Output message processor.
+*/
 template <typename K, typename T>
-static void readDX( const std::string& filename,
-					vec3<K>& v,
-					A3<T>& origin,
-					A3<T>& delta,
-					A3<szt>& ms,
-					const std::vector<uint>& bin,
-					const std::string& units,
-					Msgr &msgr )
+void read_as_DX(
+		const std::string& filename,
+		vec3<K>& v,
+		A3<T>& origin,
+		A3<T>& delta,
+		A3<szt>& ms,
+		const std::vector<uint>& bin,
+		const std::string& units,
+		Msgr &msgr )
 {
 	if (bin[0] != 1 ||
 		bin[1] != 1 ||
 		bin[2] != 1 )
 		msgr.exit("Error: readDX with bin != 1 is not implemented for "+filename);
+
 	std::ifstream fin {filename, std::ios::in};
 	if (!fin.is_open())
 		msgr.exit("Error while reading volume map: Unable to open file at "+filename);
 
-	msgr.print{"Started reading "+filename);
+	msgr.print("Started reading "+filename);
+
 	std::string line;
 	szt xdim, ydim, zdim;
 	std::getline(fin, line);
@@ -149,6 +159,7 @@ static void readDX( const std::string& filename,
 	}
 	else
 		numlines = size_t(npoints/3) + 1;
+
 	std::getline(fin, line);
 	sscanf(line.c_str(), "%*s %f %f %f", &origin[0], &origin[1], &origin[2]);	// origin
 	std::getline(fin, line);
@@ -188,12 +199,12 @@ static void readDX( const std::string& filename,
 		origin /= ten<T>;
 	}
 	else if (units != "A")
-		msgr.exit("Error while saving volume map: length units not supported  ");
+		msgr.exit("Error while reading volume map: length units not supported  ");
 
 	msgr.print("Finished reading " + filename);
 }
 
-} 	// namespace Common
+} 	// namespace Volumetric
 }	// namespace Utils
 
-#endif // UTILS_VOLUME_IO
+#endif // UTILS_VOLUMETRIC_DX_IO

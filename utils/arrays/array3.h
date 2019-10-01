@@ -22,6 +22,12 @@
 
 ============================================================================== */
 
+/**
+* \file array3.h
+* \brief Three-element arrays.
+* \author Valerii Sukhorukov
+*/
+
 #ifndef UTILS_ARRAYS_ARRAY3_H
 #define UTILS_ARRAYS_ARRAY3_H
 
@@ -29,8 +35,10 @@
 #include <cmath>
 #include <type_traits>
 #include <array>
+
 #include "../common/misc.h"
 
+/// Library-wide.
 namespace Utils {
 
 namespace Common {
@@ -38,9 +46,15 @@ template <typename>
 class Geometric;
 }
 
+/// Custom arrays.
 namespace Arrays {
 using namespace Utils::Common;
 
+/// \brief Three-element arrays.
+/// \details This class specializes array template for three-element array of arithmetic types.
+/// Implements convenient arithmetics as well as some functionaity
+/// commonly used in 3-dimensional geometric applications.
+/// \tparam T Type of the elements.
 template <typename T>
 class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 

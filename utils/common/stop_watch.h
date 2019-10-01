@@ -21,7 +21,11 @@
  SOFTWARE.
 
 ============================================================================== */
-
+/**
+* \file stop_watch.h
+* Timing class.
+* \author Valerii Sukhorukov
+*/
 
 #ifndef UTILS_COMMON_STOP_WATCH_H
 #define UTILS_COMMON_STOP_WATCH_H
@@ -29,7 +33,9 @@
 #include <chrono>
 #include <ctime>
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 

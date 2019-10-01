@@ -24,13 +24,15 @@
 
 /**
 * \file threads.h
-* Implements class Threads.
+* \brief Implements class Threads.
 * \author Valerii Sukhorukov
 */
 
 #include "threads.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 Threads::
@@ -80,10 +82,9 @@ join()
 		o.join();
 }
 
-// Various chunksizes for flexible thread loads
-
+// Various chunk sizes for flexible thread loads
 inline void Threads::
-set_chunks_equal( const szt w, const szt rest)
+set_chunks_equal( const szt w, const szt rest )
 {
 	for (szt ith=0; ith<num; ith++) {
 		chunkSize[ith] = w/num;
@@ -93,7 +94,7 @@ set_chunks_equal( const szt w, const szt rest)
 }
 
 void Threads::
-set_chunks_circular( const szt w, const szt rest)
+set_chunks_circular( const szt w, const szt rest )
 {
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
 // where phi is the central angle (in radians)  defining the circle segment.

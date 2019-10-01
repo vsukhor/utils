@@ -38,13 +38,15 @@
 #include "misc.h"
 #include "msgr.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 /**
 * \class Threads threads.h
 * \brief Simple threading utility class.
-* Implements convenience class for handling a collection of std::thread objects.
+* \details Implements convenience class for handling a collection of std::thread objects.
 */
 class Threads {
 
@@ -52,7 +54,7 @@ public:
 
 	/**
 	* \brief Enumerates basic load sharing modes.
-	* Names three modes of load distribution between threads.
+	* \details Names three modes of load distribution between threads.
 	*/
 	enum class Weights {
 		CircleCenter,	///< Circle-shaped load distribution.
@@ -67,7 +69,7 @@ public:
 
 	/**
 	* \brief Constructor.
-	* Creates threads based on a set of work units.
+	* \details Creates threads based on a set of work units.
 	* \param offset Offset from the start of work unit container.
 	* \param size Size of the work unit container shared among the threads.
 	* \param omittedBoundaries Boundsary work units to discard.
@@ -88,7 +90,7 @@ public:
 	
 	// Various weights for relative thread loads
 	/**
-	* Sets weighting factors according to \a Weights::Equal.
+	* \brief Sets weighting factors according to \a Weights::Equal.
 	* \param w Total number of work units.
 	* \param rest Number of work units remaining after the optimal distribution.
 	*/
@@ -96,20 +98,20 @@ public:
 						  const szt rest);
 
 	/**
-	* Sets weighting factors according to \a Weights::CircleCenter.
+	* \brief Sets weighting factors according to \a Weights::CircleCenter.
 	* \param w Total number of work units.
 	* \param rest Number of work units remaining after the optimal distribution.
 	*/
 	void set_chunks_circular(const szt w,
 							 const szt rest);
 	/**
-	* Sets weighting factors according to \a Weights::TriangleDecr.
+	* \brief Sets weighting factors according to \a Weights::TriangleDecr.
 	* \param size Total number of work units.
 	*/
 	void set_chunks_triangleDecr(const szt size);
 
 	/**
-	* Prints work unit borders for particular threads.
+	* \brief Prints work unit borders for particular threads.
 	* \param withCout Specifies if printing to cout.
 	* \param msgr \a Msgr used for the output.
 	*/

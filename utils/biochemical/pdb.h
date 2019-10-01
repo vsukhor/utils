@@ -23,7 +23,7 @@
 ============================================================================== */
 
 /// \file pdb.h
-/// Contains class PDB.
+/// \brief Contains class PDB.
 /// \author Valerii Sukhorukov
 
 #ifndef UTILS_BIOCHEMICAL_PDB_H
@@ -32,11 +32,15 @@
 #include <sstream>
 #include <algorithm>
 #include <string>
-#include "../common/misc.h"
-#include "../arrays/all.h"
-#include "../common/msgr.h"
 
+#include "../common/misc.h"
+#include "../common/msgr.h"
+#include "../arrays/all.h"
+
+/// Library-wide.
 namespace Utils {
+
+/// \brief Biochemistry-related stuff.
 namespace Biochemical {
 
 using namespace Common;

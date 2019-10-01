@@ -22,15 +22,29 @@
 
 ============================================================================== */
 
+/**
+* \file array4.h
+* \brief Four-element arrays.
+* \author Valerii Sukhorukov
+*/
+
 #ifndef UTILS_ARRAYS_ARRAY4_H
 #define UTILS_ARRAYS_ARRAY4_H
 
 #include <fstream>
+
 #include "../common/misc.h"
 
+/// Library-wide.
 namespace Utils {
+/// Custom arrays.
 namespace Arrays {
 
+/// \brief Four-element arrays.
+/// \details This class specializes array template for four-element array of arithmetic types.
+/// Implements convenient arithmetics as well as some functionaity
+/// commonly used in 4-dimensional geometric applications.
+/// \tparam T Type of the elements.
 template <typename T>
 class array<4,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 

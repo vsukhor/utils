@@ -30,10 +30,16 @@
 
 #include "exceptions.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
+/// \brief Exeption and exit handlers.
 namespace Exceptions {
 
+/// \brief Print a message and exit.
+/// \param msg Message text.
+/// \param msg The reporter.
 int simple( const std::string& msg,
 			Msgr* msgr )
 {

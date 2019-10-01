@@ -24,7 +24,7 @@
 
 /**
 * \file msgr.h
-* Contains class Msgr.
+* \brief Contains class Msgr.
 * \author Valerii Sukhorukov
 */
 
@@ -37,13 +37,15 @@
 #include <iostream>
 #include <stdarg.h>
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 /**
-* \class Gillespie gillespie.h
+* \class Msgr msgr.h
 * \brief Convenient formatted text output to the screen and a logfile.
-* Implements convenience class for formatted text output to std::cout and to a logfile.
+* \details Implements convenience class for formatted text output to std::cout and to a logfile.
 */
 class Msgr {
 
@@ -57,12 +59,12 @@ public:
 	logstream* sl {};		///< Logfile stream.
 
 	/**
-	* Default constructor.
+	* \brief Default constructor.
 	*/
 	Msgr() = default;
 
 	/**
-	* Constructor.
+	* \brief Constructor.
 	* \param so Screen out stream.
 	* \param sl File out stream.
 	* \param precision Precision of real numbers.
@@ -72,14 +74,14 @@ public:
 		  		  const int precision=6 );
 	
 	/**
-	* Set formatting parameters.
+	* \brief Set formatting parameters.
 	* \param precision Precision of real numbers
 	*/
 	void set_formats(const int precision) noexcept;
 
 
 	/**
-	* Print std::array out.
+	* \brief Print std::array out.
 	* \tparam V Data type of array elements.
 	* \tparam N Number of array elements.
 	* \param name Name/title.
@@ -91,7 +93,7 @@ public:
 					) const noexcept;
 
 	/**
-	* Print std::string out.
+	* \brief Print std::string out.
 	* \tparam endline Finish with line end.
 	* \param s String to print.
 	*/
@@ -99,7 +101,7 @@ public:
 	void print(const std::string& s) const noexcept;
 
 	/**
-	* Print to formatted out (variadic).
+	* \brief Print to formatted out (variadic).
 	* \tparam endline Finish with line end.
 	* \param fmt Formatting.
 	*/
@@ -107,13 +109,13 @@ public:
 	void print(const char *fmt, ...) noexcept;
 		
 	/**
-	* Print std::string out and exit.
+	* \brief Print std::string out and exit.
 	* \param s String to print.
 	*/
 	void exit(const std::string& s) const noexcept;
 
 	/**
-	* Print to formatted out (variadic) and exit.
+	* \brief Print to formatted out (variadic) and exit.
 	* \param fmt Formatting.
 	*/
 	void exit(const char *fmt, ...) noexcept;
@@ -123,14 +125,14 @@ private:
 	char buf [4096];	///< Buffer.
 
 	/**
-	* Check that the stream used is valid.
+	* \brief Check that the stream used is valid.
 	* \tparam S Stream type.
 	*/
 	template <typename S>
 	static constexpr auto is_valid_stream() noexcept;
 
 	/**
-	* Print to a stream \p io.
+	* \brief Print to a stream \p io.
 	* \tparam IO Stream type.
 	* \param v String to print.
 	* \param endline Specifies if the line end should be added.

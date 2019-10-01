@@ -28,7 +28,9 @@
 #include "msgr.h"
 #include "misc.h"
 
+/// Library-wide.
 namespace Utils {
+/// General stuff.
 namespace Common {
 
 template <int I, typename T>
@@ -38,7 +40,7 @@ public:
 
 	/**
 	* \brief Constructor.
-	* \param msgr Output printing.
+	* \param msgr Output message processor.
 	*/
 	explicit RootFinder(Msgr& msgr);
 
@@ -51,12 +53,14 @@ public:
 							const std::array<T,I>& arg1, const std::array<T,I>& arg2, const std::array<T,I>& arg3 ) const;
 private:
 
-	Msgr& 				  msgr;					///< Output handling facility.
+	Msgr& 				  msgr;					///< Output message processor.
 	static constexpr uint MAXIT {100'000'000};	///< Max. number of iterations.
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+template <int I, typename T>
+RootFinder<I,T>::
 RootFinder( Msgr& msgr )
 	: msgr {msgr}
 {}
