@@ -5,8 +5,6 @@ project(utils
     DESCRIPTION "Utility library."
     LANGUAGES CXX)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-
 	add_compile_options(-O3 -msse4 -fPIC)
 	set(CMAKE_CXX_EXTENSIONS OFF)
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
@@ -27,6 +25,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 											utils/config
                                             utils/random
 											utils/volumetric_data)
+
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
 	# Let's nicely support folders in IDE's
 	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
