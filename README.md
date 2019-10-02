@@ -24,9 +24,11 @@ Pseudo-random number factories.
 
 ## Installlation
 
-The library is a mix: some classes require building, while other a header-only.
-No external dependencies are reqiored for building the library. 
-On the other hand, random number factories, which are themselves header-only, would need boost or curand, depending on the type chosen.
+The library contains both classes require building and header-only includes.
+No external dependencies are required in order to build the library. 
+However, random number factories, which are themselves header-only, 
+would need [boost](https://www.boost.org/) (only the headers) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), 
+depending on the factory type chosen.
 
 There are two ways for building the library:  
 * Using cmake, which also creates documentation if doxygen (ver. > 3.14) is installed.
