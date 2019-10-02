@@ -27,8 +27,8 @@ Pseudo-random number factories.
 
 ## Installlation
 
-The library contains both the classes require building and the header-only includes.
-No external dependencies are required in order to build the library. 
+The library contains both the classes that require separate compilation, and the header-only includes.
+No external dependencies are necessary in order to build the library. 
 However, random number factories (despite being header-only), 
 would need the availability of [boost](https://www.boost.org/) (only the headers) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), 
 depending on the factory type chosen, in the system where an executable using these classes is built.
