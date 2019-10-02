@@ -1,6 +1,5 @@
 
 .DS_Store
-lib/lib*
 build/**
 manual_make/.DS_Store
 manual_make/asm/
