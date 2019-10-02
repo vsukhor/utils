@@ -33,5 +33,5 @@ depending on the factory type chosen.
 There are two ways for building the library:  
 * Using cmake, which also creates documentation if doxygen (ver. > 3.14) is installed.
 * With a simple Makefile for a more direct manual build. Please see beginning of the Makefile for instructions regarding the variables required.
-
+A C++17-capable compiler is required (e.g. on MacOS, either gcc 7.3.0 or clang 10.0.0 would be sufficient).
 
