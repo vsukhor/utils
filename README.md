@@ -4,8 +4,8 @@ Intended mainly for the use in other ropositories in this collection.
 
 ## Overview
 
-Functionality of this library can be best summerized by listing the namespaces available. 
-See doxygen documentation for more details.
+Functionality of this library can be best summarized by listing the namespaces provided 
+(see doxygen documentation for more details):
 
 #### Arrays 
 Lightweight  array types with convenient arithmetics as well as some functionaity commonly used in geometric applications.
