@@ -3,7 +3,7 @@
 Consider the following code. It defines parameters
 - 'init_mass'  
 - 'assign_separately'
-- 'spring_k'  
+- 'spring_k'   
 of different types, and uses 'Reader' functor provided by the library to import their values from a config file.
  
 ```
