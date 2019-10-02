@@ -16,6 +16,9 @@ Reader and writer for files in Protein Data Bank format.
 #### Common
 General-usability typedefs and functions.
 
+### [Config](config/readme.md) 
+A simple configuration flie reader.
+
 #### Graph
 Abstruct graphs and some common operations on them.
 
