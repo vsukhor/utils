@@ -33,9 +33,16 @@ However, random number factories (despite being header-only),
 would need the availability of [boost](https://www.boost.org/) (only the headers) or [NVIDIA cuRAND](https://developer.nvidia.com/curand), 
 depending on the factory type chosen, in the system where an executable using these classes is built.
 
+The library can be compiled with a C++17-capable compiler (e.g. on macOS, either gcc 7.3.0 or clang 10.0.0 would be sufficient).
 There are two ways for building the library:  
 
-* Using cmake, which also creates documentation if doxygen (ver. > 3.14) is installed.
-* With a simple Makefile for a more direct manual build. Please see beginning of the Makefile for instructions regarding the variables required.
-A C++17-capable compiler is required (e.g. on macOS, either gcc 7.3.0 or clang 10.0.0 would be sufficient).
+1. On systems having cmake (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
+    * cd mitosim
+    * mkdir build
+    * cmake -S . -B build
+    * cmake --build build
+    
+2. cmake-independent Makefile is available for for a more targeted manulal build. 
+    Please see beginning of the Makefile for instructions.
+
 
