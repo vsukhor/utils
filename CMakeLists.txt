@@ -24,7 +24,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 											utils/arrays
 											utils/graph
 											utils/common
-											utils/random
+											utils/config
+                                            utils/random
 											utils/volumetric_data)
 
 	# Let's nicely support folders in IDE's

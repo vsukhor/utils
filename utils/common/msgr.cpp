@@ -27,7 +27,8 @@
 * Implements class Msgr.
 * \author Valerii Sukhorukov
 */
- #include "msgr.h"
+
+#include "msgr.h"
 
 /// Library-wide.
 namespace Utils {
