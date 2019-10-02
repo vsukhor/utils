@@ -1,6 +1,6 @@
 #  utils
-A library of loosely related constructs of general use. 
-Intended mainly for the use in other ropositories in this collection.
+A library of loosely related constructs of general use.  
+Intended mainly for the use in other repositories in this collection.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Functionality of this library can be best summarized by listing the namespaces p
 (see doxygen documentation for more details):
 
 #### Arrays 
-Lightweight  array types with convenient arithmetics as well as some functionaity commonly used in geometric applications.
+Lightweight  array types implementing convenient arithmetics as well as some functionaity commonly used in geometric applications.
 
 #### Biochemical
 Reader and writer for files in Protein Data Bank format.
