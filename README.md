@@ -7,19 +7,19 @@ Intended mainly for the use in other ropositories in this collection.
 Functionality of this library can be best summerized by listing the namespaces available. 
 See doxygen documentation for more details.
 
-### Arrays 
+#### Arrays 
 Lightweight  array types with convenient arithmetics as well as some functionaity commonly used in geometric applications.
 
-### Biochemical
+#### Biochemical
 Reader and writer for files in Protein Data Bank format.
 
-### Common
+#### Common
 General-usability typedefs and functions.
 
-### Graph
+#### Graph
 Abstruct graphs and some common operations on them.
 
-### Random
+#### Random
 Pseudo-random number factories.
 
 ## Installlation
