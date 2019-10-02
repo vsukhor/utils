@@ -2,8 +2,6 @@
 .DS_Store
 build/**
 manual_make/.DS_Store
-manual_make/asm/
-manual_make/obj/
 xcode/**
 docs/html/**
 docs/latex/**
