@@ -16,7 +16,7 @@ Reader and writer for files in Protein Data Bank format.
 #### Common
 General-usability typedefs and functions.
 
-### [Config](config/readme.md) 
+### [Config](utils/config/readme.md) 
 A simple configuration flie reader.
 
 #### Graph
