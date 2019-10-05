@@ -60,7 +60,7 @@ public:
 	* \param msgr Messanger used for outputing.
 	*/
 	Reader( const std::string& fname,
-			Msgr& msgr
+			Msgr const* msgr
 		)
 		: fname {check_fname(fname)}
 		, msgr {msgr}
@@ -152,7 +152,7 @@ public:
 
 private:
 
-	Msgr& msgr;		///< \a Msgr output message processor.
+	Msgr const* msgr {};		///< \a Msgr output message processor.
 };
 
 }	// namespace Config
