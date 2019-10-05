@@ -70,20 +70,25 @@ public:
 											 ) noexcept;
 	
 	/// \brief Calculate area of an ellipse.
-	/// \param a, b Lengths of semi-major axes.
+	/// \param a  Length of the semi-major axis.
+	/// \param b  Length of the semi-major axis.
 	static constexpr T ellipse_area(const T a,
 									const T b
 									) noexcept;
 
 	/// \brief Calculate volume of an ellipsoid.
-	/// \param a, b, c  Lengths of semi-major axes.
+	/// \param a  Length of the semi-major axis.
+	/// \param b  Length of the semi-major axis.
+	/// \param c  Length of the semi-major axis.
+
 	static constexpr T ellipsoid_vol(const T a,
 									 const T b,
 									 const T c
 									 ) noexcept;
 	 
 	/// \brief Calculate volume of an elliptic cylinder.
-	/// \param a, b Dimensions of the cylinder semi-major axes,
+	/// \param a  Length of the semi-major axis.
+	/// \param b  Length of the semi-major axis.
 	/// \param h Cylinder height.
 	static constexpr T elliptic_cylinder_vol(const T a,
 											 const T b,
@@ -91,7 +96,9 @@ public:
 											 ) noexcept;
 	
 	/// \brief Calculate volume of an ellipsoidal cap.
-	/// \param a, b, c  Lengths of semi-major axes.
+	/// \param a  Length of the semi-major axis.
+	/// \param b  Length of the semi-major axis.
+	/// \param c  Length of the semi-major axis.
 	/// \param h The cap height (|h| < c).
 	static constexpr T ellipsoid_cap_vol(const T a,
 										 const T b,
@@ -100,7 +107,9 @@ public:
 										 ) noexcept;
 	 
 	/// \brief Calculate base area of an ellipsoidal cap.
-	/// \param a, b, c  Lengths of semi-major axes.
+	/// \param a  Length of the semi-major axis.
+	/// \param b  Length of the semi-major axis.
+	/// \param c  Length of the semi-major axis.
 	/// \param h The cap height (|h| < c).
 	static constexpr T ellipsoid_cap_base_area(const T a,
 											   const T b,
