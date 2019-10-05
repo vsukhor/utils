@@ -33,6 +33,7 @@
 
 #include <type_traits>
 #include <array>
+#include <vector>
 #include <fstream>
 #include <iostream>
 #include <stdarg.h>
@@ -81,7 +82,7 @@ public:
 
 
 	/**
-	* \brief Print std::array out.
+	* \brief Print std::array.
 	* \tparam V Data type of array elements.
 	* \tparam N Number of array elements.
 	* \param name Name/title.
@@ -93,7 +94,18 @@ public:
 					) const noexcept;
 
 	/**
-	* \brief Print std::string out.
+	* \brief Print named std::vector .
+	* \tparam V Data type of vector elements.
+	* \param name Name/title.
+	* \param v Vector data.
+	*/
+	template <typename V>
+	void print_vector( const std::string& name,
+				       const std::vector<V>& v
+					 ) noexcept;
+
+	/**
+	* \brief Print std::string.
 	* \tparam endline Finish with line end.
 	* \param s String to print.
 	*/
@@ -194,7 +206,16 @@ print_array( const std::string& name,
 	print<false>(name+"[]:  ");
 	for (const auto o : v)
 		print<false>(std::to_string(o));
-	print("");
+}
+
+template <typename V>
+void Msgr::
+print_vector( const std::string& name,
+			  const std::vector<V>& v ) noexcept
+{
+	print<false>(name+"[]:  ");
+	for (const auto o : v)
+		print<false>(std::to_string(o));
 }
 
 }	// namespace Common
