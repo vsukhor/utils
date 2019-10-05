@@ -65,7 +65,7 @@ public:
 		: fname {check_fname(fname)}
 		, msgr {msgr}
 	{
-		msgr->print("\nReading config from: "+fname);
+		if (msgr) msgr->print("\nReading config from: "+fname);
 	}
 	
 	/**

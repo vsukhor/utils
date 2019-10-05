@@ -282,7 +282,6 @@ irecname2str( const int irecname ) noexcept
 						   : "HETATM";
 }
 
-inline
 float Pdb::
 set_vdW() const noexcept
 {
@@ -299,7 +298,6 @@ set_vdW() const noexcept
 		}
 }
 
-inline
 bool Pdb::
 is_in_aminoacid() const noexcept
 {

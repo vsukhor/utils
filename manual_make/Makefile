@@ -13,7 +13,6 @@ SRC_DIR := ../utils/
 ARRAYS_DIR := $(SRC_DIR)arrays/
 BIOCHEMICAL_DIR := $(SRC_DIR)biochemical/
 COMMON_DIR := $(SRC_DIR)common/
-RANDOM_DIR := $(SRC_DIR)random/
 
 SRCS_BIOCHEMICAL := pdb.cpp
 SRCS_COMMON := threads.cpp misc.cpp msgr.cpp exceptions.cpp
