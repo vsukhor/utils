@@ -24,7 +24,7 @@
 
 /**
 * \file misc.h
-* A loose collection of functions of common use.
+* \brief A loose collection of functions of common use.
 * \author Valerii Sukhorukov
 */
 

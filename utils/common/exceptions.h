@@ -47,10 +47,9 @@ namespace Common {
 namespace Exceptions {
 
 /**
-* Simple process termination as a global function.
+* \brief Simple process termination as a global function.
 * \details Outputs message \p msg to \a Msgr.
 * \param msg Message to output.
-* \return EXIT_FAILURE
 * \see Msgr
 */
 int simple(const std::string& msg,
@@ -66,9 +65,7 @@ class Simple
 
 public:
 
-	/**
-	* \brief Default constructor.
-	*/
+	/// \brief Default constructor.
 	Simple() = default;
 
 	/**

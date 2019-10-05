@@ -117,10 +117,10 @@ public:
 	*/
 	static std::string check_fname( const std::string fname )
 	{
-		if (file_exists(fname))
-			return fname;
-		else
-			exit(Utils::Common::Exceptions::simple("Error: no config file provided "+fname));
+		if (!file_exists(fname))
+			Utils::Common::Exceptions::simple("Error: no config file provided "+fname);
+
+		return fname;
 	}
 
 	/**

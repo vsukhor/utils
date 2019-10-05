@@ -25,7 +25,7 @@
 /**
  * \file exceptions.cpp
  * \brief Implementation of std::exception-derived classes for checking the parameters read from confuguration files.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #include "exceptions.h"
@@ -48,7 +48,9 @@ int simple( const std::string& msg,
 	else
 		std::cout << msg << std::endl;
 
-	return EXIT_FAILURE;
+	exit(EXIT_FAILURE);
+
+	return EXIT_FAILURE; 		// pro forma
 }
 
 // Simple xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
