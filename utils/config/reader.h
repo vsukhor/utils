@@ -60,12 +60,12 @@ public:
 	* \param msgr Messanger used for outputing.
 	*/
 	Reader( const std::string& fname,
-			Msgr const* msgr
+			Msgr* msgr
 		)
 		: fname {check_fname(fname)}
 		, msgr {msgr}
 	{
-		msgr.print("\nReading config from: "+fname);
+		msgr->print("\nReading config from: "+fname);
 	}
 	
 	/**
@@ -79,7 +79,7 @@ public:
 	auto operator()(const std::string& s,
 					const std::vector<T>& range ) const
 	{
-		return Par<T,true>(s, fname, range, &msgr)();
+		return Par<T,true>(s, fname, range, msgr)();
 	}
 
 	/**
@@ -93,7 +93,7 @@ public:
 	auto operator()(const std::string& s,
 					const std::array<T,2>& range ) const
 	{
-		return Par<T,false>(s, fname, range, &msgr)();
+		return Par<T,false>(s, fname, range, msgr)();
 	}
 
 	/**
@@ -107,7 +107,7 @@ public:
 	auto operator()(const std::string& s,
 					const vecarr<T,N>& range) const
 	{
-		return Par<std::array<T,N>,false>(s, fname, range, &msgr)();
+		return Par<std::array<T,N>,false>(s, fname, range, msgr)();
 	}
 
 	/**
@@ -135,7 +135,7 @@ public:
 			   const std::string& compartment ) const
 	{
 		const auto cfgCopy {path+"cfgCopy_"+compartment+signature+".txt"};
-		msgr.print("Copying "+compartment+" config to "+cfgCopy);
+		msgr->print("Copying "+compartment+" config to "+cfgCopy);
 		copy_text_file(fname, cfgCopy);
 	}
 
@@ -152,7 +152,7 @@ public:
 
 private:
 
-	Msgr const* msgr {};		///< \a Msgr output message processor.
+	Msgr* msgr {};		///< \a Msgr output message processor.
 };
 
 }	// namespace Config
