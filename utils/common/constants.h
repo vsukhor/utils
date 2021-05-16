@@ -34,7 +34,9 @@
 #include <limits>
 #include <vector>
 #include <array>
+#include <memory>
 #include <numeric>
+#include <cmath>
 
 /// Library-wide.
 namespace Utils {

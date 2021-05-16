@@ -39,8 +39,8 @@
 
 /// Library-wide.
 namespace Utils {
-/// Configuration module
-namespace Config{
+/// Configuration module.
+namespace Config {
 
 using namespace Common;
 using namespace Parameter;

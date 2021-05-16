@@ -206,6 +206,7 @@ print_array( const std::string& name,
 	print<false>(name+"[]:  ");
 	for (const auto o : v)
 		print<false>(std::to_string(o));
+	print<true>("");
 }
 
 template <typename V>
