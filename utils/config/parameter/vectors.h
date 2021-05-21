@@ -56,197 +56,197 @@ using namespace Common;
 */
 template <typename T, bool isDiscrete>
 class Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>
-	: public Base<T>
+    : public Base<T>
 {
-	using Q = std::vector<T>;
+    using Q = std::vector<T>;
 
-	using Base<T>::get_name;
-	using Base<T>::isLoaded_;
+    using Base<T>::get_name;
+    using Base<T>::isLoaded_;
 
-	Q p_;				///< The parameter value.
-	szt expectedSize_;	///< Expected size of the vector.
-	
-public:	
+    Q p_;                ///< The parameter value.
+    szt expectedSize_;    ///< Expected size of the vector.
+    
+public:    
 
-	/**
-	* \brief Constructor.
-	* \param name Name of the parameter.
-	* \param expectedSize Expected size of the parameter vector.
-	*/
-	explicit Par(const std::string& name,
-				 const szt expectedSize);
-				 
-	/**
-	* \brief Constructor.
-	* \param name Name of the parameter.
-	* \param fname Name of the configuration file.
-	* \param range Acceptable range of parameter values.
-	* \param msgr \a Msgr used for the output.
-	* \see Msgr
-	*/
-	explicit Par(const std::string& name,
-		 		 const std::string& fname,
-		 		 const std::vector<Q>& range,
-		 		 Msgr* msgr=nullptr);
+    /**
+    * \brief Constructor.
+    * \param name Name of the parameter.
+    * \param expectedSize Expected size of the parameter vector.
+    */
+    explicit Par(const std::string& name,
+                 const szt expectedSize);
+                 
+    /**
+    * \brief Constructor.
+    * \param name Name of the parameter.
+    * \param fname Name of the configuration file.
+    * \param range Acceptable range of parameter values.
+    * \param msgr \a Msgr used for the output.
+    * \see Msgr
+    */
+    explicit Par(const std::string& name,
+                  const std::string& fname,
+                  const std::vector<Q>& range,
+                  Msgr* msgr=nullptr);
 
-	/**
-	* \brief Check that the read in parameter value is within the range set by \p r.
-	* \param r Acceptable range of parameter values.
-	* \param msgr \a Msgr used for the output.
-	* \see Msgr
-	*/
-	void check_range(const std::vector<Q>& r,
-					 Msgr* msgr=nullptr);
+    /**
+    * \brief Check that the read in parameter value is within the range set by \p r.
+    * \param r Acceptable range of parameter values.
+    * \param msgr \a Msgr used for the output.
+    * \see Msgr
+    */
+    void check_range(const std::vector<Q>& r,
+                     Msgr* msgr=nullptr);
 
-	/**
-	* \brief Static function for reading a parameter without instantiating this class object.
-	* \param name Name of the parameter.
-	* \param fname Name of the configuration file.
-	* \param msgr \a Msgr used for the output.
-	* \return Parameter values (the whole vector).
-	*/
-	static auto readin(const std::string& name,
-					   const std::string& fname,
-					   Msgr* msgr=nullptr);
-	
-	/**
-	* \brief Print the the parameter to std::cout and logfile.
-	* \param msgr \a Msgr used for the output.
-	* \see Msgr
-	*/
-	void print(Msgr* msgr=nullptr) final;
-	
-	/**
-	* \brief The parameter values.
-	* \return Parameter values (the whole vector).
-	*/
-	Q operator()() const;
-	
-	/**
-	* \brief Specific component of the parameter vector.
-	* \param i Index in the vaector.
-	* \return  Parameter value (the \p i -th component).
-	*/
-	T operator[](const szt i) const;
+    /**
+    * \brief Static function for reading a parameter without instantiating this class object.
+    * \param name Name of the parameter.
+    * \param fname Name of the configuration file.
+    * \param msgr \a Msgr used for the output.
+    * \return Parameter values (the whole vector).
+    */
+    static auto readin(const std::string& name,
+                       const std::string& fname,
+                       Msgr* msgr=nullptr);
+    
+    /**
+    * \brief Print the the parameter to std::cout and logfile.
+    * \param msgr \a Msgr used for the output.
+    * \see Msgr
+    */
+    void print(Msgr* msgr=nullptr) final;
+    
+    /**
+    * \brief The parameter values.
+    * \return Parameter values (the whole vector).
+    */
+    Q operator()() const;
+    
+    /**
+    * \brief Specific component of the parameter vector.
+    * \param i Index in the vaector.
+    * \return  Parameter value (the \p i -th component).
+    */
+    T operator[](const szt i) const;
 
 private:
-	
-	/**
-	* \brief Initialize the parameter from the config file.
-	* \param value Value to search for.
-	*/
-	void initialize(std::string value) final;
-};	
+    
+    /**
+    * \brief Initialize the parameter from the config file.
+    * \param value Value to search for.
+    */
+    void initialize(std::string value) final;
+};    
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, bool isDiscrete>
 Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
-	 const szt expectedSize )
-	: Base<T> {name}
-	, expectedSize_ {expectedSize}
+     const szt expectedSize )
+    : Base<T> {name}
+    , expectedSize_ {expectedSize}
 {}
 
 template <typename T, bool isDiscrete>
 Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
-	 const std::string& fname,
-	 const std::vector<Q>& range,
-	 Msgr* msgr )
-	: Base<Q> {name}
+     const std::string& fname,
+     const std::vector<Q>& range,
+     Msgr* msgr )
+    : Base<Q> {name}
 {
-	this->load(fname);
-	check_range(range, msgr);
-	print(msgr);
+    this->load(fname);
+    check_range(range, msgr);
+    print(msgr);
 }
 
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 check_range( const std::vector<Q>& r, Msgr* msgr )
 {
-	if (!r.size()) return;		// use this case to omit string checkups
+    if (!r.size()) return;        // use this case to omit string checkups
 
-	using namespace Exceptions;
+    using namespace Exceptions;
 
-	XASSERT(!isDiscrete || r.size()==2, "size of r must be 2 for continuous parameters");
-	if constexpr (isDiscrete) {
-		if (std::find(r.begin(), r.end(), p_) == r.end())
-			throw ParOutOfRange<Q,isDiscrete> {get_name(), p_, r, msgr};
-	}
-	else {
-		if (p_<r[0] || p_>r[1])
-			throw ParOutOfRange<Q,isDiscrete>{get_name(), p_, r, msgr};
-	}
+    XASSERT(!isDiscrete || r.size()==2, "size of r must be 2 for continuous parameters");
+    if constexpr (isDiscrete) {
+        if (std::find(r.begin(), r.end(), p_) == r.end())
+            throw ParOutOfRange<Q,isDiscrete> {get_name(), p_, r, msgr};
+    }
+    else {
+        if (p_<r[0] || p_>r[1])
+            throw ParOutOfRange<Q,isDiscrete>{get_name(), p_, r, msgr};
+    }
 }
 
 template <typename T, bool isDiscrete>
 auto Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 readin( const std::string& s, const std::string& fname, Msgr* msgr )
 {
-	return Par<Q,isDiscrete> {s, fname, msgr}();
+    return Par<Q,isDiscrete> {s, fname, msgr}();
 };
 
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 print( Msgr* msgr )
 {
-	(msgr)
-	? msgr->print(get_name(), p_, 1)
-	: std::cout << get_name() << " " << p_ << std::endl;
+    (msgr)
+    ? msgr->print(get_name(), p_, 1)
+    : std::cout << get_name() << " " << p_ << std::endl;
 }
 
 template <typename T, bool isDiscrete>
 std::vector<T> Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 operator()() const
 {
-	XASSERT(true, get_name());
-	return p_;
+    XASSERT(true, get_name());
+    return p_;
 }
 
 template <typename T, bool isDiscrete>
 T Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 operator[]( const szt i ) const
 {
-	XASSERT(isLoaded_, get_name());
-	XASSERT(i<p_.size(), get_name());
-	return p_[i];
+    XASSERT(isLoaded_, get_name());
+    XASSERT(i<p_.size(), get_name());
+    return p_[i];
 }
 
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
 initialize( std::string value )
 {
-	const std::string emp {" "};
-	const std::string tab {"\t"};
-	const Utils::Common::Exceptions::Simple improperSizeEx
-			{"Improper Config::"+get_name()+" initialization: Excessive data size"};
+    const std::string emp {" "};
+    const std::string tab {"\t"};
+    const Utils::Common::Exceptions::Simple improperSizeEx
+            {"Improper Config::"+get_name()+" initialization: Excessive data size"};
 
-	while (value.length()) {
-		ulong e {value.find(emp)};
-		if (e == std::string::npos) e = value.find(tab);
-		if (e == std::string::npos) e = value.length();
-		const std::string val {value.substr(0, e)};
-		if (val.length() < 1)
-			throw Utils::Common::Exceptions::Simple
-					{"Error in config file: Number of elelments in " + get_name() +
-					 " is " + STR(p_.size()) + " which is insufficient"};
-		T tmp;
-		std::stringstream(val) >> tmp;
-		p_.push_back(tmp);
-		value.erase(0, e);
-		while (!value.substr(0, 1).compare(emp) ||
-			   !value.substr(0, 1).compare(tab))
-			value.erase(value.begin());
-		if (p_.size() > expectedSize_)
-			throw improperSizeEx;
-	}
-	if (p_.size() != expectedSize_)
-		throw improperSizeEx;
+    while (value.length()) {
+        ulong e {value.find(emp)};
+        if (e == std::string::npos) e = value.find(tab);
+        if (e == std::string::npos) e = value.length();
+        const std::string val {value.substr(0, e)};
+        if (val.length() < 1)
+            throw Utils::Common::Exceptions::Simple
+                    {"Error in config file: Number of elelments in " + get_name() +
+                     " is " + STR(p_.size()) + " which is insufficient"};
+        T tmp;
+        std::stringstream(val) >> tmp;
+        p_.push_back(tmp);
+        value.erase(0, e);
+        while (!value.substr(0, 1).compare(emp) ||
+               !value.substr(0, 1).compare(tab))
+            value.erase(value.begin());
+        if (p_.size() > expectedSize_)
+            throw improperSizeEx;
+    }
+    if (p_.size() != expectedSize_)
+        throw improperSizeEx;
 }
 
-}	// namespace Parameter
-}	// namespace Config
+}    // namespace Parameter
+}    // namespace Config
 }   // namespace Utils
 
 #endif // UTILS_CONFIG_PARAMETER_VECTORS_H

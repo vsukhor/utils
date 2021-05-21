@@ -93,7 +93,7 @@ template <typename T> constexpr T EPS<T,std::enable_if_t<std::is_fundamental<T>:
 
 template <typename T, typename Enabler = void> constexpr T huge;
 template <typename T> constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>>
-	{std::numeric_limits<T>::has_infinity
+    {std::numeric_limits<T>::has_infinity
    ? std::numeric_limits<T>::infinity()
    : std::numeric_limits<T>::max()};
 
@@ -117,11 +117,11 @@ template <typename T> constexpr T INF {std::numeric_limits<T>::infinity()};
 template <typename T, auto N> constexpr
 auto filled_array( const T val )
 {
-	std::array<T,N> a {};
-//	a.fill(val);		// needs c++20 to be constexpr
-	for (auto& o : a)
-		o = val;
-	return a;
+    std::array<T,N> a {};
+//    a.fill(val);        // needs c++20 to be constexpr
+    for (auto& o : a)
+        o = val;
+    return a;
 }
 
 template <auto N> constexpr std::array<bool,N> falses {filled_array<bool,N>(false)};
@@ -169,12 +169,12 @@ template <typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>}
 #define ANSI_BG_MAGENTA  "\x1b[45m"
 #define ANSI_BG_CYAN     "\x1b[46m"
 #define ANSI_BG_WHITE    "\x1b[47m"
-#define ANSI_BOLD_ON     "\x1b[1m"			
-#define ANSI_BOLD_OFF    "\x1b[22m"		
+#define ANSI_BOLD_ON     "\x1b[1m"            
+#define ANSI_BOLD_OFF    "\x1b[22m"        
 #define ANSI_INVERSE_ON  "\x1b[7m"
 
-} 	// namespace Common
-}	// namespace Utils
+}     // namespace Common
+}    // namespace Utils
 
 
 #endif // UTILS_COMMON_CONSTANTS_H

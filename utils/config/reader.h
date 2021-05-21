@@ -52,110 +52,110 @@ class Reader {
 
 public:
 
-	const std::string fname;		///< name of the configuration file.
+    const std::string fname;        ///< name of the configuration file.
 
-	/**
-	* \brief Constructor creating the configuration file-specific instance.
-	* \param fname Name of the configuration file.
-	* \param msgr Messanger used for outputing.
-	*/
-	Reader( const std::string& fname,
-			Msgr* msgr
-		)
-		: fname {check_fname(fname)}
-		, msgr {msgr}
-	{
-		if (msgr) msgr->print("\nReading config from: "+fname);
-	}
-	
-	/**
-	* \brief Value of the parameter read in from the configuration file.
-	* \tparam T Parameter type.
-	* \param s Parameter name.
-	* \param range Acceptable range of parameter values.
-	* \return Value of the parameter read in.
-	*/
-	template <typename T>
-	auto operator()(const std::string& s,
-					const std::vector<T>& range ) const
-	{
-		return Par<T,true>(s, fname, range, msgr)();
-	}
+    /**
+    * \brief Constructor creating the configuration file-specific instance.
+    * \param fname Name of the configuration file.
+    * \param msgr Messanger used for outputing.
+    */
+    Reader( const std::string& fname,
+            Msgr* msgr
+        )
+        : fname {check_fname(fname)}
+        , msgr {msgr}
+    {
+        if (msgr) msgr->print("\nReading config from: "+fname);
+    }
+    
+    /**
+    * \brief Value of the parameter read in from the configuration file.
+    * \tparam T Parameter type.
+    * \param s Parameter name.
+    * \param range Acceptable range of parameter values.
+    * \return Value of the parameter read in.
+    */
+    template <typename T>
+    auto operator()(const std::string& s,
+                    const std::vector<T>& range ) const
+    {
+        return Par<T,true>(s, fname, range, msgr)();
+    }
 
-	/**
-	* \brief Value of the parameter read in from the configuration file.
-	* \tparam T Parameter type.
-	* \param s Parameter name.
-	* \param range Acceptable range of parameter values.
-	* \return Value of the parameter read in.
-	*/
-	template <typename T>
-	auto operator()(const std::string& s,
-					const std::array<T,2>& range ) const
-	{
-		return Par<T,false>(s, fname, range, msgr)();
-	}
+    /**
+    * \brief Value of the parameter read in from the configuration file.
+    * \tparam T Parameter type.
+    * \param s Parameter name.
+    * \param range Acceptable range of parameter values.
+    * \return Value of the parameter read in.
+    */
+    template <typename T>
+    auto operator()(const std::string& s,
+                    const std::array<T,2>& range ) const
+    {
+        return Par<T,false>(s, fname, range, msgr)();
+    }
 
-	/**
-	* \brief Value of the parameter read in from the configuration file.
-	* \tparam T Parameter type.
-	* \param s Parameter name.
-	* \param range Acceptable range of parameter values.
-	* \return Value of the parameter read in.
-	*/
-	template <typename T, auto N>
-	auto operator()(const std::string& s,
-					const vecarr<T,N>& range) const
-	{
-		return Par<std::array<T,N>,false>(s, fname, range, msgr)();
-	}
+    /**
+    * \brief Value of the parameter read in from the configuration file.
+    * \tparam T Parameter type.
+    * \param s Parameter name.
+    * \param range Acceptable range of parameter values.
+    * \return Value of the parameter read in.
+    */
+    template <typename T, auto N>
+    auto operator()(const std::string& s,
+                    const vecarr<T,N>& range) const
+    {
+        return Par<std::array<T,N>,false>(s, fname, range, msgr)();
+    }
 
-	/**
-	* \brief Checks if file with name \p fname exists.
-	* \param fname Expected name of the file.
-	* \return Name of the confuguration file if it is found.
-	*/
-	static std::string check_fname( const std::string fname )
-	{
-		if (!file_exists(fname))
-			Utils::Common::Exceptions::simple("Error: no config file provided "+fname);
+    /**
+    * \brief Checks if file with name \p fname exists.
+    * \param fname Expected name of the file.
+    * \return Name of the confuguration file if it is found.
+    */
+    static std::string check_fname( const std::string fname )
+    {
+        if (!file_exists(fname))
+            Utils::Common::Exceptions::simple("Error: no config file provided "+fname);
 
-		return fname;
-	}
+        return fname;
+    }
 
-	/**
-	* \brief Copies \p compartment - specific configuration file to directory \p path.
-	* \note The directory is expected to exist.
-	* \param path Directory name to which file should be copied.
-	* \param signature Case-specific signature present in the file name.
-	* \param compartment Name of the compartment specified in the configuration.
-	*/
-	void copy( const std::string& path,
-			   const std::string& signature,
-			   const std::string& compartment ) const
-	{
-		const auto cfgCopy {path+"cfgCopy_"+compartment+signature+".txt"};
-		msgr->print("Copying "+compartment+" config to "+cfgCopy);
-		copy_text_file(fname, cfgCopy);
-	}
+    /**
+    * \brief Copies \p compartment - specific configuration file to directory \p path.
+    * \note The directory is expected to exist.
+    * \param path Directory name to which file should be copied.
+    * \param signature Case-specific signature present in the file name.
+    * \param compartment Name of the compartment specified in the configuration.
+    */
+    void copy( const std::string& path,
+               const std::string& signature,
+               const std::string& compartment ) const
+    {
+        const auto cfgCopy {path+"cfgCopy_"+compartment+signature+".txt"};
+        msgr->print("Copying "+compartment+" config to "+cfgCopy);
+        copy_text_file(fname, cfgCopy);
+    }
 
-	/**
-	* \brief Extracts directory name.
-	* \return Directory name.
-	*/
-	std::string path() const noexcept
-	{
-		auto found {fname.find_last_of("/\\")};
-		XASSERT(found < fname.npos, "ConfigReader: fname cannot be splitted");
-		return fname.substr(0, found)+SLASH;
-	}
+    /**
+    * \brief Extracts directory name.
+    * \return Directory name.
+    */
+    std::string path() const noexcept
+    {
+        auto found {fname.find_last_of("/\\")};
+        XASSERT(found < fname.npos, "ConfigReader: fname cannot be splitted");
+        return fname.substr(0, found)+SLASH;
+    }
 
 private:
 
-	Msgr* msgr {};		///< \a Msgr output message processor.
+    Msgr* msgr {};        ///< \a Msgr output message processor.
 };
 
-}	// namespace Config
+}    // namespace Config
 }   // namespace Utils
 
 #endif // UTILS_CONFIG_READER_H

@@ -42,8 +42,8 @@ using namespace Utils::Common;
 
  /// Weight classification of graph edges.
 enum class EdgeMode {
-	weighted,
-	unweighted
+    weighted,
+    unweighted
 };
 
 
@@ -66,26 +66,26 @@ struct EdgeType {};
 template <typename fT, typename iT>
 struct EdgeType<fT,iT,EdgeMode::weighted> {
 
-	using vertex_t = iT;	///< Type alias for vertex index.
-	using weight_t = fT;	///< Type alias for edge weight.
+    using vertex_t = iT;    ///< Type alias for vertex index.
+    using weight_t = fT;    ///< Type alias for edge weight.
 
-	static constexpr weight_t max_weight {huge<weight_t>};	///< maximal edge weight allowed
+    static constexpr weight_t max_weight {huge<weight_t>};    ///< maximal edge weight allowed
 
-	vertex_t target;	///< Target neighbour index.
-	weight_t weight;	///< Weight of the connecting edge.
+    vertex_t target;    ///< Target neighbour index.
+    weight_t weight;    ///< Weight of the connecting edge.
 
-	/**
-	 * \brief Constructor.
-	 * \param target Vertex to which this edge is to bind the parent vertex.
-	 * \param weight Weight of the edge (default is one).
-	 */
-	explicit EdgeType(
-			vertex_t target,
-			weight_t weight=one<weight_t>
-			)
-		: target {target}
-		, weight {weight}
-	{}
+    /**
+     * \brief Constructor.
+     * \param target Vertex to which this edge is to bind the parent vertex.
+     * \param weight Weight of the edge (default is one).
+     */
+    explicit EdgeType(
+            vertex_t target,
+            weight_t weight=one<weight_t>
+            )
+        : target {target}
+        , weight {weight}
+    {}
 };
 
 
@@ -98,25 +98,25 @@ struct EdgeType<fT,iT,EdgeMode::weighted> {
 template <typename fT, typename iT>
 struct EdgeType<fT,iT,EdgeMode::unweighted> {
 
-	using vertex_t = iT;	///< Type alias for vertex index.
-	using weight_t = fT;	///< Type alias for edge weight.
+    using vertex_t = iT;    ///< Type alias for vertex index.
+    using weight_t = fT;    ///< Type alias for edge weight.
 
-	static constexpr weight_t max_weight {huge<weight_t>};	///< Maximal edge weight allowed.
-	static constexpr weight_t weight {one<weight_t>};		///< Weight of the connecting edge.
+    static constexpr weight_t max_weight {huge<weight_t>};    ///< Maximal edge weight allowed.
+    static constexpr weight_t weight {one<weight_t>};        ///< Weight of the connecting edge.
 
-	vertex_t target;	///< Target neighbour index.
+    vertex_t target;    ///< Target neighbour index.
 
-	/**
-	 * \brief Constructor.
-	 * \param target Target vertex.
-	 */
-	explicit EdgeType(vertex_t target)
-		: target {target}
-	{}
+    /**
+     * \brief Constructor.
+     * \param target Target vertex.
+     */
+    explicit EdgeType(vertex_t target)
+        : target {target}
+    {}
 };
 
 
-}	// namespace Graph
-}	// namespace Utils
+}    // namespace Graph
+}    // namespace Utils
 
 #endif  // UTILS_GRAPH_VERTEX_EDGE_H

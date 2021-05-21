@@ -52,74 +52,74 @@ class Threads {
 
 public:
 
-	/**
-	* \brief Enumerates basic load sharing modes.
-	* \details Names three modes of load distribution between threads.
-	*/
-	enum class Weights {
-		CircleCenter,	///< Circle-shaped load distribution.
-		Equal,			///< Uniform load sharing.
-		TriangleDecr	///< Right triangle-shaped distribution
-	};
+    /**
+    * \brief Enumerates basic load sharing modes.
+    * \details Names three modes of load distribution between threads.
+    */
+    enum class Weights {
+        CircleCenter,    ///< Circle-shaped load distribution.
+        Equal,            ///< Uniform load sharing.
+        TriangleDecr    ///< Right triangle-shaped distribution
+    };
 
-	const szt					num;		///< Number of threads.
-	std::vector<szt>			chunkSize;	///< Per-thread amounts of relative load.
-	std::vector<szt>			i1, i2;		///< Range borders.
-	std::vector<std::thread>	thr;		///< Container holding the threads.
+    const szt                    num;        ///< Number of threads.
+    std::vector<szt>            chunkSize;    ///< Per-thread amounts of relative load.
+    std::vector<szt>            i1, i2;        ///< Range borders.
+    std::vector<std::thread>    thr;        ///< Container holding the threads.
 
-	/**
-	* \brief Constructor.
-	* \details Creates threads based on a set of work units.
-	* \param offset Offset from the start of work unit container.
-	* \param size Size of the work unit container shared among the threads.
-	* \param omittedBoundaries Boundsary work units to discard.
-	* \param wht Relative weiting.
-	* \param nThreads Thread number.
-	*/
-	explicit Threads(
-			 const szt offset,
-			 const szt size,
-			 const ulong omittedBoundaries,
-			 const Weights wht,
-			 const ulong nThreads );
-	
-	/**
-	* Joins the threads.
-	*/
-	void join();
-	
-	// Various weights for relative thread loads
-	/**
-	* \brief Sets weighting factors according to \a Weights::Equal.
-	* \param w Total number of work units.
-	* \param rest Number of work units remaining after the optimal distribution.
-	*/
-	void set_chunks_equal(const szt w,
-						  const szt rest);
+    /**
+    * \brief Constructor.
+    * \details Creates threads based on a set of work units.
+    * \param offset Offset from the start of work unit container.
+    * \param size Size of the work unit container shared among the threads.
+    * \param omittedBoundaries Boundsary work units to discard.
+    * \param wht Relative weiting.
+    * \param nThreads Thread number.
+    */
+    explicit Threads(
+             const szt offset,
+             const szt size,
+             const ulong omittedBoundaries,
+             const Weights wht,
+             const ulong nThreads );
+    
+    /**
+    * Joins the threads.
+    */
+    void join();
+    
+    // Various weights for relative thread loads
+    /**
+    * \brief Sets weighting factors according to \a Weights::Equal.
+    * \param w Total number of work units.
+    * \param rest Number of work units remaining after the optimal distribution.
+    */
+    void set_chunks_equal(const szt w,
+                          const szt rest);
 
-	/**
-	* \brief Sets weighting factors according to \a Weights::CircleCenter.
-	* \param w Total number of work units.
-	* \param rest Number of work units remaining after the optimal distribution.
-	*/
-	void set_chunks_circular(const szt w,
-							 const szt rest);
-	/**
-	* \brief Sets weighting factors according to \a Weights::TriangleDecr.
-	* \param size Total number of work units.
-	*/
-	void set_chunks_triangleDecr(const szt size);
+    /**
+    * \brief Sets weighting factors according to \a Weights::CircleCenter.
+    * \param w Total number of work units.
+    * \param rest Number of work units remaining after the optimal distribution.
+    */
+    void set_chunks_circular(const szt w,
+                             const szt rest);
+    /**
+    * \brief Sets weighting factors according to \a Weights::TriangleDecr.
+    * \param size Total number of work units.
+    */
+    void set_chunks_triangleDecr(const szt size);
 
-	/**
-	* \brief Prints work unit borders for particular threads.
-	* \param withCout Specifies if printing to cout.
-	* \param msgr \a Msgr used for the output.
-	*/
-	void print_regions(const bool withCout,
-					   Msgr& msgr);
+    /**
+    * \brief Prints work unit borders for particular threads.
+    * \param withCout Specifies if printing to cout.
+    * \param msgr \a Msgr used for the output.
+    */
+    void print_regions(const bool withCout,
+                       Msgr& msgr);
 };
 
-}	// namespace Common
-}	// namespace Utils
+}    // namespace Common
+}    // namespace Utils
 
 #endif // UTILS_COMMON_THREADS_H

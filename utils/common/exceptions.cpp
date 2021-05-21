@@ -41,31 +41,31 @@ namespace Exceptions {
 /// \param msg Message text.
 /// \param msg The reporter.
 int simple( const std::string& msg,
-			Msgr* msgr )
+            Msgr* msgr )
 {
-	if (msgr)
-		msgr->print<true>(msg);
-	else
-		std::cout << msg << std::endl;
+    if (msgr)
+        msgr->print<true>(msg);
+    else
+        std::cout << msg << std::endl;
 
-	exit(EXIT_FAILURE);
+    exit(EXIT_FAILURE);
 
-	return EXIT_FAILURE; 		// pro forma
+    return EXIT_FAILURE;         // pro forma
 }
 
 // Simple xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Simple::
 Simple(
-		const std::string& msg,
-		Msgr* msgr )
-	: std::exception {}
+        const std::string& msg,
+        Msgr* msgr )
+    : std::exception {}
 {
-	if (msgr)
-		msgr->print<true>(msg);
-	else
-		std::cout << msg << std::endl;
+    if (msgr)
+        msgr->print<true>(msg);
+    else
+        std::cout << msg << std::endl;
 }
 
-}	// namespace Exceptions
-}	// namespace Common
-}	// namespace Utils
+}    // namespace Exceptions
+}    // namespace Common
+}    // namespace Utils

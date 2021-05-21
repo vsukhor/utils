@@ -46,39 +46,39 @@ namespace Common {
 /// \details Implements convenience class for measuring time duration.
 struct StopWatch {
 
-	/// An instance in time.
-	struct Instance {
+    /// An instance in time.
+    struct Instance {
 
-		std::chrono::time_point<std::chrono::system_clock> h;	///< A point in time.
-		std::time_t c;											///< ctime-based instance.
-		std::string str;										///< String-based representation.
+        std::chrono::time_point<std::chrono::system_clock> h;    ///< A point in time.
+        std::time_t c;                                            ///< ctime-based instance.
+        std::string str;                                        ///< String-based representation.
 
-		/// Current time.
-		void operator()() {
-			h = std::chrono::system_clock::now();
-			c = std::chrono::system_clock::to_time_t(h);
-			str = std::string(ctime(&c));
-		}
-	};
+        /// Current time.
+        void operator()() {
+            h = std::chrono::system_clock::now();
+            c = std::chrono::system_clock::to_time_t(h);
+            str = std::string(ctime(&c));
+        }
+    };
 
-	Instance start;			///< Start time.
-	Instance stop;			///< Stop time
+    Instance start;            ///< Start time.
+    Instance stop;            ///< Stop time
 
-	/// Duration between \a start and \a stop formatted as a string..
-	std::string duration() {
-		diff = stop.h - start.h;
-		return STR(diff.count());
-	}
+    /// Duration between \a start and \a stop formatted as a string..
+    std::string duration() {
+        diff = stop.h - start.h;
+        return STR(diff.count());
+    }
 
 private:
 
-	std::chrono::duration<double> diff;		///< Duration in std::chrono format.
+    std::chrono::duration<double> diff;        ///< Duration in std::chrono format.
 
 };
 
 
-} 	// namespace Common
-}	// namespace Utils
+}     // namespace Common
+}    // namespace Utils
 
 
 #endif // UTILS_COMMON_STOP_WATCH_H

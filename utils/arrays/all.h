@@ -43,7 +43,7 @@ namespace Arrays {
 namespace iota_array {
   template<typename T, T... Ns>
   constexpr std::array<T, sizeof...(Ns)> make_iota_array(T const offset,
-  														 std::integer_sequence<T, Ns...>) noexcept
+                                                           std::integer_sequence<T, Ns...>) noexcept
   {
     return {{(Ns + offset)...}};
   }
@@ -65,8 +65,8 @@ constexpr auto make_iota_array(T const offset = {}) noexcept
 template <unsigned N, typename T, typename Enabler=void>
 class array {};
 
-}	// namespace Arrays
-}	// namespace Utils
+}    // namespace Arrays
+}    // namespace Utils
 
 #include "array2.h"
 #include "array3.h"
@@ -81,7 +81,7 @@ template<typename T> using A2 = Arrays::array<2,T>;
 template<typename T> using A3 = Arrays::array<3,T>;
 template<typename T> using A4 = Arrays::array<4,T>;
 
-}	// namespace Arrays
-}	// namespace Utils
+}    // namespace Arrays
+}    // namespace Utils
 
 #endif // UTILS_ARRAYS_ARRAY_H

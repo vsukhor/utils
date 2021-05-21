@@ -53,7 +53,7 @@ namespace Exceptions {
 * \see Msgr
 */
 int simple(const std::string& msg,
-		   Msgr* msgr=nullptr);
+           Msgr* msgr=nullptr);
 
 // Simple Exceptions xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -61,34 +61,34 @@ int simple(const std::string& msg,
 * \brief Uncomplicated process termination with exception.
 */
 class Simple
-	: public std::exception {
+    : public std::exception {
 
 public:
 
-	/// \brief Default constructor.
-	Simple() = default;
+    /// \brief Default constructor.
+    Simple() = default;
 
-	/**
-	* \brief Constructor for printing to a log record.
-	* \details Outputs message \p msg to \a Msgr sor tandard output (if \p msgr is nullptr).
-	* \param msg Message to output.
-	* \param msgr Output message processor.
-	*/
-	explicit Simple(const std::string& msg,
-					Msgr* msgr=nullptr);
+    /**
+    * \brief Constructor for printing to a log record.
+    * \details Outputs message \p msg to \a Msgr sor tandard output (if \p msgr is nullptr).
+    * \param msg Message to output.
+    * \param msgr Output message processor.
+    */
+    explicit Simple(const std::string& msg,
+                    Msgr* msgr=nullptr);
 
-	/**
-	* \brief Constructor template for message with parameter \u.
-	* \details Outputs message \p msg to \a Msgr.
-	* \tparam T Type of the essage parameter.
-	* \param msg Message to output.
-	* \param u Message parameter.
-	* \param msgr Output message processor.
-	*/
-	template<typename T>
-	explicit Simple(const std::string& msg,
-					const T& u,
-					Msgr* msgr=nullptr);
+    /**
+    * \brief Constructor template for message with parameter \u.
+    * \details Outputs message \p msg to \a Msgr.
+    * \tparam T Type of the essage parameter.
+    * \param msg Message to output.
+    * \param u Message parameter.
+    * \param msgr Output message processor.
+    */
+    template<typename T>
+    explicit Simple(const std::string& msg,
+                    const T& u,
+                    Msgr* msgr=nullptr);
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -96,20 +96,20 @@ public:
 template<typename T>
 Simple::
 Simple(
-		const std::string& msg,
-		const T& u,
-		Msgr* msgr )
-	: std::exception {}
+        const std::string& msg,
+        const T& u,
+        Msgr* msgr )
+    : std::exception {}
 {
-	if (msgr)
-		msgr->print(msg, u);
-	else
-		std::cout << msg << " " << u << std::endl;
+    if (msgr)
+        msgr->print(msg, u);
+    else
+        std::cout << msg << " " << u << std::endl;
 }
 
 
-}	// namespace Exceptions
-}	// namespace Common
-}	// namespace Utils
+}    // namespace Exceptions
+}    // namespace Common
+}    // namespace Utils
 
 #endif // UTILS_CONFIG_EXCEPTIONS_H

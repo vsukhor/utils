@@ -51,24 +51,24 @@ std::string operator"" _str( unsigned long long number )
 }
 
 long long assert_fun(
-	const char* EX,
-	const char *file,
-	int line,
-	const std::string& msg )
+    const char* EX,
+    const char *file,
+    int line,
+    const std::string& msg )
 {
-	std::cerr << "Assertion (" + std::string(EX) + ") failed! \n" +
-			   "File " + file + ", Line " + std::to_string(line) + "\n" +
-			   "Reason: " + msg << std::endl;
-	std::abort();
+    std::cerr << "Assertion (" + std::string(EX) + ") failed! \n" +
+               "File " + file + ", Line " + std::to_string(line) + "\n" +
+               "Reason: " + msg << std::endl;
+    std::abort();
 }
 
 bool file_exists( const std::string& name )
 {
-	if (auto file = fopen(name.c_str(), "r")) {
-		fclose(file);
-		return true;
-	} 
-	else return false;
+    if (auto file = fopen(name.c_str(), "r")) {
+        fclose(file);
+        return true;
+    } 
+    else return false;
 }
 /*
 bool fileExists( const std::string& name )
@@ -77,41 +77,41 @@ bool fileExists( const std::string& name )
   return (stat (name.c_str(), &buffer) == 0); 
 }
 */
-bool directory_exists( const std::string& pathstrconst ) 			// checks if a given directory exists
+bool directory_exists( const std::string& pathstrconst )             // checks if a given directory exists
 {
-	std::string pathstr {pathstrconst};
-	char lascch {pathstr.back()};
-	if (lascch == SLASH.c_str()[0])
-		pathstr.pop_back();
-	const char* path {pathstr.c_str()};
+    std::string pathstr {pathstrconst};
+    char lascch {pathstr.back()};
+    if (lascch == SLASH.c_str()[0])
+        pathstr.pop_back();
+    const char* path {pathstr.c_str()};
     class stat info;
-    if (stat(path, &info) != 0)			return false;
+    if (stat(path, &info) != 0)            return false;
     else if (info.st_mode & S_IFDIR)    return true;
-    else								return false;
+    else                                return false;
 }
 /*
 void check_directory( const std::string& s )
 {
-	namespace fs = boost::filesystem;
-//	namespace fs = std::experimental::filesystem;
-	const fs::path path {s};
-	if (!fs::exists(path))
-		XASSERT(false, "Error: cannot create directory"+path.string());
-	return;
-//		if(!fs::create_directory(path))
-//			XASSERT(false, "Error: cannot create directory"+path.string());
+    namespace fs = boost::filesystem;
+//    namespace fs = std::experimental::filesystem;
+    const fs::path path {s};
+    if (!fs::exists(path))
+        XASSERT(false, "Error: cannot create directory"+path.string());
+    return;
+//        if(!fs::create_directory(path))
+//            XASSERT(false, "Error: cannot create directory"+path.string());
 }
 */
 void copy_text_file(const std::string& from, const std::string& to)
 {
 
     std::ifstream ifs {from};
-	XASSERT(ifs.is_open(), "Unable to open file for writing: "+from);
+    XASSERT(ifs.is_open(), "Unable to open file for writing: "+from);
     std::ofstream ofs {to};
-	XASSERT(ofs.is_open(), "Unable to open file for writing: "+to);
+    XASSERT(ofs.is_open(), "Unable to open file for writing: "+to);
 
-	for (std::string line; std::getline(ifs, line);)
-		ofs << line << std::endl;
+    for (std::string line; std::getline(ifs, line);)
+        ofs << line << std::endl;
 }
 
 //template float avg<float>( std::vector<float> const& );
@@ -121,7 +121,7 @@ std::string trim( const std::string& str, const std::string& whitespace )
 {
     const auto strBegin {str.find_first_not_of(whitespace)};
     if (strBegin == std::string::npos)
-    	return "";						// no content
+        return "";                        // no content
 
     const auto strEnd {str.find_last_not_of(whitespace)};
     const auto strRange {strEnd - strBegin + 1};
@@ -129,5 +129,5 @@ std::string trim( const std::string& str, const std::string& whitespace )
     return str.substr(strBegin, strRange);
 }
 
-}	// namespace Common
-}	// namespace Utils
+}    // namespace Common
+}    // namespace Utils

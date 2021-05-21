@@ -50,110 +50,110 @@ namespace Common {
 */
 class Msgr {
 
-	using outstream = std::ostream;
-	using logstream = std::ofstream;
+    using outstream = std::ostream;
+    using logstream = std::ofstream;
 
 
 public:
 
-	outstream* so {};		///< Screen out stream.
-	logstream* sl {};		///< Logfile stream.
+    outstream* so {};        ///< Screen out stream.
+    logstream* sl {};        ///< Logfile stream.
 
-	/**
-	* \brief Default constructor.
-	*/
-	Msgr() = default;
+    /**
+    * \brief Default constructor.
+    */
+    Msgr() = default;
 
-	/**
-	* \brief Constructor.
-	* \param so Screen out stream.
-	* \param sl File out stream.
-	* \param precision Precision of real numbers.
-	*/
-	explicit Msgr(outstream* so,
-				  logstream* sl,
-		  		  const int precision=6 );
-	
-	/**
-	* \brief Set formatting parameters.
-	* \param precision Precision of real numbers
-	*/
-	void set_formats(const int precision) noexcept;
+    /**
+    * \brief Constructor.
+    * \param so Screen out stream.
+    * \param sl File out stream.
+    * \param precision Precision of real numbers.
+    */
+    explicit Msgr(outstream* so,
+                  logstream* sl,
+                    const int precision=6 );
+    
+    /**
+    * \brief Set formatting parameters.
+    * \param precision Precision of real numbers
+    */
+    void set_formats(const int precision) noexcept;
 
 
-	/**
-	* \brief Print std::array.
-	* \tparam V Data type of array elements.
-	* \tparam N Number of array elements.
-	* \param name Name/title.
-	* \param v Array data.
-	*/
-	template <typename V, auto N>
-	void print_array( const std::string& name,
-					  const std::array<V,N>& v
-					) const noexcept;
+    /**
+    * \brief Print std::array.
+    * \tparam V Data type of array elements.
+    * \tparam N Number of array elements.
+    * \param name Name/title.
+    * \param v Array data.
+    */
+    template <typename V, auto N>
+    void print_array( const std::string& name,
+                      const std::array<V,N>& v
+                    ) const noexcept;
 
-	/**
-	* \brief Print named std::vector .
-	* \tparam V Data type of vector elements.
-	* \param name Name/title.
-	* \param v Vector data.
-	*/
-	template <typename V>
-	void print_vector( const std::string& name,
-				       const std::vector<V>& v
-					 ) noexcept;
+    /**
+    * \brief Print named std::vector .
+    * \tparam V Data type of vector elements.
+    * \param name Name/title.
+    * \param v Vector data.
+    */
+    template <typename V>
+    void print_vector( const std::string& name,
+                       const std::vector<V>& v
+                     ) noexcept;
 
-	/**
-	* \brief Print std::string.
-	* \tparam endline Finish with line end.
-	* \param s String to print.
-	*/
-	template <bool endline=true>
-	void print(const std::string& s) const noexcept;
+    /**
+    * \brief Print std::string.
+    * \tparam endline Finish with line end.
+    * \param s String to print.
+    */
+    template <bool endline=true>
+    void print(const std::string& s) const noexcept;
 
-	/**
-	* \brief Print to formatted out (variadic).
-	* \tparam endline Finish with line end.
-	* \param fmt Formatting.
-	*/
-	template <bool endline=true>
-	void print(const char *fmt, ...) noexcept;
-		
-	/**
-	* \brief Print std::string out and exit.
-	* \param s String to print.
-	*/
-	void exit(const std::string& s) const noexcept;
+    /**
+    * \brief Print to formatted out (variadic).
+    * \tparam endline Finish with line end.
+    * \param fmt Formatting.
+    */
+    template <bool endline=true>
+    void print(const char *fmt, ...) noexcept;
+        
+    /**
+    * \brief Print std::string out and exit.
+    * \param s String to print.
+    */
+    void exit(const std::string& s) const noexcept;
 
-	/**
-	* \brief Print to formatted out (variadic) and exit.
-	* \param fmt Formatting.
-	*/
-	void exit(const char *fmt, ...) noexcept;
-	
+    /**
+    * \brief Print to formatted out (variadic) and exit.
+    * \param fmt Formatting.
+    */
+    void exit(const char *fmt, ...) noexcept;
+    
 private:
 
-	char buf [4096];	///< Buffer.
+    char buf [4096];    ///< Buffer.
 
-	/**
-	* \brief Check that the stream used is valid.
-	* \tparam S Stream type.
-	*/
-	template <typename S>
-	static constexpr auto is_valid_stream() noexcept;
+    /**
+    * \brief Check that the stream used is valid.
+    * \tparam S Stream type.
+    */
+    template <typename S>
+    static constexpr auto is_valid_stream() noexcept;
 
-	/**
-	* \brief Print to a stream \p io.
-	* \tparam IO Stream type.
-	* \param v String to print.
-	* \param endline Specifies if the line end should be added.
-	*/
-	template <typename IO>
-	void prn(IO* io,
-			 const std::string& v,
-			 bool endline
-			 ) const noexcept;
+    /**
+    * \brief Print to a stream \p io.
+    * \tparam IO Stream type.
+    * \param v String to print.
+    * \param endline Specifies if the line end should be added.
+    */
+    template <typename IO>
+    void prn(IO* io,
+             const std::string& v,
+             bool endline
+             ) const noexcept;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -161,65 +161,65 @@ private:
 template <typename S>
 constexpr auto Msgr::
 is_valid_stream() noexcept {
-	return std::is_same_v<S, outstream> ||
-		   std::is_same_v<S, logstream>;
+    return std::is_same_v<S, outstream> ||
+           std::is_same_v<S, logstream>;
 }
 
 template <typename IO> inline
 void Msgr::
 prn( IO* io,
-	const std::string& v,
-	bool endline ) const noexcept
+    const std::string& v,
+    bool endline ) const noexcept
 { 
-	static_assert(is_valid_stream<IO>(), "Stream type used in Msgr is not valid");
+    static_assert(is_valid_stream<IO>(), "Stream type used in Msgr is not valid");
 
-	*io << v << " ";
-	if (endline) *io << std::endl;
+    *io << v << " ";
+    if (endline) *io << std::endl;
 }
 
 template <bool endline> inline
 void Msgr::
 print( const std::string& s ) const noexcept
-{	
-	if (sl) prn(sl, s, endline);
-	if (so) prn(so, s, endline);
+{    
+    if (sl) prn(sl, s, endline);
+    if (so) prn(so, s, endline);
 }
 
 template <bool endline>
 void Msgr::
 print( const char *fmt, ... ) noexcept
 {
-	va_list va;
-	va_start(va, fmt);
-	const auto n = vsprintf(buf, fmt, va);
-	va_end(va);
-	const auto s = std::string(buf).substr(0, static_cast<unsigned long>(n));
-	if (sl) prn(sl, s, endline);
-	if (so) prn(so, s, endline);
+    va_list va;
+    va_start(va, fmt);
+    const auto n = vsprintf(buf, fmt, va);
+    va_end(va);
+    const auto s = std::string(buf).substr(0, static_cast<unsigned long>(n));
+    if (sl) prn(sl, s, endline);
+    if (so) prn(so, s, endline);
 }
 
 template <typename V, auto N>
 void Msgr::
 print_array( const std::string& name,
-		  	 const std::array<V,N>& v ) const noexcept
+               const std::array<V,N>& v ) const noexcept
 {
-	print<false>(name+"[]:  ");
-	for (const auto o : v)
-		print<false>(std::to_string(o));
-	print<true>("");
+    print<false>(name+"[]:  ");
+    for (const auto o : v)
+        print<false>(std::to_string(o));
+    print<true>("");
 }
 
 template <typename V>
 void Msgr::
 print_vector( const std::string& name,
-			  const std::vector<V>& v ) noexcept
+              const std::vector<V>& v ) noexcept
 {
-	print<false>(name+"[]:  ");
-	for (const auto o : v)
-		print<false>(std::to_string(o));
+    print<false>(name+"[]:  ");
+    for (const auto o : v)
+        print<false>(std::to_string(o));
 }
 
-}	// namespace Common
-}	// namespace Utils
+}    // namespace Common
+}    // namespace Utils
 
 #endif // UTILS_COMMON_OEL_H
