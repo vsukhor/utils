@@ -37,7 +37,7 @@ The library can be compiled with a C++17-capable compiler (e.g. on macOS, either
 There are two ways for building the library:  
 
 1. On systems having cmake (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
-    * cd mitosim
+    * cd utils
     * mkdir build
     * cmake -S . -B build
     * cmake --build build
