@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(utils
-    VERSION 0.31
+    VERSION 0.31.1
     DESCRIPTION "Utility library."
     LANGUAGES CXX)
 
