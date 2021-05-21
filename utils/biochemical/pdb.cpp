@@ -142,7 +142,9 @@ Pdb::Pdb(
 }
 
 void Pdb::
-format_as_pdb( const std::string& record ) noexcept
+format_as_pdb(
+    const std::string& record
+) noexcept
 {
     irecname = irecn(record.substr(0, 6));
     ind = static_cast<uint>(std::stoi(trim(record.substr(6, 5))));
@@ -164,21 +166,29 @@ format_as_pdb( const std::string& record ) noexcept
 }
 
 std::string Pdb::
-format_as_pdb( Msgr& msgr ) const
+format_as_pdb(
+    Msgr& msgr
+) const
 {
     return format_as_pdb(recname(), ind, name, resname, resSeq, chainID[0],
                          pos, occupancy, tempFactor, element, charge, msgr);
 }
 
 std::string Pdb::
-format_as_pdb( const A3<float>& p, Msgr& msgr ) const
+format_as_pdb(
+    const A3<float>& p,
+    Msgr& msgr
+) const
 {
     return format_as_pdb(recname(), ind, name, resname, resSeq, chainID[0],
                          p, occupancy, tempFactor, element, charge, msgr);
 }
 
 std::string Pdb::
-format_as_pdb( float* p, Msgr& msgr ) const
+format_as_pdb(
+    float* p,
+    Msgr& msgr
+) const
 {
     return format_as_pdb(recname(), ind, name, resname, resSeq, chainID[0],
                          {p[0], p[1], p[2]}, occupancy, tempFactor, element,
@@ -186,7 +196,10 @@ format_as_pdb( float* p, Msgr& msgr ) const
 }
 
 std::string Pdb::
-format_as_pdb( const Pdb& a, Msgr& msgr )
+format_as_pdb(
+    const Pdb& a,
+    Msgr& msgr
+)
 {
     return format_as_pdb(irecname2str(a.irecname), a.ind, a.name, a.resname,
                          a.resSeq, a.chainID.c_str()[0], a.pos, a.occupancy,
@@ -206,7 +219,8 @@ format_as_pdb(
     const float tempf,
     const std::string& elt,
     const std::string& chge,
-    Msgr& msgr )
+    Msgr& msgr
+)
 {
     // http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
     std::ostringstream record;
@@ -304,7 +318,9 @@ format_as_pdb(
 }
 
 int Pdb::
-irecn( const std::string& s ) const noexcept
+irecn(
+    const std::string& s
+) const noexcept
 {
     return (s == "ATOM  ") ? 1
                            : ((s == "HETATM") ? 2 : -1);
@@ -318,7 +334,9 @@ recname() const noexcept
 } 
 
 std::string Pdb::
-irecname2str( const int irecname ) noexcept
+irecname2str(
+    const int irecname
+) noexcept
 {
     return (irecname == 1) ? "ATOM  "
                            : "HETATM";
@@ -343,20 +361,27 @@ set_vdW() const noexcept
 bool Pdb::
 is_in_aminoacid() const noexcept
 {
-    std::vector<std::string> resnames { "ILE", "LEU", "PHE", "VAL", "MET", "PRO", "TRP", "HIS", "THR", "GLU",
-                                        "GLN", "CYS", "TYR", "ALA", "SER", "ASN", "ASP", "ARG", "GLY", "LYS" };
-    return std::find(resnames.begin(), resnames.end(), resname) != resnames.end();
+    std::vector<std::string> resnames {
+        "ILE", "LEU", "PHE", "VAL", "MET", "PRO", "TRP", "HIS", "THR", "GLU",
+        "GLN", "CYS", "TYR", "ALA", "SER", "ASN", "ASP", "ARG", "GLY", "LYS"
+    };
+
+    return std::find(resnames.begin(),
+                     resnames.end(),
+                     resname) != resnames.end();
 }
 
 void Pdb::
-read( const std::string& filename,
-      std::vector<Pdb>& a,
-      vec2<std::string>& other,
-      Msgr& msgr )
+read(
+    const std::string& filename,
+    std::vector<Pdb>& a,
+    vec2<std::string>& other,
+    Msgr& msgr
+)
 {
     std::ifstream fin {filename};
     if (!fin.is_open())
-        msgr.exit("Unable to open file for reading at "+filename);
+        msgr.exit("Unable to open file for reading at " + filename);
 
     a.clear();
     other.clear();
@@ -379,14 +404,16 @@ read( const std::string& filename,
 }
 
 void Pdb::
-write( const std::string& filename,
-       const std::vector<Pdb>& a,
-       const vec2<std::string>& other,
-       Msgr& msgr )
+write(
+    const std::string& filename,
+    const std::vector<Pdb>& a,
+    const vec2<std::string>& other,
+    Msgr& msgr
+)
 {
     std::ofstream fout {filename};
     if (!fout.is_open())
-        msgr.exit("Unable to open file for writing at "+filename);
+        msgr.exit("Unable to open file for writing at " + filename);
 
     szt i = 0;
     if (!other.empty())
@@ -407,11 +434,3 @@ write( const std::string& filename,
 
 }    // namespace Biochemical
 }    // namespace Utils
-
-
-
-
-
-
-
-

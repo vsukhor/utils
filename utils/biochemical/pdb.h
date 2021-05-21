@@ -239,11 +239,3 @@ private:
 }    // namespace Utils
 
 #endif // UTILS_BIOCHEMICAL_PDB_H
-
-
-
-
-
-
-
-

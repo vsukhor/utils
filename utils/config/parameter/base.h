@@ -140,7 +140,9 @@ private:
 
 template <typename Q>
 Base<Q>::
-Base( const std::string& name )
+Base(
+        const std::string& name
+    )
     : name {name}
 {}
 
@@ -148,8 +150,10 @@ Base( const std::string& name )
 // value, otherwise retruns false.
 template <typename Q>
 bool Base<Q>::
-detect_by_name( std::ifstream& config,
-                std::string& value ) const
+detect_by_name(
+    std::ifstream& config,
+    std::string& value
+) const
 {    
     const std::string emp {" "};
     const std::string tab {"\t"};
