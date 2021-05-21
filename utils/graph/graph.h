@@ -56,42 +56,51 @@ class Graph {
 
 public:
 
-    using EdgeT = ET;                        ///< Type of the graph edges
-    using vertex_t = typename ET::vertex_t;    ///< Type of the graph vertexes
-    using weight_t = typename ET::weight_t;    ///< Weight type of the edges
-    using pathT = std::vector<vertex_t>;    ///< Type alias for path over consecutively connected vertexes.
-    using adjLT = vec2<ET>;                    ///< Type alias for the graph adjacency list.
+    // typedefs
+    using EdgeT = ET;                        ///< Type of the graph edges.
+    using vertex_t = typename ET::vertex_t;  ///< Type of the graph vertexes.
+    using weight_t = typename ET::weight_t;  ///< Weight type of the edges.
+
+    /// Type alias for path over consecutively connected vertexes.
+    using pathT = std::vector<vertex_t>;
+
+    /// Type alias for the graph adjacency list.
+    using adjLT = vec2<ET>;
 
     /**
     * \brief Breadth first search on the graph
     * \details Determines if vertex \p tar belongs to the graph.
     * \param ajl Adjacency list of the graph.
     * \param q Auxiliary deque.
-    * \param visited Auxiliary vector of flags deniting visited status of graph vertexes.
+    * \param visited Auxiliary vector of flags deniting visited status
+    * of graph vertexes.
     * \param tar Searched vertex.
     * \return 1/0 if \p tar is found/not found respectively.
     */
-    int bfs(const adjLT& ajl,
-            std::deque<vertex_t>& q,            // by reference
-            std::vector<bool>& visited,            // by reference
-            const vertex_t tar
-            ) const;
+    int bfs(
+        const adjLT& ajl,
+        std::deque<vertex_t>& q,        // by reference
+        std::vector<bool>& visited,     // by reference
+        const vertex_t tar
+    ) const;
 
     /**
     * \brief Compute paths connecting a vertex in the graph
     * \details Computes paths starting at vertex \p source to other vertexes
     * in the connected component of the graph specified by the djacency list \p ajl.
-    * Implements Dijkstra's algorithm \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
+    * Implements Dijkstra's algorithm
+    * \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
     * \param[in] source Vertex from which the paths are computed.
     * \param[in] ajl Adjacency list of the graph.
     * \param[out] min_distance Minimal distances.
     * \param[out] previous Path vertexes.
     */
-    void compute_paths(const vertex_t source,
-                       const adjLT& ajl,
-                       std::vector<weight_t>& min_distance,        // by reference
-                       std::vector<vertex_t>& previous            // by reference
-                       ) const;
+    void compute_paths(
+        const vertex_t source,
+        const adjLT& ajl,
+        std::vector<weight_t>& min_distance,   // by reference
+        std::vector<vertex_t>& previous        // by reference
+    ) const;
 
     /**
     * \brief The shortest path between two graph vertexes.
@@ -102,10 +111,11 @@ public:
     * \param ajl Adjacency list of the graph.
     * \return The shortest path between vertexes \p v1 and \p v2.
     */
-    pathT shortest_path(const vertex_t v1,
-                         const vertex_t v2,
-                         const adjLT& ajl
-                         );
+    pathT shortest_path(
+        const vertex_t v1,
+        const vertex_t v2,
+        const adjLT& ajl
+    );
 
     /**
     * \brief Resets adjacency list of the graph.
@@ -113,27 +123,37 @@ public:
     * \param al Adjacency list of the graph.
     * \param w Desired edge weights.
     */
-    void reset_al(adjLT& al,        // by reference
-                  const weight_t w);
+    void reset_al(
+        adjLT& al,        // by reference
+        const weight_t w
+    );
     
-    static std::vector<vertex_t> list2vector(const std::list<vertex_t>& l );
+    /**
+    * \brief Convert list to a std::vector.
+    */
+    static std::vector<vertex_t> list2vector(
+        const std::list<vertex_t>& l
+    );
 
     /**
     * \brief Creates graph adjacency matrix from its adjacency list.
     * \param[in] ajl Adjacency list of the graph.
     * \param[out] agm Adjacency matrix of the graph.
     */
-    void adjacency_matrix(const adjLT& ajl,
-                          vec2<int>& agm        // by reference
-                          ) const;
+    void adjacency_matrix(
+        const adjLT& ajl,
+        vec2<int>& agm        // by reference
+    ) const;
 
     /**
     * \brief Creates graph laplacian matrix from its adjacency matrix.
     * \param[in] agm Adjacency matrix of the graph.
     * \param[out] lm Laplacian matrix of the graph.
     */
-    void laplacian_matrix(const vec2<int>& agm,
-                          vec2<int>& lm);
+    void laplacian_matrix(
+        const vec2<int>& agm,
+        vec2<int>& lm
+    );
     
     /**
     * \brief Prints adjacency list of the graph.
@@ -142,9 +162,10 @@ public:
     * \param ajl Adjacency list of the graph.
     * \param os Output stream.
     */
-    static void print_adjacency_list(const adjLT& ajl,
-                                        std::ostream& os    // by reference
-                                        );
+    static void print_adjacency_list(
+        const adjLT& ajl,
+        std::ostream& os    // by reference
+    );
 
     /**
     * \brief Prints adjacency list of the graph.
@@ -153,21 +174,24 @@ public:
     * \param ajl Adjacency list of the graph.
     * \param os Output stream.
     */
-    static void print_adjacency_list_line(const vertex_t v,
-                                          const adjLT& ajl,
-                                          std::ostream& os    // by reference
-                                          );
+    static void print_adjacency_list_line(
+        const vertex_t v,
+        const adjLT& ajl,
+        std::ostream& os    // by reference
+    );
 };
 
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename ET>
 int Graph<ET>::
-bfs( const adjLT& ajl,
-     std::deque<vertex_t>& q,            // by reference
-     std::vector<bool>& visited,        // by reference
-     const vertex_t tar ) const
+bfs(
+    const adjLT& ajl,
+    std::deque<vertex_t>& q,           // by reference
+    std::vector<bool>& visited,        // by reference
+    const vertex_t tar
+) const
 {
     if (q.empty()) return 0;    // reached end of the search wt finding tar
 
@@ -186,12 +210,15 @@ bfs( const adjLT& ajl,
     return bfs(ajl, q, visited, tar);
 }
 
+
 template <typename ET>
 void Graph<ET>::
-compute_paths( const vertex_t source,
-               const adjLT& adjacency_list,
-               std::vector<weight_t>& min_distance,            // by reference
-               std::vector<vertex_t>& previous ) const        // by reference
+compute_paths(
+    const vertex_t source,
+    const adjLT& adjacency_list,
+    std::vector<weight_t>& min_distance,        // by reference
+    std::vector<vertex_t>& previous             // by reference
+    ) const
 {
     const auto n = adjacency_list.size();
 
@@ -230,17 +257,20 @@ compute_paths( const vertex_t source,
     }
 }
 
+
 template <typename ET>
 typename Graph<ET>::pathT Graph<ET>::
-shortest_path( const vertex_t ind1,
-               const vertex_t ind2,
-               const adjLT& ajl )
+shortest_path(
+    const vertex_t ind1,
+    const vertex_t ind2,
+    const adjLT& ajl
+)
 {
     pathT previous;
     std::vector<weight_t> min_distance;
     compute_paths(ind1, ajl, min_distance, previous);
 
-    // shortest path to a specific vertex v
+    // Shortest path to a specific vertex v:
     auto get_shortest_path_to = [&](vertex_t v) {
         std::list<vertex_t> path;
         for (; v != huge<vertex_t>; v = previous[v])
@@ -250,25 +280,32 @@ shortest_path( const vertex_t ind1,
     };
 
     if (min_distance[ind2] < ET::max_weight) {
-        const auto path_l = get_shortest_path_to(ind2);    // the shortest path edge sequence from ind1 to ind2
+        // The shortest path edge sequence from ind1 to ind2:
+        const auto path_l = get_shortest_path_to(ind2);
         return list2vector(path_l);
     }
     return pathT();
 }
 
+
 template <typename ET>
 void Graph<ET>::
-reset_al( adjLT &al,
-          const weight_t w )
+reset_al(
+    adjLT &al,
+    const weight_t w
+)
 {
     for (auto& o : al)
         for (auto& oo : o)
             oo = {huge<vertex_t>, w};
 }
 
+
 template <typename ET>
 std::vector<typename Graph<ET>::vertex_t> Graph<ET>::
-list2vector( const std::list<vertex_t>& l )
+list2vector(
+    const std::list<vertex_t>& l
+)
 {
     std::vector<vertex_t> v(l.size());
     typename std::list<vertex_t>::const_iterator itl;
@@ -279,10 +316,13 @@ list2vector( const std::list<vertex_t>& l )
     return v;
 }
 
+
 template <typename ET>
 void Graph<ET>::
-adjacency_matrix( const adjLT& ajl,
-                  vec2<int> &agm ) const
+adjacency_matrix(
+    const adjLT& ajl,
+    vec2<int> &agm
+) const
 {    
     agm.resize(ajl.size());
     for (auto& o : agm)
@@ -293,36 +333,45 @@ adjacency_matrix( const adjLT& ajl,
             agm[i][o.target] = 1;
 }
 
+
 template <typename ET>
 void Graph<ET>::
-laplacian_matrix( const vec2<int>& agm,
-                  vec2<int>& lm )
+laplacian_matrix(
+    const vec2<int>& agm,
+    vec2<int>& lm
+)
 {
     lm = Vec2::array_like<int,int>(agm);
 
     const auto s = lm.size();
     for (szt j=0; j<s; j++) {
         int d {};
-        for (szt i=0; i<s; i++) d += agm[j][i];            // j-th node degree
+        for (szt i=0; i<s; i++) d += agm[j][i];       // j-th node degree
         for (szt i=0; i<s; i++) lm[j][i] = -agm[j][i];
         lm[j][j] = d;                                                
     }
 }
 
+
 template <typename ET>
 void Graph<ET>::
-print_adjacency_list( const adjLT& ajl,
-                      std::ostream& os )
+print_adjacency_list(
+    const adjLT& ajl,
+    std::ostream& os
+)
 {
     for (szt i1=0; i1<ajl.size(); i1++)
         print_adjacency_list_line(i1, ajl, os);
 }
 
+
 template <typename ET>
 void Graph<ET>::
-print_adjacency_list_line( const vertex_t v,
-                           const adjLT& ajl,
-                           std::ostream& os )
+print_adjacency_list_line(
+    const vertex_t v,
+    const adjLT& ajl,
+    std::ostream& os
+)
 {
     os << v;
     for (const auto& o : ajl[v])

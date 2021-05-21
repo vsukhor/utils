@@ -46,7 +46,8 @@ namespace Common {
 /**
 * \class Threads threads.h
 * \brief Simple threading utility class.
-* \details Implements convenience class for handling a collection of std::thread objects.
+* \details Implements convenience class for handling a collection
+* of std::thread objects.
 */
 class Threads {
 
@@ -57,15 +58,15 @@ public:
     * \details Names three modes of load distribution between threads.
     */
     enum class Weights {
-        CircleCenter,    ///< Circle-shaped load distribution.
-        Equal,            ///< Uniform load sharing.
+        CircleCenter,   ///< Circle-shaped load distribution.
+        Equal,          ///< Uniform load sharing.
         TriangleDecr    ///< Right triangle-shaped distribution
     };
 
-    const szt                    num;        ///< Number of threads.
-    std::vector<szt>            chunkSize;    ///< Per-thread amounts of relative load.
-    std::vector<szt>            i1, i2;        ///< Range borders.
-    std::vector<std::thread>    thr;        ///< Container holding the threads.
+    const szt                num;        ///< Number of threads.
+    std::vector<szt>         chunkSize;  ///< Per-thread amounts of relative load.
+    std::vector<szt>         i1, i2;     ///< Range borders.
+    std::vector<std::thread> thr;        ///< Container holding the threads.
 
     /**
     * \brief Constructor.

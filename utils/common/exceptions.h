@@ -24,7 +24,9 @@
 
 /**
  * \file exceptions.h
- * \brief std::exception-derived classes for checking the parameters read from confuguration files.
+ * \brief std::exception-derived classes for checking confuguration parameters.
+ * \details Implementation of std::exception-derived classes for checking
+ * the parameters read from confuguration files.
  + \author Valerii Sukhorukov
  */
 
@@ -55,7 +57,7 @@ namespace Exceptions {
 int simple(const std::string& msg,
            Msgr* msgr=nullptr);
 
-// Simple Exceptions xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// Simple Exceptions xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * \brief Uncomplicated process termination with exception.
@@ -70,7 +72,8 @@ public:
 
     /**
     * \brief Constructor for printing to a log record.
-    * \details Outputs message \p msg to \a Msgr sor tandard output (if \p msgr is nullptr).
+    * \details Outputs message \p msg to \a Msgr for standard
+    * output (if \p msgr is nullptr).
     * \param msg Message to output.
     * \param msgr Output message processor.
     */
@@ -91,7 +94,7 @@ public:
                     Msgr* msgr=nullptr);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename T>
 Simple::

@@ -88,7 +88,9 @@ void copy_text_file(const std::string& fname1,
                     const std::string& fname2);
 
 /// Sum at compile time.
-template <typename T, typename Q, T (Q::* P)() const> // member function pointer parameter
+template <typename T,
+          typename Q,
+          T (Q::* P)() const> // member function pointer parameter
 struct Adder {
     int operator()(const T& i, const Q& o) const {
         return (o.*P)() + i;
@@ -196,9 +198,11 @@ template <typename T> inline
 auto avg( const std::vector<T>& v )
 {
     if constexpr (std::is_integral<T>::value)
-        return std::accumulate(v.begin(), v.end(), 0LL) / static_cast<double>(v.size());
+        return std::accumulate(v.begin(), v.end(), 0LL) /
+               static_cast<double>(v.size());
     else
-        return std::accumulate(v.begin(), v.end(), zero<T>) / v.size();
+        return std::accumulate(v.begin(), v.end(), zero<T>) /
+               v.size();
 }
 
 /// Variance of the vector elements.
@@ -225,7 +229,7 @@ std::vector<T> exp_num( const T b,
     for (uint i=1; i<n; i++)
         x[i] = x[i-1] + dx;
 
-    const auto c {b / (std::exp( b * r) - one<T>)};
+    const auto c {b / (std::exp(b * r) - one<T>)};
 
     for (uint i=0; i<n; i++)
         q[i] = c * std::exp(b * x[i]);
@@ -277,7 +281,8 @@ szt index_min( const std::vector<T>& v ) noexcept
 template <typename T> constexpr
 T gaussian( const T x ) noexcept
 {
-    return std::exp(-x*x/two<T>)/std::sqrt(twopi<T>);
+    return std::exp(-x * x / two<T>) /
+           std::sqrt(twopi<T>);
 }
 
 /// The zero-mean Gaussian function calculated at position \b x.
@@ -285,7 +290,8 @@ template <typename T> constexpr
 T gaussian( const T x,
             const T var ) noexcept
 {
-    return std::exp(-x*x/(two<T>*var))/std::sqrt(twopi<T>*var);
+    return std::exp(-x*x / (two<T> * var)) /
+           std::sqrt(twopi<T> * var);
 }
 
 /// The Gaussian function calculated at position \b x.
@@ -294,7 +300,8 @@ T gaussian( const T x,
             const T mean,
             const T var ) noexcept
 {
-    return std::exp(-(x-mean)*(x-mean)/(two<T>*var))/std::sqrt(twopi<T>*var);
+    return std::exp(-(x - mean) * (x - mean) / (two<T> * var)) /
+           std::sqrt(twopi<T>*var);
 }
 
 /// The zero-mean Gaussian function calculated at position \b x.
@@ -303,7 +310,9 @@ T gaussian_fun( T x,
                 T mean,
                 T sigma )
 {
-    return one<T> / std::sqrt(twopi<T>) * std::exp(-(x-mean)*(x-mean)/(sigma*sigma)/two<T>);
+    return one<T> /
+           std::sqrt(twopi<T>) *
+           std::exp(-(x - mean) * (x - mean) / (sigma * sigma) / two<T>);
 }
 
 /// \brief Prepads an integer number with zeros to a string of desired length.
@@ -312,18 +321,44 @@ T gaussian_fun( T x,
 template <auto K>
 std::string pad_zeros( const szt n )
 {
-    static_assert(K > 1 && K < 7, "Padding is only supprted for lengths between 2 and 6 inclusive");
+    static_assert(K > 1 && K < 7,
+                  "Padding is only supprted for lengths between 2 and 6 inclusive");
 
     if constexpr (K == 2)
-        return n<10 ? "0" : "" + STR(n);
+        return n<10 ? "0"
+                    : "" + STR(n);
     else if constexpr (K == 3)
-        return n<100 ? n<10 ? "00" : "0" : "" + STR(n);
+        return n<100 ? n<10
+                     ? "00"
+                     : "0"
+                     : "" + STR(n);
     else if constexpr (K == 4)
-        return n<1000 ? n<100 ? n<10 ? "000" : "00" : "0" : "" + STR(n);
+        return n<1000 ? n<100
+                      ? n<10
+                      ? "000"
+                      : "00"
+                      : "0"
+                      : "" + STR(n);
     else if constexpr (K == 5)
-        return n<10000 ? n<1000 ? n<100 ? n<10 ? "0000" : "000" : "00" : "0" : "" + STR(n);
+        return n<10000 ? n<1000
+                       ? n<100
+                       ? n<10
+                       ? "0000"
+                       : "000"
+                       : "00"
+                       : "0"
+                       : "" + STR(n);
     else if constexpr (K == 6)
-        return n<100000 ? n<10000 ? n<1000 ? n<100 ? n<10 ? "00000" : "0000" : "000" : "00" : "0" : "" + STR(n);
+        return n<100000 ? n<10000
+                        ? n<1000
+                        ? n<100
+                        ? n<10
+                        ? "00000"
+                        : "0000"
+                        : "000"
+                        : "00"
+                        : "0"
+                        : "" + STR(n);
 };
 
 /// \brief Removes from a vector all instances of an element a.

@@ -25,8 +25,8 @@
 /**
  * \file vectors.h
  * \brief Parameters of type std::vector.
- * \details Contains template partial specialization for classes encapsulating confuguration file
- * parameter of type std::vector.
+ * \details Contains template partial specialization for classes encapsulating
+ * confuguration file parameter of type std::vector.
  + \author Valerii Sukhorukov
  */
 
@@ -47,15 +47,20 @@ namespace Parameter {
 
 using namespace Common;
 
-// specialization for vectors of fundamental types xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// specialization for vectors of fundamental types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* \brief Partial template specialization for for parameters of std vector of continuous fundamental types.
+* \brief Parameters of std vector of continuous fundamental types.
+* \details Partial template specialization for for parameters of std vector of
+* continuous fundamental types.
 * \tparam T Parameter type: must be std::is_fundamental.
-* \tparam isDiscrete Specifies if the vector components accept discrete of continous values.
+* \tparam isDiscrete Specifies if the vector components accept discrete
+* or continous values.
 */
 template <typename T, bool isDiscrete>
-class Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>
+class Par<std::vector<T>,
+         isDiscrete,
+         std::enable_if_t<std::is_fundamental<T>::value>>
     : public Base<T>
 {
     using Q = std::vector<T>;
@@ -99,15 +104,19 @@ public:
                      Msgr* msgr=nullptr);
 
     /**
-    * \brief Static function for reading a parameter without instantiating this class object.
+    * \brief Read a parameter without instantiating.
+    * \details Static function for reading a parameter without instantiating
+    * this class object.
     * \param name Name of the parameter.
     * \param fname Name of the configuration file.
     * \param msgr \a Msgr used for the output.
     * \return Parameter values (the whole vector).
     */
-    static auto readin(const std::string& name,
-                       const std::string& fname,
-                       Msgr* msgr=nullptr);
+    static auto readin(
+        const std::string& name,
+        const std::string& fname,
+        Msgr* msgr=nullptr
+    );
     
     /**
     * \brief Print the the parameter to std::cout and logfile.
@@ -138,18 +147,24 @@ private:
     void initialize(std::string value) final;
 };    
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, bool isDiscrete>
-Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+Par<std::vector<T>,
+    isDiscrete,
+    std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
      const szt expectedSize )
     : Base<T> {name}
     , expectedSize_ {expectedSize}
 {}
 
+
 template <typename T, bool isDiscrete>
-Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+Par<std::vector<T>,
+    isDiscrete,
+    std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
      const std::string& fname,
      const std::vector<Q>& range,
@@ -161,15 +176,22 @@ Par( const std::string& name,
     print(msgr);
 }
 
+
 template <typename T, bool isDiscrete>
-void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
-check_range( const std::vector<Q>& r, Msgr* msgr )
+void Par<std::vector<T>,
+         isDiscrete,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
+check_range(
+    const std::vector<Q>& r,
+    Msgr* msgr
+)
 {
-    if (!r.size()) return;        // use this case to omit string checkups
+    if (!r.size()) return;   // use this case to omit string checkups
 
     using namespace Exceptions;
 
-    XASSERT(!isDiscrete || r.size()==2, "size of r must be 2 for continuous parameters");
+    XASSERT(!isDiscrete || r.size()==2,
+            "size of r must be 2 for continuous parameters");
     if constexpr (isDiscrete) {
         if (std::find(r.begin(), r.end(), p_) == r.end())
             throw ParOutOfRange<Q,isDiscrete> {get_name(), p_, r, msgr};
@@ -180,15 +202,25 @@ check_range( const std::vector<Q>& r, Msgr* msgr )
     }
 }
 
-template <typename T, bool isDiscrete>
-auto Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
-readin( const std::string& s, const std::string& fname, Msgr* msgr )
-{
-    return Par<Q,isDiscrete> {s, fname, msgr}();
-};
 
 template <typename T, bool isDiscrete>
-void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+auto Par<std::vector<T>,
+         isDiscrete,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
+readin(
+    const std::string& s,
+    const std::string& fname,
+    Msgr* msgr
+)
+{
+    return Par<Q,isDiscrete> {s, fname, msgr}();
+}
+
+
+template <typename T, bool isDiscrete>
+void Par<std::vector<T>,
+         isDiscrete,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
 print( Msgr* msgr )
 {
     (msgr)
@@ -196,16 +228,22 @@ print( Msgr* msgr )
     : std::cout << get_name() << " " << p_ << std::endl;
 }
 
+
 template <typename T, bool isDiscrete>
-std::vector<T> Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+std::vector<T> Par<std::vector<T>,
+                   isDiscrete,
+                   std::enable_if_t<std::is_fundamental<T>::value>>::
 operator()() const
 {
     XASSERT(true, get_name());
     return p_;
 }
 
+
 template <typename T, bool isDiscrete>
-T Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+T Par<std::vector<T>,
+      isDiscrete,
+      std::enable_if_t<std::is_fundamental<T>::value>>::
 operator[]( const szt i ) const
 {
     XASSERT(isLoaded_, get_name());
@@ -213,14 +251,18 @@ operator[]( const szt i ) const
     return p_[i];
 }
 
+
 template <typename T, bool isDiscrete>
-void Par<std::vector<T>, isDiscrete, std::enable_if_t<std::is_fundamental<T>::value>>::
+void Par<std::vector<T>,
+         isDiscrete,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
 initialize( std::string value )
 {
     const std::string emp {" "};
     const std::string tab {"\t"};
     const Utils::Common::Exceptions::Simple improperSizeEx
-            {"Improper Config::"+get_name()+" initialization: Excessive data size"};
+            {"Improper Config::"+get_name()+
+             " initialization: Excessive data size"};
 
     while (value.length()) {
         ulong e {value.find(emp)};

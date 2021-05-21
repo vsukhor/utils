@@ -49,9 +49,11 @@ struct StopWatch {
     /// An instance in time.
     struct Instance {
 
-        std::chrono::time_point<std::chrono::system_clock> h;    ///< A point in time.
-        std::time_t c;                                            ///< ctime-based instance.
-        std::string str;                                        ///< String-based representation.
+        /// A point in time.
+        std::chrono::time_point<std::chrono::system_clock> h;
+
+        std::time_t c;     ///< ctime-based instance.
+        std::string str;   ///< String-based representation.
 
         /// Current time.
         void operator()() {
@@ -61,8 +63,8 @@ struct StopWatch {
         }
     };
 
-    Instance start;            ///< Start time.
-    Instance stop;            ///< Stop time
+    Instance start;    ///< Start time.
+    Instance stop;     ///< Stop time
 
     /// Duration between \a start and \a stop formatted as a string..
     std::string duration() {
@@ -72,7 +74,7 @@ struct StopWatch {
 
 private:
 
-    std::chrono::duration<double> diff;        ///< Duration in std::chrono format.
+    std::chrono::duration<double> diff;   ///< Duration in std::chrono format.
 
 };
 

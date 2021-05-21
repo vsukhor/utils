@@ -51,7 +51,7 @@ using ulong = unsigned long;
 using uint = unsigned int;
 using szt = std::size_t;
 
-// container typedefs ==================================================================================================
+// container typedefs ==========================================================
 
 // std vector-based 2, 3, 4-dim containers
 template <typename T> using vec2 = std::vector<std::vector<T>>;
@@ -65,7 +65,7 @@ template <typename T, auto N> using vecarr = std::vector<std::array<T,N>>;
 // std vector of unique pointers
 template <typename T> using vup = std::vector<std::unique_ptr<T>>;
 
-// common constants ====================================================================================================
+// common constants ============================================================
 
 template <typename T> constexpr T zero {static_cast<T>(0.L)};
 template <typename T> constexpr T half {static_cast<T>(.5L)};
@@ -78,36 +78,54 @@ template <typename T> constexpr T five {static_cast<T>(5.L)};
 template <typename T> constexpr T six {static_cast<T>(6.L)};
 template <typename T> constexpr T ten {static_cast<T>(10.L)};
 
-template <typename T> constexpr T pi {static_cast<T>(3.1415926535897932384626433832795L)};
-template <typename T> constexpr T twopi {two<T>*pi<T>};
-template <typename T> constexpr T halfpi {half<T>*pi<T>};
-template <typename T> constexpr T sqrtPI {static_cast<T>(1.7724538509055160272981674833411L)};
+template <typename T> constexpr T
+    pi {static_cast<T>(3.1415926535897932384626433832795L)};
+template <typename T> constexpr T
+    twopi {two<T>*pi<T>};
+template <typename T> constexpr T
+    halfpi {half<T>*pi<T>};
+template <typename T> constexpr T
+    sqrtPI {static_cast<T>(1.7724538509055160272981674833411L)};
 
 template <typename T, typename Enabler = void> constexpr T sqrt2PI;
-template <typename T> constexpr T sqrt2PI<T,std::enable_if_t<std::is_arithmetic<T>::value>> {std::pow(twopi<T>, half<T>)};
+template <typename T> constexpr T
+    sqrt2PI<T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+        std::pow(twopi<T>, half<T>)
+    };
 
-// Templates for numerical limits. =====================================================================================
+// Templates for numerical limits. =============================================
 
 template <typename T, typename Enabler = void> constexpr T EPS;
-template <typename T> constexpr T EPS<T,std::enable_if_t<std::is_fundamental<T>::value>> {std::numeric_limits<T>::epsilon()};
+template <typename T> constexpr T
+    EPS<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+        std::numeric_limits<T>::epsilon()
+    };
 
 template <typename T, typename Enabler = void> constexpr T huge;
-template <typename T> constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>>
-    {std::numeric_limits<T>::has_infinity
-   ? std::numeric_limits<T>::infinity()
-   : std::numeric_limits<T>::max()};
+template <typename T> constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+        std::numeric_limits<T>::has_infinity
+        ? std::numeric_limits<T>::infinity()
+        : std::numeric_limits<T>::max()
+    };
 
 template <typename T, typename Enabler = void> constexpr T MAX;
-template <typename T> constexpr T MAX<T,std::enable_if_t<std::is_fundamental<T>::value>> = std::numeric_limits<T>::max();
-template <typename T> constexpr T MAX<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
+template <typename T> constexpr T
+    MAX<T,std::enable_if_t<std::is_fundamental<T>::value>> =
+        std::numeric_limits<T>::max();
+template <typename T> constexpr T
+    MAX<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
 
 template <typename T, typename Enabler = void> constexpr T MIN;
-template <typename T> constexpr T MIN<T,std::enable_if_t<std::is_fundamental<T>::value>> {std::numeric_limits<T>::min()};
-template <typename T> constexpr T MIN<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
+template <typename T> constexpr T
+    MIN<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+        std::numeric_limits<T>::min()
+    };
+template <typename T> constexpr T
+    MIN<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
 
 template <typename T> constexpr T INF {std::numeric_limits<T>::infinity()};
 
-// std arrays filled with common constants. ============================================================================
+// std arrays filled with common constants. ====================================
 
 /// \brief produce std::array initialized to \p val.
 /// \tparam T std::array template parameter.
@@ -124,17 +142,29 @@ auto filled_array( const T val )
     return a;
 }
 
-template <auto N> constexpr std::array<bool,N> falses {filled_array<bool,N>(false)};
-template <auto N> constexpr std::array<bool,N> trues {filled_array<bool,N>(true)};
+template <auto N> constexpr std::array<bool,N> falses {
+    filled_array<bool,N>(false)
+};
+template <auto N> constexpr std::array<bool,N> trues {
+    filled_array<bool,N>(true)
+};
+template <typename T, auto N> constexpr std::array<T,N> zeros {
+    filled_array<T,N>(zero<T>)
+};
+template <typename T, auto N> constexpr std::array<T,N> ones {
+    filled_array<T,N>(one<T>)
+};
+template <typename T, auto N> constexpr std::array<T,N> hundreds {
+    filled_array<T,N>(static_cast<T>(100.L))
+};
+template <typename T, auto N> constexpr std::array<T,N> huges {
+    filled_array<T,N>(huge<T>)
+};
+template <typename T, auto N> constexpr std::array<T,N> mhuges {
+    filled_array<T,N>(-huge<T>)
+};
 
-template <typename T, auto N> constexpr std::array<T,N> zeros {filled_array<T,N>(zero<T>)};
-template <typename T, auto N> constexpr std::array<T,N> ones {filled_array<T,N>(one<T>)};
-template <typename T, auto N> constexpr std::array<T,N> hundreds {filled_array<T,N>(static_cast<T>(100.L))};
-template <typename T, auto N> constexpr std::array<T,N> huges {filled_array<T,N>(huge<T>)};
-template <typename T, auto N> constexpr std::array<T,N> mhuges {filled_array<T,N>(-huge<T>)};
-
-
-// Range borders as two-element std arrays. ============================================================================
+// Range borders as two-element std arrays. ====================================
 
 constexpr std::array<bool,2> bools {{false, true}};
 template <typename T> constexpr std::array<T,2> zeroone {{zero<T>, one<T>}};
@@ -143,7 +173,7 @@ template <typename T> constexpr std::array<T,2> onehuge {{one<T>, huge<T>}};
 template <typename T> constexpr std::array<T,2> moneone {{-one<T>, one<T>}};
 template <typename T> constexpr std::array<T,2> mhugehuge {{-huge<T>, huge<T>}};
 
-// Range borders as two-element std vectors of arrays. =================================================================
+// Range borders as two-element std vectors of arrays. =========================
 
 template <auto N> const std::vector rangeBools {falses<N>, trues<N>};
 template <auto N> const vecarr<bool,N> vecarrFT {falses<N>, trues<N>};
@@ -151,7 +181,7 @@ template <typename T, auto N> const vecarr<T,N> vecarr0H {zeros<T,N>, huges<T,N>
 template <typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>};
 //template <typename T, auto N> constexpr std::vector<T,N> zeroshuges {zeros<real,N>, huges<real,N>};
 
-// ANSI colors =========================================================================================================
+// ANSI colors =================================================================
 
 #define ANSI_RESET       "\x1B[0m"
 #define ANSI_FG_BLACK    "\x1b[30m"

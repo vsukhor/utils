@@ -66,32 +66,38 @@ void save_as_DX(
         msgr.exit("Error while saving volume map: length units not supported");
     std::ofstream fout {filename};
     if (!fout.is_open())
-        msgr.exit("Error while saving volume map: Unable to open file: "+filename);
+        msgr.exit("Error while saving volume map: Unable to open file: " +
+                  filename);
 
-    msgr.print("Started writing to "+filename);
+    msgr.print("Started writing to " + filename);
 
     std::size_t npoints = v.size() * v[0].size() * v[0][0].size();
 
-    fout << std::string("object 1 class gridpositions counts ") + STR(v.size()) + " "
-                                                                + STR(v[0].size()) + " "
-                                                                + STR(v[0][0].size()) << std::endl;
-    fout << std::string("origin ") + STR(origin[0]) + " " + STR(origin[1]) + " " + STR(origin[2]) << std::endl;
+    fout << std::string("object 1 class gridpositions counts ") +
+         << v.size() << " " << v[0].size() << " " << v[0][0].size()
+         << std::endl;
 
-    fout << std::string("delta ") + STR(delta[0]) + " " + STR(0)        + " " + STR(0) << std::endl;
-    fout << std::string("delta ") + STR(0)        + " " + STR(delta[1]) + " " + STR(0) << std::endl;
-    fout << std::string("delta ") + STR(0)        + " " + STR(0)        + " " + STR(delta[2]) << std::endl;
+    fout << std::string("origin ")
+         << origin[0] << " " << origin[1] << " " << origin[2]
+         << std::endl;
 
-    fout << std::string("object 2 class gridconnections counts ") + STR(v.size()) + " "
-                                                                  + STR(v[0].size()) + " "
-                                                                  + STR(v[0][0].size()) << std::endl;
-    fout << std::string("object 3 class array type double rank 0 items ") + STR(npoints) + " data follows" << std::endl;
+    fout << std::string("delta ") << delta[0] << " " << 0        << " " << 0        << std::endl;
+    fout << std::string("delta ") << 0        << " " << delta[1] << " " << 0        << std::endl;
+    fout << std::string("delta ") << 0        << " " << 0        << " " << delta[2] << std::endl;
+
+    fout << std::string("object 2 class gridconnections counts ")
+         << v.size() << " " <<v[0].size() << " " << v[0][0].size()
+         << std::endl;
+    fout << std::string("object 3 class array type double rank 0 items ")
+         << npoints << " data follows"
+         << std::endl;
 
     std::vector<L> templine(npoints);
     std::size_t count {};
     for (std::size_t i=0; i<v.size(); i++)
         for (std::size_t j=0; j<v[i].size(); j++)
             for (std::size_t k=0; k<v[i][j].size(); k++)
-                templine[count++] = v[i][j][k];                // ( v[i][j][k] ) ? 0 : 1;
+                templine[count++] = v[i][j][k];
     std::size_t nlines = std::size_t(npoints/3);
     std::size_t lastlinenum = npoints % 3;
     for (size_t i=0; i<nlines; i++)
@@ -101,9 +107,10 @@ void save_as_DX(
     if (     lastlinenum == 1) fout << STR(templine[npoints-1]) << std::endl;
     else if (lastlinenum == 2) fout << STR(templine[npoints-2]) + " " +
                                        STR(templine[npoints-1]) << std::endl;
-    fout << std::endl;
-    fout << std::string("object \"distance (protein) [A]\" class field") << std::endl;
-    fout << std::endl;
+    fout << std::endl
+         << std::string("object \"distance (protein) [A]\" class field")
+         << std::endl
+         << std::endl;
 
     msgr.print("Finished writing to "+filename);
 }
@@ -122,30 +129,36 @@ void save_as_DX(
 */
 template <typename K, typename T>
 void read_as_DX(
-        const std::string& filename,
-        vec3<K>& v,
-        A3<T>& origin,
-        A3<T>& delta,
-        A3<szt>& ms,
-        const std::vector<uint>& bin,
-        const std::string& units,
-        Msgr &msgr )
+    const std::string& filename,
+    vec3<K>& v,
+    A3<T>& origin,
+    A3<T>& delta,
+    A3<szt>& ms,
+    const std::vector<uint>& bin,
+    const std::string& units,
+    Msgr &msgr
+)
 {
     if (bin[0] != 1 ||
         bin[1] != 1 ||
-        bin[2] != 1 )
-        msgr.exit("Error: readDX with bin != 1 is not implemented for "+filename);
+        bin[2] != 1)
+        msgr.exit("Error: readDX with bin != 1 is not implemented for " +
+                  filename);
 
     std::ifstream fin {filename, std::ios::in};
     if (!fin.is_open())
-        msgr.exit("Error while reading volume map: Unable to open file at "+filename);
+        msgr.exit("Error while reading volume map: Unable to open file at " +
+                  filename);
 
-    msgr.print("Started reading "+filename);
+    msgr.print("Started reading " + filename);
 
     std::string line;
     szt xdim, ydim, zdim;
+    // % object 1 class gridpositions counts 30 30 30:
     std::getline(fin, line);
-    sscanf(line.c_str(), "%*s %*d %*s %*s %*s %ld %ld %ld", &xdim, &ydim, &zdim);    // % object 1 class gridpositions counts 30 30 30
+    sscanf(line.c_str(),
+           "%*s %*d %*s %*s %*s %ld %ld %ld",
+           &xdim, &ydim, &zdim);
     ms[0] = xdim;
     ms[1] = ydim;
     ms[2] = zdim;
@@ -160,35 +173,61 @@ void read_as_DX(
     else
         numlines = size_t(npoints/3) + 1;
 
+    // origin:
     std::getline(fin, line);
-    sscanf(line.c_str(), "%*s %f %f %f", &origin[0], &origin[1], &origin[2]);    // origin
+    sscanf(line.c_str(), "%*s %f %f %f", &origin[0], &origin[1], &origin[2]);
+
+    // delta 1 0 0:
     std::getline(fin, line);
-    sscanf(line.c_str(), "%*s %f %*f %*f", &delta[0]);                            // delta 1 0 0
+    sscanf(line.c_str(), "%*s %f %*f %*f", &delta[0]);
+
+    // delta 0 1 0:
     std::getline(fin, line);
-    sscanf(line.c_str(), "%*s %*f %f %*f", &delta[1]);                            // delta 0 1 0
+    sscanf(line.c_str(), "%*s %*f %f %*f", &delta[1]);
+
+    // delta 0 0 1:
     std::getline(fin, line);
-    sscanf(line.c_str(), "%*s %*f %*f %f", &delta[2]);                            // delta 0 0 1
-    std::getline(fin, line);            // ignore:   object 2 class gridconnections counts 247 317 242
-    std::getline(fin, line);            // ignore:   object 3 class array type double rank 0 items 18948358 data follows
-    std::vector<float> templine(npoints);    // convert to float for writing
+    sscanf(line.c_str(), "%*s %*f %*f %f", &delta[2]);
+
+    // Ignore: object 2 class grid connections counts 247 317 242:
+    std::getline(fin, line);
+
+    // Ignore: object 3 class array type double rank 0 items 18948358 data follows:
+    std::getline(fin, line);
+
+    // Convert to float for writing:
+    std::vector<float> templine(npoints);
 
     szt count {};
     for (szt n=0; n<numlines-1; n++) {
         std::getline(fin, line);
-        sscanf(line.c_str(), "%f %f %f", &templine[count], &templine[count+1], &templine[count+2]);
+        sscanf(line.c_str(),
+               "%f %f %f",
+               &templine[count], &templine[count+1], &templine[count+2]);
         count += 3;
     }
-    std::getline(fin, line);        // the last line may be shorter than 3 elements, so it is treated separately
-    if (     lastlinenumelements == 1)
-        sscanf(line.c_str(), "%f", &templine[count++]);
-    else if (lastlinenumelements == 2 ) {
-        sscanf(line.c_str(), "%f %f", &templine[count], &templine[count+1]);
+
+    // The last line may be shorter than 3 elements, so it is treated separately:
+    std::getline(fin, line);
+    if (     lastlinenumelements == 1) {
+        sscanf(line.c_str(),
+               "%f",
+               &templine[count]);
+        count++
+    }
+    else if (lastlinenumelements == 2) {
+        sscanf(line.c_str(),
+               "%f %f",
+               &templine[count], &templine[count+1]);
         count += 2;
     }
     else {
-        sscanf(line.c_str(), "%f %f %f", &templine[count], &templine[count+1], &templine[count+2]);
+        sscanf(line.c_str(),
+               "%f %f %f",
+               &templine[count], &templine[count+1], &templine[count+2]);
         count += 3;
     }
+
     count = 0;
     for (szt i=0; i<v.size(); i++)
         for (szt j=0; j<v[i].size(); j++)

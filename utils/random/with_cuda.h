@@ -51,19 +51,21 @@ template <typename realT>
 class Cuda
     : public Core<realT> {
 
-    // Ensure that the template parameter is a floating type
-    static_assert(std::is_floating_point<realT>::value,
-                  "Class Core can only be instantiated with floating point types");
+    // Ensure that the template parameter is a floating type:
+    static_assert(
+        std::is_floating_point<realT>::value,
+        "Class Core can only be instantiated with floating point types"
+    );
 
     using Core<realT>::buffersize;
 
-    realT* rU01;            ///< Buffer array for storing random numbers (host).
-    realT* d_Rand;            ///< Buffer array for storing random numbers (device).
+    realT* rU01;         ///< Buffer array for storing random numbers (host).
+    realT* d_Rand;       ///< Buffer array for storing random numbers (device).
     
-    int       rU01_ind;        ///< Index of the current random number in \a rU01.
+    int rU01_ind;        ///< Index of the current random number in \a rU01.
                                                 
-    std::mt19937        gCPU;        ///< Random number generator using CPU.
-    curandGenerator_t    gGPU;        ///< Random number generator using GPU.
+    std::mt19937      gCPU;    ///< Random number generator using CPU.
+    curandGenerator_t gGPU;    ///< Random number generator using GPU.
 
 public:
 
@@ -88,14 +90,14 @@ public:
         const std::string& runName,
         Msgr& msgr);
 
-    // The rule of five is triggered by the destructor, the defaults suffice
-    Cuda(const Cuda&) = delete;                ///< copy constructor
-    Cuda& operator=(const Cuda&) = delete;     ///< copy assignment
-    Cuda(Cuda&&) = delete;                     ///< move constructor
-    Cuda& operator=(Cuda&&) = delete;          ///< move assignment
+    // The rule of five is triggered by the destructor, the defaults suffice:
+    Cuda(const Cuda&) = delete;             ///< copy constructor
+    Cuda& operator=(const Cuda&) = delete;  ///< copy assignment
+    Cuda(Cuda&&) = delete;                  ///< move constructor
+    Cuda& operator=(Cuda&&) = delete;       ///< move assignment
     ~Cuda();                                ///< destructor
 
-    /// \brief Initialize CUDA rng machinery.
+    /// Initialize CUDA rng machinery.
     void initialize_CUDA_rng();
     
     /// A pseudo-random number with uniform distribution over [0,1).
@@ -107,20 +109,21 @@ public:
 
 private:
 
-    /// \brief Populate the buffer array \a rU01 with a new butch of random numbers over (0,1] (!!!).
+    /// Populate the buffer array with a new butch of random numbers over (0,1].
     void prepare_uniform_real01();
 
-    /// \brief Check CUDA errors.
+    /// Check CUDA errors.
     void checkCudaErrors(const curandStatus_t& e);
-    /// \brief Check CUDA errors.
+
+    /// Check CUDA errors.
     void checkCudaErrors(const cudaError_t& e);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename realT> 
 Cuda<realT>::
-Cuda(     const std::string& seedFname,
+Cuda(   const std::string& seedFname,
         const szt ii,
         Msgr& msgr )
     : RandCore<realT> {msgr, seedFname, ii}
@@ -136,7 +139,7 @@ Cuda(     const std::string& seedFname,
 
 template <typename realT> 
 Cuda<realT>::
-Cuda( const int seed,
+Cuda(   const int seed,
         const std::string& runName,
         Msgr& msgr )
     : Core<realT> {msgr, seed, runName}
@@ -174,22 +177,27 @@ prepare_uniform_real01()
 {
     checkCudaErrors(curandGenerateUniform(gGPU, (float *) d_Rand, buffersize));
     // synchronizes the GPU threads before copy
-    checkCudaErrors(cudaMemcpy(rU01, d_Rand, buffersize * sizeof(float), cudaMemcpyDeviceToHost));
+    checkCudaErrors(cudaMemcpy(rU01, d_Rand, buffersize * sizeof(float),
+                    cudaMemcpyDeviceToHost));
 }
 
 template <> 
 void Cuda<double>::
 prepare_uniform_real01()
 {
-    checkCudaErrors(curandGenerateUniformDouble( gGPU, (double *) d_Rand, buffersize));
+    checkCudaErrors(curandGenerateUniformDouble(gGPU, (double *) d_Rand,
+                                                buffersize));
     // synchronizes the GPU threads before copy
-    checkCudaErrors(cudaMemcpy(rU01, d_Rand, buffersize * sizeof(double), cudaMemcpyDeviceToHost));
+    checkCudaErrors(cudaMemcpy(rU01, d_Rand, buffersize * sizeof(double),
+                               cudaMemcpyDeviceToHost));
 }
 
 // returns int in the range [0,max-1]
 template <typename realT> 
 uint Cuda<realT>::
-uniformInt0( const uint& max )
+uniformInt0(
+    const uint& max
+)
 {            
     auto ir {static_cast<uint>(r01u() * max)};
     while (ir >= max)
@@ -210,14 +218,18 @@ realT Cuda<realT>::r01u()
 }
 template<typename realT>
 void Cuda<realT>::
-checkCudaErrors( const curandStatus_t& err )
+checkCudaErrors(
+    const curandStatus_t& err
+)
 {
     if (err != CURAND_STATUS_SUCCESS)
         throw Exceptions::Simple("CURAND error: " + STR(err), this->msgr);
 }
 template<typename realT>
 void Cuda<realT>::
-checkCudaErrors( const cudaError_t& err )
+checkCudaErrors(
+    const cudaError_t& err
+)
 {
     if (err != cudaSuccess)
         throw Exceptions::Simple("CUDA error: " + STR(err), this->msgr);

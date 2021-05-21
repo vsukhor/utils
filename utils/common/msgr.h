@@ -46,7 +46,8 @@ namespace Common {
 /**
 * \class Msgr msgr.h
 * \brief Convenient formatted text output to the screen and a logfile.
-* \details Implements convenience class for formatted text output to std::cout and to a logfile.
+* \details Implements convenience class for formatted text output
+* to std::cout and to a logfile.
 */
 class Msgr {
 
@@ -156,26 +157,33 @@ private:
              ) const noexcept;
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename S>
 constexpr auto Msgr::
-is_valid_stream() noexcept {
+is_valid_stream() noexcept
+{
     return std::is_same_v<S, outstream> ||
            std::is_same_v<S, logstream>;
 }
 
+
 template <typename IO> inline
 void Msgr::
-prn( IO* io,
+prn(
+    IO* io,
     const std::string& v,
-    bool endline ) const noexcept
+    bool endline
+) const noexcept
 { 
-    static_assert(is_valid_stream<IO>(), "Stream type used in Msgr is not valid");
+    static_assert(is_valid_stream<IO>(),
+                  "Stream type used in Msgr is not valid");
 
     *io << v << " ";
     if (endline) *io << std::endl;
 }
+
 
 template <bool endline> inline
 void Msgr::
@@ -184,6 +192,7 @@ print( const std::string& s ) const noexcept
     if (sl) prn(sl, s, endline);
     if (so) prn(so, s, endline);
 }
+
 
 template <bool endline>
 void Msgr::
@@ -200,8 +209,10 @@ print( const char *fmt, ... ) noexcept
 
 template <typename V, auto N>
 void Msgr::
-print_array( const std::string& name,
-               const std::array<V,N>& v ) const noexcept
+print_array(
+    const std::string& name,
+    const std::array<V,N>& v
+) const noexcept
 {
     print<false>(name+"[]:  ");
     for (const auto o : v)
@@ -211,8 +222,10 @@ print_array( const std::string& name,
 
 template <typename V>
 void Msgr::
-print_vector( const std::string& name,
-              const std::vector<V>& v ) noexcept
+print_vector(
+    const std::string& name,
+    const std::vector<V>& v
+) noexcept
 {
     print<false>(name+"[]:  ");
     for (const auto o : v)

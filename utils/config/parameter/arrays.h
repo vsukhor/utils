@@ -25,8 +25,9 @@
 /**
  * \file arrays.h
  * \brief Parameters of type std::array.
- * \details Contains template partial specialization for classes encapsulating confuguration file
- * parameter of type std::array and the exception handler class for out of range errors.
+ * \details Contains template partial specialization for classes encapsulating
+ * confuguration file parameter of type std::array and the exception handler
+ * class for out of range errors.
  + \author Valerii Sukhorukov
  */
 
@@ -50,7 +51,9 @@ using namespace Common;
 using namespace Config::Exceptions;
 
 /**
-* \brief Partial template specialization for for parameters of std arrays of continuous fundamental types.
+* \brief parameters of std arrays of continuous fundamental types.
+* \details Partial template specialization for for parameters of std arrays of
+* continuous fundamental types.
 * \tparam T Parameter type: must be std::is_fundamental.
 * \tparam W Length of the std::array.
 */
@@ -124,7 +127,7 @@ private:
     void initialize(std::string value) final;
 };    
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, szt W>
 Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
@@ -156,7 +159,9 @@ check_range( const std::vector<Q>& r,
 {
     for (szt i=0; i<W; i++)
         if (p_[i]<r[0][i] || p_[i]>r[1][i])
-            throw ParOutOfRange<T,false> {get_name(), p_[i], std::array<T,2>{r[0][i], r[1][i]}, msgr};
+            throw ParOutOfRange<T,false> {
+                get_name(), p_[i], std::array<T,2>{r[0][i], r[1][i]}, msgr
+            };
 }
 
 template <typename T, szt W>
@@ -199,8 +204,6 @@ initialize( std::string value )
     const std::string tab {"\t"};
     szt i {};
     while (value.length() && i<W) {
-//            if (i == W)
-//                throw Exceptions::Simple {"Improper Config::" + name() + " initialization: Excessive data size"};
         ulong e {value.find(emp)};
         if (e == std::string::npos) e = value.find(tab);
         if (e == std::string::npos) e = value.length();
@@ -217,7 +220,8 @@ initialize( std::string value )
         i++;
     }
     if (i < W)
-        throw Simple {"Improper Config::" + get_name() + " initialization: Data size insufficient"};
+        throw Simple {"Improper Config::" + get_name() +
+                      " initialization: Data size insufficient"};
 }
 
 }    // namespace Parameter

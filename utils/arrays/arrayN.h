@@ -328,10 +328,12 @@ constexpr T norm() const noexcept {
 array unitv() const noexcept {
     return *this / norm();
 }
-constexpr T scaProjection( const array& b ) const noexcept {            // scalar projection of *this onto array b
+// Scalar projection of *this onto array b.
+constexpr T scaProjection( const array& b ) const noexcept {
     return dotpr(b) / b.norm();
 }
-constexpr array vecProjection( const array& b ) const noexcept {        // std::vector projection of *this onto array b
+// Vector projection of *this onto array b.
+constexpr array vecProjection( const array& b ) const noexcept {
     return b.unitv() * scaProjection(b);
 }
 constexpr T sum() const noexcept {

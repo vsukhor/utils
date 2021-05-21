@@ -36,14 +36,18 @@ namespace Utils {
 /// Custom arrays.
 namespace Arrays {
 
-//===================================================================================
-/// \brief A compile-time generator of std:iota-like array of consecutive integers [1, ..., N]
-/// \details Adopted from https://stackoverflow.com/users/636019/ildjarn
+//==============================================================================
+/// \brief A std:iota-like compile-time generator of integers [1, ..., N].
+/// \details A compile-time generator of std:iota-like array of consecutive
+/// integers [1, ..., N].
+/// Adopted from https://stackoverflow.com/users/636019/ildjarn
 /// at https://stackoverflow.com/questions/41660062/how-to-construct-an-stdarray-with-index-sequence
 namespace iota_array {
-  template<typename T, T... Ns>
-  constexpr std::array<T, sizeof...(Ns)> make_iota_array(T const offset,
-                                                           std::integer_sequence<T, Ns...>) noexcept
+    template<typename T, T... Ns>
+    constexpr std::array<T, sizeof...(Ns)> make_iota_array(
+        T const offset,
+        std::integer_sequence<T, Ns...>
+    ) noexcept
   {
     return {{(Ns + offset)...}};
   }
@@ -52,11 +56,14 @@ namespace iota_array {
 template<typename T, T N>
 constexpr auto make_iota_array(T const offset = {}) noexcept
 {
-  static_assert(N >= T{}, "no negative sizes");
-  return iota_array::make_iota_array<T>(offset, std::make_integer_sequence<T, N>{});
+    static_assert(N >= T{}, "no negative sizes");
+
+    return iota_array::make_iota_array<T>(
+        offset, std::make_integer_sequence<T, N>{}
+    );
 }
 
-//===================================================================================
+//==============================================================================
 
 /// \brief Generic array template.
 /// \tparam N Array length.

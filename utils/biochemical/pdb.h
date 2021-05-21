@@ -53,65 +53,125 @@ public:
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3<float>    pos {huge<float>};                ///< Atom position.
-    uint        ind {huge<decltype(ind)>};        ///< Atom insex.
-    int            irecname {};        ///< Record name   1 : "ATOM  "; 2 : "HETATM".
-    ulong        pdbsegment {};        ///< Segment name.
-    std::string    name;                ///< Pdb name.
-    std::string    resname {""};        ///< Residue name.
-    std::string    chainID {};            ///< Chain identifier.
-    ulong        resSeq {};            ///< Residue sequence number.
-    float        occupancy {};        ///< Occupancy.
-    float        tempFactor {};        ///< Temperature factor.
-    std::string    element;            ///< Name of the element.
-    std::string    charge;                ///< Electrostatic charge.
-    float        vdWRad {};            ///< Van Der Waals radius.
+    A3<float>   pos {huge<float>};           ///< Atom position.
+    uint        ind {huge<decltype(ind)>};   ///< Atom insex.
+    int         irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
+    ulong       pdbsegment {};   ///< Segment name.
+    std::string name;            ///< Pdb name.
+    std::string resname {""};    ///< Residue name.
+    std::string chainID {};      ///< Chain identifier.
+    ulong       resSeq {};       ///< Residue sequence number.
+    float       occupancy {};    ///< Occupancy.
+    float       tempFactor {};   ///< Temperature factor.
+    std::string element;         ///< Name of the element.
+    std::string charge;          ///< Electrostatic charge.
+    float       vdWRad {};       ///< Van Der Waals radius.
 
     /// \brief Constructor.
-    explicit Pdb(const std::string& chainID, const std::string& resname, const std::string& atomname) noexcept;
+    explicit Pdb(
+        const std::string& chainID,
+        const std::string& resname,
+        const std::string& atomname
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const uint ind, const std::string& chainID, const uint resSeq, const std::string& resname, const std::string& atomname, const A3<float>& pos) noexcept;
+    explicit Pdb(
+        const uint ind,
+        const std::string& chainID,
+        const uint resSeq,
+        const std::string& resname,
+        const std::string& atomname,
+        const A3<float>& pos
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const uint ind, const std::string& chainID, const uint resSeq, const std::string& resname, const std::string& atomname, const A3<float>& pos, const float occupancy) noexcept;
+    explicit Pdb(
+        const uint ind,
+        const std::string& chainID,
+        const uint resSeq,
+        const std::string& resname,
+        const std::string& atomname,
+        const A3<float>& pos,
+        const float occupancy
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const uint ind, const std::string& chainID, const uint resSeq, const std::string& resname, const std::string& atomname, const A3<float>& pos, const float occupancy, const float tempFactor) noexcept;
+    explicit Pdb(
+        const uint ind,
+        const std::string& chainID,
+        const uint resSeq,
+        const std::string& resname,
+        const std::string& atomname,
+        const A3<float>& pos,
+        const float occupancy,
+        const float tempFactor
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const uint ind, const std::string& chainID, const uint resSeq, const std::string& resname, const std::string& atomname, const A3<float>& pos, const float occupancy, const float tempFactor, const std::string& element) noexcept;
+    explicit Pdb(
+        const uint ind,
+        const std::string& chainID,
+        const uint resSeq,
+        const std::string& resname,
+        const std::string& atomname,
+        const A3<float>& pos,
+        const float occupancy,
+        const float tempFactor,
+        const std::string& element
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const uint ind, const std::string& chainID, const uint resSeq, const std::string& resname, const std::string& atomname, const A3<float>& pos, const std::string& element) noexcept;
+    explicit Pdb(
+        const uint ind,
+        const std::string& chainID,
+        const uint resSeq,
+        const std::string& resname,
+        const std::string& atomname,
+        const A3<float>& pos,
+        const std::string& element
+    ) noexcept;
 
     /// \brief Constructor.
-    explicit Pdb(const std::string record, const ulong segm) noexcept;
+    explicit Pdb(
+        const std::string record,
+        const ulong segm
+    ) noexcept;
 
     /// \brief Formated reading of a line record from a pdb file.
     /// \param record Record in the pdb file.
-    void format_as_pdb( const std::string& record ) noexcept;
+    void format_as_pdb(
+        const std::string& record
+    ) noexcept;
 
     /// \brief Produce an atom-specific formatted record for a pdb file.
     /// \param msgr Output message processor.
-    std::string format_as_pdb( Msgr& msgr ) const;
+    std::string format_as_pdb(
+        Msgr& msgr
+    ) const;
 
     /// \brief Produce an atom-specific formatted record for a pdb file.
     /// \param p Atom position coordinates.
     /// \param msgr Output message processor.
-    std::string format_as_pdb( const A3<float>& p, Msgr& msgr ) const;
+    std::string format_as_pdb(
+        const A3<float>& p,
+        Msgr& msgr
+    ) const;
 
     /// \brief Produce an atom-specific formatted record for a pdb file.
     /// \param p Atom position coordinates.
     /// \param msgr Output message processor.
-    std::string format_as_pdb( float* p, Msgr& msgr ) const;
+    std::string format_as_pdb(
+        float* p,
+        Msgr& msgr
+    ) const;
 
     /// \brief Produce an atom-specific formatted record for a pdb file.
     /// \param a Atom-specific record.
     /// \param msgr Output message processor.
     static std::string format_as_pdb(
         const Pdb& a,
-        Msgr& msgr );
+        Msgr& msgr
+    );
 
     /// \brief Produce an atom-specific formatted record for a pdb file.
     static std::string format_as_pdb(
@@ -136,20 +196,24 @@ public:
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
-    static void read( const std::string& filename,
-                      std::vector<Pdb>& a,
-                         vec2<std::string>& other,
-                         Msgr& msgr );
+    static void read(
+        const std::string& filename,
+        std::vector<Pdb>& a,
+        vec2<std::string>& other,
+        Msgr& msgr
+    );
 
     /// \brief Write to a pdb file.
     /// \param filename Name of the file to write to.
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
-    static void write( const std::string& filename,
-                         const std::vector<Pdb>& a,
-                         const vec2<std::string>& other,
-                         Msgr& msgr );
+    static void write(
+        const std::string& filename,
+        const std::vector<Pdb>& a,
+        const vec2<std::string>& other,
+        Msgr& msgr
+    );
        
 private:
 

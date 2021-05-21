@@ -112,18 +112,18 @@ public :
 
 private:
 
-    vup<Reaction>        rc;                    ///< Vector of unique pointers to reactions.
-    std::vector<realT>    a;                    ///< Vector of protensitioe.
-    szt                    rind {huge<szt>};    ///< Index of the current reaction.
-    realT                tau_ {};            ///< Time till the next reaction event.
-    RF&                    rnd;                ///< Random number generator.
-    szt                    nreact {};            ///< Total number of reactions.
-    std::vector<szt>    rtype;                ///< Human-readable abbreviations of reaction names.
-    std::vector<realT>    csums;                ///< Cumulative sum.
-    realT                asum {};            ///< Total propensity of the reaction set.
-    std::vector<realT>    auxf;                ///< Auxiliary vector of nreact reals.
-    std::vector<szt>    auxi;                ///< Auxiliary vector of nreact integers.
-    std::vector<szt>    rinds;                ///< Reaction indexes.
+    vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
+    std::vector<realT> a;          ///< Vector of protensitioe.
+    szt                rind {huge<szt>}; ///< Index of the current reaction.
+    realT              tau_ {};    ///< Time till the next reaction event.
+    RF&                rnd;        ///< Random number generator.
+    szt                nreact {};  ///< Total number of reactions.
+    std::vector<szt>   rtype;      ///< Human-readable abbrev. of reaction names.
+    std::vector<realT> csums;      ///< Cumulative sum.
+    realT              asum {};    ///< Total propensity of the reaction set.
+    std::vector<realT> auxf;       ///< Auxiliary vector of nreact reals.
+    std::vector<szt>   auxi;       ///< Auxiliary vector of nreact integers.
+    std::vector<szt>   rinds;      ///< Reaction indexes.
 
     /**
     * \brief Sets the time \tau_ till the next reaction event.
@@ -143,7 +143,7 @@ private:
 
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename RF, typename Reaction> inline
 Gillespie<RF,Reaction>::

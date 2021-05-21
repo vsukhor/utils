@@ -25,7 +25,8 @@
 /**
  * \file scalars.h
  * \brief Exception handler for parameters of scalar type.
- * \details A class template specialization for checking parameters of scalar fundamental type read from confuguration files.
+ * \details A class template specialization for checking parameters of scalar
+ * fundamental type read from confuguration files.
  + \author Valerii Sukhorukov
  */
 
@@ -42,14 +43,16 @@
 
 /// Library-wide.
 namespace Utils {
-/// Configuration module
+/// Configuration module.
 namespace Config {
 namespace Exceptions {
 
 using namespace Common;
 
 /**
-* Partial template specialization for for 'Parameter out of range' exception involving discrete scalars.
+* \brief 'Parameter out of range' exception involving discrete scalars.
+* \details Partial template specialization for for 'Parameter out of range'
+* exception involving discrete scalars.
 * \tparam Q Parameter type: must be std::is_fundamental.
 */
 template <typename Q>
@@ -91,7 +94,8 @@ private:
             const std::vector<Q>& r);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename Q>
 ParOutOfRange<Q, true,        // discrete case
@@ -134,9 +138,12 @@ generate_message(const std::string& name,
            print(r);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 /**
-* \brief Partial template specialization for for 'Parameter out of range' exception involving continuous fundamental scalars.
+* \brief 'Parameter out of range' exception.
+* \details Partial template specialization for for 'Parameter out of range'
+* exception involving continuous fundamental scalars.
 * \tparam Q Parameter type: must be std::is_fundamental.
 */
 template <typename Q>
@@ -194,7 +201,7 @@ private:
                                  const R& r);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename Q>
 ParOutOfRange<Q, false,        // continuous case
@@ -249,8 +256,8 @@ generate_message(const std::string& name,
            "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
 }
 
-}    // namespace Exceptions
-}    // namespace Config
+}   // namespace Exceptions
+}   // namespace Config
 }   // namespace Utils
 
 #endif // UTILS_CONFIG_EXCEPTIONS_SCALARS_H

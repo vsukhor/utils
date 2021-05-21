@@ -25,8 +25,8 @@
 /**
  * \file scalars_strings.h
  * \brief Parameters of fundamental or string type.
- * \details Contains template partial specialization for classes encapsulating confuguration file
- * parameters of fundamental or string type.
+ * \details Contains template partial specialization for classes encapsulating
+ * confuguration file parameters of fundamental or string type.
  + \author Valerii Sukhorukov
  */
 
@@ -49,14 +49,19 @@ namespace Parameter {
 using namespace Common;
 using namespace Exceptions;
 
+
 /**
-* \brief Partial template specialization for for parameters of std fundamental scalar or std::string types.
+* \brief Parameters of std fundamental scalar or std::string types.
+* \details Partial template specialization for for parameters of std fundamental
+* scalar or std::string types.
 * \tparam T Parameter type: must be std::is_fundamental.
-* \tparam isDiscrete Specifies if the vector components accept discrete of continous values.
+* \tparam isDiscrete Specifies if the vector components accept discrete of
+*         continous values.
 */
 template <typename T, bool isDiscrete>
-class Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                                  std::is_same<T,std::string>::value>>
+class Par<T,isDiscrete,
+          typename std::enable_if_t<std::is_fundamental<T>::value ||
+                                    std::is_same<T,std::string>::value>>
     : public Base<T> {
 
     using Q = T;
@@ -127,7 +132,9 @@ public:
                      Msgr* msgr=nullptr);
 
     /**
-    * \brief Static function for reading a parameter without instantiating this class object.
+    * \brief Read a parameter without instantiating.
+    * \details Static function for reading a parameter without instantiating
+    * this class object.
     * \param name Name of the parameter.
     * \param fname Name of the configuration file.
     * \param range Acceptable range of parameter values.
@@ -168,7 +175,8 @@ private:
 
 };    
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
@@ -176,6 +184,7 @@ Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
 Par( const std::string& name )
     : Base<T> {name}
 {}
+
 
 template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
@@ -191,6 +200,7 @@ Par( const std::string& name,
     print(msgr);
 }
 
+
 template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
@@ -204,6 +214,7 @@ Par( const std::string& name,
     check_range(range, msgr);
     print(msgr);
 }
+
 
 template <typename T, bool isDiscrete>
 template <typename W>
@@ -225,6 +236,7 @@ check_range( const W& r,
     }
 }
 
+
 template <typename T, bool isDiscrete>
 auto Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
@@ -235,6 +247,7 @@ readin( const std::string& name,
 {
     return Par<Q,isDiscrete> {name, fname, range, msgr}();
 }
+
 
 template <typename T, bool isDiscrete>
 void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
@@ -247,6 +260,7 @@ print( Msgr* msgr )
         std::cout << get_name() << " = " << p_ << std::endl;
 }
 
+
 template <typename T, bool isDiscrete>
 void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
@@ -255,6 +269,7 @@ set( const Q& val )
     isLoaded_ = true;
     p_ = val;
 }
+
 
 template <typename T, bool isDiscrete>
 T Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
@@ -265,6 +280,7 @@ operator()() const
     return p_;
 }
 
+
 template <typename T, bool isDiscrete>
 void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
@@ -272,6 +288,7 @@ initialize( std::string value )
 {
     std::stringstream(value) >> p_;
 }
+
 
 }    // namespace Parameter
 }    // namespace Config

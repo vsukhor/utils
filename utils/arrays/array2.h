@@ -44,9 +44,9 @@ namespace Utils {
 namespace Arrays {
 
 /// \brief Two-element arrays.
-/// \details This class specializes array template for two-element array of arithmetic types.
-/// Implements convenient arithmetics as well as some functionaity
-/// commonly used in 2-dimensional geometric applications.
+/// \details This class specializes array template for two-element array of
+/// arithmetic types. Implements convenient arithmetics as well as some
+/// functionaity commonly used in 2-dimensional geometric applications.
 /// \tparam T Type of the elements.
 template <typename T>
 class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
@@ -294,14 +294,18 @@ constexpr T norm() const noexcept {
 constexpr array unitv() const noexcept {
     return *this / norm();
 }
-constexpr T scaProjection( const array& b ) const noexcept {            // scalar projection of *this onto array b
+// Scalar projection of *this onto array b.
+constexpr T scaProjection( const array& b ) const noexcept {
     return dotpr(b) / b.norm();
 }
-constexpr array vecProjection( const array& b ) const noexcept {        // std::vector projection of *this onto array b
+// Vector projection of *this onto array b.
+constexpr array vecProjection( const array& b ) const noexcept {
     return b.unitv() * scaProjection(b);
 }
-static constexpr T crosspr( const array& p1, const array& p2 ) noexcept {    // the magnitude of the std::vector that would result from a regular 3D cross product ...
-    return p1[0] * p2[1] - p1[1] * p2[0];                    // of the input vectors, taking their Z values implicitly as 0
+// Magnitude of the vector that would result from a regular 3D cross product
+// of the input vectors, taking their Z values implicitly as 0.
+static constexpr T crosspr( const array& p1, const array& p2 ) noexcept {
+    return p1[0] * p2[1] - p1[1] * p2[0];
 }
 constexpr T crosspr( const array& p ) const noexcept {
     return n[0] * p[1] - n[1] * p[0];

@@ -35,6 +35,7 @@ namespace Utils {
 /// General stuff.
 namespace Common {
 
+
 Msgr::
 Msgr( outstream* so,
       logstream* sl,
@@ -45,6 +46,7 @@ Msgr( outstream* so,
 {
     set_formats(precision);
 }
+
 
 void Msgr::
 set_formats( const int precision ) noexcept
@@ -59,12 +61,14 @@ set_formats( const int precision ) noexcept
     }
 }
 
+
 void Msgr::
 exit( const std::string& s ) const noexcept
 {    
     print<true>(s);
     ::exit(EXIT_FAILURE);
 }
+
 
 void Msgr::
 exit( const char *fmt, ... ) noexcept

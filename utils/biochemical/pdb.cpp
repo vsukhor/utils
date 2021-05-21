@@ -29,7 +29,7 @@ namespace Utils {
 /// \brief Biochemistry-related stuff.
 namespace Biochemical {
 
-float Pdb::scaling;        // convert nm <-> A; nanometers are used internally
+float Pdb::scaling;    ///< Convert nm <-> A; nanometers are used internally.
 
 Pdb::Pdb(
         const std::string& chainID,
@@ -150,9 +150,12 @@ format_as_pdb( const std::string& record ) noexcept
     resname = record.substr(17, 3);
     chainID = record[21];
     resSeq = std::stoi(trim(record.substr(22, 4)));
-    pos[0] = scaling * static_cast<float>(std::stod(trim(record.substr(30, 8))));        // converts to nm from data read in A
+
+    // Converts to nm from data read in A:
+    pos[0] = scaling * static_cast<float>(std::stod(trim(record.substr(30, 8))));
     pos[1] = scaling * static_cast<float>(std::stod(trim(record.substr(38, 8))));
     pos[2] = scaling * static_cast<float>(std::stod(trim(record.substr(46, 8))));
+
     occupancy = static_cast<float>(std::stod(trim(record.substr(54, 6))));
     tempFactor = static_cast<float>(std::stod(trim(record.substr(60, 6))));
     element = record.substr(76, 2);
@@ -178,7 +181,8 @@ std::string Pdb::
 format_as_pdb( float* p, Msgr& msgr ) const
 {
     return format_as_pdb(recname(), ind, name, resname, resSeq, chainID[0],
-                         {p[0], p[1], p[2]}, occupancy, tempFactor, element, charge, msgr);
+                         {p[0], p[1], p[2]}, occupancy, tempFactor, element,
+                         charge, msgr);
 }
 
 std::string Pdb::
@@ -206,24 +210,43 @@ format_as_pdb(
 {
     // http://www.wwpdb.org/documentation/file-format-content/format33/sect9.html#ATOM
     std::ostringstream record;
-    record << recn;                    // columns 1-6        Record name   "ATOM  " or "TER   "
+
+    // columns 1-6  Record name  "ATOM  " or "TER   "
+    record << recn;
     record.width(5);
+
     record << std::right;
-    record << STR(iatom);            // columns 7-11       Integer       Pdb  serial number
-    record << " ";                    // column  12          empty
+
+    // columns 7-11   Integer   Pdb serial number
+    record << STR(iatom);
+
+    // column  12  empty
+    record << " ";
+
+    // columns 13-16  Pdb name  Pdb name
     record.width(4);
-    record << atname;                // columns 13-16      Pdb           name         Pdb name
-    record << " ";                    // column  17         Character     altLoc       Alternate location indicator
+    record << atname;
+
+    // column 17   Character   altLoc   Alternate location indicator
+    record << " ";
+
+    // columns 18-20  Residue name  resName   Residue name
     record.width(3);
-    record << resname;                // columns 18-20      Residue name  resName      Residue name
-    record << " ";                    // column  21          empty
+    record << resname;
+
+    // column 21  empty
+    record << " ";
+
+    // column 22   Character  chainID Chain identifier
     record.width(1);
-    record << ichain;                // column  22         Character     chainID      Chain identifier
+    record << ichain;
+
+    // columns 23-26  Integer  resSeq   Residue sequence number
     record.width(4);
-    record << STR(uint(ires));        // columns 23-26      Integer       resSeq       Residue sequence number
-//    record.width(1);
-    record << " ";                    // column  27         AChar         iCode        Code for insertion of residues
-//    record.width(3);
+    record << STR(uint(ires));
+
+    // column  27   AChar  iCode  Code for insertion of residues
+    record << " ";
 
     if (recn == "ATOM  " || recn == "HETATM") {
         A3<float> p {pos/scaling};
@@ -232,32 +255,51 @@ format_as_pdb(
             std::abs(p[1]) >= mx ||
             std::abs(p[2]) >= mx) {
             msgr.exit("Error: Pdb position exceeds pdb numerical limit ");
-            
         }
-        record << "   ";            // columns 28-30      empty
+
+        // columns 28-30      empty
+        record << "   ";
+
         record.setf(std::ios::fixed);
+
+        // columns 31-38  Real(8.3)  x  Orthogonal coordinates for X in Angstroms
         record.width(8);
         record.precision(3);
-        record << p[0];                // columns 31-38    Real(8.3)     x        Orthogonal coordinates for X in Angstroms
+        record << p[0];
+
+        // columns 39-46  Real(8.3)  y  Orthogonal coordinates for Y in Angstroms
         record.width(8);
         record.precision(3);
-        record << p[1];             // columns 39-46    Real(8.3)     y     Orthogonal coordinates for Y in Angstroms
+        record << p[1];
+
+        // columns 47-54  Real(8.3)  z  Orthogonal coordinates for Z in Angstroms
         record.width(8);
         record.precision(3);
-        record << p[2];                // columns 47-54    Real(8.3)     z     Orthogonal coordinates for Z in Angstroms
+        record << p[2];
+
+        // columns 55-60   Real(6.2)  occupancy   Occupancy
         record.width(6);
         record.precision(2);
-        record << occ;                // columns 55-60    Real(6.2)     occupancy    Occupancy
+        record << occ;
+
+        // columns 61-66  Real(6.2)  tempFactor  Temperature  factor
         record.width(6);
         record.precision(2);
-        record << tempf;            // columns 61-66    Real(6.2)     tempFactor   Temperature  factor
-        record << "          ";        // columns 67-76    empty
+        record << tempf;
+
+        // columns 67-76    empty
+        record << "          ";
+
+        // columns 77-78  LString(2)  element  Element symbol, right-justified
         record << std::right;
         record.width(2);
-        record << elt;                // columns 77-78    LString(2)    element   Element symbol, right-justified
+        record << elt;
+
+        // columns 79-80  LString(2)  charge  Charge  on the atom (e.g. "2+" or "1-")
         record.width(2);
-        record << chge;                // columns 79-80    LString(2)    charge    Charge  on the atom ( e.g. "2+" or "1-")
+        record << chge;
     }
+
     return record.str();
 }
 

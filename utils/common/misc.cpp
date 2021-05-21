@@ -77,7 +77,8 @@ bool fileExists( const std::string& name )
   return (stat (name.c_str(), &buffer) == 0); 
 }
 */
-bool directory_exists( const std::string& pathstrconst )             // checks if a given directory exists
+bool directory_exists( const std::string& pathstrconst )
+// checks if a given directory exists.
 {
     std::string pathstr {pathstrconst};
     char lascch {pathstr.back()};

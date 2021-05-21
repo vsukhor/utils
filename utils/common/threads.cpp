@@ -45,11 +45,14 @@ Threads(const szt offset,
 {
     szt threadsSupported {std::thread::hardware_concurrency()};
     if (nThreads > threadsSupported) {
-        std::cout << "Warning: thread number set exceeds the CPU concurrency: " << nThreads << " " << threadsSupported << std::endl; 
+        std::cout << "Warning: thread number set exceeds the CPU concurrency: "
+                  << nThreads << " " << threadsSupported
+                  << std::endl;
         exit(0); 
     }
     if (nThreads < 1) {
-        std::cout << "Error in Threads: nThreads provided is not supprted " << nThreads << std::endl;
+        std::cout << "Error in Threads: nThreads provided is not supprted "
+                  << nThreads << std::endl;
         exit(0); 
     }
     szt w {size - 2*omittedBoundaries};
@@ -57,9 +60,12 @@ Threads(const szt offset,
     w -= rest;
     
     chunkSize.resize(num);
-    if (     wht == Weights::Equal)           set_chunks_equal(w, rest);
-    else if (wht == Weights::CircleCenter) set_chunks_circular(w, rest);    // arc sector area: A = r*r*phi/2
-    else if (wht == Weights::TriangleDecr) set_chunks_triangleDecr(size - 2*omittedBoundaries);    
+    if (     wht == Weights::Equal)
+        set_chunks_equal(w, rest);
+    else if (wht == Weights::CircleCenter)
+        set_chunks_circular(w, rest);    // arc sector area: A = r*r*phi/2
+    else if (wht == Weights::TriangleDecr)
+        set_chunks_triangleDecr(size - 2*omittedBoundaries);
     else { 
         std::cout << "Error in Threads: Weight type is not defined" << std::endl; 
         exit(0); 
@@ -98,12 +104,15 @@ set_chunks_circular( const szt w, const szt rest )
 {
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
 // where phi is the central angle (in radians)  defining the circle segment.
-// The condition is the equality of the segment areas A = rnd^2 * ( phi - sin(phi) ) / 2, which reflect the thread loads.
-// The problem has no explicit solution but can be solved numerically. E.g. in matlab:
-//        % Let be given: 'k': an index in chunkSize[k] 
-//        %                'num': the number of threads
-//        % Then, to find 'h':
-//        syms h;  vpasolve( 2*pi*k/num == 2*acos(1-h) - sin(2*acos(1-h)), h ) / 2
+// The condition is the equality of the segment areas
+//     A = rnd^2 * ( phi - sin(phi) ) / 2,
+// which reflect the thread loads.
+// The problem has no explicit solution but can be solved numerically.
+// E.g. in matlab:
+//     % Let be given: 'k': an index in chunkSize[k]
+//     %                'num': the number of threads
+//     % Then, to find 'h':
+//     syms h;  vpasolve( 2*pi*k/num == 2*acos(1-h) - sin(2*acos(1-h)), h ) / 2
 // 
     switch (num) {
     case 1 :                                            
@@ -209,7 +218,9 @@ set_chunks_circular( const szt w, const szt rest )
         chunkSize[11] =   w - chunkSize[10] - chunkSize[9] - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
         break;                                     
     default : 
-        std::cout << "Error in Threads: Weights::CircleCenter is implemented for number of threads < 13 only. The attempted number is " << num << std::endl; 
+        std::cout << "Error in Threads: Weights::CircleCenter is implemented "
+                  << "for number of threads < 13 only. The attempted number is "
+                  << num << std::endl;
         exit(0); 
     }
     
@@ -249,13 +260,15 @@ print_regions( const bool withCout,
     if (withCout && msgr.so) {
         *msgr.so << " Thread borders: ";
         for (szt ith=0; ith<num; ith++) 
-            *msgr.so << i1[ith] << " to " << i2[ith]-1 << "; ";
+            *msgr.so << i1[ith] << " to "
+                     << i2[ith]-1 << "; ";
         *msgr.so << std::endl;
     }
     if (msgr.sl) {
         *msgr.sl << " Thread borders: ";
         for (szt ith=0; ith<num; ith++)
-            *msgr.sl << i1[ith] << " to " << i2[ith]-1 << "; ";
+            *msgr.sl << i1[ith] << " to "
+                     << i2[ith]-1 << "; ";
         *msgr.sl << std::endl;
     }
 }

@@ -41,6 +41,7 @@
 namespace Utils {
 /// Configuration module
 namespace Config {
+
 namespace Exceptions {
 
 using namespace Common;
@@ -49,7 +50,7 @@ using namespace Common;
 * \brief Generic template for 'Parameter out of range' exception.
 * \tparam Q Parameter type.
 * \tparam isDiscrete Specifies if the parameter takes discrete values only.
-* \tparam Enabler SFINAE enabler
+* \tparam Enabler SFINAE enabler.
 */
 template <typename Q, bool isDiscrete, typename Enabler = void>
 class ParOutOfRange
@@ -58,7 +59,8 @@ class ParOutOfRange
 
 }     // namespace Exceptions
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
 namespace Parameter {
 
 using namespace Utils::Common;
@@ -86,7 +88,7 @@ public:
 
 protected:
     
-    bool isLoaded_ {};        ///< Flag if the parameter is loaded from the configuration file.
+    bool isLoaded_ {};  ///< Flag if the parameter is loaded.
 
     /**
     * \brief Constructor.
@@ -96,11 +98,11 @@ protected:
 
     // The rule of five is triggered by the virtual destructor, the defaults suffice.
     Base(const Base&) = default;                ///< copy constructor
-    Base& operator=(const Base&) = default;        ///< copy assignment
-    Base(Base&&) = default;                         ///< move constructor
-    Base& operator=(Base&&) = default;           ///< move assignment
-    virtual ~Base() noexcept = default;            ///< virtual destructor
-    
+    Base& operator=(const Base&) = default;     ///< copy assignment
+    Base(Base&&) = default;                     ///< move constructor
+    Base& operator=(Base&&) = default;          ///< move assignment
+    virtual ~Base() noexcept = default;         ///< virtual destructor
+
     /**
     * \brief Print the the parameter to std::cout and logfile.
     * \param msgr \a Msgr used for the output.
@@ -134,7 +136,7 @@ private:
                         std::string& value) const;    // by reference
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename Q>
 Base<Q>::
@@ -142,7 +144,8 @@ Base( const std::string& name )
     : name {name}
 {}
 
-// if the line contains a valid parname-value combination, returns true and the value, otherwise retruns false
+// If the line contains a valid parname-value combination, returns true and the
+// value, otherwise retruns false.
 template <typename Q>
 bool Base<Q>::
 detect_by_name( std::ifstream& config,
@@ -168,12 +171,15 @@ detect_by_name( std::ifstream& config,
     
     int parnameend = -1;
     if (     line.find_first_of(emp) == std::string::npos &&
-             line.find_first_of(tab) != std::string::npos) parnameend = static_cast<int>(line.find_first_of(tab));
+             line.find_first_of(tab) != std::string::npos)
+        parnameend = static_cast<int>(line.find_first_of(tab));
     else if (line.find_first_of(emp) != std::string::npos &&
-             line.find_first_of(tab) == std::string::npos) parnameend = static_cast<int>(line.find_first_of(emp));
+             line.find_first_of(tab) == std::string::npos)
+        parnameend = static_cast<int>(line.find_first_of(emp));
     else if (line.find_first_of(emp) != std::string::npos &&
-             line.find_first_of(tab) != std::string::npos) parnameend = std::min(static_cast<int>(line.find_first_of(emp)),
-                                                                                 static_cast<int>(line.find_first_of(tab)));
+             line.find_first_of(tab) != std::string::npos)
+        parnameend = std::min(static_cast<int>(line.find_first_of(emp)),
+                              static_cast<int>(line.find_first_of(tab)));
     const auto parname = line.substr(0, static_cast<size_t>(parnameend));
     
     if (parname != name)
@@ -219,7 +225,8 @@ load( std::ifstream& config )
         isLoaded_ = true;
         return;
     }
-    throw Utils::Common::Exceptions::Simple {"Error: parameter not loaded: "+name};
+    throw Utils::Common::Exceptions::Simple
+        {"Error: parameter not loaded: "+name};
 }
 
 template <typename Q>
@@ -229,7 +236,7 @@ get_name() const noexcept
     return name;
 }
 
-// template for Par xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// template for Par xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
 * \brief Generic template for parameter classes.

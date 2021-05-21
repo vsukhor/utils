@@ -51,9 +51,9 @@ namespace Arrays {
 using namespace Utils::Common;
 
 /// \brief Three-element arrays.
-/// \details This class specializes array template for three-element array of arithmetic types.
-/// Implements convenient arithmetics as well as some functionaity
-/// commonly used in 3-dimensional geometric applications.
+/// \details This class specializes array template for three-element array
+/// of arithmetic types. Implements convenient arithmetics as well as some
+/// functionaity commonly used in 3-dimensional geometric applications.
 /// \tparam T Type of the elements.
 template <typename T>
 class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
@@ -363,11 +363,11 @@ constexpr T norm() const noexcept {
 constexpr array unitv() const noexcept {
     return *this / norm();
 }
-// scalar projection of *this onto array b
+// Scalar projection of *this onto array b.
 constexpr T scaProjection( const array& b ) const noexcept {
     return dotpr(b) / b.norm();
 }
-// vector projection of *this onto array b
+// Vector projection of *this onto array b.
 constexpr array vecProjection( const array& b ) const noexcept {
     return b.unitv() * scaProjection(b);
 }

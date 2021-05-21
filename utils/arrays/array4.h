@@ -41,9 +41,9 @@ namespace Utils {
 namespace Arrays {
 
 /// \brief Four-element arrays.
-/// \details This class specializes array template for four-element array of arithmetic types.
-/// Implements convenient arithmetics as well as some functionaity
-/// commonly used in 4-dimensional geometric applications.
+/// \details This class specializes array template for four-element array of
+/// arithmetic types. Implements convenient arithmetics as well as some
+/// functionaity commonly used in 4-dimensional geometric applications.
 /// \tparam T Type of the elements.
 template <typename T>
 class array<4,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
@@ -394,10 +394,12 @@ constexpr T norm() const noexcept {
 constexpr array unitv() const noexcept {
     return *this / norm();
 }
-constexpr T scaProjection( const array& b ) const noexcept {            // scalar projection of *this onto array b
+// Scalar projection of *this onto array b.
+constexpr T scaProjection( const array& b ) const noexcept {
     return dotpr(b) / b.norm();
 }
-constexpr array vecProjection( const array& b ) const noexcept {        // std::vector projection of *this onto array b
+// Vector projection of *this onto array b.
+constexpr array vecProjection( const array& b ) const noexcept {
     return b.unitv() * scaProjection(b);
 }
 constexpr int find( T p ) noexcept {

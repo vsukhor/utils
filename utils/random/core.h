@@ -50,50 +50,62 @@ template <typename realT>
 class Core {
 
     // Ensure that the template parameter is a floating type
-    static_assert(std::is_floating_point<realT>::value,
-                  "Class Core can only be instantiated with floating point types");
+    static_assert(
+        std::is_floating_point<realT>::value,
+        "Class Core can only be instantiated with floating point types"
+    );
 
 public:
 
-    static constexpr szt num_saved_seeds {1'000'001};    ///< Number of seeds in the 'seed' file.
-    static constexpr int bufferSize {1'000'000};        ///< Size of the buffer for storing random numbers.
-    static constexpr int mainSeed {1234'567'890};        ///< Master seed
+    ///< Number of seeds in the 'seed' file.
+    static constexpr szt num_saved_seeds {1'000'001};
+    ///< Size of the buffer for storing random numbers.
+    static constexpr int bufferSize {1'000'000};
+    ///< Master seed.
+    static constexpr int mainSeed {1234'567'890};
 
     /// \brief Produce \p num_saved_seeds seeds and store them in a file.
-    /// This is done whenever the working directory does not already have such a file.
-    static void make_seed(const std::string& seedFname,  ///< Name of the file with seeds.
-                          Msgr* msgr                     ///< Output message processor.
-                         );
+    /// \details This is done whenever the working directory does not already
+    /// have such a file.
+    static void make_seed(
+        const std::string& seedFname,  ///< Name of the file with seeds.
+        Msgr* msgr                     ///< Output message processor.
+    );
 
     /// \brief Produce \p num_saved_seeds seeds and store them in a file.
-    /// This is done whenever the working directory does not already have such a file.
-    static uint readin_seed(const std::string& seedFname,    ///< Name of the file with seeds.
-                            const szt ii,                    ///< Run index to choose a seed.
-                            Msgr& msgr                        ///< Output message processor.
-                            );
+    /// \details This is done whenever the working directory does not already
+    /// have such a file.
+    static uint readin_seed(
+        const std::string& seedFname,    ///< Name of the file with seeds.
+        const szt ii,                    ///< Run index to choose a seed.
+        Msgr& msgr                       ///< Output message processor.
+    );
 
     /// \brief \a seed getter.
     auto theSeed() { return seed; }
 
 protected:
 
-    explicit Core(Msgr& msgr,                    ///< Output message processor.
-                  const uint seed,                ///< Seed to use.
-                  const std::string& runName    ///< Human-readable run index.
-                  ) noexcept;
+    explicit Core(
+        Msgr& msgr,                   ///< Output message processor.
+        const uint seed,              ///< Seed to use.
+        const std::string& runName    ///< Human-readable run index.
+    ) noexcept;
 
-    explicit Core(Msgr& msgr,                    ///< Output message processor.
-                  const std::string& seedFname,    ///< Name of the file with seeds.
-                  const szt runInd                ///< Run index to choose a seed.
-                  );
+    explicit Core(
+        Msgr& msgr,                    ///< Output message processor.
+        const std::string& seedFname,  ///< Name of the file with seeds.
+        const szt runInd               ///< Run index to choose a seed.
+    );
 
 private:
 
     uint    seed;    ///< The seed
-    Msgr&    msgr;    ///< Output message processor.
+    Msgr&    msgr;   ///< Output message processor.
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename realT> 
 Core<realT>::
@@ -123,8 +135,10 @@ Core(    Msgr& msgr,
 
 template <typename realT> 
 void Core<realT>::
-make_seed( const std::string& seedFname,
-           Msgr* msgr )
+make_seed(
+    const std::string& seedFname,
+    Msgr* msgr
+)
 {
     if (const auto msg = "No seed file found. Creating a new seed file "+seedFname;
         msgr)
@@ -152,9 +166,11 @@ make_seed( const std::string& seedFname,
 
 template <typename realT> 
 uint Core<realT>::
-readin_seed(const std::string& seedFname,
-            szt runInd,
-            Msgr& msgr)
+readin_seed(
+    const std::string& seedFname,
+    szt runInd,
+    Msgr& msgr
+)
 {
     msgr.print(("Reading from file "+seedFname+" seed no: %d").c_str(), runInd);
     

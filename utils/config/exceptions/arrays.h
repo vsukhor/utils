@@ -50,7 +50,8 @@ namespace Exceptions {
 using namespace Common;
 
 /**
-* Partial template specialization for for 'Parameter out of range'
+* \brief 'Parameter out of range' exception for continuous fundamental std arrays.
+* \details Partial template specialization for for 'Parameter out of range'
 * exception involving continuous fundamental std arrays.
 * \tparam T Parameter type: must be std::is_fundamental.
 * \tparam W Length of the std::array.
@@ -81,7 +82,7 @@ public:
             Msgr* msgr=nullptr);
 };
 
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename T, std::size_t W>
 ParOutOfRange<std::array<T,W>, false,
@@ -109,8 +110,8 @@ ParOutOfRange(
     msgr->print<true>(s);
 }
 
-}    // namespace Exceptions
-}    // namespace Config
+}   // namespace Exceptions
+}   // namespace Config
 }   // namespace Utils
 
 #endif // UTILS_CONFIG_EXCEPTIONS_ARRAYS_H
