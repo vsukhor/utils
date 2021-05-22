@@ -1331,10 +1331,11 @@ hexagonal_lattice(
 
     auto add_point = [&](const szt j, const int sign)
     {
-    for (szt i=1; i<=2*numLayers+1-j; i++)
-        const auto a1 = half<T>*j + i - numLayers - one<T>
-        const auto a2 = sign * static_cast<T>(j) * std::sin(pi<T>/three<T>)
-        v.emplace_back(orig + A2<T> {a1, a2} * step);
+        for (szt i=1; i<=2*numLayers+1-j; i++) {
+            const auto a1 = half<T>*j + i - numLayers - one<T>;
+            const auto a2 = sign * static_cast<T>(j) * std::sin(pi<T>/three<T>);
+            v.emplace_back(orig + A2<T> {a1, a2} * step);
+        }
     };
 
     add_point(0, 0);

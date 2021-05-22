@@ -524,8 +524,8 @@ uniform_on_sphere( const realT solidAngle,
         // Inclination of the candidate point on a sphere surface:
         const auto ph = twopi<realT> * r01u();
 
-        const auto vcp = v * std::cos(ph)
-        const auto vsp = v * std::sin(ph)
+        const auto vcp = v * std::cos(ph);
+        const auto vsp = v * std::sin(ph);
 
         return poleDir == 2
                ? A3<realT>(vcp, vsp, u) * r
