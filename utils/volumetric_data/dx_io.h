@@ -1,6 +1,6 @@
 /* ==============================================================================
 
- Copyright (C) 2009-2019, Valerii Sukhorukov, <vsukhorukov@yahoo.com>
+ Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,9 +54,10 @@ void save_as_DX(
         const std::string& filename,
         const vec3<K>& v,
         A3<T> origin,        // by value
-        A3<T> delta,        // by value
+        A3<T> delta,         // by value
         const std::string& units,
-        Msgr& msgr )
+        Msgr& msgr
+)
 {
     if (units == "nm") {
         delta *= ten<T>;
@@ -101,8 +102,8 @@ void save_as_DX(
     std::size_t nlines = std::size_t(npoints/3);
     std::size_t lastlinenum = npoints % 3;
     for (size_t i=0; i<nlines; i++)
-        fout << STR(templine[3*i])+" "+
-                STR(templine[3*i+1])+" "+
+        fout << STR(templine[3*i]) + " " +
+                STR(templine[3*i+1]) + " " +
                 STR(templine[3*i+2]) << std::endl;
     if (     lastlinenum == 1) fout << STR(templine[npoints-1]) << std::endl;
     else if (lastlinenum == 2) fout << STR(templine[npoints-2]) + " " +
@@ -129,14 +130,14 @@ void save_as_DX(
 */
 template <typename K, typename T>
 void read_as_DX(
-    const std::string& filename,
-    vec3<K>& v,
-    A3<T>& origin,
-    A3<T>& delta,
-    A3<szt>& ms,
-    const std::vector<uint>& bin,
-    const std::string& units,
-    Msgr &msgr
+        const std::string& filename,
+        vec3<K>& v,
+        A3<T>& origin,
+        A3<T>& delta,
+        A3<szt>& ms,
+        const std::vector<uint>& bin,
+        const std::string& units,
+        Msgr &msgr
 )
 {
     if (bin[0] != 1 ||
