@@ -335,10 +335,13 @@ template <typename realT> inline
 realT Boost<realT>::
 r01u()
 {
-    if (++rU01_ind == bufferSize) {
+    auto counter = rU01_ind + 1;
+    if (counter == bufferSize) {
         prepare_uniform_real01();
         rU01_ind = 0;
     }
+    else rU01_ind = counter;
+    
     return rU01[rU01_ind];
 }
 
