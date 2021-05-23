@@ -31,16 +31,17 @@
 #ifndef UTILS_COMMON_MISC_H
 #define UTILS_COMMON_MISC_H
 
-#include <cmath>
-#include <vector>
 #include <array>
-#include <map>
-#include <iostream>
-#include <numeric>
+#include <cmath>
 #include <fstream>
+#include <iostream>
+#include <map>
 #include <memory>
-#include <stdio.h>
+#include <numeric>
+#include <cstdio>
+#include <vector>
 #include <sys/stat.h>
+
 //#include <boost/filesystem.hpp>
 #include "constants.h"
 
@@ -170,7 +171,7 @@ vec3<T> make( const szt x,
     return v;
 }
 
-};
+}  // namespace Vec3
 
 /// \brief Partial (cumulative) sum (in place) of the array \b v.
 /// \param u Initial value (of the first element)

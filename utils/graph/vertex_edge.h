@@ -38,8 +38,6 @@ namespace Utils {
 /// Abstract graph circuitry.
 namespace Graph {
 
-using namespace Utils::Common;
-
  /// Weight classification of graph edges.
 enum class EdgeMode {
     weighted,
@@ -53,7 +51,9 @@ enum class EdgeMode {
   * \tparam iT Integer type.
   * \tparam LinkMode Weitghted/unweighted mode.
  */
-template <typename fT, typename iT, auto LinkMode>
+template <typename fT,
+          typename iT,
+          auto LinkMode>
 struct EdgeType {};
 
 
@@ -63,7 +63,8 @@ struct EdgeType {};
   * \tparam fT Floating point type.
   * \tparam iT Integer type.
  */
-template <typename fT, typename iT>
+template <typename fT,
+          typename iT>
 struct EdgeType<fT,iT,EdgeMode::weighted> {
 
     using vertex_t = iT;    ///< Type alias for vertex index.
@@ -96,7 +97,8 @@ struct EdgeType<fT,iT,EdgeMode::weighted> {
   * \tparam fT Floating point type.
   * \tparam iT Integer type.
  */
-template <typename fT, typename iT>
+template <typename fT,
+          typename iT>
 struct EdgeType<fT,iT,EdgeMode::unweighted> {
 
     using vertex_t = iT;    ///< Type alias for vertex index.

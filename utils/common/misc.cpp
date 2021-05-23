@@ -86,7 +86,7 @@ bool directory_exists( const std::string& pathstrconst )
         pathstr.pop_back();
     const char* path {pathstr.c_str()};
     class stat info;
-    if (stat(path, &info) != 0)            return false;
+    if (stat(path, &info) != 0)         return false;
     else if (info.st_mode & S_IFDIR)    return true;
     else                                return false;
 }
@@ -103,7 +103,10 @@ void check_directory( const std::string& s )
 //            XASSERT(false, "Error: cannot create directory"+path.string());
 }
 */
-void copy_text_file(const std::string& from, const std::string& to)
+void copy_text_file(
+    const std::string& from,
+    const std::string& to
+)
 {
 
     std::ifstream ifs {from};
@@ -118,7 +121,10 @@ void copy_text_file(const std::string& from, const std::string& to)
 //template float avg<float>( std::vector<float> const& );
 //template double avg<double>( std::vector<double> const& );
 
-std::string trim( const std::string& str, const std::string& whitespace )
+std::string trim(
+    const std::string& str,
+    const std::string& whitespace
+)
 {
     const auto strBegin {str.find_first_not_of(whitespace)};
     if (strBegin == std::string::npos)

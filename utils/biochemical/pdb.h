@@ -37,11 +37,8 @@
 #include "../common/msgr.h"
 #include "../arrays/all.h"
 
-/// Library-wide.
-namespace Utils {
-
 /// \brief Biochemistry-related stuff.
-namespace Biochemical {
+namespace Utils::Biochemical {
 
 using namespace Common;
 using namespace Arrays;
@@ -86,45 +83,45 @@ public:
 
     /// \brief Constructor.
     explicit Pdb(
-        const uint ind,
+        uint ind,
         const std::string& chainID,
-        const uint resSeq,
+        uint resSeq,
         const std::string& resname,
         const std::string& atomname,
         const A3<float>& pos,
-        const float occupancy
+        float occupancy
     ) noexcept;
 
     /// \brief Constructor.
     explicit Pdb(
-        const uint ind,
+        uint ind,
         const std::string& chainID,
-        const uint resSeq,
+        uint resSeq,
         const std::string& resname,
         const std::string& atomname,
         const A3<float>& pos,
-        const float occupancy,
-        const float tempFactor
+        float occupancy,
+        float tempFactor
     ) noexcept;
 
     /// \brief Constructor.
     explicit Pdb(
-        const uint ind,
+        uint ind,
         const std::string& chainID,
-        const uint resSeq,
+        uint resSeq,
         const std::string& resname,
         const std::string& atomname,
         const A3<float>& pos,
-        const float occupancy,
-        const float tempFactor,
+        float occupancy,
+        float tempFactor,
         const std::string& element
     ) noexcept;
 
     /// \brief Constructor.
     explicit Pdb(
-        const uint ind,
+        uint ind,
         const std::string& chainID,
-        const uint resSeq,
+        uint resSeq,
         const std::string& resname,
         const std::string& atomname,
         const A3<float>& pos,
@@ -134,7 +131,7 @@ public:
     /// \brief Constructor.
     explicit Pdb(
         const std::string record,
-        const ulong segm
+        ulong segm
     ) noexcept;
 
     /// \brief Formated reading of a line record from a pdb file.
@@ -176,14 +173,14 @@ public:
     /// \brief Produce an atom-specific formatted record for a pdb file.
     static std::string format_as_pdb(
         const std::string& recn,
-        const uint iatom,
+        uint iatom,
         const std::string& atname,
         const std::string& resname,
-        const ulong ires,
-        const char ichain,
+        ulong ires,
+        char ichain,
         const A3<float>& pos,
-        const float occ,
-        const float tempf,
+        float occ,
+        float tempf,
         const std::string& elt,
         const std::string& chge,
         Msgr& msgr );
@@ -228,14 +225,13 @@ private:
 
     /// \brief Convert record name index to string.
     /// \return "HETATM" or "ATOM  ".
-    static std::string irecname2str(const int irecname) noexcept;
+    static std::string irecname2str(int irecname) noexcept;
     
     /// \brief Determine van Der Waals radius based on the atom data.
     float set_vdW() const noexcept;
 
 };
 
-}    // namespace Biochemical
-}    // namespace Utils
+}    // namespace Utils::Biochemical
 
 #endif // UTILS_BIOCHEMICAL_PDB_H

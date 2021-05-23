@@ -31,12 +31,12 @@
 #ifndef UTILS_COMMON_CONSTANTS_H
 #define UTILS_COMMON_CONSTANTS_H
 
-#include <limits>
-#include <vector>
 #include <array>
+#include <cmath>
+#include <limits>
 #include <memory>
 #include <numeric>
-#include <cmath>
+#include <vector>
 
 /// Library-wide.
 namespace Utils {
@@ -45,7 +45,12 @@ namespace Common {
 
 extern const std::string SLASH;
 
-#define STR(x) std::to_string(x)
+//#define STR(x) std::to_string(x)
+template <typename T>
+constexpr auto STR(T x)
+{
+    return std::to_string(x);
+}
 
 using ulong = unsigned long;
 using uint = unsigned int;
@@ -102,7 +107,8 @@ template <typename T> constexpr T
     };
 
 template <typename T, typename Enabler = void> constexpr T huge;
-template <typename T> constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+template <typename T>
+    constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
         std::numeric_limits<T>::has_infinity
         ? std::numeric_limits<T>::infinity()
         : std::numeric_limits<T>::max()
@@ -183,25 +189,25 @@ template <typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>}
 
 // ANSI colors =================================================================
 
-#define ANSI_RESET       "\x1B[0m"
-#define ANSI_FG_BLACK    "\x1b[30m"
-#define ANSI_FG_RED      "\x1B[31m"
-#define ANSI_FG_GREEN    "\x1B[32m"
-#define ANSI_FG_YELLOW   "\x1B[33m"
-#define ANSI_FG_BLUE     "\x1B[34m"
-#define ANSI_FG_MAGENTA  "\x1B[35m"
-#define ANSI_FG_CYAN     "\x1B[36m"
-#define ANSI_FG_WHITE    "\x1B[37m"
-#define ANSI_BG_RED      "\x1b[41m"
-#define ANSI_BG_GREEN    "\x1b[42m"
-#define ANSI_BG_YELLOW   "\x1b[43m"
-#define ANSI_BG_BLUE     "\x1b[44m"
-#define ANSI_BG_MAGENTA  "\x1b[45m"
-#define ANSI_BG_CYAN     "\x1b[46m"
-#define ANSI_BG_WHITE    "\x1b[47m"
-#define ANSI_BOLD_ON     "\x1b[1m"            
-#define ANSI_BOLD_OFF    "\x1b[22m"        
-#define ANSI_INVERSE_ON  "\x1b[7m"
+constexpr auto ANSI_RESET      = "\x1B[0m";
+constexpr auto ANSI_FG_BLACK   = "\x1b[30m";
+constexpr auto ANSI_FG_RED     = "\x1B[31m";
+constexpr auto ANSI_FG_GREEN   = "\x1B[32m";
+constexpr auto ANSI_FG_YELLOW  = "\x1B[33m";
+constexpr auto ANSI_FG_BLUE    = "\x1B[34m";
+constexpr auto ANSI_FG_MAGENTA = "\x1B[35m";
+constexpr auto ANSI_FG_CYAN    = "\x1B[36m";
+constexpr auto ANSI_FG_WHITE   = "\x1B[37m";
+constexpr auto ANSI_BG_RED     = "\x1b[41m";
+constexpr auto ANSI_BG_GREEN   = "\x1b[42m";
+constexpr auto ANSI_BG_YELLOW  = "\x1b[43m";
+constexpr auto ANSI_BG_BLUE    = "\x1b[44m";
+constexpr auto ANSI_BG_MAGENTA = "\x1b[45m";
+constexpr auto ANSI_BG_CYAN    = "\x1b[46m";
+constexpr auto ANSI_BG_WHITE   = "\x1b[47m";
+constexpr auto ANSI_BOLD_ON    = "\x1b[1m";
+constexpr auto ANSI_BOLD_OFF   = "\x1b[22m";
+constexpr auto ANSI_INVERSE_ON = "\x1b[7m";
 
 }     // namespace Common
 }    // namespace Utils

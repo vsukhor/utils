@@ -31,18 +31,16 @@
 #ifndef UTILS_GRAPH_GRAPH_H
 #define UTILS_GRAPH_GRAPH_H
 
-#include <set>
 #include <deque>
-#include <vector>
 #include <list>
+#include <set>
+#include <vector>
 
 #include "../common/misc.h"
 #include "vertex_edge.h"
 
-/// Library-wide.
-namespace Utils {
 /// \brief Abstract graph circuitry.
-namespace Graph {
+namespace Utils::Graph {
 
 using namespace Utils::Common;
 
@@ -77,7 +75,7 @@ public:
     * \param tar Searched vertex.
     * \return 1/0 if \p tar is found/not found respectively.
     */
-    int bfs(
+    auto bfs(
         const adjLT& ajl,
         std::deque<vertex_t>& q,        // by reference
         std::vector<bool>& visited,     // by reference
@@ -125,7 +123,7 @@ public:
     */
     void reset_al(
         adjLT& al,        // by reference
-        const weight_t w
+        weight_t w
     );
     
     /**
@@ -185,7 +183,7 @@ public:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename ET>
-int Graph<ET>::
+auto Graph<ET>::
 bfs(
     const adjLT& ajl,
     std::deque<vertex_t>& q,           // by reference
@@ -379,7 +377,6 @@ print_adjacency_list_line(
     os << std::endl;
 }
 
-}    // namespace Graph
-}    // namespace Utils
+}    // namespace Utils::Graph
 
 #endif  // UTILS_GRAPH_GRAPH_H

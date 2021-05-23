@@ -22,12 +22,11 @@
 
 ============================================================================== */
 
+#include "../common/misc.h"
 #include "pdb.h"
 
-/// Library-wide.
-namespace Utils {
 /// \brief Biochemistry-related stuff.
-namespace Biochemical {
+namespace Utils::Biochemical {
 
 float Pdb::scaling;    ///< Convert nm <-> A; nanometers are used internally.
 
@@ -322,15 +321,15 @@ irecn(
     const std::string& s
 ) const noexcept
 {
-    return (s == "ATOM  ") ? 1
-                           : ((s == "HETATM") ? 2 : -1);
+    return s == "ATOM  " ? 1
+                         : (s == "HETATM" ? 2 : -1);
 } 
 
 std::string Pdb::
 recname() const noexcept
 {
-    return (irecname == 1) ? "ATOM  "
-                           : "HETATM";
+    return irecname == 1 ? "ATOM  "
+                         : "HETATM";
 } 
 
 std::string Pdb::
@@ -346,15 +345,15 @@ float Pdb::
 set_vdW() const noexcept
 {
     if (resname == "UNX" || resname == "UNK")
-        return 0.4f;
+        return 0.4F;
     else
         switch (name.front()) {
-            case 'C': return 0.170f;
-            case 'N': return 0.155f;
-            case 'O': return 0.152f;
-            case 'H': return 0.120f;
-            case 'S': return 0.180f;
-            default:  return 0.160f;
+            case 'C': return 0.170F;
+            case 'N': return 0.155F;
+            case 'O': return 0.152F;
+            case 'H': return 0.120F;
+            case 'S': return 0.180F;
+            default:  return 0.160F;
         }
 }
 
@@ -432,5 +431,4 @@ write(
         }
 }
 
-}    // namespace Biochemical
-}    // namespace Utils
+}    // namespace Utils::Biochemical
