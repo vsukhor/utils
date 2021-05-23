@@ -322,10 +322,13 @@ T gaussian_fun( T x,
 template <auto K>
 std::string pad_zeros( const szt n )
 {
-    static_assert(K > 1 && K < 7,
+    constexpr szt MIN_ALLOWED = 1;
+    constexpr szt MAX_ALLOWED = 6;
+    static_assert(K >= MIN_ALLOWED &&
+                  K <= MAX_ALLOWED,
                   "Padding is only supprted for lengths between 2 and 6 inclusive");
 
-    if constexpr (K == 2)
+    if constexpr (K == 1)
         return n<10 ? "0"
                     : "" + STR(n);
     else if constexpr (K == 3)

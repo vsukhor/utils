@@ -32,12 +32,8 @@
 
 #include "exceptions.h"
 
-/// Library-wide.
-namespace Utils {
-/// General stuff.
-namespace Common {
 /// \brief Exeption and exit handlers.
-namespace Exceptions {
+namespace Utils::Common::Exceptions {
 
 /// \brief Print a message and exit.
 /// \param msg Message text.
@@ -68,6 +64,4 @@ Simple(
         std::cout << msg << std::endl;
 }
 
-}    // namespace Exceptions
-}    // namespace Common
-}    // namespace Utils
+}    // namespace Utils::Common::Exceptions

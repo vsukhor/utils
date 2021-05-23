@@ -31,17 +31,15 @@
 #ifndef UTILS_COMMON_OEL_H
 #define UTILS_COMMON_OEL_H
 
-#include <type_traits>
 #include <array>
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <stdarg.h>
+#include <type_traits>
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 /**
 * \class Msgr msgr.h
@@ -71,9 +69,11 @@ public:
     * \param sl File out stream.
     * \param precision Precision of real numbers.
     */
-    explicit Msgr(outstream* so,
-                  logstream* sl,
-                    const int precision=6 );
+    explicit Msgr(
+        outstream* so,
+        logstream* sl,
+        const int precision=6
+    );
     
     /**
     * \brief Set formatting parameters.
@@ -232,7 +232,6 @@ print_vector(
         print<false>(std::to_string(o));
 }
 
-}    // namespace Common
-}    // namespace Utils
+}    // namespace Utils::Common
 
 #endif // UTILS_COMMON_OEL_H

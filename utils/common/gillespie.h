@@ -32,10 +32,8 @@
 
 #include "misc.h"
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 /**
 * \class Gillespie gillespie.h
@@ -287,7 +285,6 @@ printScores( std::ostream& ofs ) const
             << rc[i]->get_score() << " ";
 }
 
-}    // namespace Common
-}    // namespace Utils
+}    // namespace Utils::Common
 
 #endif // UTILS_COMMON_GILLESPIE_H

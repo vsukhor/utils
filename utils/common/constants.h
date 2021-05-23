@@ -38,10 +38,8 @@
 #include <numeric>
 #include <vector>
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 extern const std::string SLASH;
 
@@ -209,8 +207,7 @@ constexpr auto ANSI_BOLD_ON    = "\x1b[1m";
 constexpr auto ANSI_BOLD_OFF   = "\x1b[22m";
 constexpr auto ANSI_INVERSE_ON = "\x1b[7m";
 
-}     // namespace Common
-}    // namespace Utils
+}     // namespace Utils::Common
 
 
 #endif // UTILS_COMMON_CONSTANTS_H

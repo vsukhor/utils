@@ -41,12 +41,8 @@
 
 #include "msgr.h"
 
-/// Library-wide.
-namespace Utils {
-/// General stuff.
-namespace Common {
 /// Exeption and exit handlers.
-namespace Exceptions {
+namespace Utils::Common::Exceptions {
 
 /**
 * \brief Simple process termination as a global function.
@@ -111,8 +107,6 @@ Simple(
 }
 
 
-}    // namespace Exceptions
-}    // namespace Common
-}    // namespace Utils
+}    // namespace Utils::Common::Exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_H
