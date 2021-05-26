@@ -181,10 +181,12 @@ public:
         realT biasPar  //=zero
     ) noexcept -> A3r;
 
-    /// \brief A point on the ellipse boundary having uinform directional (angular) distribution.
+    /// \brief Uinform directional (angular) distribution
+    /// \details A point on the ellipse boundary from a uinform directional
+    /// (angular) distribution.
     /// \note This is not a uniform density over the ellipse boundary.
     /// The ellipse is centered at (0,0)
-    /// \param r Semi-axes dimensions of the ellipse: r = { a, b }.
+    /// \param r Semi-axes dimensions of the ellipse: r = {a, b}.
     constexpr auto uniform_on_ellipse(
         const A2r& r  //=one
     ) noexcept -> A2r;
@@ -193,14 +195,14 @@ public:
     /// \details A point within the ellipse boundary having uinform
     /// distribution over the ellipse area.
     /// The ellipse is centered at (0,0)
-    /// \param r Semi-axes dimensions of the ellipse: r = { a, b }.
+    /// \param r Semi-axes dimensions of the ellipse: r = {a, b}.
     constexpr auto uniform_in_ellipse(
         const A2r& r  //=one
     ) noexcept -> A2r;
 
 /*    /// \brief A shifted point within the ellipse boundary having uinform
     /// distribution over the ellipse area.
-    /// \param r1 Semi-axes dimensions of the ellipse: r1 = { a, b }.
+    /// \param r1 Semi-axes dimensions of the ellipse: r1 = {a, b}.
     /// \param r0 Ellipse center.
     /// \param shift Shift.
     A2<realT> uniform_in_ellipse(const A2<realT>& r1,
@@ -288,12 +290,14 @@ private:
     /// Standard normal distribution.
     boost::random::normal_distribution<realT> normalDistr;
 
-    std::array<realT, bufferSize> rU01;  ///< Buffer array for storing random numbers.
+    /// Buffer array for storing random numbers.
+    std::array<realT, bufferSize> rU01;
 
-    volatile int rU01_ind;   ///< Index of the current random number in \a rU01.
+    /// Index of the current random number in \a rU01.
+    volatile long rU01_ind;
 
-//    boost::mt19937 g;      ///< Random number generator.
-    std::mt19937 g;          ///< Random number generator.
+//    boost::mt19937 g;   ///< Random number generator.
+    std::mt19937 g;       ///< Random number generator.
 
     /// Populate the buffer array \a rU01 with a new butch of random numbers.
     void prepare_uniform_real01();
@@ -352,7 +356,7 @@ template <typename realT> inline
 realT Boost<realT>::
 r01u()
 {
-    auto counter = rU01_ind + 1;  // local counter because of rU01_ind volatility
+    auto counter = rU01_ind + 1;  // local because of rU01_ind volatility
     if (counter == bufferSize) {
         prepare_uniform_real01();
         rU01_ind = 0;
@@ -370,10 +374,10 @@ uniform0( const int max )
 {            
     XASSERT(max > 0, "Boost<realT>::uniform0 requires max > 0");
 
-    auto ir {static_cast<int>(r01u()*max)};
+    auto ir {static_cast<int>(r01u() * max)};
     
     while (ir >= max) 
-        ir = static_cast<int>(r01u()*max);
+        ir = static_cast<int>(r01u() * max);
     
     return ir;    
 }
@@ -386,10 +390,10 @@ uniform0( const uint max )
 {            
     XASSERT(max > 0, "Boost<realT>::uniform0 requires max > 0");
 
-    auto ir = static_cast<uint>(r01u()*max);
+    auto ir = static_cast<uint>(r01u() * max);
     
     while (ir >= max) 
-        ir = static_cast<uint>(r01u()*max);
+        ir = static_cast<uint>(r01u() * max);
     
     return ir;    
 }
@@ -402,10 +406,10 @@ uniform0(const szt max)
 {            
     XASSERT(max > 0, "Boost<realT>::uniform0 requires max > 0");
 
-    auto ir {static_cast<szt>(r01u()*max)};
+    auto ir {static_cast<szt>(r01u() * max)};
     
     while (ir >= max) 
-        ir = static_cast<szt>(r01u()*max);
+        ir = static_cast<szt>(r01u() * max);
     
     return ir;    
 }
@@ -498,7 +502,7 @@ uniform_direction(
         if (std::abs(th) < pi * std::cos(ph)) {
             // 'th' is spread the remaining points over the length of the parallele.
             th /= std::cos(ph);
-            bool reject = th < azimMinMax[0] ||
+            bool reject = th <  azimMinMax[0] ||
                           th >= azimMinMax[1];
             if (azimSymmetric)
                 reject = reject &&
