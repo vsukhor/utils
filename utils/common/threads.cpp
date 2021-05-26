@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file threads.h
@@ -30,10 +31,8 @@
 
 #include "threads.h"
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 Threads::
 Threads(const szt offset,
@@ -55,11 +54,18 @@ Threads(const szt offset,
                   << nThreads << std::endl;
         exit(0); 
     }
+    if (nThreads > 12 && wht == Weights::CircleCenter) {
+        std::cout << "Error in Threads: for Circular weights only up to max 12 "
+                  << "threads are supported. nThreads ordered: "
+                  << nThreads << std::endl;
+        exit(0);
+    }
+
     szt w {size - 2*omittedBoundaries};
     const szt rest {w % num};
     w -= rest;
     
-    chunkSize.resize(num);
+    chs.resize(num);
     if (     wht == Weights::Equal)
         set_chunks_equal(w, rest);
     else if (wht == Weights::CircleCenter)
@@ -73,10 +79,10 @@ Threads(const szt offset,
     i1.resize(num);
     i2.resize(num);
     i1[0] = offset + omittedBoundaries;
-    i2[0] = i1[0] + chunkSize[0];
+    i2[0] = i1[0] + chs[0];
     for (szt ith=1; ith<num; ith++) {
-        i1[ith] = i1[ith-1] + chunkSize[ith-1];
-        i2[ith] = i2[ith-1] + chunkSize[ith];
+        i1[ith] = i1[ith-1] + chs[ith-1];
+        i2[ith] = i2[ith-1] + chs[ith];
     }
     thr.resize(num);
 }
@@ -93,9 +99,9 @@ inline void Threads::
 set_chunks_equal( const szt w, const szt rest )
 {
     for (szt ith=0; ith<num; ith++) {
-        chunkSize[ith] = w/num;
+        chs[ith] = w/num;
         if (ith < rest) 
-            chunkSize[ith]++;
+            chs[ith]++;
     }
 }
 
@@ -105,127 +111,133 @@ set_chunks_circular( const szt w, const szt rest )
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
 // where phi is the central angle (in radians)  defining the circle segment.
 // The condition is the equality of the segment areas
-//     A = rnd^2 * ( phi - sin(phi) ) / 2,
+//     A = rnd^2 * (phi - sin(phi)) / 2,
 // which reflect the thread loads.
 // The problem has no explicit solution but can be solved numerically.
 // E.g. in matlab:
-//     % Let be given: 'k': an index in chunkSize[k]
+//     % Let be given: 'k': an index in chs[k]
 //     %                'num': the number of threads
 //     % Then, to find 'h':
-//     syms h;  vpasolve( 2*pi*k/num == 2*acos(1-h) - sin(2*acos(1-h)), h ) / 2
+//     syms h;  vpasolve(2*pi*k/num == 2*acos(1-h) - sin(2*acos(1-h)), h) / 2
 // 
     switch (num) {
     case 1 :                                            
-        chunkSize[0] = w;    
+        chs[0] = w;
         break;                                     
-    case 2 :                                            
-        chunkSize[0] = szt(0.5000000 * w);                        
-        chunkSize[1] = w - chunkSize[0];                        
+
+    case 2 :
+        chs[0] = szt(0.5000000 * w);
+        chs[1] = w - chs[0];
         break;                                     
-    case 3 :                                            
-        chunkSize[0] = szt(0.3675340 * w);
-        chunkSize[1] = szt(0.6324660 * w) - chunkSize[0];
-        chunkSize[2] =  w - chunkSize[1] - chunkSize[0];
+
+    case 3 :
+        chs[0] = szt(0.3675340 * w);
+        chs[1] = szt(0.6324660 * w) - chs[0];
+        chs[2] =                 w - chs[1] - chs[0];
         break;                                     
-    case 4 :                                            
-        chunkSize[0] = szt(0.2980136 * w);
-        chunkSize[1] = szt(0.5000000 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.7019864 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] =   w - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 4 :
+        chs[0] = szt(0.2980136 * w);
+        chs[1] = szt(0.5000000 * w) - chs[0];
+        chs[2] = szt(0.7019864 * w) - chs[1] - chs[0];
+        chs[3] =                  w - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 5 :                                            
-        chunkSize[0] = szt(0.2540691 * w);
-        chunkSize[1] = szt(0.4211319 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.5788681 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.7459309 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] =   w - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 5 :
+        chs[0] = szt(0.2540691 * w);
+        chs[1] = szt(0.4211319 * w) - chs[0];
+        chs[2] = szt(0.5788681 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.7459309 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] =                  w - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 6 :                                            
-        chunkSize[0] = szt(0.2233536 * w);
-        chunkSize[1] = szt(0.3675340 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.5000000 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.6324660 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] = szt(0.7766464 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5] =   w - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 6 :
+        chs[0] = szt(0.2233536 * w);
+        chs[1] = szt(0.3675340 * w) - chs[0];
+        chs[2] = szt(0.5000000 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.6324660 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] = szt(0.7766464 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5] =                 w - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 7 :                                            
-        chunkSize[0] = szt(0.2004697 * w);
-        chunkSize[1] = szt(0.3282611 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.4437815 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.5562185 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] = szt(0.6717389 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5] = szt(0.7995303 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6] =   w - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 7 :
+        chs[0] = szt(0.2004697 * w);
+        chs[1] = szt(0.3282611 * w) - chs[0];
+        chs[2] = szt(0.4437815 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.5562185 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] = szt(0.6717389 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5] = szt(0.7995303 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6] =                  w - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 8 :                                            
-        chunkSize[0] = szt(0.1826477 * w);
-        chunkSize[1] = szt(0.2980136 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.4011780 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.5000000 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] = szt(0.5988220 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5] = szt(0.7019864 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6] = szt(0.8173523 * w) - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[7] =   w - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 8 :
+        chs[0] = szt(0.1826477 * w);
+        chs[1] = szt(0.2980136 * w) - chs[0];
+        chs[2] = szt(0.4011780 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.5000000 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] = szt(0.5988220 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5] = szt(0.7019864 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6] = szt(0.8173523 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[7] =                  w - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 9 :                                            
-        chunkSize[0] = szt(0.16830735 * w);
-        chunkSize[1] = szt(0.27386929 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.36753396 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.45631111 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] = szt(0.54368889 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5] = szt(0.63246604 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6] = szt(0.72613071 * w) - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[7] = szt(0.83169265 * w) - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[8] =    w - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 9 :
+        chs[0] = szt(0.16830735 * w);
+        chs[1] = szt(0.27386929 * w) - chs[0];
+        chs[2] = szt(0.36753396 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.45631111 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] = szt(0.54368889 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5] = szt(0.63246604 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6] = szt(0.72613071 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[7] = szt(0.83169265 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[8] =                   w - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 10 :                                            
-        chunkSize[0] = szt(0.15647559 * w);
-        chunkSize[1] = szt(0.25406908 * w) - chunkSize[0];
-        chunkSize[2] = szt(0.34015425 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3] = szt(0.42113190 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4] = szt(0.50000000 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5] = szt(0.57886810 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6] = szt(0.65984575 * w) - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[7] = szt(0.74593092 * w) - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[8] = szt(0.84352441 * w) - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[9] =    w - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 10 :
+        chs[0] = szt(0.15647559 * w);
+        chs[1] = szt(0.25406908 * w) - chs[0];
+        chs[2] = szt(0.34015425 * w) - chs[1] - chs[0];
+        chs[3] = szt(0.42113190 * w) - chs[2] - chs[1] - chs[0];
+        chs[4] = szt(0.50000000 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5] = szt(0.57886810 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6] = szt(0.65984575 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[7] = szt(0.74593092 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[8] = szt(0.84352441 * w) - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[9] =                   w - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 11 :                                            
-        chunkSize[0]  = szt(0.14651773 * w);
-        chunkSize[1]  = szt(0.23748417 * w) - chunkSize[0];
-        chunkSize[2]  = szt(0.31735290 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3]  = szt(0.39205578 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4]  = szt(0.46426965 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5]  = szt(0.53573035 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6]  = szt(0.60794422 * w) - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[7]  = szt(0.68264710 * w) - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[8]  = szt(0.76251583 * w) - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[9]  = szt(0.85348227 * w) - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[10] =    w - chunkSize[9] - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 11 :
+        chs[0]  = szt(0.14651773 * w);
+        chs[1]  = szt(0.23748417 * w) - chs[0];
+        chs[2]  = szt(0.31735290 * w) - chs[1] - chs[0];
+        chs[3]  = szt(0.39205578 * w) - chs[2] - chs[1] - chs[0];
+        chs[4]  = szt(0.46426965 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5]  = szt(0.53573035 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6]  = szt(0.60794422 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[7]  = szt(0.68264710 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[8]  = szt(0.76251583 * w) - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[9]  = szt(0.85348227 * w) - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[10] =                   w - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    case 12 :                                            
-        chunkSize[0]  = szt(0.13800066 * w);
-        chunkSize[1]  = szt(0.22335364 * w) - chunkSize[0];
-        chunkSize[2]  = szt(0.29801362 * w) - chunkSize[1] - chunkSize[0];
-        chunkSize[3]  = szt(0.36753396 * w) - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[4]  = szt(0.43436113 * w) - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[5]  = szt(0.50000000 * w) - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[6]  = szt(0.56563887 * w) - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[7]  = szt(0.63246604 * w) - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[8]  = szt(0.70198638 * w) - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[9]  = szt(0.77664636 * w) - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[10] = szt(0.86199934 * w) - chunkSize[9] - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
-        chunkSize[11] =   w - chunkSize[10] - chunkSize[9] - chunkSize[8] - chunkSize[7] - chunkSize[6] - chunkSize[5] - chunkSize[4] - chunkSize[3] - chunkSize[2] - chunkSize[1] - chunkSize[0];
+
+    case 12 :
+        chs[0]  = szt(0.13800066 * w);
+        chs[1]  = szt(0.22335364 * w) - chs[0];
+        chs[2]  = szt(0.29801362 * w) - chs[1] - chs[0];
+        chs[3]  = szt(0.36753396 * w) - chs[2] - chs[1] - chs[0];
+        chs[4]  = szt(0.43436113 * w) - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[5]  = szt(0.50000000 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[6]  = szt(0.56563887 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[7]  = szt(0.63246604 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[8]  = szt(0.70198638 * w) - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[9]  = szt(0.77664636 * w) - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[10] = szt(0.86199934 * w) - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
+        chs[11] =                  w - chs[10] - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         break;                                     
-    default : 
-        std::cout << "Error in Threads: Weights::CircleCenter is implemented "
-                  << "for number of threads < 13 only. The attempted number is "
-                  << num << std::endl;
-        exit(0); 
     }
     
     for (szt ith=0; ith<rest; ith++) 
-        chunkSize[ith]++;
+        chs[ith]++;
 }
 
 void Threads::
@@ -243,14 +255,14 @@ set_chunks_triangleDecr( const szt size )
 
     szt n(size);
     for (szt ith=0; ith<num-1; ith++) {
-        chunkSize[ith] = 0;
-        szt chs {};
+        chs[ith] = 0;
+        szt c {};
         do {
-            chunkSize[ith]++; 
-            chs += n--;
-        } while (chs < dchs[ith]);
+            chs[ith]++;
+            c += n--;
+        } while (c < dchs[ith]);
     }
-    chunkSize.back() = n;
+    chs.back() = n;
 }
 
 void Threads::
@@ -273,5 +285,4 @@ print_regions( const bool withCout,
     }
 }
 
-}    // namespace Common
-}    // namespace Utils
+}    // namespace Utils::Common

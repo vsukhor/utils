@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file array3.h
@@ -31,12 +32,16 @@
 #ifndef UTILS_ARRAYS_ARRAY3_H
 #define UTILS_ARRAYS_ARRAY3_H
 
-#include <fstream>
-#include <cmath>
-#include <type_traits>
 #include <array>
+#include <cmath>
+#include <fstream>
+#include <type_traits>
+#include <vector>
 
+#include "../common/constants.h"
 #include "../common/misc.h"
+#include "_misc.h"
+#include "array2.h"
 
 /// Library-wide.
 namespace Utils {
@@ -44,11 +49,10 @@ namespace Utils {
 namespace Common {
 template <typename>
 class Geometric;
-}
+}  // namespace Common
 
-/// Custom arrays.
+/// 3-element arrays.
 namespace Arrays {
-using namespace Utils::Common;
 
 /// \brief Three-element arrays.
 /// \details This class specializes array template for three-element array
@@ -58,11 +62,15 @@ using namespace Utils::Common;
 template <typename T>
 class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 
-T n[3] = {};
+static constexpr int len {3};
+
+T n[len] = {};
  
 public:
 
-array( const T m=static_cast<T>(0) ) noexcept
+array() noexcept = default;
+
+array( const T m ) noexcept
     : n {m, m, m}
 {}
 
@@ -86,6 +94,10 @@ array( const std::array<T,3>& p ) noexcept
     : n {p[0], p[1], p[2]}
 {}
 
+array( array&& p ) noexcept = default;
+array& operator=( array&& p ) noexcept = default;
+~array() = default;
+
 explicit array( std::ifstream& ist )
 {
     read(ist);
@@ -99,24 +111,14 @@ constexpr array<3,Q> cast_static() const noexcept
             static_cast<Q>(n[2])};
 }
 
-constexpr array operator=(
-    const std::array<T,3>& p
-) noexcept
-{
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
-    return *this;
-}
 constexpr array<2,T> operator()(
     const int i1,
     const int i2
 ) const noexcept
 {
-    XASSERT(i1 >= 0, "");
-    XASSERT(i1 <  3, "");
-    XASSERT(i2 >= 0, "");
-    XASSERT(i2 <  3, "");
+    XASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds.");
+    XASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds.");
+    
     return {n[i1], n[i2]};
 }
 constexpr T const* data() const noexcept
@@ -124,27 +126,42 @@ constexpr T const* data() const noexcept
     return n;
 }
 
-array operator=( const array& p ) noexcept
+constexpr array& operator=( const array& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
+    if (this != &p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+    }
     return *this;
 }
 
-array operator=( const T p[] ) noexcept
+constexpr array& operator=( const std::array<T,3>& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
+    if (*this != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+    }
     return *this;
 }
 
-constexpr array operator=( const T p ) noexcept
+constexpr array& operator=( const T p[] ) noexcept
+{
+    if (n != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+    }
+    return *this;
+}
+
+constexpr array& operator=( const T p ) noexcept
 {
     n[0] = p;
     n[1] = p;
     n[2] = p;
+    
     return *this;
 }
 
@@ -415,22 +432,22 @@ constexpr bool operator>=( const T p ) const noexcept
 
 constexpr T operator[]( const int i ) const noexcept
 {
-    XASSERT(i >= 0, "");
-    XASSERT(i <  3, "");
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
 T& operator[]( const int i ) noexcept
 {
-    XASSERT(i >= 0, "");
-    XASSERT(i <  3, "");
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
 const T* at( const int i ) const noexcept
 {
-    XASSERT(i >= 0, "");
-    XASSERT(i <  3, "");
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return &n[i];
 }
 constexpr bool contains( const T p ) const noexcept
@@ -523,7 +540,7 @@ T other_than( const array<2,T>& p
             p == array<2,T>(n[2], n[0])) ? n[1] :
           ((p == array<2,T>(n[1], n[2]) ||
             p == array<2,T>(n[2], n[1])) ? n[0] :
-            -one<T>));
+            -Utils::Common::one<T>));
 }
 
 constexpr T sum() const noexcept
@@ -662,15 +679,16 @@ void write( std::ofstream& ost ) const noexcept
     ost.write(reinterpret_cast<const char*>(&n[2]), sizeof(T));
 }
 
-array<2,int> equal_dims() const noexcept
+[[nodiscard]] array<2,int> equal_dims() const noexcept
 {
     if (n[0] == n[1]) return {0, 1};
     if (n[0] == n[2]) return {0, 2};
     if (n[1] == n[2]) return {1, 2};
+
     return {-1, -1};
 }
 
-int index_min() const noexcept
+[[nodiscard]] int index_min() const noexcept
 {
     return (n[0] > n[1]) ? ((n[1] > n[2]) ? 2 : 1)
                          : ((n[0] > n[2]) ? 2 : 0);

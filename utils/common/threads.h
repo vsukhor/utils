@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file threads.h
@@ -31,17 +32,15 @@
 #ifndef UTILS_COMMON_THREADS_H
 #define UTILS_COMMON_THREADS_H
 
-#include <thread>
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include "misc.h"
 #include "msgr.h"
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 /**
 * \class Threads threads.h
@@ -63,10 +62,11 @@ public:
         TriangleDecr    ///< Right triangle-shaped distribution
     };
 
-    const szt                num;        ///< Number of threads.
-    std::vector<szt>         chunkSize;  ///< Per-thread amounts of relative load.
-    std::vector<szt>         i1, i2;     ///< Range borders.
-    std::vector<std::thread> thr;        ///< Container holding the threads.
+    const szt        num;     ///< Number of threads.
+    std::vector<szt> chs;     ///< Per-thread amounts of relative load.
+    std::vector<szt> i1, i2;  ///< Range borders.
+
+    std::vector<std::thread> thr;  ///< Container holding the threads.
 
     /**
     * \brief Constructor.
@@ -78,11 +78,11 @@ public:
     * \param nThreads Thread number.
     */
     explicit Threads(
-             const szt offset,
-             const szt size,
-             const ulong omittedBoundaries,
-             const Weights wht,
-             const ulong nThreads );
+        szt offset,
+        szt size,
+        ulong omittedBoundaries,
+        const Weights wht,
+        ulong nThreads );
     
     /**
     * Joins the threads.
@@ -95,32 +95,29 @@ public:
     * \param w Total number of work units.
     * \param rest Number of work units remaining after the optimal distribution.
     */
-    void set_chunks_equal(const szt w,
-                          const szt rest);
+    void set_chunks_equal(szt w, szt rest);
 
     /**
     * \brief Sets weighting factors according to \a Weights::CircleCenter.
     * \param w Total number of work units.
     * \param rest Number of work units remaining after the optimal distribution.
     */
-    void set_chunks_circular(const szt w,
-                             const szt rest);
+    void set_chunks_circular(szt w, szt rest);
     /**
     * \brief Sets weighting factors according to \a Weights::TriangleDecr.
     * \param size Total number of work units.
     */
-    void set_chunks_triangleDecr(const szt size);
+    void set_chunks_triangleDecr(szt size);
 
     /**
     * \brief Prints work unit borders for particular threads.
     * \param withCout Specifies if printing to cout.
     * \param msgr \a Msgr used for the output.
     */
-    void print_regions(const bool withCout,
+    void print_regions(bool withCout,
                        Msgr& msgr);
 };
 
-}    // namespace Common
-}    // namespace Utils
+}  // namespace Utils::Common
 
 #endif // UTILS_COMMON_THREADS_H

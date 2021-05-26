@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /// \file dx_io.h
 /// \brief Functions reading and writing volumetric data using .DX file format.
@@ -29,13 +30,14 @@
 #ifndef UTILS_VOLUMETRIC_DX_IO
 #define UTILS_VOLUMETRIC_DX_IO
 
-#include "misc.h"
-#include "msgr.h"
+#include "../arrays/all.h"
+#include "../common/constants.h"
+#include "../common/misc.h"
+#include "../common/msgr.h"
 
-/// Library-wide.
-namespace Utils {
 /// Volume data io.
-namespace Volumetric {
+namespace Utils::Volumetric {
+
 
 /**
  * \brief Writes 3d matrix to a file using .DX format.
@@ -52,16 +54,16 @@ namespace Volumetric {
 template <typename K, typename L, typename T>
 void save_as_DX(
         const std::string& filename,
-        const vec3<K>& v,
-        A3<T> origin,        // by value
-        A3<T> delta,         // by value
+        const Common::vec3<K>& v,
+        Arrays::A3<T> origin,        // by value
+        Arrays::A3<T> delta,         // by value
         const std::string& units,
-        Msgr& msgr
+        Common::Msgr& msgr
 )
 {
     if (units == "nm") {
-        delta *= ten<T>;
-        origin *= ten<T>;
+        delta *= Common::ten<T>;
+        origin *= Common::ten<T>;
     }
     else if (units != "A")
         msgr.exit("Error while saving volume map: length units not supported");
@@ -74,7 +76,7 @@ void save_as_DX(
 
     std::size_t npoints = v.size() * v[0].size() * v[0][0].size();
 
-    fout << std::string("object 1 class gridpositions counts ") +
+    fout << "object 1 class gridpositions counts "
          << v.size() << " " << v[0].size() << " " << v[0][0].size()
          << std::endl;
 
@@ -82,14 +84,14 @@ void save_as_DX(
          << origin[0] << " " << origin[1] << " " << origin[2]
          << std::endl;
 
-    fout << std::string("delta ") << delta[0] << " " << 0        << " " << 0        << std::endl;
-    fout << std::string("delta ") << 0        << " " << delta[1] << " " << 0        << std::endl;
-    fout << std::string("delta ") << 0        << " " << 0        << " " << delta[2] << std::endl;
+    fout << "delta " << delta[0] << " " << 0        << " " << 0        << std::endl;
+    fout << "delta " << 0        << " " << delta[1] << " " << 0        << std::endl;
+    fout << "delta " << 0        << " " << 0        << " " << delta[2] << std::endl;
 
-    fout << std::string("object 2 class gridconnections counts ")
+    fout << "object 2 class gridconnections counts "
          << v.size() << " " <<v[0].size() << " " << v[0][0].size()
          << std::endl;
-    fout << std::string("object 3 class array type double rank 0 items ")
+    fout << "object 3 class array type double rank 0 items "
          << npoints << " data follows"
          << std::endl;
 
@@ -109,7 +111,7 @@ void save_as_DX(
     else if (lastlinenum == 2) fout << STR(templine[npoints-2]) + " " +
                                        STR(templine[npoints-1]) << std::endl;
     fout << std::endl
-         << std::string("object \"distance (protein) [A]\" class field")
+         << "object \"distance (protein) [A]\" class field"
          << std::endl
          << std::endl;
 
@@ -131,13 +133,13 @@ void save_as_DX(
 template <typename K, typename T>
 void read_as_DX(
         const std::string& filename,
-        vec3<K>& v,
-        A3<T>& origin,
-        A3<T>& delta,
-        A3<szt>& ms,
-        const std::vector<uint>& bin,
+        Common::vec3<K>& v,
+        Arrays::A3<T>& origin,
+        Arrays::A3<T>& delta,
+        Arrays::A3<Common::szt>& ms,
+        const std::vector<Common::uint>& bin,
         const std::string& units,
-        Msgr &msgr
+        Common::Msgr &msgr
 )
 {
     if (bin[0] != 1 ||
@@ -153,8 +155,10 @@ void read_as_DX(
 
     msgr.print("Started reading " + filename);
 
-    std::string line;
-    szt xdim, ydim, zdim;
+    std::string line {};
+    Common::szt xdim = 0;
+    Common::szt ydim = 0;
+    Common::szt zdim = 0;
     // % object 1 class gridpositions counts 30 30 30:
     std::getline(fin, line);
     sscanf(line.c_str(),
@@ -163,16 +167,16 @@ void read_as_DX(
     ms[0] = xdim;
     ms[1] = ydim;
     ms[2] = zdim;
-    v = make_vec3<K>(xdim, ydim, zdim);
+    v = Common::Vec3::make<K>(xdim, ydim, zdim);
     auto npoints {xdim * ydim * zdim};
-    szt numlines;
+    Common::szt numlines;
     auto lastlinenumelements = npoints % 3;
     if (lastlinenumelements == 0) {
         lastlinenumelements = 3;
         numlines = npoints / 3;
     }
     else
-        numlines = size_t(npoints/3) + 1;
+        numlines = static_cast<Common::szt>(npoints / 3) + 1;
 
     // origin:
     std::getline(fin, line);
@@ -199,8 +203,8 @@ void read_as_DX(
     // Convert to float for writing:
     std::vector<float> templine(npoints);
 
-    szt count {};
-    for (szt n=0; n<numlines-1; n++) {
+    Common::szt count {};
+    for (Common::szt n=0; n<numlines-1; n++) {
         std::getline(fin, line);
         sscanf(line.c_str(),
                "%f %f %f",
@@ -214,7 +218,7 @@ void read_as_DX(
         sscanf(line.c_str(),
                "%f",
                &templine[count]);
-        count++
+        count++;
     }
     else if (lastlinenumelements == 2) {
         sscanf(line.c_str(),
@@ -230,13 +234,13 @@ void read_as_DX(
     }
 
     count = 0;
-    for (szt i=0; i<v.size(); i++)
-        for (szt j=0; j<v[i].size(); j++)
-            for (szt k=0; k<v[i][j].size(); k++)
+    for (Common::szt i=0; i<v.size(); i++)
+        for (Common::szt j=0; j<v[i].size(); j++)
+            for (Common::szt k=0; k<v[i][j].size(); k++)
                 v[i][j][k] = static_cast<K>(templine[count++]);
     if (units == "nm") {
-        delta /= ten<T>;
-        origin /= ten<T>;
+        delta /= Common::ten<T>;
+        origin /= Common::ten<T>;
     }
     else if (units != "A")
         msgr.exit("Error while reading volume map: length units not supported  ");
@@ -244,7 +248,6 @@ void read_as_DX(
     msgr.print("Finished reading " + filename);
 }
 
-}     // namespace Volumetric
-}    // namespace Utils
+}  // namespace Utils::Volumetric
 
 #endif // UTILS_VOLUMETRIC_DX_IO

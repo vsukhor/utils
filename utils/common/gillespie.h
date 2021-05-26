@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,9 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
+
 /**
 * \file gillespie.h
 * \brief Contains class Gillespie.
@@ -30,6 +32,10 @@
 #ifndef UTILS_COMMON_GILLESPIE_H
 #define UTILS_COMMON_GILLESPIE_H
 
+#include <algorithm>
+#include <fstream>
+
+#include "constants.h"
 #include "misc.h"
 
 /// General stuff.
@@ -52,9 +58,9 @@ public :
     
     /**
     * \brief Constructor.
-    * \param rf Random class factory.
+    * \param rnd Random class factory.
     */
-    explicit Gillespie(RF& rf) noexcept;
+    explicit Gillespie(RF& rnd) noexcept;
 
     /**
     * \brief Adds a reaction \p r to the reaction collection.
@@ -68,13 +74,13 @@ public :
     void initialize() noexcept;
 
     bool set_asum() noexcept;
-    void fire(double&) noexcept;
+    void fire(double& time) noexcept;
 
     /**
     * \brief Getter for the time till the nest reaction event.
     * \return Time till the nest reaction event.
     */
-    realT tau() const noexcept { return tau_; }
+    [[nodiscard]] realT tau() const noexcept { return tau_; }
 
     /**
     * \brief Prints reaction propensities to \p os.
@@ -92,14 +98,14 @@ public :
     * \brief Number of reactions.
     * \return Number of reactions.
     */
-    constexpr szt num_reactions() const noexcept;
+    [[nodiscard]] constexpr szt num_reactions() const noexcept;
 
     /**
     * \brief Short human readable name of the reaction.
     * \param ind index of the reaction.
     * \returns Short human readable name of the reaction indexed by \p ind.
     */
-    std::string short_name(const szt ind) const noexcept;
+    [[nodiscard]] std::string short_name(szt ind) const noexcept;
 
     /**
     * \brief Finds reaction from its name.
@@ -178,10 +184,10 @@ initialize() noexcept
 
 template <typename RF, typename Reaction>
 Reaction* Gillespie<RF,Reaction>::
-get_reaction( const std::string& s ) const
+get_reaction( const std::string& name ) const
 {
     for (const auto& o : rc)
-        if (o->shortName == s)
+        if (o->shortName == name)
             return o.get();
 
     return nullptr;
@@ -193,9 +199,7 @@ set_asum() noexcept
 {
     asum = std::accumulate(a.begin(), a.end(), zero<realT>);
     
-    if (asum == zero<realT>)
-        return false;
-    return true;
+    return asum != zero<realT>;
 }
 
 template <typename RF, typename Reaction>
@@ -206,7 +210,7 @@ set_rind() noexcept
         auxf[i] = a[i] / asum;
     std::partial_sum(auxf.begin(), auxf.end(), csums.begin());
 
-    realT ran;
+    realT ran {};
     do ran = rnd.r01u(); 
     while (ran >= csums[nreact-1]);
 
@@ -221,7 +225,7 @@ template <typename RF, typename Reaction>
 void Gillespie<RF,Reaction>::
 set_tau() noexcept
 {
-    realT ran;
+    realT ran {};
     do ran = rnd.r01u(); 
     while (ran <= zero<realT> || ran >= one<realT>);
 
@@ -264,25 +268,34 @@ short_name( const szt i ) const noexcept
 
 template <typename RF, typename Reaction>
 void Gillespie<RF,Reaction>::
-log_data( std::ostream& ofs ) const
+log_data( std::ostream& os ) const
 {
-    ofs << " tau " << tau_
-        << " rt " << (rind!=huge<szt> ? "" : "000") << pad_zeros<3>(rind);
+    auto pad_zeros = [](auto n) {
+        constexpr int MIN2 = 10;
+        constexpr int MIN3 = 100;
+        return (n < MIN2 ? "00"
+                         : (n < MIN3 ? "0"
+                                     : "")) + STR(n);
+    };
+
+    os << " tau " << tau_
+       << " rt " << (rind!=huge<szt> ? "" : "000")
+                  << pad_zeros(rind);
     if (rind != huge<szt>)
-        ofs << " " << currRc()->shortName;
+        os << " " << currRc()->shortName;
 }
 
 template <typename RF, typename Reaction>
 void Gillespie<RF,Reaction>::
-printScores( std::ostream& ofs ) const
+printScores( std::ostream& os ) const
 {
     for (szt i=0; i<nreact; i++)
         rc[i]->set_score();
-    ofs << " scores: "; 
+    os << " scores: ";
     for (szt i=0; i<nreact; i++)
-        ofs << rc[i]->shortName << " "
-            << rc[i]->event_count() << " "
-            << rc[i]->get_score() << " ";
+        os << rc[i]->shortName << " "
+           << rc[i]->event_count() << " "
+           << rc[i]->get_score() << " ";
 }
 
 }    // namespace Utils::Common

@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov <vsukhorukov@yahoo.com>
 
@@ -33,16 +33,15 @@
 
 #include <deque>
 #include <list>
+#include <ostream>
 #include <set>
 #include <vector>
 
 #include "../common/misc.h"
 #include "vertex_edge.h"
 
-/// \brief Abstract graph circuitry.
+/// Abstract graph circuitry.
 namespace Utils::Graph {
-
-using namespace Utils::Common;
 
 /**
   * \brief Stores routines essential for an abstract graph.
@@ -51,6 +50,9 @@ using namespace Utils::Common;
   */
 template <typename ET>
 class Graph {
+
+    using vec2int = Common::vec2<int>;
+    using szt = Common::szt;
 
 public:
 
@@ -63,7 +65,7 @@ public:
     using pathT = std::vector<vertex_t>;
 
     /// Type alias for the graph adjacency list.
-    using adjLT = vec2<ET>;
+    using adjLT = Common::vec2<ET>;
 
     /**
     * \brief Breadth first search on the graph
@@ -94,7 +96,7 @@ public:
     * \param[out] previous Path vertexes.
     */
     void compute_paths(
-        const vertex_t source,
+        vertex_t source,
         const adjLT& ajl,
         std::vector<weight_t>& min_distance,   // by reference
         std::vector<vertex_t>& previous        // by reference
@@ -110,8 +112,8 @@ public:
     * \return The shortest path between vertexes \p v1 and \p v2.
     */
     pathT shortest_path(
-        const vertex_t v1,
-        const vertex_t v2,
+        vertex_t v1,
+        vertex_t v2,
         const adjLT& ajl
     );
 
@@ -140,7 +142,7 @@ public:
     */
     void adjacency_matrix(
         const adjLT& ajl,
-        vec2<int>& agm        // by reference
+        vec2int& agm        // by reference
     ) const;
 
     /**
@@ -149,8 +151,8 @@ public:
     * \param[out] lm Laplacian matrix of the graph.
     */
     void laplacian_matrix(
-        const vec2<int>& agm,
-        vec2<int>& lm
+        const vec2int& agm,
+        vec2int& lm
     );
     
     /**
@@ -173,7 +175,7 @@ public:
     * \param os Output stream.
     */
     static void print_adjacency_list_line(
-        const vertex_t v,
+        vertex_t v,
         const adjLT& ajl,
         std::ostream& os    // by reference
     );
@@ -186,8 +188,8 @@ template <typename ET>
 auto Graph<ET>::
 bfs(
     const adjLT& ajl,
-    std::deque<vertex_t>& q,           // by reference
-    std::vector<bool>& visited,        // by reference
+    std::deque<vertex_t>& q,     // by reference
+    std::vector<bool>& visited,  // by reference
     const vertex_t tar
 ) const
 {
@@ -213,19 +215,19 @@ template <typename ET>
 void Graph<ET>::
 compute_paths(
     const vertex_t source,
-    const adjLT& adjacency_list,
-    std::vector<weight_t>& min_distance,        // by reference
-    std::vector<vertex_t>& previous             // by reference
+    const adjLT& ajl,
+    std::vector<weight_t>& min_distance,  // by reference
+    std::vector<vertex_t>& previous       // by reference
     ) const
 {
-    const auto n = adjacency_list.size();
+    const auto n = ajl.size();
 
     min_distance.resize(n);
     std::fill(min_distance.begin(), min_distance.end(), ET::max_weight);
     min_distance[source] = 0;
 
     previous.resize(n);
-    std::fill(previous.begin(), previous.end(), huge<vertex_t>);
+    std::fill(previous.begin(), previous.end(), Common::huge<vertex_t>);
     
     std::set<std::pair<weight_t, vertex_t>> vertex_queue;
     vertex_queue.insert(std::make_pair(min_distance[source], source));
@@ -236,7 +238,7 @@ compute_paths(
         vertex_queue.erase(vertex_queue.begin());
         
         // Visit each edge exiting u
-        const auto& neighbours = adjacency_list[u];
+        const auto& neighbours = ajl[u];
         for (auto iter = neighbours.begin();
                   iter != neighbours.end();
                   iter++) {
@@ -259,27 +261,27 @@ compute_paths(
 template <typename ET>
 typename Graph<ET>::pathT Graph<ET>::
 shortest_path(
-    const vertex_t ind1,
-    const vertex_t ind2,
+    const vertex_t v1,
+    const vertex_t v2,
     const adjLT& ajl
 )
 {
     pathT previous;
     std::vector<weight_t> min_distance;
-    compute_paths(ind1, ajl, min_distance, previous);
+    compute_paths(v1, ajl, min_distance, previous);
 
-    // Shortest path to a specific vertex v:
-    auto get_shortest_path_to = [&](vertex_t v) {
+    // Shortest path to a specific vertex u:
+    auto get_shortest_path_to = [&](vertex_t u) {
         std::list<vertex_t> path;
-        for (; v != huge<vertex_t>; v = previous[v])
-            path.push_front(v);
+        for (; u != Common::huge<vertex_t>; u = previous[u])
+            path.push_front(u);
 
         return path;
     };
 
-    if (min_distance[ind2] < ET::max_weight) {
-        // The shortest path edge sequence from ind1 to ind2:
-        const auto path_l = get_shortest_path_to(ind2);
+    if (min_distance[v2] < ET::max_weight) {
+        // The shortest path edge sequence from ind1 to v2:
+        const auto path_l = get_shortest_path_to(v2);
         return list2vector(path_l);
     }
     return pathT();
@@ -295,7 +297,7 @@ reset_al(
 {
     for (auto& o : al)
         for (auto& oo : o)
-            oo = {huge<vertex_t>, w};
+            oo = {Common::huge<vertex_t>, w};
 }
 
 
@@ -319,7 +321,7 @@ template <typename ET>
 void Graph<ET>::
 adjacency_matrix(
     const adjLT& ajl,
-    vec2<int> &agm
+    vec2int &agm
 ) const
 {    
     agm.resize(ajl.size());
@@ -335,11 +337,11 @@ adjacency_matrix(
 template <typename ET>
 void Graph<ET>::
 laplacian_matrix(
-    const vec2<int>& agm,
-    vec2<int>& lm
+    const vec2int& agm,
+    vec2int& lm
 )
 {
-    lm = Vec2::array_like<int,int>(agm);
+    lm = Common::Vec2::array_like<int,int>(agm);
 
     const auto s = lm.size();
     for (szt j=0; j<s; j++) {

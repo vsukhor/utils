@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 /**
 * \file stop_watch.h
 * Timing class.
@@ -35,11 +36,8 @@
 
 #include "constants.h"
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
-
+namespace Utils::Common {
 
 /// \struct StopWatch stop_watch.h
 /// \brief Simple stop watch class.
@@ -52,8 +50,8 @@ struct StopWatch {
         /// A point in time.
         std::chrono::time_point<std::chrono::system_clock> h;
 
-        std::time_t c;     ///< ctime-based instance.
-        std::string str;   ///< String-based representation.
+        std::time_t c {huge<std::time_t>};  ///< ctime-based instance.
+        std::string str {""};   ///< String-based representation.
 
         /// Current time.
         void operator()() {
@@ -63,8 +61,8 @@ struct StopWatch {
         }
     };
 
-    Instance start;    ///< Start time.
-    Instance stop;     ///< Stop time
+    Instance start;  ///< Start time.
+    Instance stop;   ///< Stop time
 
     /// Duration between \a start and \a stop formatted as a string..
     std::string duration() {
@@ -74,13 +72,11 @@ struct StopWatch {
 
 private:
 
-    std::chrono::duration<double> diff;   ///< Duration in std::chrono format.
+    /// Duration in std::chrono format.
+    std::chrono::duration<double> diff {huge<double>};
 
 };
 
-
-}     // namespace Common
-}    // namespace Utils
-
+}  // namespace Utils::Common
 
 #endif // UTILS_COMMON_STOP_WATCH_H

@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -19,8 +19,9 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-
-============================================================================== */
+ 
+================================================================================
+*/
 
 /**
 * \file msgr.h
@@ -32,11 +33,10 @@
 #define UTILS_COMMON_OEL_H
 
 #include <array>
-#include <vector>
 #include <fstream>
 #include <iostream>
-#include <stdarg.h>
 #include <type_traits>
+#include <vector>
 
 /// General stuff.
 namespace Utils::Common {
@@ -55,12 +55,10 @@ class Msgr {
 
 public:
 
-    outstream* so {};        ///< Screen out stream.
-    logstream* sl {};        ///< Logfile stream.
+    outstream* so {};  ///< Screen out stream.
+    logstream* sl {};  ///< Logfile stream.
 
-    /**
-    * \brief Default constructor.
-    */
+    /// Default constructor.
     Msgr() = default;
 
     /**
@@ -72,14 +70,14 @@ public:
     explicit Msgr(
         outstream* so,
         logstream* sl,
-        const int precision=6
+        int precision
     );
     
     /**
     * \brief Set formatting parameters.
     * \param precision Precision of real numbers
     */
-    void set_formats(const int precision) noexcept;
+    void set_formats(int precision) noexcept;
 
 
     /**
@@ -114,28 +112,12 @@ public:
     void print(const std::string& s) const noexcept;
 
     /**
-    * \brief Print to formatted out (variadic).
-    * \tparam endline Finish with line end.
-    * \param fmt Formatting.
-    */
-    template <bool endline=true>
-    void print(const char *fmt, ...) noexcept;
-        
-    /**
     * \brief Print std::string out and exit.
     * \param s String to print.
     */
     void exit(const std::string& s) const noexcept;
 
-    /**
-    * \brief Print to formatted out (variadic) and exit.
-    * \param fmt Formatting.
-    */
-    void exit(const char *fmt, ...) noexcept;
-    
 private:
-
-    char buf [4096];    ///< Buffer.
 
     /**
     * \brief Check that the stream used is valid.
@@ -194,19 +176,6 @@ print( const std::string& s ) const noexcept
 }
 
 
-template <bool endline>
-void Msgr::
-print( const char *fmt, ... ) noexcept
-{
-    va_list va;
-    va_start(va, fmt);
-    const auto n = vsprintf(buf, fmt, va);
-    va_end(va);
-    const auto s = std::string(buf).substr(0, static_cast<unsigned long>(n));
-    if (sl) prn(sl, s, endline);
-    if (so) prn(so, s, endline);
-}
-
 template <typename V, auto N>
 void Msgr::
 print_array(
@@ -219,6 +188,7 @@ print_array(
         print<false>(std::to_string(o));
     print<true>("");
 }
+
 
 template <typename V>
 void Msgr::

@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -34,21 +34,20 @@
 #ifndef UTILS_CONFIG_PARAMETER_ARRAYS_H
 #define UTILS_CONFIG_PARAMETER_ARRAYS_H
 
+#include <array>
 #include <sstream>
+#include <string>
+#include <type_traits>
+#include <vector>
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
-#include "base.h"
 #include "../exceptions/arrays.h"
+#include "base.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module
-namespace Config {
-namespace Parameter {
+/// Namespace for config parameters.
+namespace Utils::Config::Parameter {
 
-using namespace Common;
-using namespace Config::Exceptions;
 
 /**
 * \brief parameters of std arrays of continuous fundamental types.
@@ -58,7 +57,8 @@ using namespace Config::Exceptions;
 * \tparam W Length of the std::array.
 */
 template <typename T, szt W>
-class Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>
+class Par<std::array<T,W>, false,
+          std::enable_if_t<std::is_fundamental<T>::value>>
     : public Base<T> {
 
     using Q = std::array<T,W>;
@@ -130,13 +130,15 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, szt W>
-Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+Par<std::array<T,W>, false,
+    std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name )
     : Base<T> {name}
 {}
 
 template <typename T, szt W>
-Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+Par<std::array<T,W>, false,
+    std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
      const std::string& fname,
      const std::vector<Q>& range,
@@ -146,26 +148,28 @@ Par( const std::string& name,
     this->load(fname);
     try {
         check_range(range, msgr);
-    } catch (const ParOutOfRange<T,false>&) {
+    } catch (const Exceptions::ParOutOfRange<T,false>&) {
         exit(0);
     }
     print(msgr);
 }
 
 template <typename T, szt W>
-void Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+void Par<std::array<T,W>, false,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
 check_range( const std::vector<Q>& r,
              Msgr* msgr )
 {
     for (szt i=0; i<W; i++)
         if (p_[i]<r[0][i] || p_[i]>r[1][i])
-            throw ParOutOfRange<T,false> {
+            throw Exceptions::ParOutOfRange<T,false> {
                 get_name(), p_[i], std::array<T,2>{r[0][i], r[1][i]}, msgr
             };
 }
 
 template <typename T, szt W>
-void Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+void Par<std::array<T,W>, false,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
 print( Msgr* msgr )
 {
     (msgr)
@@ -179,7 +183,8 @@ print( Msgr* msgr )
 }
 
 template <typename T, szt W>
-std::array<T,W> Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+std::array<T,W> Par<std::array<T,W>, false,
+                    std::enable_if_t<std::is_fundamental<T>::value>>::
 operator()() const
 {
     XASSERT(true, get_name());
@@ -187,7 +192,8 @@ operator()() const
 }
 
 template <typename T, szt W>
-T Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+T Par<std::array<T,W>, false,
+      std::enable_if_t<std::is_fundamental<T>::value>>::
 operator[]( const szt i ) const
 {
     XASSERT(isLoaded_, get_name());
@@ -196,10 +202,10 @@ operator[]( const szt i ) const
 }
 
 template <typename T, szt W>
-void Par<std::array<T,W>, false, std::enable_if_t<std::is_fundamental<T>::value>>::
+void Par<std::array<T,W>, false,
+         std::enable_if_t<std::is_fundamental<T>::value>>::
 initialize( std::string value )
 {
-    using namespace Utils::Common::Exceptions;
     const std::string emp {" "};
     const std::string tab {"\t"};
     szt i {};
@@ -209,9 +215,10 @@ initialize( std::string value )
         if (e == std::string::npos) e = value.length();
         const std::string val {value.substr(0, e)};
         if (val.length() < 1)
-            throw Simple
-                     {"Error in config file: Number of elelments in " + get_name() +
-                     " is " + STR(p_.size()) + " which is insufficient"};
+            throw Common::Exceptions::Simple
+                {"Error in config file: Number of elelments in " + get_name() +
+                 " is " + Common::STR(p_.size()) + " which is insufficient",
+                 nullptr};
         std::stringstream(val) >> p_[i];
         value.erase(0, e);
         while (!value.substr(0, 1).compare(emp) ||
@@ -220,12 +227,11 @@ initialize( std::string value )
         i++;
     }
     if (i < W)
-        throw Simple {"Improper Config::" + get_name() +
-                      " initialization: Data size insufficient"};
+        throw Common::Exceptions::Simple {
+            "Improper Config::" + get_name() +
+            " initialization: Data size insufficient", nullptr};
 }
 
-}    // namespace Parameter
-}    // namespace Config
-}   // namespace Utils
+}  // namespace Utils::Config::Parameter
 
 #endif // UTILS_CONFIG_PARAMETER_ARRAYS_H

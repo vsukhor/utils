@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -31,64 +31,19 @@
 #ifndef UTILS_ARRAYS_ARRAY_H
 #define UTILS_ARRAYS_ARRAY_H
 
-/// Library-wide.
-namespace Utils {
 /// Custom arrays.
-namespace Arrays {
-
-//==============================================================================
-/// \brief A std:iota-like compile-time generator of integers [1, ..., N].
-/// \details A compile-time generator of std:iota-like array of consecutive
-/// integers [1, ..., N].
-/// Adopted from https://stackoverflow.com/users/636019/ildjarn
-/// at https://stackoverflow.com/questions/41660062/how-to-construct-an-stdarray-with-index-sequence
-namespace iota_array {
-    template<typename T, T... Ns>
-    constexpr std::array<T, sizeof...(Ns)> make_iota_array(
-        T const offset,
-        std::integer_sequence<T, Ns...>
-    ) noexcept
-  {
-    return {{(Ns + offset)...}};
-  }
-}
-
-template<typename T, T N>
-constexpr auto make_iota_array(T const offset = {}) noexcept
-{
-    static_assert(N >= T{}, "no negative sizes");
-
-    return iota_array::make_iota_array<T>(
-        offset, std::make_integer_sequence<T, N>{}
-    );
-}
-
-//==============================================================================
-
-/// \brief Generic array template.
-/// \tparam N Array length.
-/// \tparam T Type of the elements.
-/// \tparam Enabler SFINAE Enabler
-template <unsigned N, typename T, typename Enabler=void>
-class array {};
-
-}    // namespace Arrays
-}    // namespace Utils
-
 #include "array2.h"
 #include "array3.h"
 #include "array4.h"
 #include "arrayN.h"
 
-namespace Utils {
-namespace Arrays {
+namespace Utils::Arrays {
 
 // Type abbreviations.
 template<typename T> using A2 = Arrays::array<2,T>;
 template<typename T> using A3 = Arrays::array<3,T>;
 template<typename T> using A4 = Arrays::array<4,T>;
 
-}    // namespace Arrays
-}    // namespace Utils
+}  // namespace Utils::Arrays
 
 #endif // UTILS_ARRAYS_ARRAY_H

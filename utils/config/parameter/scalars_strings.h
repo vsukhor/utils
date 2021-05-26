@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
  * \file scalars_strings.h
@@ -37,18 +38,11 @@
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
-#include "base.h"
 #include "../exceptions/scalars.h"
+#include "base.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module
-namespace Config {
-namespace Parameter {
-
-using namespace Common;
-using namespace Exceptions;
-
+/// Parameter namespace.
+namespace Utils::Config::Parameter {
 
 /**
 * \brief Parameters of std fundamental scalar or std::string types.
@@ -254,8 +248,8 @@ void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value |
                                             std::is_same<T,std::string>::value>>::
 print( Msgr* msgr )
 {
-    if (msgr)
-        msgr->print(get_name()+" = "+STR(p_));
+    if (msgr != nullptr)
+        msgr->print(get_name() + " = " + Common::STR(p_));
     else
         std::cout << get_name() << " = " << p_ << std::endl;
 }
@@ -289,9 +283,6 @@ initialize( std::string value )
     std::stringstream(value) >> p_;
 }
 
-
-}    // namespace Parameter
-}    // namespace Config
-}   // namespace Utils
+}  // namespace Utils::Config::Parameter
 
 #endif // UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H

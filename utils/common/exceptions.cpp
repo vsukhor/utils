@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -49,19 +49,6 @@ int simple( const std::string& msg,
     exit(EXIT_FAILURE);
 
     return EXIT_FAILURE;         // pro forma
-}
-
-// Simple xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-Simple::
-Simple(
-        const std::string& msg,
-        Msgr* msgr )
-    : std::exception {}
-{
-    if (msgr)
-        msgr->print<true>(msg);
-    else
-        std::cout << msg << std::endl;
 }
 
 }    // namespace Utils::Common::Exceptions

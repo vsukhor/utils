@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -33,10 +33,10 @@
 #ifndef UTILS_CONFIG_EXCEPTIONS_H
 #define UTILS_CONFIG_EXCEPTIONS_H
 
-#include <iostream>
-#include <string>
 #include <algorithm>
 #include <exception>
+#include <iostream>
+#include <string>
 #include <vector>
 
 #include "msgr.h"
@@ -51,9 +51,10 @@ namespace Utils::Common::Exceptions {
 * \see Msgr
 */
 int simple(const std::string& msg,
-           Msgr* msgr=nullptr);
+           Msgr* msgr);
 
-// Simple Exceptions xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+// Simple Exceptions ===========================================================
 
 /**
 * \brief Uncomplicated process termination with exception.
@@ -74,38 +75,14 @@ public:
     * \param msgr Output message processor.
     */
     explicit Simple(const std::string& msg,
-                    Msgr* msgr=nullptr);
-
-    /**
-    * \brief Constructor template for message with parameter \u.
-    * \details Outputs message \p msg to \a Msgr.
-    * \tparam T Type of the essage parameter.
-    * \param msg Message to output.
-    * \param u Message parameter.
-    * \param msgr Output message processor.
-    */
-    template<typename T>
-    explicit Simple(const std::string& msg,
-                    const T& u,
-                    Msgr* msgr=nullptr);
+                    Msgr* msgr)
+    {
+        if (msgr != nullptr)
+            msgr->print<true>(msg);
+        else
+            std::cout << msg << std::endl;
+    }
 };
-
-// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-template<typename T>
-Simple::
-Simple(
-        const std::string& msg,
-        const T& u,
-        Msgr* msgr )
-    : std::exception {}
-{
-    if (msgr)
-        msgr->print(msg, u);
-    else
-        std::cout << msg << " " << u << std::endl;
-}
-
 
 }    // namespace Utils::Common::Exceptions
 

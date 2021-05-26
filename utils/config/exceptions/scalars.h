@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
  * \file scalars.h
@@ -33,21 +34,18 @@
 #ifndef UTILS_CONFIG_EXCEPTIONS_SCALARS_H
 #define UTILS_CONFIG_EXCEPTIONS_SCALARS_H
 
-#include <iostream>
-#include <string>
 #include <algorithm>
 #include <exception>
+#include <iostream>
+#include <string>
+#include <type_traits>
 #include <vector>
 
 #include "../../common/msgr.h"
+#include "../parameter/base.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module.
-namespace Config {
-namespace Exceptions {
-
-using namespace Common;
+/// Exceptions namespace.
+namespace Utils::Config::Exceptions {
 
 /**
 * \brief 'Parameter out of range' exception involving discrete scalars.
@@ -108,7 +106,7 @@ ParOutOfRange(
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
-    if (msgr)
+    if (msgr != nullptr)
         msgr->print(message);
     else
         std::cout << message;
@@ -214,12 +212,12 @@ ParOutOfRange(
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
-    if (msgr)
+    if (msgr != nullptr)
         msgr->print(message);
     else
         std::cout << message;
         
-    throw this;
+    throw *this;
 }
 
 template <typename Q>
@@ -233,12 +231,12 @@ ParOutOfRange(
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
-    if (msgr)
+    if (msgr != nullptr)
         msgr->print(message);
     else
         std::cout << message;
 
-    throw this;
+    throw *this;
 }
 
 template <typename Q>
@@ -256,8 +254,6 @@ generate_message(const std::string& name,
            "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
 }
 
-}   // namespace Exceptions
-}   // namespace Config
-}   // namespace Utils
+}   // namespace Utils::Config::Exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_SCALARS_H

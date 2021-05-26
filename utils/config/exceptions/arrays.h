@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
  * \file arrays.h
@@ -33,21 +34,16 @@
 #ifndef UTILS_CONFIG_EXCEPTIONS_ARRAYS_H
 #define UTILS_CONFIG_EXCEPTIONS_ARRAYS_H
 
-#include <iostream>
-#include <string>
 #include <algorithm>
 #include <exception>
+#include <iostream>
+#include <string>
 #include <vector>
 
 #include "../../common/msgr.h"
+#include "../parameter/base.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module
-namespace Config {
-namespace Exceptions {
-
-using namespace Common;
+namespace Utils::Config::Exceptions {
 
 /**
 * \brief 'Parameter out of range' exception for continuous fundamental std arrays.
@@ -76,17 +72,17 @@ public:
     * \see Msgr
     */
     explicit ParOutOfRange(
-            const std::string& name,
-            const Q& p,
-            const std::vector<Q>& r,
-            Msgr* msgr=nullptr);
+        const std::string& name,
+        const Q& p,
+        const std::vector<Q>& r,
+        Msgr* msgr=nullptr);
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename T, std::size_t W>
 ParOutOfRange<std::array<T,W>, false,
-                std::enable_if_t<std::is_fundamental<T>::value>>::
+              std::enable_if_t<std::is_fundamental<T>::value>>::
 ParOutOfRange(
         const std::string& name,
         const Q& p,
@@ -101,17 +97,16 @@ ParOutOfRange(
     auto print = [](const Q& a) {
         std::string w{"{ "};
         for(const auto& o : a)
-            w += "["+std::to_string(o[0])+" "+std::to_string(o[1])+"] ";
+            w += "[" + std::to_string(o[0]) + " " + std::to_string(o[1]) + "] ";
         return w+"}";
     };
-    const std::string s = "Error in conf specification for parameter '"+name+
-                          "' = "+print(p)+" :"+"\n\tthe value provided "+
-                          " is outside the acceptable range "+print(r);
+    const std::string s =
+        "Error in conf specification for parameter '" +
+        name + "' = " + print(p) + " :" + "\n\tthe value provided " +
+        " is outside the acceptable range "+print(r);
     msgr->print<true>(s);
 }
 
-}   // namespace Exceptions
-}   // namespace Config
-}   // namespace Utils
+}   // namespace Utils::Config::Exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_ARRAYS_H

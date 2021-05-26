@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file array4.h
@@ -31,14 +32,17 @@
 #ifndef UTILS_ARRAYS_ARRAY4_H
 #define UTILS_ARRAYS_ARRAY4_H
 
+#include <array>
+#include <cmath>
 #include <fstream>
+#include <vector>
 
+#include "../common/constants.h"
 #include "../common/misc.h"
+#include "_misc.h"
 
-/// Library-wide.
-namespace Utils {
-/// Custom arrays.
-namespace Arrays {
+/// 4-element arrays.
+namespace Utils::Arrays {
 
 /// \brief Four-element arrays.
 /// \details This class specializes array template for four-element array of
@@ -48,10 +52,15 @@ namespace Arrays {
 template <typename T>
 class array<4,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 
-T n[4] = {};
+static constexpr int len {4};
+
+T n[len] = {};
  
 public:
-array( T m=static_cast<T>(0) ) noexcept
+
+array() noexcept = default;
+
+array( T m ) noexcept
     : n {m, m, m, m}
 {}
 
@@ -88,59 +97,75 @@ constexpr array<4,Q> cast_static() const noexcept
             static_cast<Q>(n[3])};
 }
 
-constexpr array operator=( const array& p ) noexcept
+array( array&& p ) noexcept = default;
+array& operator=( array&& p ) noexcept = default;
+~array() = default;
+
+array& operator=( const array& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
-    n[3] = p[3];
+    if (this != &p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+        n[3] = p[3];
+    }
+
     return *this;
 }
 
-constexpr array operator=( const std::array<T,4>& p ) noexcept
+constexpr array& operator=( const std::array<T,4>& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
-    n[3] = p[3];
+    if (*this != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+        n[3] = p[3];
+    }
     return *this;
 }
 
-constexpr array operator=( const T p[] ) noexcept
+constexpr array& operator=( const T p[] ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
-    n[2] = p[2];
-    n[3] = p[3];
+    if (n != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+        n[2] = p[2];
+        n[3] = p[3];
+    }
     return *this;
 }
 
-constexpr array operator=( T p ) noexcept
+constexpr array& operator=( T p ) noexcept
 {
     n[0] = p;
     n[1] = p;
     n[2] = p;
     n[3] = p;
+
     return *this;
 }
 
-constexpr array<2,T> operator()( int i1, int i2 ) const noexcept
+constexpr array<2,T> operator()(
+    const int i1,
+    const int i2
+) const noexcept
 {
-    XASSERT(i1 >= 0, "");
-    XASSERT(i1 <  4, "");
-    XASSERT(i2 >= 0, "");
-    XASSERT(i2 <  4, "");
+    XASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds.");
+    XASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds.");
+
     return {n[i1], n[i2]};
 }
 
-constexpr array<3,T> operator()( int i1, int i2, int i3 ) const noexcept
+constexpr array<3,T> operator()(
+    const int i1,
+    const int i2,
+    const int i3
+) const noexcept
 {
-    XASSERT(i1 >= 0, "");
-    XASSERT(i1 <  4, "");
-    XASSERT(i2 >= 0, "");
-    XASSERT(i2 <  4, "");
-    XASSERT(i3 >= 0, "");
-    XASSERT(i3 <  4, "");
+    XASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds.");
+    XASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds.");
+    XASSERT(i3 >= 0 && i3 < len, "Index 3 out of bounds.");
+
     return {n[i1], n[i2], n[i3]};
 }
 
@@ -440,13 +465,17 @@ constexpr bool operator>=( T p ) const noexcept
            n[3] >= p;
 }
 
-constexpr T operator[]( int i ) const noexcept
+constexpr T operator[]( const int i ) const noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
-constexpr T& operator[]( int i ) noexcept
+constexpr T& operator[]( const int i ) noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
@@ -595,7 +624,7 @@ T other_than(
             p == array<3,T>(n[1], n[2], n[3]) ||
             p == array<3,T>(n[2], n[3], n[1]) ||
             p == array<3,T>(n[2], n[1], n[3])) ? n[0]
-            : -one<T>)));
+            : -Utils::Common::one<T>)));
 }
 
 constexpr T sum() const noexcept
@@ -664,7 +693,6 @@ void write(
 
 };
 
-}    // namespace Arrays
-}    // namespace Utils
+}    // namespace Utils::Arrays
 
 #endif // UTILS_ARRAYS_ARRAY4_H

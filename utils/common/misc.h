@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file misc.h
@@ -33,29 +34,27 @@
 
 #include <array>
 #include <cmath>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <map>
 #include <memory>
 #include <numeric>
-#include <cstdio>
-#include <vector>
 #include <sys/stat.h>
+#include <vector>
 
 //#include <boost/filesystem.hpp>
 #include "constants.h"
 
-#ifdef _DEBUG
+#ifdef USE_UTILS_XASSERT
     #define XASSERT(EX, msg) \
         (void)((EX) || (Utils::Common::assert_fun(#EX, __FILE__, __LINE__, msg), 0))
 #else
     #define XASSERT(EX, msg)
 #endif
 
-/// Library-wide.
-namespace Utils {
 /// General stuff.
-namespace Common {
+namespace Utils::Common {
 
 /// Convert a double \b number to string.
 std::string operator"" _str (long double number);
@@ -73,7 +72,7 @@ long long assert_fun(
 /// Trin the string \b str from whitespaces.
 std::string trim(
     const std::string& str,
-    const std::string& whitespace = " "
+    const std::string& whitespace  // = " "
 );
 
 /// Check that the file named \b name exists.
@@ -113,7 +112,9 @@ vec2<T1> array_like( const vec2<T2>& as )
 
 /// Make a 2D vector having dimensions \b x and \b y eventually initializing it to \b ini.
 template <typename T> inline
-vec2<T> make( const szt x, const szt y, const T ini=zero<T> )
+vec2<T> make( const szt x,
+              const szt y,
+              const T ini )  // =zero<T>
 {
     vec2<T> v(x);
     for (auto& vv : v)
@@ -160,7 +161,7 @@ template <typename T> inline
 vec3<T> make( const szt x,
               const szt y,
               const szt z,
-              const T ini=zero<T> )
+              const T ini )  // =zero<T>
 {
     vec3<T> v(x);
     for (auto& vv : v) {
@@ -214,6 +215,7 @@ T var( const std::vector<T>& n )
     T mn {avg(n)};
     for (const auto& o : n)
         v += (o - mn) * (o - mn);
+
     return v / n.size();
 }
 
@@ -224,7 +226,8 @@ std::vector<T> exp_num( const T b,
                         const T dx ) noexcept
 {
     uint n {r / dx};
-    std::vector<T> x(n), q(n);
+    std::vector<T> x(n);
+    std::vector<T> q(n);
 
     x[0] = zero<T>;
     for (uint i=1; i<n; i++)
@@ -254,12 +257,13 @@ T sigmoid_decay( const T x,
 /// \return how many elements in b /= 0 putting their indices to j
 template <typename T> 
 szt find( const std::vector<T>& b, 
-          std::vector<szt>& j )    noexcept
+          std::vector<szt>& j ) noexcept
 {
     j.clear();
     for (szt i=0; i<b.size(); i++) 
         if (b[i] != zero<T>)
             j.push_back(i);
+
     return j.size();
 }
 
@@ -316,54 +320,6 @@ T gaussian_fun( T x,
            std::exp(-(x - mean) * (x - mean) / (sigma * sigma) / two<T>);
 }
 
-/// \brief Prepads an integer number with zeros to a string of desired length.
-/// \tparam K Desired string length: between 2 and 7 inclusive.
-/// \param n Input integer number.
-template <auto K>
-std::string pad_zeros( const szt n )
-{
-    constexpr szt MIN_ALLOWED = 1;
-    constexpr szt MAX_ALLOWED = 6;
-    static_assert(K >= MIN_ALLOWED &&
-                  K <= MAX_ALLOWED,
-                  "Padding is only supprted for lengths between 2 and 6 inclusive");
-
-    if constexpr (K == 1)
-        return n<10 ? "0"
-                    : "" + STR(n);
-    else if constexpr (K == 3)
-        return n<100 ? n<10
-                     ? "00"
-                     : "0"
-                     : "" + STR(n);
-    else if constexpr (K == 4)
-        return n<1000 ? n<100
-                      ? n<10
-                      ? "000"
-                      : "00"
-                      : "0"
-                      : "" + STR(n);
-    else if constexpr (K == 5)
-        return n<10000 ? n<1000
-                       ? n<100
-                       ? n<10
-                       ? "0000"
-                       : "000"
-                       : "00"
-                       : "0"
-                       : "" + STR(n);
-    else if constexpr (K == 6)
-        return n<100000 ? n<10000
-                        ? n<1000
-                        ? n<100
-                        ? n<10
-                        ? "00000"
-                        : "0000"
-                        : "000"
-                        : "00"
-                        : "0"
-                        : "" + STR(n);
-};
 
 /// \brief Removes from a vector all instances of an element a.
 /// \tparam T Data type (must be EqualityComparable).
@@ -381,8 +337,7 @@ void remove_vector_element( std::vector<T>& v,
     XASSERT(false, "Error in remove_vector_element: element not found");
 }
 
-}     // namespace Common
-}    // namespace Utils
+}  // namespace Utils::Common
 
 
 #endif // UTILS_COMMON_MISC_H

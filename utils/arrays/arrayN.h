@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file arrayN.h
@@ -31,14 +32,21 @@
 #ifndef UTILS_ARRAYS_ARRAYN_H
 #define UTILS_ARRAYS_ARRAYN_H
 
+#include <array>
+#include <cmath>
 #include <fstream>
+#include <vector>
 
+#include "../common/constants.h"
 #include "../common/misc.h"
+#include "_misc.h"
 
-/// Library-wide.
-namespace Utils {
-/// Custom arrays.
-namespace Arrays {
+/// Arbitrary-size arrays.
+namespace Utils::Arrays {
+
+/// Max array length with specific class.
+inline constexpr int MAX_SPECIFIED_LENGTH = 4;
+
 
 /// \brief Three-element arrays.
 /// \details This class specializes array template for N-element array of
@@ -48,17 +56,21 @@ namespace Arrays {
 /// \tparam T Type of the elements.
 template <unsigned N, typename T>
 class array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
-                                 std::greater_equal<>()(N,5)>> {
+                                 std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>> {
 
-T n[N] = {};
+static constexpr int len {N};
+
+T n[len] = {};
 
 public:
 
 /// Compile-time indexes of the elements.
-static constexpr auto ii {make_iota_array<int,N>()};
+static constexpr auto ii {make_iota_array<int,N>(0)};
 
 
-constexpr array( const T m=zero<T> ) noexcept
+constexpr array() noexcept = default;
+
+constexpr array( const T m ) noexcept
 {
     for (const auto i : ii)
         n[i] = m;
@@ -76,31 +88,38 @@ constexpr array( const std::array<T,N>& p ) noexcept
         n[i] = p[i];
 }
 
-constexpr array operator=( const array& p ) noexcept
+array( array&& p ) noexcept = default;
+array& operator=( array&& p ) noexcept = default;
+~array() = default;
+
+constexpr array& operator=( const array& p ) noexcept
 {
-    for (const auto i : ii)
-        n[i] = p[i];
+    if (this != &p)
+        for (const auto i : ii)
+            n[i] = p[i];
 
     return *this;
 }
 
-constexpr array operator=( const std::array<T,N>& p ) noexcept
+constexpr array& operator=( const std::array<T,N>& p ) noexcept
 {
-    for (const auto i : ii)
-        n[i] = p[i];
+    if (*this != p)
+        for (const auto i : ii)
+            n[i] = p[i];
 
     return *this;
 }
 
-constexpr array operator=( const T p[] ) noexcept
+constexpr array& operator=( const T p[] ) noexcept
 {
-    for (const auto i : ii)
-        n[i] = p[i];
+    if (n != p)
+        for (const auto i : ii)
+            n[i] = p[i];
 
     return *this;
 }
 
-constexpr array operator=( const T p ) noexcept
+constexpr array& operator=( const T p ) noexcept
 {
     for (const auto i : ii)
         n[i] = p;
@@ -417,11 +436,15 @@ constexpr bool operator>=( const T p ) const noexcept
 
 constexpr T operator[]( const int i ) const noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
 T& operator[]( const int i ) noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
@@ -553,7 +576,6 @@ void write( std::ofstream& ost ) const noexcept
 
 };
 
-}    // namespace Arrays
-}    // namespace Utils
+}    // namespace Utils::Arrays
 
 #endif // UTILS_ARRAYS_ARRAYN_H

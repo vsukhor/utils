@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file constants.h
@@ -36,6 +37,8 @@
 #include <limits>
 #include <memory>
 #include <numeric>
+#include <string>
+#include <type_traits>
 #include <vector>
 
 /// General stuff.
@@ -47,7 +50,12 @@ extern const std::string SLASH;
 template <typename T>
 constexpr auto STR(T x)
 {
-    return std::to_string(x);
+    if constexpr (std::is_arithmetic_v<T>)
+        return std::to_string(x);
+    else //if constexpr (std::is_same_v<T, char*>)
+        return std::string(x);
+//    else
+//        static_assert(false, "Unsupported type");
 }
 
 using ulong = unsigned long;
@@ -91,7 +99,7 @@ template <typename T> constexpr T
     sqrtPI {static_cast<T>(1.7724538509055160272981674833411L)};
 
 template <typename T, typename Enabler = void> constexpr T sqrt2PI;
-template <typename T> constexpr T
+template <typename T> inline constexpr T
     sqrt2PI<T,std::enable_if_t<std::is_arithmetic<T>::value>> {
         std::pow(twopi<T>, half<T>)
     };
@@ -99,35 +107,35 @@ template <typename T> constexpr T
 // Templates for numerical limits. =============================================
 
 template <typename T, typename Enabler = void> constexpr T EPS;
-template <typename T> constexpr T
+template <typename T> inline constexpr T
     EPS<T,std::enable_if_t<std::is_fundamental<T>::value>> {
         std::numeric_limits<T>::epsilon()
     };
 
 template <typename T, typename Enabler = void> constexpr T huge;
 template <typename T>
-    constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+    inline constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
         std::numeric_limits<T>::has_infinity
         ? std::numeric_limits<T>::infinity()
         : std::numeric_limits<T>::max()
     };
 
-template <typename T, typename Enabler = void> constexpr T MAX;
-template <typename T> constexpr T
+template <typename T, typename Enabler = void> inline constexpr T MAX;
+template <typename T> inline constexpr T
     MAX<T,std::enable_if_t<std::is_fundamental<T>::value>> =
         std::numeric_limits<T>::max();
-template <typename T> constexpr T
+template <typename T> inline constexpr T
     MAX<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
 
-template <typename T, typename Enabler = void> constexpr T MIN;
-template <typename T> constexpr T
+template <typename T, typename Enabler = void> inline constexpr T MIN;
+template <typename T> inline constexpr T
     MIN<T,std::enable_if_t<std::is_fundamental<T>::value>> {
         std::numeric_limits<T>::min()
     };
-template <typename T> constexpr T
+template <typename T> inline constexpr T
     MIN<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
 
-template <typename T> constexpr T INF {std::numeric_limits<T>::infinity()};
+template <typename T> inline constexpr T INF {std::numeric_limits<T>::infinity()};
 
 // std arrays filled with common constants. ====================================
 
@@ -207,7 +215,6 @@ constexpr auto ANSI_BOLD_ON    = "\x1b[1m";
 constexpr auto ANSI_BOLD_OFF   = "\x1b[22m";
 constexpr auto ANSI_INVERSE_ON = "\x1b[7m";
 
-}     // namespace Utils::Common
-
+}  // namespace Utils::Common
 
 #endif // UTILS_COMMON_CONSTANTS_H

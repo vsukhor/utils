@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,32 +20,29 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
  * \file vectors.h
  * \brief Parameters of type std::vector.
  * \details Contains template partial specialization for classes encapsulating
  * confuguration file parameter of type std::vector.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_PARAMETER_VECTORS_H
 #define UTILS_CONFIG_PARAMETER_VECTORS_H
 
 #include <sstream>
+#include <type_traits>
+#include <vector>
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
 #include "base.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module
-namespace Config {
-namespace Parameter {
-
-using namespace Common;
+namespace Utils::Config::Parameter {
 
 // specialization for vectors of fundamental types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -69,7 +66,7 @@ class Par<std::vector<T>,
     using Base<T>::isLoaded_;
 
     Q p_;                ///< The parameter value.
-    szt expectedSize_;    ///< Expected size of the vector.
+    szt expectedSize_ {Common::huge<szt>};    ///< Expected size of the vector.
     
 public:    
 
@@ -79,7 +76,7 @@ public:
     * \param expectedSize Expected size of the parameter vector.
     */
     explicit Par(const std::string& name,
-                 const szt expectedSize);
+                 szt expectedSize);
                  
     /**
     * \brief Constructor.
@@ -136,7 +133,7 @@ public:
     * \param i Index in the vaector.
     * \return  Parameter value (the \p i -th component).
     */
-    T operator[](const szt i) const;
+    T operator[](szt i) const;
 
 private:
     
@@ -188,17 +185,17 @@ check_range(
 {
     if (!r.size()) return;   // use this case to omit string checkups
 
-    using namespace Exceptions;
-
     XASSERT(!isDiscrete || r.size()==2,
             "size of r must be 2 for continuous parameters");
     if constexpr (isDiscrete) {
         if (std::find(r.begin(), r.end(), p_) == r.end())
-            throw ParOutOfRange<Q,isDiscrete> {get_name(), p_, r, msgr};
+            throw Exceptions::ParOutOfRange<Q,isDiscrete>
+                {get_name(), p_, r, msgr};
     }
     else {
         if (p_<r[0] || p_>r[1])
-            throw ParOutOfRange<Q,isDiscrete>{get_name(), p_, r, msgr};
+            throw Exceptions::ParOutOfRange<Q,isDiscrete>
+                {get_name(), p_, r, msgr};
     }
 }
 
@@ -208,12 +205,12 @@ auto Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_fundamental<T>::value>>::
 readin(
-    const std::string& s,
+    const std::string& name,
     const std::string& fname,
     Msgr* msgr
 )
 {
-    return Par<Q,isDiscrete> {s, fname, msgr}();
+    return Par<Q,isDiscrete> {name, fname, msgr}();
 }
 
 
@@ -223,7 +220,7 @@ void Par<std::vector<T>,
          std::enable_if_t<std::is_fundamental<T>::value>>::
 print( Msgr* msgr )
 {
-    (msgr)
+    (msgr != nullptr)
     ? msgr->print(get_name(), p_, 1)
     : std::cout << get_name() << " " << p_ << std::endl;
 }
@@ -260,8 +257,8 @@ initialize( std::string value )
 {
     const std::string emp {" "};
     const std::string tab {"\t"};
-    const Utils::Common::Exceptions::Simple improperSizeEx
-            {"Improper Config::"+get_name()+
+    const std::string exceptMessage
+            {"Improper Config::" + get_name()+
              " initialization: Excessive data size"};
 
     while (value.length()) {
@@ -270,25 +267,23 @@ initialize( std::string value )
         if (e == std::string::npos) e = value.length();
         const std::string val {value.substr(0, e)};
         if (val.length() < 1)
-            throw Utils::Common::Exceptions::Simple
+            throw Common::Exceptions::Simple
                     {"Error in config file: Number of elelments in " + get_name() +
                      " is " + STR(p_.size()) + " which is insufficient"};
         T tmp;
         std::stringstream(val) >> tmp;
         p_.push_back(tmp);
         value.erase(0, e);
-        while (!value.substr(0, 1).compare(emp) ||
-               !value.substr(0, 1).compare(tab))
+        while (value.substr(0, 1) != emp ||
+               value.substr(0, 1) != tab)
             value.erase(value.begin());
         if (p_.size() > expectedSize_)
-            throw improperSizeEx;
+            throw Common::Exceptions::Simple {exceptMessage, nullptr};
     }
     if (p_.size() != expectedSize_)
-        throw improperSizeEx;
+        throw Common::Exceptions::Simple {exceptMessage, nullptr};
 }
 
-}    // namespace Parameter
-}    // namespace Config
-}   // namespace Utils
+}    // namespace Utils::Config::Parameter
 
 #endif // UTILS_CONFIG_PARAMETER_VECTORS_H

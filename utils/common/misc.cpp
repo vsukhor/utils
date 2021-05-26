@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -86,9 +86,9 @@ bool directory_exists( const std::string& pathstrconst )
         pathstr.pop_back();
     const char* path {pathstr.c_str()};
     class stat info;
-    if (stat(path, &info) != 0)         return false;
-    else if (info.st_mode & S_IFDIR)    return true;
-    else                                return false;
+    if (stat(path, &info) != 0)      return false;
+    else if (info.st_mode & S_IFDIR) return true;
+    else                             return false;
 }
 /*
 void check_directory( const std::string& s )

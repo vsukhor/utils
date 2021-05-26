@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file array2.h
@@ -31,17 +32,18 @@
 #ifndef UTILS_ARRAYS_ARRAY2_H
 #define UTILS_ARRAYS_ARRAY2_H
 
-#include <fstream>
-#include <cmath>
-#include <type_traits>
 #include <array>
+#include <cmath>
+#include <fstream>
+#include <type_traits>
+#include <vector>
 
+#include "_misc.h"
+#include "../common/constants.h"
 #include "../common/misc.h"
 
-/// Library-wide.
-namespace Utils {
-/// Custom arrays.
-namespace Arrays {
+/// Two-element arrays.
+namespace Utils::Arrays {
 
 /// \brief Two-element arrays.
 /// \details This class specializes array template for two-element array of
@@ -51,11 +53,15 @@ namespace Arrays {
 template <typename T>
 class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
 
-T n[2] = {};
+static constexpr int len {2};
+
+T n[len] = {};
  
 public:
 
-array( T n=static_cast<T>(0) ) noexcept
+array() noexcept = default;
+
+array( T n ) noexcept
     : n {n, n}
 {}
 
@@ -76,6 +82,10 @@ array( const std::array<K,2>& p ) noexcept
     : n {p[0], p[1]}
 {}
 
+array( array&& p ) noexcept = default;
+array& operator=( array&& p ) noexcept = default;
+~array() = default;
+
 template <typename Q>
 constexpr array<2,Q> cast_static() const noexcept
 {
@@ -83,28 +93,34 @@ constexpr array<2,Q> cast_static() const noexcept
             static_cast<Q>(n[1])};
 }
 
-constexpr array operator=( const std::array<T,2>& p ) noexcept
+constexpr array& operator=( const array& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
+    if (this != &p) {
+        n[0] = p[0];
+        n[1] = p[1];
+    }
     return *this;
 }
 
-constexpr array operator=( const array& p ) noexcept
+constexpr array& operator=( const std::array<T,2>& p ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
+    if (*this != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+    }
     return *this;
 }
 
-constexpr array operator=( const T p[] ) noexcept
+constexpr array& operator=( const T p[] ) noexcept
 {
-    n[0] = p[0];
-    n[1] = p[1];
+    if (n != p) {
+        n[0] = p[0];
+        n[1] = p[1];
+    }
     return *this;
 }
 
-constexpr array operator=( T p ) noexcept
+constexpr array& operator=( T p ) noexcept
 {
     n[0] = p;
     n[1] = p;
@@ -183,14 +199,14 @@ constexpr array& operator-=( const T p[] ) noexcept
 
 constexpr array operator-( T p ) const noexcept
 {
-    return { n[0]-p,
-             n[1]-p };
+    return { n[0] - p,
+             n[1] - p };
 }
 
 constexpr array operator*( const array& p ) const noexcept
 {
-    return { n[0]*p[0],
-             n[1]*p[1] };
+    return { n[0] * p[0],
+             n[1] * p[1] };
 }
 
 constexpr array operator*( const T p[] ) const noexcept
@@ -215,14 +231,14 @@ constexpr array& operator*=( const T p[] ) noexcept
 
 constexpr array operator*( T p ) const noexcept
 {
-    return { n[0]*p,
-             n[1]*p };
+    return { n[0] * p,
+             n[1] * p };
 }
 
 constexpr array operator/( const array& p ) const noexcept
 {
-    return { n[0]/p[0],
-             n[1]/p[1] };
+    return { n[0] / p[0],
+             n[1] / p[1] };
 }
 
 constexpr array& operator/=( const array& p ) noexcept
@@ -241,8 +257,8 @@ constexpr array& operator/=( const T p[] ) noexcept
 
 constexpr array operator/( T p ) const noexcept
 {
-    return { n[0]/p,
-             n[1]/p };
+    return { n[0] / p,
+             n[1] / p };
 }
 
 constexpr bool operator==( const array& p ) const noexcept
@@ -341,17 +357,21 @@ constexpr bool operator>=( T p ) const noexcept
            n[1] >= p;
 }
 
-constexpr T operator[]( int i ) const noexcept
+constexpr T operator[]( const int i ) const noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
-constexpr T& operator[]( int i ) noexcept
+constexpr T& operator[]( const int i ) noexcept
 {
+    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+
     return n[i];
 }
 
-constexpr bool contains( T p ) const noexcept
+[[nodiscard]] constexpr bool contains( T p ) const noexcept
 {
     return n[0] == p ||
            n[1] == p;
@@ -376,18 +396,20 @@ constexpr T other_than( T p ) noexcept
                      : (p == n[1] ? n[0] : -1);
 }
 
-constexpr T sum() const noexcept
+[[nodiscard]] constexpr T sum() const noexcept
 {
     return n[0] + n[1];
 }
 
-constexpr T dotpr() const noexcept
+[[nodiscard]] constexpr T dotpr() const noexcept
 {
     return n[0] * n[0] +
            n[1] * n[1];
 }
 
-constexpr T dotpr( const array& a ) const noexcept
+[[nodiscard]] constexpr T dotpr(
+    const array& a
+) const noexcept
 {
     return n[0] * a.n[0] +
            n[1] * a.n[1];
@@ -402,17 +424,17 @@ static constexpr T dotpr(
            a1.n[1] * a2.n[1];
 }
 
-constexpr T norm() const noexcept
+[[nodiscard]] constexpr T norm() const noexcept
 {
     return std::sqrt(dotpr());
 }
 
-constexpr array unitv() const noexcept
+[[nodiscard]] constexpr array unitv() const noexcept
 {
     return *this / norm();
 }
 // Scalar projection of *this onto array b.
-constexpr T scaProjection(
+[[nodiscard]]constexpr T scaProjection(
     const array& b
 ) const noexcept
 {
@@ -420,9 +442,9 @@ constexpr T scaProjection(
 }
 
 // Vector projection of *this onto array b.
-constexpr array vecProjection(
+[[nodiscard]] constexpr array vecProjection(
     const array& b
-    ) const noexcept
+) const noexcept
 {
     return b.unitv() * scaProjection(b);
 }
@@ -437,7 +459,7 @@ static constexpr T crosspr(
     return p1[0] * p2[1] - p1[1] * p2[0];
 }
 
-constexpr T crosspr( const array& p ) const noexcept
+[[nodiscard]] constexpr T crosspr( const array& p ) const noexcept
 {
     return n[0] * p[1] - n[1] * p[0];
 }
@@ -516,7 +538,6 @@ void write( std::ofstream& ost ) const noexcept
 }
 };
     
-}    // namespace Arrays
-}    // namespace Utils
+}  // namespace Utils::Arrays
 
 #endif // UTILS_ARRAYS_ARRAY2_H

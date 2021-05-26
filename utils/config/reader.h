@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
  * \file reader.h
@@ -31,28 +32,29 @@
 #ifndef UTILS_CONFIG_READER_H
 #define UTILS_CONFIG_READER_H
 
+#include <array>
+#include <string>
+#include <vector>
+
 #include "../common/misc.h"
 #include "../common/msgr.h"
-#include "parameter/vectors.h"
 #include "parameter/arrays.h"
 #include "parameter/scalars_strings.h"
+#include "parameter/vectors.h"
 
-/// Library-wide.
-namespace Utils {
-/// Configuration module.
-namespace Config {
-
-using namespace Common;
-using namespace Parameter;
+/// Configuration namespace.
+namespace Utils::Config {
 
 /**
 * Convenience class reading parameters from confuguration files.
 */
 class Reader {
 
-public:
+    using Msgr = Common::Msgr;
 
-    const std::string fname;        ///< name of the configuration file.
+    const std::string fname;  ///< name of the configuration file.
+
+public:
 
     /**
     * \brief Constructor creating the configuration file-specific instance.
@@ -65,7 +67,8 @@ public:
         : fname {check_fname(fname)}
         , msgr {msgr}
     {
-        if (msgr) msgr->print("\nReading config from: "+fname);
+        if (msgr != nullptr)
+            msgr->print("\nReading config from: " + fname);
     }
     
     /**
@@ -79,7 +82,7 @@ public:
     auto operator()(const std::string& s,
                     const std::vector<T>& range ) const
     {
-        return Par<T,true>(s, fname, range, msgr)();
+        return Parameter::Par<T,true>(s, fname, range, msgr)();
     }
 
     /**
@@ -93,7 +96,7 @@ public:
     auto operator()(const std::string& s,
                     const std::array<T,2>& range ) const
     {
-        return Par<T,false>(s, fname, range, msgr)();
+        return Parameter::Par<T,false>(s, fname, range, msgr)();
     }
 
     /**
@@ -105,9 +108,9 @@ public:
     */
     template <typename T, auto N>
     auto operator()(const std::string& s,
-                    const vecarr<T,N>& range) const
+                    const std::vector<std::array<T,N>>& range) const
     {
-        return Par<std::array<T,N>,false>(s, fname, range, msgr)();
+        return Parameter::Par<std::array<T,N>,false>(s, fname, range, msgr)();
     }
 
     /**
@@ -115,10 +118,11 @@ public:
     * \param fname Expected name of the file.
     * \return Name of the confuguration file if it is found.
     */
-    static std::string check_fname( const std::string fname )
+    static std::string check_fname( const std::string& fname )
     {
-        if (!file_exists(fname))
-            Utils::Common::Exceptions::simple("Error: no config file provided "+fname);
+        if (!Common::file_exists(fname))
+            Common::Exceptions::simple(
+                "Error: no config file provided " + fname, nullptr);
 
         return fname;
     }
@@ -134,9 +138,9 @@ public:
                const std::string& signature,
                const std::string& compartment ) const
     {
-        const auto cfgCopy {path+"cfgCopy_"+compartment+signature+".txt"};
-        msgr->print("Copying "+compartment+" config to "+cfgCopy);
-        copy_text_file(fname, cfgCopy);
+        const auto cfgCopy {path + "cfgCopy_" + compartment+signature + ".txt"};
+        msgr->print("Copying "+compartment + " config to " + cfgCopy);
+        Common::copy_text_file(fname, cfgCopy);
     }
 
     /**
@@ -147,15 +151,14 @@ public:
     {
         auto found {fname.find_last_of("/\\")};
         XASSERT(found < fname.npos, "ConfigReader: fname cannot be splitted");
-        return fname.substr(0, found)+SLASH;
+        return fname.substr(0, found) + Common::SLASH;
     }
 
 private:
 
-    Msgr* msgr {};        ///< \a Msgr output message processor.
+    Msgr* msgr {};  ///< \a Msgr output message processor.
 };
 
-}    // namespace Config
-}   // namespace Utils
+}  // namespace Utils::Config
 
 #endif // UTILS_CONFIG_READER_H

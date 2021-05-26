@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 #include "../common/misc.h"
 #include "pdb.h"
@@ -45,7 +46,7 @@ Pdb::Pdb(
         const uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos ) noexcept
+        const A3f& pos ) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -64,7 +65,7 @@ Pdb::Pdb(
         const uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         const float occupancy ) noexcept
     : pos {pos}
     , ind {ind}
@@ -81,7 +82,7 @@ Pdb::Pdb(
         const uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         const float occupancy,
         const float tempFactor ) noexcept
     : pos {pos}
@@ -100,7 +101,7 @@ Pdb::Pdb(
         const uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         const float occupancy,
         const float tempFactor,
         const std::string& element ) noexcept
@@ -121,7 +122,7 @@ Pdb::Pdb(
         const uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         const std::string& element ) noexcept
     : pos {pos}
     , ind {ind}
@@ -133,7 +134,7 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const std::string record,
+        const std::string& record,
         const ulong segm ) noexcept
     : pdbsegment(segm) 
 {
@@ -146,19 +147,24 @@ format_as_pdb(
 ) noexcept
 {
     irecname = irecn(record.substr(0, 6));
-    ind = static_cast<uint>(std::stoi(trim(record.substr(6, 5))));
+    ind = static_cast<uint>(std::stoi(Common::trim(record.substr(6, 5), " ")));
     name = record.substr(12, 4);
     resname = record.substr(17, 3);
     chainID = record[21];
-    resSeq = std::stoi(trim(record.substr(22, 4)));
+    resSeq = std::stoi(Common::trim(record.substr(22, 4), " "));
 
     // Converts to nm from data read in A:
-    pos[0] = scaling * static_cast<float>(std::stod(trim(record.substr(30, 8))));
-    pos[1] = scaling * static_cast<float>(std::stod(trim(record.substr(38, 8))));
-    pos[2] = scaling * static_cast<float>(std::stod(trim(record.substr(46, 8))));
+    pos[0] = scaling * static_cast<float>(
+                        std::stod(Common::trim(record.substr(30, 8), " ")));
+    pos[1] = scaling * static_cast<float>(
+                        std::stod(Common::trim(record.substr(38, 8), " ")));
+    pos[2] = scaling * static_cast<float>(
+                        std::stod(Common::trim(record.substr(46, 8), " ")));
 
-    occupancy = static_cast<float>(std::stod(trim(record.substr(54, 6))));
-    tempFactor = static_cast<float>(std::stod(trim(record.substr(60, 6))));
+    occupancy = static_cast<float>(
+                    std::stod(Common::trim(record.substr(54, 6), " ")));
+    tempFactor = static_cast<float>(
+                    std::stod(Common::trim(record.substr(60, 6), " ")));
     element = record.substr(76, 2);
     charge  = record.substr(78, 2);
     vdWRad = set_vdW();
@@ -175,7 +181,7 @@ format_as_pdb(
 
 std::string Pdb::
 format_as_pdb(
-    const A3<float>& p,
+    const A3f& p,
     Msgr& msgr
 ) const
 {
@@ -213,7 +219,7 @@ format_as_pdb(
     const std::string& resname,
     const ulong ires,
     const char ichain,
-    const A3<float>& pos,
+    const A3f& pos,
     const float occ,
     const float tempf,
     const std::string& elt,
@@ -231,7 +237,7 @@ format_as_pdb(
     record << std::right;
 
     // columns 7-11   Integer   Pdb serial number
-    record << STR(iatom);
+    record << Common::STR(iatom);
 
     // column  12  empty
     record << " ";
@@ -256,13 +262,13 @@ format_as_pdb(
 
     // columns 23-26  Integer  resSeq   Residue sequence number
     record.width(4);
-    record << STR(uint(ires));
+    record << Common::STR(uint(ires));
 
     // column  27   AChar  iCode  Code for insertion of residues
     record << " ";
 
     if (recn == "ATOM  " || recn == "HETATM") {
-        A3<float> p {pos/scaling};
+        A3f p {pos/scaling};
         float mx{1000.f};
         if (std::abs(p[0]) >= mx ||
             std::abs(p[1]) >= mx ||
@@ -374,7 +380,7 @@ void Pdb::
 read(
     const std::string& filename,
     std::vector<Pdb>& a,
-    vec2<std::string>& other,
+    vec2str& other,
     Msgr& msgr
 )
 {
@@ -406,7 +412,7 @@ void Pdb::
 write(
     const std::string& filename,
     const std::vector<Pdb>& a,
-    const vec2<std::string>& other,
+    const vec2str& other,
     Msgr& msgr
 )
 {

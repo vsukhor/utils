@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -31,20 +31,23 @@
 #ifndef UTILS_CONFIG_PARAMETER_BASE_H
 #define UTILS_CONFIG_PARAMETER_BASE_H
 
+
+#include <exception>
 #include <sstream>
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
 #include "../../common/exceptions.h"
 
-/// Library-wide.
-namespace Utils {
 /// Configuration module
-namespace Config {
+namespace Utils::Config {
+
+using Msgr = Common::Msgr;
+using szt = Common::szt;
+using ulong = Common::ulong;
+
 
 namespace Exceptions {
-
-using namespace Common;
 
 /**
 * \brief Generic template for 'Parameter out of range' exception.
@@ -57,13 +60,12 @@ class ParOutOfRange
     : public std::exception
 {};
 
-}     // namespace Exceptions
+}   // namespace Exceptions
 
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace Parameter {
 
-using namespace Utils::Common;
 
 /**
 * \brief Base class for configuration parameters.
@@ -94,13 +96,14 @@ protected:
     * \brief Constructor.
     * \param name Name of the parameter.
     */
-    explicit Base(const std::string& name);
+    explicit Base(std::string name);  // by pass-by-value + move
 
-    // The rule of five is triggered by the virtual destructor, the defaults suffice.
+    // The rule of five is triggered by the virtual destructor,
+    // the defaults suffice.
     Base(const Base&) = default;                ///< copy constructor
     Base& operator=(const Base&) = default;     ///< copy assignment
     Base(Base&&) = default;                     ///< move constructor
-    Base& operator=(Base&&) = default;          ///< move assignment
+    Base& operator=(Base&&) noexcept = default; ///< move assignment
     virtual ~Base() noexcept = default;         ///< virtual destructor
 
     /**
@@ -140,10 +143,8 @@ private:
 
 template <typename Q>
 Base<Q>::
-Base(
-        const std::string& name
-    )
-    : name {name}
+Base( std::string name )
+    : name {std::move(name)}
 {}
 
 // If the line contains a valid parname-value combination, returns true and the
@@ -151,7 +152,7 @@ Base(
 template <typename Q>
 bool Base<Q>::
 detect_by_name(
-    std::ifstream& config,
+    std::ifstream& ifs,
     std::string& value
 ) const
 {    
@@ -159,7 +160,7 @@ detect_by_name(
     const std::string tab {"\t"};
     
     std::string line;
-    getline(config, line);
+    getline(ifs, line);
     
     ulong commentpos = line.find_first_of('#');
     if (commentpos != std::string::npos)
@@ -189,7 +190,7 @@ detect_by_name(
     if (parname != name)
         return false; 
     
-    value = line.substr(line.find_last_of("=")+1);
+    value = line.substr(line.find_last_of("=") + 1);
     while (!value.substr(0, 1).compare(emp) ||
            !value.substr(0, 1).compare(tab))
         value.erase(value.begin());
@@ -200,37 +201,38 @@ template <typename Q>
 void Base<Q>::
 load( const std::string& fname )
 {
-    std::string parname, value;
+    std::string parname;
+    std::string value;
     std::ifstream ifs {fname};
     if (!ifs.is_open()) {
-        std::cout << "Unable to open config file: " << fname << std::endl;
-        exit(0);
+        throw Common::Exceptions::Simple
+            {"Unable to open config file: " + fname, nullptr};
     }
     try {
         load(ifs);
-    } catch (Utils::Common::Exceptions::Simple& e) {
+    } catch (Common::Exceptions::Simple& e) {
         return;
     }
 }
 
 template <typename Q>
 void Base<Q>::
-load( std::ifstream& config )
+load( std::ifstream& ifs )
 {
-    XASSERT(!isLoaded_, "Repeated load of "+name);
+    XASSERT(!isLoaded_, "Repeated load of " + name);
     
-    config.clear();
-    config.seekg(0, std::ios::beg);
-    while (config.good()) {
+    ifs.clear();
+    ifs.seekg(0, std::ios::beg);
+    while (ifs.good()) {
         std::string value;
-        if (!detect_by_name(config, value))
+        if (!detect_by_name(ifs, value))
             continue;
         initialize(value);
         isLoaded_ = true;
         return;
     }
-    throw Utils::Common::Exceptions::Simple
-        {"Error: parameter not loaded: "+name};
+    throw Common::Exceptions::Simple
+        {"Error: parameter not loaded: " + name, nullptr};
 }
 
 template <typename Q>
@@ -253,8 +255,7 @@ class Par : public Base<Q>
 {};
 
 
-}    // namespace Parameter
-}    // namespace Config
-}   // namespace Utils
+}  // namespace Parameter
+}  // namespace Utils::Config
 
 #endif // UTILS_CONFIG_PARAMETER_BASE_H

@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -20,7 +20,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
 
-============================================================================== */
+================================================================================
+*/
 
 /**
 * \file with_cuda.h
@@ -31,19 +32,14 @@
 #ifndef UTILS_RANDOM_WITH_CUDA_H
 #define UTILS_RANDOM_WITH_CUDA_H
 
-#include <cuda_runtime.h>
-#include <curand.h>
+//#include <cuda_runtime.h>
+//#include <curand.h>
 
-#include "common/misc.h"
+#include "../common/misc.h"
 #include "core.h"
 
-/// Library-wide.
-namespace Utils {
-/// \brief Pseugo-random number generation.
-namespace Random {
-
-using namespace Common;
-using namespace Arrays;
+/// Pseugo-random number generation.
+namespace Utils::Random {
 
 /// \brief Random number factory based on Cuda rng library.
 /// \tparam realT Floating point type.
@@ -64,8 +60,8 @@ class Cuda
     
     int rU01_ind;        ///< Index of the current random number in \a rU01.
                                                 
-    std::mt19937      gCPU;    ///< Random number generator using CPU.
-    curandGenerator_t gGPU;    ///< Random number generator using GPU.
+    std::mt19937      gCPU; ///< Random number generator using CPU.
+    curandGenerator_t gGPU; ///< Random number generator using GPU.
 
 public:
 
@@ -78,7 +74,7 @@ public:
     /// \param msgr Output message processor.
     explicit Cuda(
         const std::string& seedFname,
-        const szt ii,
+        Common::szt ii,
         Msgr& msgr);
 
     /// \brief Constructor.
@@ -86,7 +82,7 @@ public:
     /// \param runName Human-readable run index.
     /// \param msgr Output message processor.
     explicit Cuda(
-        const int seed,
+        int seed,
         const std::string& runName,
         Msgr& msgr);
 
@@ -124,9 +120,9 @@ private:
 template <typename realT> 
 Cuda<realT>::
 Cuda(   const std::string& seedFname,
-        const szt ii,
+        const Common::szt ii,
         Msgr& msgr )
-    : RandCore<realT> {msgr, seedFname, ii}
+    : Core<realT> {msgr, seedFname, ii}
 {
     
     gCPU.seed(this->seed);
@@ -223,7 +219,8 @@ checkCudaErrors(
 )
 {
     if (err != CURAND_STATUS_SUCCESS)
-        throw Exceptions::Simple("CURAND error: " + STR(err), this->msgr);
+        throw Common::Exceptions::Simple(
+            "CURAND error: " + Common::STR(err), this->msgr);
 }
 template<typename realT>
 void Cuda<realT>::
@@ -232,10 +229,10 @@ checkCudaErrors(
 )
 {
     if (err != cudaSuccess)
-        throw Exceptions::Simple("CUDA error: " + STR(err), this->msgr);
+        throw Common::Exceptions::Simple(
+            "CUDA error: " + Common::STR(err), this->msgr);
 }
 
-}    // namespace Random
-}    // namespace Utils
+}  // namespace Utils::Random
 
 #endif // UTILS_RANDOM_WITH_CUDA_H

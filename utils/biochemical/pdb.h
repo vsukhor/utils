@@ -1,4 +1,4 @@
-/* ==============================================================================
+/* =============================================================================
 
  Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
 
@@ -29,29 +29,33 @@
 #ifndef UTILS_BIOCHEMICAL_PDB_H
 #define UTILS_BIOCHEMICAL_PDB_H
 
-#include <sstream>
 #include <algorithm>
+#include <sstream>
 #include <string>
 
+#include "../arrays/all.h"
 #include "../common/misc.h"
 #include "../common/msgr.h"
-#include "../arrays/all.h"
 
 /// \brief Biochemistry-related stuff.
 namespace Utils::Biochemical {
 
-using namespace Common;
-using namespace Arrays;
-
 /// \brief Encapsulates Protein Data Bank formatting and file io.
 class Pdb {
+
+    using A3f = Arrays::A3<float>;
+    using Msgr = Common::Msgr;
+    using szt = Common::szt;
+    using uint = Common::uint;
+    using ulong = Common::ulong;
+    using vec2str = Common::vec2<std::string>;
 
 public:
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3<float>   pos {huge<float>};           ///< Atom position.
-    uint        ind {huge<decltype(ind)>};   ///< Atom insex.
+    A3f         pos {Common::huge<float>};           ///< Atom position.
+    uint        ind {Common::huge<decltype(ind)>};   ///< Atom insex.
     int         irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
     ulong       pdbsegment {};   ///< Segment name.
     std::string name;            ///< Pdb name.
@@ -73,12 +77,12 @@ public:
 
     /// \brief Constructor.
     explicit Pdb(
-        const uint ind,
+        uint ind,
         const std::string& chainID,
-        const uint resSeq,
+        uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos
+        const A3f& pos
     ) noexcept;
 
     /// \brief Constructor.
@@ -88,7 +92,7 @@ public:
         uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         float occupancy
     ) noexcept;
 
@@ -99,7 +103,7 @@ public:
         uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         float occupancy,
         float tempFactor
     ) noexcept;
@@ -111,7 +115,7 @@ public:
         uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         float occupancy,
         float tempFactor,
         const std::string& element
@@ -124,13 +128,13 @@ public:
         uint resSeq,
         const std::string& resname,
         const std::string& atomname,
-        const A3<float>& pos,
+        const A3f& pos,
         const std::string& element
     ) noexcept;
 
     /// \brief Constructor.
     explicit Pdb(
-        const std::string record,
+        const std::string& record,
         ulong segm
     ) noexcept;
 
@@ -150,7 +154,7 @@ public:
     /// \param p Atom position coordinates.
     /// \param msgr Output message processor.
     std::string format_as_pdb(
-        const A3<float>& p,
+        const A3f& p,
         Msgr& msgr
     ) const;
 
@@ -178,7 +182,7 @@ public:
         const std::string& resname,
         ulong ires,
         char ichain,
-        const A3<float>& pos,
+        const A3f& pos,
         float occ,
         float tempf,
         const std::string& elt,
@@ -196,7 +200,7 @@ public:
     static void read(
         const std::string& filename,
         std::vector<Pdb>& a,
-        vec2<std::string>& other,
+        vec2str& other,
         Msgr& msgr
     );
 
@@ -208,12 +212,11 @@ public:
     static void write(
         const std::string& filename,
         const std::vector<Pdb>& a,
-        const vec2<std::string>& other,
+        const vec2str& other,
         Msgr& msgr
     );
        
 private:
-
 
     /// \brief Convert record name string to index.
     /// \param s "HETATM" or "ATOM  ".
