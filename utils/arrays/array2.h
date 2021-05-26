@@ -38,9 +38,9 @@
 #include <type_traits>
 #include <vector>
 
-#include "_misc.h"
 #include "../common/constants.h"
 #include "../common/misc.h"
+#include "_misc.h"
 
 /// Two-element arrays.
 namespace Utils::Arrays {
