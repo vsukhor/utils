@@ -29,8 +29,8 @@
 * \author Valerii Sukhorukov
 */
 
-#ifndef UTILS_ARRAYS__MISC_H
-#define UTILS_ARRAYS__MISC_H
+#ifndef UTILS_ARRAYS_MISC_H
+#define UTILS_ARRAYS_MISC_H
 
 /// Custom arrays.
 namespace Utils::Arrays {
@@ -45,7 +45,7 @@ namespace iota_array {
     template<typename T, T... Ns>
     constexpr std::array<T, sizeof...(Ns)> make_iota_array(
         T const offset,
-        std::integer_sequence<T, Ns...>
+        std::integer_sequence<T, Ns...> /* unused */
     ) noexcept
   {
     return {{(Ns + offset)...}};
@@ -73,4 +73,4 @@ class array {};
 
 }  // namespace Utils::Arrays
 
-#endif // UTILS_ARRAYS__MISC_H
+#endif // UTILS_ARRAYS_MISC_H
