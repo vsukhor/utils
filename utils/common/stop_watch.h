@@ -45,7 +45,7 @@ namespace Utils::Common {
 struct StopWatch {
 
     /// An instance in time.
-    struct Instance {
+    struct __attribute__((aligned(128))) Instance {
 
         /// A point in time.
         std::chrono::time_point<std::chrono::system_clock> h;

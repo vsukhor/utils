@@ -156,7 +156,7 @@ void Msgr::
 prn(
     IO* io,
     const std::string& v,
-    bool endline
+    const bool endline
 ) const noexcept
 { 
     static_assert(is_valid_stream<IO>(),
