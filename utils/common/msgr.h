@@ -29,8 +29,8 @@
 * \author Valerii Sukhorukov
 */
 
-#ifndef UTILS_COMMON_OEL_H
-#define UTILS_COMMON_OEL_H
+#ifndef UTILS_COMMON_MSGR_H
+#define UTILS_COMMON_MSGR_H
 
 #include <array>
 #include <fstream>
@@ -202,6 +202,6 @@ print_vector(
         print<false>(std::to_string(o));
 }
 
-}    // namespace Utils::Common
+}  // namespace Utils::Common
 
-#endif // UTILS_COMMON_OEL_H
+#endif // UTILS_COMMON_MSGR_H

@@ -75,13 +75,7 @@ public:
     * \param msgr Output message processor.
     */
     explicit Simple(const std::string& msg,
-                    Msgr* msgr)
-    {
-        if (msgr != nullptr)
-            msgr->print<true>(msg);
-        else
-            std::cout << msg << std::endl;
-    }
+                    Msgr* msgr);
 };
 
 }    // namespace Utils::Common::Exceptions

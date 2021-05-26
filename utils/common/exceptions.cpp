@@ -51,4 +51,14 @@ int simple( const std::string& msg,
     return EXIT_FAILURE;         // pro forma
 }
 
+Simple::
+Simple(const std::string& msg,
+                Msgr* msgr)
+{
+    if (msgr != nullptr)
+        msgr->print<true>(msg);
+    else
+        std::cout << msg << std::endl;
+}
+
 }    // namespace Utils::Common::Exceptions
