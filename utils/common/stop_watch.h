@@ -45,13 +45,14 @@ namespace Utils::Common {
 struct StopWatch {
 
     /// An instance in time.
-    struct __attribute__((aligned(128))) Instance {
+    struct __attribute__((aligned(128)))
+    Instance {
 
         /// A point in time.
         std::chrono::time_point<std::chrono::system_clock> h;
 
         std::time_t c {huge<std::time_t>};  ///< ctime-based instance.
-        std::string str {""};   ///< String-based representation.
+        std::string str {};   ///< String-based representation.
 
         /// Current time.
         void operator()() {
