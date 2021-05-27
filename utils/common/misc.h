@@ -48,13 +48,13 @@
 
 #ifdef USE_UTILS_XASSERT
     #define XASSERT(EX, msg) \
-        (void)((EX) || (Utils::Common::assert_fun(#EX, __FILE__, __LINE__, msg), 0))
+        (void)((EX) || (utils::common::assert_fun(#EX, __FILE__, __LINE__, msg), 0))
 #else
     #define XASSERT(EX, msg)
 #endif
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /// Convert a double \b number to string.
 std::string operator"" _str (long double number);
@@ -337,7 +337,7 @@ void remove_vector_element( std::vector<T>& v,
     XASSERT(false, "Error in remove_vector_element: element not found");
 }
 
-}  // namespace Utils::Common
+}  // namespace utils::common
 
 
 #endif // UTILS_COMMON_MISC_H

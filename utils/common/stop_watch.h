@@ -37,7 +37,7 @@
 #include "constants.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /// \struct StopWatch stop_watch.h
 /// \brief Simple stop watch class.
@@ -78,6 +78,6 @@ private:
 
 };
 
-}  // namespace Utils::Common
+}  // namespace utils::common
 
 #endif // UTILS_COMMON_STOP_WATCH_H

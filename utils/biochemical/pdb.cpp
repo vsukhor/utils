@@ -27,7 +27,7 @@
 #include "pdb.h"
 
 /// \brief Biochemistry-related stuff.
-namespace Utils::Biochemical {
+namespace utils::biochemical {
 
 float Pdb::scaling;    ///< Convert nm <-> A; nanometers are used internally.
 
@@ -147,24 +147,24 @@ format_as_pdb(
 ) noexcept
 {
     irecname = irecn(record.substr(0, 6));
-    ind = static_cast<uint>(std::stoi(Common::trim(record.substr(6, 5), " ")));
+    ind = static_cast<uint>(std::stoi(common::trim(record.substr(6, 5), " ")));
     name = record.substr(12, 4);
     resname = record.substr(17, 3);
     chainID = record[21];
-    resSeq = std::stoi(Common::trim(record.substr(22, 4), " "));
+    resSeq = std::stoi(common::trim(record.substr(22, 4), " "));
 
     // Converts to nm from data read in A:
     pos[0] = scaling * static_cast<float>(
-                        std::stod(Common::trim(record.substr(30, 8), " ")));
+                        std::stod(common::trim(record.substr(30, 8), " ")));
     pos[1] = scaling * static_cast<float>(
-                        std::stod(Common::trim(record.substr(38, 8), " ")));
+                        std::stod(common::trim(record.substr(38, 8), " ")));
     pos[2] = scaling * static_cast<float>(
-                        std::stod(Common::trim(record.substr(46, 8), " ")));
+                        std::stod(common::trim(record.substr(46, 8), " ")));
 
     occupancy = static_cast<float>(
-                    std::stod(Common::trim(record.substr(54, 6), " ")));
+                    std::stod(common::trim(record.substr(54, 6), " ")));
     tempFactor = static_cast<float>(
-                    std::stod(Common::trim(record.substr(60, 6), " ")));
+                    std::stod(common::trim(record.substr(60, 6), " ")));
     element = record.substr(76, 2);
     charge  = record.substr(78, 2);
     vdWRad = set_vdW();
@@ -237,7 +237,7 @@ format_as_pdb(
     record << std::right;
 
     // columns 7-11   Integer   Pdb serial number
-    record << Common::STR(iatom);
+    record << common::STR(iatom);
 
     // column  12  empty
     record << " ";
@@ -262,7 +262,7 @@ format_as_pdb(
 
     // columns 23-26  Integer  resSeq   Residue sequence number
     record.width(4);
-    record << Common::STR(uint(ires));
+    record << common::STR(uint(ires));
 
     // column  27   AChar  iCode  Code for insertion of residues
     record << " ";
@@ -437,4 +437,4 @@ write(
         }
 }
 
-}    // namespace Utils::Biochemical
+}    // namespace utils::biochemical

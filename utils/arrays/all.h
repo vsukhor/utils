@@ -37,13 +37,13 @@
 #include "array4.h"
 #include "arrayN.h"
 
-namespace Utils::Arrays {
+namespace utils::arrays {
 
 // Type abbreviations.
-template<typename T> using A2 = Arrays::array<2,T>;
-template<typename T> using A3 = Arrays::array<3,T>;
-template<typename T> using A4 = Arrays::array<4,T>;
+template<typename T> using A2 = arrays::array<2,T>;
+template<typename T> using A3 = arrays::array<3,T>;
+template<typename T> using A4 = arrays::array<4,T>;
 
-}  // namespace Utils::Arrays
+}  // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAY_H

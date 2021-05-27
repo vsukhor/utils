@@ -40,7 +40,7 @@
 #include "msgr.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /**
 * \class Threads threads.h
@@ -118,6 +118,6 @@ public:
                        Msgr& msgr);
 };
 
-}  // namespace Utils::Common
+}  // namespace utils::common
 
 #endif // UTILS_COMMON_THREADS_H

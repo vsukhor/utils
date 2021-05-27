@@ -44,8 +44,8 @@
 #include "../../common/msgr.h"
 #include "../parameter/base.h"
 
-/// Exceptions namespace.
-namespace Utils::Config::Exceptions {
+/// exceptions namespace.
+namespace utils::config::exceptions {
 
 /**
 * \brief 'Parameter out of range' exception involving discrete scalars.
@@ -254,6 +254,6 @@ generate_message(const std::string& name,
            "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
 }
 
-}   // namespace Utils::Config::Exceptions
+}   // namespace utils::config::exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_SCALARS_H

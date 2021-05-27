@@ -38,24 +38,24 @@
 #include "../common/msgr.h"
 
 /// \brief Biochemistry-related stuff.
-namespace Utils::Biochemical {
+namespace utils::biochemical {
 
 /// \brief Encapsulates Protein Data Bank formatting and file io.
 class Pdb {
 
-    using A3f = Arrays::A3<float>;
-    using Msgr = Common::Msgr;
-    using szt = Common::szt;
-    using uint = Common::uint;
-    using ulong = Common::ulong;
-    using vec2str = Common::vec2<std::string>;
+    using A3f = arrays::A3<float>;
+    using Msgr = common::Msgr;
+    using szt = common::szt;
+    using uint = common::uint;
+    using ulong = common::ulong;
+    using vec2str = common::vec2<std::string>;
 
 public:
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3f         pos {Common::huge<float>};           ///< Atom position.
-    uint        ind {Common::huge<decltype(ind)>};   ///< Atom insex.
+    A3f         pos {common::huge<float>};           ///< Atom position.
+    uint        ind {common::huge<decltype(ind)>};   ///< Atom insex.
     int         irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
     ulong       pdbsegment {};   ///< Segment name.
     std::string name;            ///< Pdb name.
@@ -235,6 +235,6 @@ private:
 
 };
 
-}    // namespace Utils::Biochemical
+}    // namespace utils::biochemical
 
 #endif // UTILS_BIOCHEMICAL_PDB_H

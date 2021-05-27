@@ -51,7 +51,7 @@
 #include "core.h"
 
 /// Pseugo-random number generation.
-namespace Utils::Random {
+namespace utils::random {
 
 /// \brief Random number factory based on Boost distribution functions.
 /// \tparam realT Floating point type.
@@ -68,15 +68,15 @@ class Boost
 
 public:
 
-    using A2r = Arrays::A2<realT>;
-    using A3r = Arrays::A3<realT>;
-    static constexpr auto half = Common::half<realT>;
-    static constexpr auto one = Common::one<realT>;
-    static constexpr auto two = Common::two<realT>;
-    static constexpr auto zero = Common::zero<realT>;
-    static constexpr auto pi = Common::pi<realT>;
-    static constexpr auto twopi = Common::twopi<realT>;
-    static constexpr auto halfpi = Common::halfpi<realT>;
+    using A2r = arrays::A2<realT>;
+    using A3r = arrays::A3<realT>;
+    static constexpr auto half = common::half<realT>;
+    static constexpr auto one = common::one<realT>;
+    static constexpr auto two = common::two<realT>;
+    static constexpr auto zero = common::zero<realT>;
+    static constexpr auto pi = common::pi<realT>;
+    static constexpr auto twopi = common::twopi<realT>;
+    static constexpr auto halfpi = common::halfpi<realT>;
 
 //    /// \brief Default constructor.
 //    Boost() = default;
@@ -822,6 +822,6 @@ gaussian_number_constrained(
     return res;
 }
 
-}    // namespace Utils::Random
+}    // namespace utils::random
 
 #endif // UTILS_RANDOM_WITH_BOOST_H

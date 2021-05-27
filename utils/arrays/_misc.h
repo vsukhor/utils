@@ -33,7 +33,7 @@
 #define UTILS_ARRAYS_MISC_H
 
 /// Custom arrays.
-namespace Utils::Arrays {
+namespace utils::arrays {
 
 //==============================================================================
 /// \brief A std:iota-like compile-time generator of integers [1, ..., N].
@@ -71,6 +71,6 @@ constexpr auto make_iota_array(T const offset) noexcept
 template <unsigned N, typename T, typename Enabler=void>
 class array {};
 
-}  // namespace Utils::Arrays
+}  // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_MISC_H

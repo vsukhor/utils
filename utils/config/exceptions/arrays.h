@@ -43,7 +43,7 @@
 #include "../../common/msgr.h"
 #include "../parameter/base.h"
 
-namespace Utils::Config::Exceptions {
+namespace utils::config::exceptions {
 
 /**
 * \brief 'Parameter out of range' exception for continuous fundamental std arrays.
@@ -107,6 +107,6 @@ ParOutOfRange(
     msgr->print<true>(s);
 }
 
-}   // namespace Utils::Config::Exceptions
+}   // namespace utils::config::exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_ARRAYS_H

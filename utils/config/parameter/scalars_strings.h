@@ -42,7 +42,7 @@
 #include "base.h"
 
 /// Parameter namespace.
-namespace Utils::Config::Parameter {
+namespace utils::config::parameter {
 
 /**
 * \brief Parameters of std fundamental scalar or std::string types.
@@ -104,12 +104,12 @@ public:
     {
         if (isDiscrete) {
             if (std::find(r.begin(), r.end(), p_) == r.end())
-                throw Exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
+                throw exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
         }
         else {
             XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
             if (p_<r[0] || p_>r[1])
-                throw Exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
+                throw exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
         }
     }
 */
@@ -221,12 +221,12 @@ check_range( const W& r,
 
     if constexpr (isDiscrete) {
         if (std::find(r.begin(), r.end(), p_) == r.end())
-            throw Exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
+            throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
     }
     else {
         XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
         if (p_<r[0] || p_>r[1])
-            throw Exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
+            throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
     }
 }
 
@@ -249,7 +249,7 @@ void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value |
 print( Msgr* msgr )
 {
     if (msgr != nullptr)
-        msgr->print(get_name() + " = " + Common::STR(p_));
+        msgr->print(get_name() + " = " + common::STR(p_));
     else
         std::cout << get_name() << " = " << p_ << std::endl;
 }
@@ -283,6 +283,6 @@ initialize( std::string value )
     std::stringstream(value) >> p_;
 }
 
-}  // namespace Utils::Config::Parameter
+}  // namespace utils::config::parameter
 
 #endif // UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H

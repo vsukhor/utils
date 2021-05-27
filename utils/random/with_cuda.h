@@ -39,7 +39,7 @@
 #include "core.h"
 
 /// Pseugo-random number generation.
-namespace Utils::Random {
+namespace utils::random {
 
 /// \brief Random number factory based on Cuda rng library.
 /// \tparam realT Floating point type.
@@ -74,7 +74,7 @@ public:
     /// \param msgr Output message processor.
     explicit Cuda(
         const std::string& seedFname,
-        Common::szt ii,
+        common::szt ii,
         Msgr& msgr);
 
     /// \brief Constructor.
@@ -120,7 +120,7 @@ private:
 template <typename realT> 
 Cuda<realT>::
 Cuda(   const std::string& seedFname,
-        const Common::szt ii,
+        const common::szt ii,
         Msgr& msgr )
     : Core<realT> {msgr, seedFname, ii}
 {
@@ -219,8 +219,8 @@ checkCudaErrors(
 )
 {
     if (err != CURAND_STATUS_SUCCESS)
-        throw Common::Exceptions::Simple(
-            "CURAND error: " + Common::STR(err), this->msgr);
+        throw common::exceptions::Simple(
+            "CURAND error: " + common::STR(err), this->msgr);
 }
 template<typename realT>
 void Cuda<realT>::
@@ -229,10 +229,10 @@ checkCudaErrors(
 )
 {
     if (err != cudaSuccess)
-        throw Common::Exceptions::Simple(
-            "CUDA error: " + Common::STR(err), this->msgr);
+        throw common::exceptions::Simple(
+            "CUDA error: " + common::STR(err), this->msgr);
 }
 
-}  // namespace Utils::Random
+}  // namespace utils::random
 
 #endif // UTILS_RANDOM_WITH_CUDA_H

@@ -42,7 +42,7 @@
 #include "../../common/msgr.h"
 #include "base.h"
 
-namespace Utils::Config::Parameter {
+namespace utils::config::parameter {
 
 // specialization for vectors of fundamental types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -66,7 +66,7 @@ class Par<std::vector<T>,
     using Base<T>::isLoaded_;
 
     Q p_;                ///< The parameter value.
-    szt expectedSize_ {Common::huge<szt>};    ///< Expected size of the vector.
+    szt expectedSize_ {common::huge<szt>};    ///< Expected size of the vector.
     
 public:    
 
@@ -189,12 +189,12 @@ check_range(
             "size of r must be 2 for continuous parameters");
     if constexpr (isDiscrete) {
         if (std::find(r.begin(), r.end(), p_) == r.end())
-            throw Exceptions::ParOutOfRange<Q,isDiscrete>
+            throw exceptions::ParOutOfRange<Q,isDiscrete>
                 {get_name(), p_, r, msgr};
     }
     else {
         if (p_<r[0] || p_>r[1])
-            throw Exceptions::ParOutOfRange<Q,isDiscrete>
+            throw exceptions::ParOutOfRange<Q,isDiscrete>
                 {get_name(), p_, r, msgr};
     }
 }
@@ -267,7 +267,7 @@ initialize( std::string value )
         if (e == std::string::npos) e = value.length();
         const std::string val {value.substr(0, e)};
         if (val.length() < 1)
-            throw Common::Exceptions::Simple
+            throw common::exceptions::Simple
                     {"Error in config file: Number of elelments in " + get_name() +
                      " is " + STR(p_.size()) + " which is insufficient"};
         T tmp;
@@ -278,12 +278,12 @@ initialize( std::string value )
                value.substr(0, 1) != tab)
             value.erase(value.begin());
         if (p_.size() > expectedSize_)
-            throw Common::Exceptions::Simple {exceptMessage, nullptr};
+            throw common::exceptions::Simple {exceptMessage, nullptr};
     }
     if (p_.size() != expectedSize_)
-        throw Common::Exceptions::Simple {exceptMessage, nullptr};
+        throw common::exceptions::Simple {exceptMessage, nullptr};
 }
 
-}    // namespace Utils::Config::Parameter
+}    // namespace utils::config::parameter
 
 #endif // UTILS_CONFIG_PARAMETER_VECTORS_H

@@ -36,7 +36,7 @@
 #include "../common/msgr.h"
 
 /// Volume data io.
-namespace Utils::Volumetric {
+namespace utils::volumetric {
 
 
 /**
@@ -54,16 +54,16 @@ namespace Utils::Volumetric {
 template <typename K, typename L, typename T>
 void save_as_DX(
         const std::string& filename,
-        const Common::vec3<K>& v,
+        const common::vec3<K>& v,
         Arrays::A3<T> origin,        // by value
         Arrays::A3<T> delta,         // by value
         const std::string& units,
-        Common::Msgr& msgr
+        common::Msgr& msgr
 )
 {
     if (units == "nm") {
-        delta *= Common::ten<T>;
-        origin *= Common::ten<T>;
+        delta *= common::ten<T>;
+        origin *= common::ten<T>;
     }
     else if (units != "A")
         msgr.exit("Error while saving volume map: length units not supported");
@@ -133,13 +133,13 @@ void save_as_DX(
 template <typename K, typename T>
 void read_as_DX(
         const std::string& filename,
-        Common::vec3<K>& v,
+        common::vec3<K>& v,
         Arrays::A3<T>& origin,
         Arrays::A3<T>& delta,
-        Arrays::A3<Common::szt>& ms,
-        const std::vector<Common::uint>& bin,
+        Arrays::A3<common::szt>& ms,
+        const std::vector<common::uint>& bin,
         const std::string& units,
-        Common::Msgr &msgr
+        common::Msgr &msgr
 )
 {
     if (bin[0] != 1 ||
@@ -156,9 +156,9 @@ void read_as_DX(
     msgr.print("Started reading " + filename);
 
     std::string line {};
-    Common::szt xdim = 0;
-    Common::szt ydim = 0;
-    Common::szt zdim = 0;
+    common::szt xdim = 0;
+    common::szt ydim = 0;
+    common::szt zdim = 0;
     // % object 1 class gridpositions counts 30 30 30:
     std::getline(fin, line);
     sscanf(line.c_str(),
@@ -167,16 +167,16 @@ void read_as_DX(
     ms[0] = xdim;
     ms[1] = ydim;
     ms[2] = zdim;
-    v = Common::Vec3::make<K>(xdim, ydim, zdim);
+    v = common::Vec3::make<K>(xdim, ydim, zdim);
     auto npoints {xdim * ydim * zdim};
-    Common::szt numlines;
+    common::szt numlines;
     auto lastlinenumelements = npoints % 3;
     if (lastlinenumelements == 0) {
         lastlinenumelements = 3;
         numlines = npoints / 3;
     }
     else
-        numlines = static_cast<Common::szt>(npoints / 3) + 1;
+        numlines = static_cast<common::szt>(npoints / 3) + 1;
 
     // origin:
     std::getline(fin, line);
@@ -203,8 +203,8 @@ void read_as_DX(
     // Convert to float for writing:
     std::vector<float> templine(npoints);
 
-    Common::szt count {};
-    for (Common::szt n=0; n<numlines-1; n++) {
+    common::szt count {};
+    for (common::szt n=0; n<numlines-1; n++) {
         std::getline(fin, line);
         sscanf(line.c_str(),
                "%f %f %f",
@@ -234,13 +234,13 @@ void read_as_DX(
     }
 
     count = 0;
-    for (Common::szt i=0; i<v.size(); i++)
-        for (Common::szt j=0; j<v[i].size(); j++)
-            for (Common::szt k=0; k<v[i][j].size(); k++)
+    for (common::szt i=0; i<v.size(); i++)
+        for (common::szt j=0; j<v[i].size(); j++)
+            for (common::szt k=0; k<v[i][j].size(); k++)
                 v[i][j][k] = static_cast<K>(templine[count++]);
     if (units == "nm") {
-        delta /= Common::ten<T>;
-        origin /= Common::ten<T>;
+        delta /= common::ten<T>;
+        origin /= common::ten<T>;
     }
     else if (units != "A")
         msgr.exit("Error while reading volume map: length units not supported  ");
@@ -248,6 +248,6 @@ void read_as_DX(
     msgr.print("Finished reading " + filename);
 }
 
-}  // namespace Utils::Volumetric
+}  // namespace utils::volumetric
 
 #endif // UTILS_VOLUMETRIC_DX_IO

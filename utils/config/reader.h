@@ -43,14 +43,14 @@
 #include "parameter/vectors.h"
 
 /// Configuration namespace.
-namespace Utils::Config {
+namespace utils::config {
 
 /**
 * Convenience class reading parameters from confuguration files.
 */
 class Reader {
 
-    using Msgr = Common::Msgr;
+    using Msgr = common::Msgr;
 
     const std::string fname;  ///< name of the configuration file.
 
@@ -82,7 +82,7 @@ public:
     auto operator()(const std::string& s,
                     const std::vector<T>& range ) const
     {
-        return Parameter::Par<T,true>(s, fname, range, msgr)();
+        return parameter::Par<T,true>(s, fname, range, msgr)();
     }
 
     /**
@@ -96,7 +96,7 @@ public:
     auto operator()(const std::string& s,
                     const std::array<T,2>& range ) const
     {
-        return Parameter::Par<T,false>(s, fname, range, msgr)();
+        return parameter::Par<T,false>(s, fname, range, msgr)();
     }
 
     /**
@@ -110,7 +110,7 @@ public:
     auto operator()(const std::string& s,
                     const std::vector<std::array<T,N>>& range) const
     {
-        return Parameter::Par<std::array<T,N>,false>(s, fname, range, msgr)();
+        return parameter::Par<std::array<T,N>,false>(s, fname, range, msgr)();
     }
 
     /**
@@ -120,8 +120,8 @@ public:
     */
     static std::string check_fname( const std::string& fname )
     {
-        if (!Common::file_exists(fname))
-            Common::Exceptions::simple(
+        if (!common::file_exists(fname))
+            common::exceptions::simple(
                 "Error: no config file provided " + fname, nullptr);
 
         return fname;
@@ -140,7 +140,7 @@ public:
     {
         const auto cfgCopy {path + "cfgCopy_" + compartment+signature + ".txt"};
         msgr->print("Copying "+compartment + " config to " + cfgCopy);
-        Common::copy_text_file(fname, cfgCopy);
+        common::copy_text_file(fname, cfgCopy);
     }
 
     /**
@@ -151,7 +151,7 @@ public:
     {
         auto found {fname.find_last_of("/\\")};
         XASSERT(found < fname.npos, "ConfigReader: fname cannot be splitted");
-        return fname.substr(0, found) + Common::SLASH;
+        return fname.substr(0, found) + common::SLASH;
     }
 
 private:
@@ -159,6 +159,6 @@ private:
     Msgr* msgr {};  ///< \a Msgr output message processor.
 };
 
-}  // namespace Utils::Config
+}  // namespace utils::config
 
 #endif // UTILS_CONFIG_READER_H

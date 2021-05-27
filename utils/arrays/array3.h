@@ -44,15 +44,15 @@
 #include "array2.h"
 
 /// Library-wide.
-namespace Utils {
+namespace utils {
 
-namespace Common {
+namespace common {
 template <typename>
 class Geometric;
-}  // namespace Common
+}  // namespace common
 
 /// 3-element arrays.
-namespace Arrays {
+namespace arrays {
 
 /// \brief Three-element arrays.
 /// \details This class specializes array template for three-element array
@@ -540,7 +540,7 @@ T other_than( const array<2,T>& p
             p == array<2,T>(n[2], n[0])) ? n[1] :
           ((p == array<2,T>(n[1], n[2]) ||
             p == array<2,T>(n[2], n[1])) ? n[0] :
-            -Utils::Common::one<T>));
+            -utils::common::one<T>));
 }
 
 constexpr T sum() const noexcept
@@ -599,7 +599,7 @@ static constexpr array rotate(
 ) noexcept
 {
     T rm[3][3];
-    Common::Geometric<T>::rotmat(axis, angle, rm);
+    common::Geometric<T>::rotmat(axis, angle, rm);
 
     return { rm[0][0] * v[0] + rm[1][0] * v[1] + rm[2][0] * v[2],
              rm[0][1] * v[0] + rm[1][1] * v[1] + rm[2][1] * v[2],
@@ -621,7 +621,7 @@ constexpr array rotate(
 ) const noexcept
 {
     T rm[3][3];
-    Common::Geometric<T>::rotmat(axis, angle, rm);
+    common::Geometric<T>::rotmat(axis, angle, rm);
 
     return { rm[0][0] * n[0] + rm[1][0] * n[1] + rm[2][0] * n[2],
              rm[0][1] * n[0] + rm[1][1] * n[1] + rm[2][1] * n[2],
@@ -697,7 +697,7 @@ void write( std::ofstream& ost ) const noexcept
 
 };
 
-}    // namespace Arrays
-}    // namespace Utils
+}    // namespace arrays
+}    // namespace utils
 
 #endif // UTILS_ARRAYS_ARRAY3_H

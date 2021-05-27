@@ -42,7 +42,7 @@
 #include "msgr.h"
 
 /// Exeption and exit handlers.
-namespace Utils::Common::Exceptions {
+namespace utils::common::exceptions {
 
 /**
 * \brief Simple process termination as a global function.
@@ -54,7 +54,7 @@ int simple(const std::string& msg,
            Msgr* msgr);
 
 
-// Simple Exceptions ===========================================================
+// Simple exceptions ===========================================================
 
 /**
 * \brief Uncomplicated process termination with exception.
@@ -78,6 +78,6 @@ public:
                     Msgr* msgr);
 };
 
-}    // namespace Utils::Common::Exceptions
+}    // namespace utils::common::exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_H

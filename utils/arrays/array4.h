@@ -42,7 +42,7 @@
 #include "_misc.h"
 
 /// 4-element arrays.
-namespace Utils::Arrays {
+namespace utils::arrays {
 
 /// \brief Four-element arrays.
 /// \details This class specializes array template for four-element array of
@@ -624,7 +624,7 @@ T other_than(
             p == array<3,T>(n[1], n[2], n[3]) ||
             p == array<3,T>(n[2], n[3], n[1]) ||
             p == array<3,T>(n[2], n[1], n[3])) ? n[0]
-            : -Utils::Common::one<T>)));
+            : -utils::common::one<T>)));
 }
 
 constexpr T sum() const noexcept
@@ -693,6 +693,6 @@ void write(
 
 };
 
-}    // namespace Utils::Arrays
+}    // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAY4_H

@@ -35,7 +35,7 @@
 #include "../common/constants.h"
 
 /// Abstract graph circuitry.
-namespace Utils::Graph {
+namespace utils::graph {
 
  /// Weight classification of graph edges.
 enum class EdgeMode {
@@ -72,7 +72,7 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
     using weight_t = fT;    ///< Type alias for edge weight.
 
     /// Maximal edge weight allowed.
-    static constexpr weight_t max_weight {Common::huge<weight_t>};
+    static constexpr weight_t max_weight {common::huge<weight_t>};
 
     vertex_t target;    ///< Target neighbour index.
     weight_t weight;    ///< Weight of the connecting edge.
@@ -84,7 +84,7 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
      */
     explicit EdgeType(
             vertex_t target,
-            weight_t weight=Common::one<weight_t>
+            weight_t weight=common::one<weight_t>
             )
         : target {target}
         , weight {weight}
@@ -106,9 +106,9 @@ struct EdgeType<fT, iT, EdgeMode::unweighted> {
     using weight_t = fT;    ///< Type alias for edge weight.
 
     /// Maximal edge weight allowed.
-    static constexpr weight_t max_weight {Common::huge<weight_t>};
+    static constexpr weight_t max_weight {common::huge<weight_t>};
     /// Weight of the connecting edge.
-    static constexpr weight_t weight {Common::one<weight_t>};
+    static constexpr weight_t weight {common::one<weight_t>};
 
     vertex_t target;    ///< Target neighbour index.
 
@@ -122,6 +122,6 @@ struct EdgeType<fT, iT, EdgeMode::unweighted> {
 };
 
 
-}    // namespace Utils::Graph
+}    // namespace utils::graph
 
 #endif  // UTILS_GRAPH_VERTEX_EDGE_H

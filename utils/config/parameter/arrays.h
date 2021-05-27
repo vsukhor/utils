@@ -46,7 +46,7 @@
 #include "base.h"
 
 /// Namespace for config parameters.
-namespace Utils::Config::Parameter {
+namespace utils::config::parameter {
 
 
 /**
@@ -148,7 +148,7 @@ Par( const std::string& name,
     this->load(fname);
     try {
         check_range(range, msgr);
-    } catch (const Exceptions::ParOutOfRange<T,false>&) {
+    } catch (const exceptions::ParOutOfRange<T,false>&) {
         exit(0);
     }
     print(msgr);
@@ -162,7 +162,7 @@ check_range( const std::vector<Q>& r,
 {
     for (szt i=0; i<W; i++)
         if (p_[i]<r[0][i] || p_[i]>r[1][i])
-            throw Exceptions::ParOutOfRange<T,false> {
+            throw exceptions::ParOutOfRange<T,false> {
                 get_name(), p_[i], std::array<T,2>{r[0][i], r[1][i]}, msgr
             };
 }
@@ -215,9 +215,9 @@ initialize( std::string value )
         if (e == std::string::npos) e = value.length();
         const std::string val {value.substr(0, e)};
         if (val.length() < 1)
-            throw Common::Exceptions::Simple
+            throw common::exceptions::Simple
                 {"Error in config file: Number of elelments in " + get_name() +
-                 " is " + Common::STR(p_.size()) + " which is insufficient",
+                 " is " + common::STR(p_.size()) + " which is insufficient",
                  nullptr};
         std::stringstream(val) >> p_[i];
         value.erase(0, e);
@@ -227,11 +227,11 @@ initialize( std::string value )
         i++;
     }
     if (i < W)
-        throw Common::Exceptions::Simple {
+        throw common::exceptions::Simple {
             "Improper Config::" + get_name() +
             " initialization: Data size insufficient", nullptr};
 }
 
-}  // namespace Utils::Config::Parameter
+}  // namespace utils::config::parameter
 
 #endif // UTILS_CONFIG_PARAMETER_ARRAYS_H

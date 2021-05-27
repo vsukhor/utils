@@ -36,7 +36,7 @@
 #include "msgr.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /**
 * \class Geometric geometric_functions.h
@@ -51,10 +51,10 @@ struct Geometric {
             "Class Geometric can only be instantiated with floating point types");
 
 
-    using A2t = Arrays::A2<T>;
-    using A3t = Arrays::A3<T>;
-    using A3i = Arrays::A3<int>;
-    using SimpleException = Exceptions::Simple;
+    using A2t = arrays::A2<T>;
+    using A3t = arrays::A3<T>;
+    using A3i = arrays::A3<int>;
+    using SimpleException = exceptions::Simple;
 
     static constexpr auto RAD2GRAD = static_cast<T>(180);
 
@@ -1469,6 +1469,6 @@ point_in_triangle(
              (d1 > zero<T> || d2 > zero<T> || d3 > zero<T>));
 }
 
-}  // namespace Utils::Common
+}  // namespace utils::common
 
 #endif     // UTILS_COMMON_GEOMETRIC_FUNCTIONS

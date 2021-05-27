@@ -43,7 +43,7 @@
 #include "_misc.h"
 
 /// Two-element arrays.
-namespace Utils::Arrays {
+namespace utils::arrays {
 
 /// \brief Two-element arrays.
 /// \details This class specializes array template for two-element array of
@@ -538,6 +538,6 @@ void write( std::ofstream& ost ) const noexcept
 }
 };
     
-}  // namespace Utils::Arrays
+}  // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAY2_H

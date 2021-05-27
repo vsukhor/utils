@@ -33,7 +33,7 @@
 #include "exceptions.h"
 
 /// \brief Exeption and exit handlers.
-namespace Utils::Common::Exceptions {
+namespace utils::common::exceptions {
 
 /// \brief Print a message and exit.
 /// \param msg Message text.
@@ -61,4 +61,4 @@ Simple(const std::string& msg,
         std::cout << msg << std::endl;
 }
 
-}    // namespace Utils::Common::Exceptions
+}    // namespace utils::common::exceptions

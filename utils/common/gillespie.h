@@ -39,7 +39,7 @@
 #include "misc.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /**
 * \class Gillespie gillespie.h
@@ -298,6 +298,6 @@ printScores( std::ostream& os ) const
            << rc[i]->get_score() << " ";
 }
 
-}    // namespace Utils::Common
+}    // namespace utils::common
 
 #endif // UTILS_COMMON_GILLESPIE_H

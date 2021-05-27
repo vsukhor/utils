@@ -41,12 +41,12 @@
 #include "../common/msgr.h"
 
 /// Pseugo-random number generation.
-namespace Utils::Random {
+namespace utils::random {
 
-using szt = Common::szt;
-using Msgr = Common::Msgr;
-using szt = Common::szt;
-using uint = Common::uint;
+using szt = common::szt;
+using Msgr = common::Msgr;
+using szt = common::szt;
+using uint = common::uint;
 
 /// \brief Base class for random number factories.
 /// \tparam realT Floating point type.
@@ -104,7 +104,7 @@ protected:
 
 private:
 
-    uint  seed {Common::huge<uint>};  ///< The seed
+    uint  seed {common::huge<uint>};  ///< The seed
     Msgr& msgr;                       ///< Output message processor.
 };
 
@@ -130,7 +130,7 @@ Core(   Msgr& msgr,
         const szt runInd)
     : msgr {msgr}
 {
-    if (!Common::file_exists(seedFname))
+    if (!common::file_exists(seedFname))
         make_seed(seedFname, &msgr);
     seed = readin_seed(seedFname, runInd, msgr);
     msgr.print("RUN = " + std::to_string(runInd));
@@ -161,7 +161,7 @@ make_seed(
             msgr)
             msgr->exit(msg);
         else
-            Common::Exceptions::simple(msg, nullptr);
+            common::exceptions::simple(msg, nullptr);
     }
     for (szt i=0; i<num_saved_seeds; i++) {
         const uint s = seed_d(g);
@@ -184,12 +184,12 @@ readin_seed(
     if (!file.is_open())
         msgr.exit("Unable to open file "+seedFname);
     file.seekg(static_cast<std::fstream::off_type>(runInd * sizeof(uint)), file.beg);
-    auto seed {Common::huge<uint>};
+    auto seed {common::huge<uint>};
     file.read(reinterpret_cast<char*>(&seed), sizeof(uint));
 
     return seed;
 }
 
-}    // namespace Utils::Random
+}    // namespace utils::random
 
 #endif // UTILS_RANDOM_CORE_H

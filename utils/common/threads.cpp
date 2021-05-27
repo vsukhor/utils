@@ -32,7 +32,7 @@
 #include "threads.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 Threads::
 Threads(const szt offset,
@@ -285,4 +285,4 @@ print_regions( const bool withCout,
     }
 }
 
-}    // namespace Utils::Common
+}    // namespace utils::common

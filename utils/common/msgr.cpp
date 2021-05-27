@@ -32,7 +32,7 @@
 #include "msgr.h"
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 
 Msgr::
@@ -68,4 +68,4 @@ exit( const std::string& s ) const noexcept
     ::exit(EXIT_FAILURE);
 }
 
-}  // namespace Utils::Common
+}  // namespace utils::common

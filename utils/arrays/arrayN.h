@@ -42,7 +42,7 @@
 #include "_misc.h"
 
 /// Arbitrary-size arrays.
-namespace Utils::Arrays {
+namespace utils::arrays {
 
 /// Max array length with specific class.
 inline constexpr int MAX_SPECIFIED_LENGTH = 4;
@@ -576,6 +576,6 @@ void write( std::ofstream& ost ) const noexcept
 
 };
 
-}    // namespace Utils::Arrays
+}    // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAYN_H

@@ -40,14 +40,14 @@
 #include "../../common/exceptions.h"
 
 /// Configuration module
-namespace Utils::Config {
+namespace utils::config {
 
-using Msgr = Common::Msgr;
-using szt = Common::szt;
-using ulong = Common::ulong;
+using Msgr = common::Msgr;
+using szt = common::szt;
+using ulong = common::ulong;
 
 
-namespace Exceptions {
+namespace exceptions {
 
 /**
 * \brief Generic template for 'Parameter out of range' exception.
@@ -60,11 +60,11 @@ class ParOutOfRange
     : public std::exception
 {};
 
-}   // namespace Exceptions
+}  // namespace exceptions
 
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace Parameter {
+namespace parameter {
 
 
 /**
@@ -205,12 +205,12 @@ load( const std::string& fname )
     std::string value;
     std::ifstream ifs {fname};
     if (!ifs.is_open()) {
-        throw Common::Exceptions::Simple
+        throw common::exceptions::Simple
             {"Unable to open config file: " + fname, nullptr};
     }
     try {
         load(ifs);
-    } catch (Common::Exceptions::Simple& e) {
+    } catch (common::exceptions::Simple& e) {
         return;
     }
 }
@@ -231,7 +231,7 @@ load( std::ifstream& ifs )
         isLoaded_ = true;
         return;
     }
-    throw Common::Exceptions::Simple
+    throw common::exceptions::Simple
         {"Error: parameter not loaded: " + name, nullptr};
 }
 
@@ -255,7 +255,7 @@ class Par : public Base<Q>
 {};
 
 
-}  // namespace Parameter
-}  // namespace Utils::Config
+}  // namespace parameter
+}  // namespace utils::config
 
 #endif // UTILS_CONFIG_PARAMETER_BASE_H

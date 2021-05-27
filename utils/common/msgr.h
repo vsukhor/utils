@@ -39,7 +39,7 @@
 #include <vector>
 
 /// General stuff.
-namespace Utils::Common {
+namespace utils::common {
 
 /**
 * \class Msgr msgr.h
@@ -202,6 +202,6 @@ print_vector(
         print<false>(std::to_string(o));
 }
 
-}  // namespace Utils::Common
+}  // namespace utils::common
 
 #endif // UTILS_COMMON_MSGR_H

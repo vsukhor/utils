@@ -31,9 +31,9 @@
 #include "misc.h"
 
 /// Library-wide.
-namespace Utils {
+namespace utils {
 /// General stuff.
-namespace Common {
+namespace common {
 
 #ifdef  _WIN32
 const std::string SLASH {"\\"};
@@ -136,5 +136,5 @@ std::string trim(
     return str.substr(strBegin, strRange);
 }
 
-}    // namespace Common
-}    // namespace Utils
+}    // namespace common
+}    // namespace utils
