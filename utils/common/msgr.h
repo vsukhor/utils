@@ -176,7 +176,7 @@ print( const std::string& s ) const noexcept
 }
 
 
-template <typename V, auto N>
+template <typename V, auto N> inline
 void Msgr::
 print_array(
     const std::string& name,
@@ -190,7 +190,7 @@ print_array(
 }
 
 
-template <typename V>
+template <typename V> inline
 void Msgr::
 print_vector(
     const std::string& name,
