@@ -34,7 +34,7 @@
 
 #include <array>
 #include <fstream>
-#include <iostream>
+#include <ostream>
 #include <type_traits>
 #include <vector>
 
