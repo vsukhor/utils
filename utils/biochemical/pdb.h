@@ -30,6 +30,7 @@
 #define UTILS_BIOCHEMICAL_PDB_H
 
 #include <algorithm>
+#include <filesystem>
 #include <sstream>
 #include <string>
 
@@ -193,24 +194,24 @@ public:
     bool is_in_aminoacid() const noexcept;
 
     /// \brief Read from a pdb file.
-    /// \param filename Name of the file to read from.
+    /// \param file The file to read from.
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
     static void read(
-        const std::string& filename,
+        const std::filesystem::directory_entry& file,
         std::vector<Pdb>& a,
         vec2str& other,
         Msgr& msgr
     );
 
     /// \brief Write to a pdb file.
-    /// \param filename Name of the file to write to.
+    /// \param file The file to write to.
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
     static void write(
-        const std::string& filename,
+        const std::filesystem::directory_entry& file,
         const std::vector<Pdb>& a,
         const vec2str& other,
         Msgr& msgr

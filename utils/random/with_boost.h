@@ -33,6 +33,7 @@
 #define UTILS_RANDOM_WITH_BOOST_H
 
 #include <cmath>
+#include <filesystem>
 #include <random>
 #include <string>
 #include <type_traits>
@@ -82,11 +83,11 @@ public:
 //    Boost() = default;
 
     /// \brief Constructor.
-    /// \param seedFname Name of the file contining seeds.
+    /// \param seedFile Name of the file contining seeds.
     /// \param ii Run index.
     /// \param msgr Output message processor.
     explicit Boost(
-        const std::string& seedFname,
+        const std::filesystem::directory_entry& seedFile,
         szt ii,
         Msgr& msgr);
 
@@ -308,10 +309,10 @@ private:
 
 template <typename realT>
 Boost<realT>::
-Boost( const std::string& seedFname,
+Boost( const std::filesystem::directory_entry& seedFile,
        const szt ii,
        Msgr& msgr)
-    : Core<realT> {msgr, seedFname, ii}
+    : Core<realT> {msgr, seedFile, ii}
     , rU01_ind {-1}
 {
     g.seed(this->theSeed());

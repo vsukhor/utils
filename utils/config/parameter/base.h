@@ -33,6 +33,7 @@
 
 
 #include <exception>
+#include <filesystem>
 #include <sstream>
 
 #include "../../common/misc.h"
@@ -84,9 +85,9 @@ public:
 
     /**
     * \brief Reads in parameters from file.
-    * \param fname Name of the configuration file to load the parameters.
+    * \param file Name of the configuration file to load the parameters.
     */
-    void load(const std::string& fname);
+    void load(const std::filesystem::directory_entry& file);
 
 protected:
     
@@ -199,14 +200,14 @@ detect_by_name(
 
 template <typename Q>
 void Base<Q>::
-load( const std::string& fname )
+load( const std::filesystem::directory_entry& file )
 {
     std::string parname;
     std::string value;
-    std::ifstream ifs {fname};
+    std::ifstream ifs {file};
     if (!ifs.is_open()) {
         throw common::exceptions::Simple
-            {"Unable to open config file: " + fname, nullptr};
+            {"Unable to open config file: " + file.path().string(), nullptr};
     }
     try {
         load(ifs);

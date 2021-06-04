@@ -44,8 +44,6 @@
 /// General stuff.
 namespace utils::common {
 
-extern const std::string SLASH;
-
 //#define STR(x) std::to_string(x)
 template <typename T>
 constexpr auto STR(T x)

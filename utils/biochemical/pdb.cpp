@@ -147,24 +147,24 @@ format_as_pdb(
 ) noexcept
 {
     irecname = irecn(record.substr(0, 6));
-    ind = static_cast<uint>(std::stoi(common::trim(record.substr(6, 5), " ")));
+    ind = static_cast<uint>(std::stoi(common::trim(record.substr(6, 5))));
     name = record.substr(12, 4);
     resname = record.substr(17, 3);
     chainID = record[21];
-    resSeq = std::stoi(common::trim(record.substr(22, 4), " "));
+    resSeq = std::stoi(common::trim(record.substr(22, 4)));
 
     // Converts to nm from data read in A:
     pos[0] = scaling * static_cast<float>(
-                        std::stod(common::trim(record.substr(30, 8), " ")));
+                        std::stod(common::trim(record.substr(30, 8))));
     pos[1] = scaling * static_cast<float>(
-                        std::stod(common::trim(record.substr(38, 8), " ")));
+                        std::stod(common::trim(record.substr(38, 8))));
     pos[2] = scaling * static_cast<float>(
-                        std::stod(common::trim(record.substr(46, 8), " ")));
+                        std::stod(common::trim(record.substr(46, 8))));
 
     occupancy = static_cast<float>(
-                    std::stod(common::trim(record.substr(54, 6), " ")));
+                    std::stod(common::trim(record.substr(54, 6))));
     tempFactor = static_cast<float>(
-                    std::stod(common::trim(record.substr(60, 6), " ")));
+                    std::stod(common::trim(record.substr(60, 6))));
     element = record.substr(76, 2);
     charge  = record.substr(78, 2);
     vdWRad = set_vdW();
@@ -378,15 +378,15 @@ is_in_aminoacid() const noexcept
 
 void Pdb::
 read(
-    const std::string& filename,
+    const std::filesystem::directory_entry& file,
     std::vector<Pdb>& a,
     vec2str& other,
     Msgr& msgr
 )
 {
-    std::ifstream fin {filename};
+    std::ifstream fin {file};
     if (!fin.is_open())
-        msgr.exit("Unable to open file for reading at " + filename);
+        msgr.exit("Unable to open file for reading at " + file.path().string());
 
     a.clear();
     other.clear();
@@ -410,15 +410,15 @@ read(
 
 void Pdb::
 write(
-    const std::string& filename,
+    const std::filesystem::directory_entry& file,
     const std::vector<Pdb>& a,
     const vec2str& other,
     Msgr& msgr
 )
 {
-    std::ofstream fout {filename};
+    std::ofstream fout {file};
     if (!fout.is_open())
-        msgr.exit("Unable to open file for writing at " + filename);
+        msgr.exit("Unable to open file for writing at " + file.path().string());
 
     szt i = 0;
     if (!other.empty())

@@ -37,7 +37,7 @@ namespace utils::common::exceptions {
 
 /// \brief Print a message and exit.
 /// \param msg Message text.
-/// \param msg The reporter.
+/// \param msgr The reporter.
 int simple( const std::string& msg,
             Msgr* msgr )
 {

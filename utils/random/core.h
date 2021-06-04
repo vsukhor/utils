@@ -30,6 +30,7 @@
 #ifndef UTILS_RANDOM_CORE_H
 #define UTILS_RANDOM_CORE_H
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -72,7 +73,7 @@ public:
     /// \details This is done whenever the working directory does not already
     /// have such a file.
     static void make_seed(
-        const std::string& seedFname,  ///< Name of the file with seeds.
+        const std::filesystem::directory_entry& file,  ///< File with seeds.
         Msgr* msgr                     ///< Output message processor.
     );
 
@@ -80,7 +81,7 @@ public:
     /// \details This is done whenever the working directory does not already
     /// have such a file.
     static uint readin_seed(
-        const std::string& seedFname,  ///< Name of the file with seeds.
+        const std::filesystem::directory_entry& file,  ///< File with seeds.
         szt runInd,                    ///< Run index to choose a seed.
         Msgr& msgr                     ///< Output message processor.
     );
@@ -98,7 +99,7 @@ protected:
 
     explicit Core(
         Msgr& msgr,                    ///< Output message processor.
-        const std::string& seedFname,  ///< Name of the file with seeds.
+        const std::filesystem::directory_entry& seedFile,  ///< File with seeds.
         szt runInd                     ///< Run index to choose a seed.
     );
 
@@ -126,13 +127,13 @@ Core(    Msgr& msgr,
 template <typename realT> 
 Core<realT>::
 Core(   Msgr& msgr,
-        const std::string& seedFname,
+        const std::filesystem::directory_entry& file,
         const szt runInd)
     : msgr {msgr}
 {
-    if (!common::file_exists(seedFname))
-        make_seed(seedFname, &msgr);
-    seed = readin_seed(seedFname, runInd, msgr);
+    if (!file.is_regular_file())
+        make_seed(file, &msgr);
+    seed = readin_seed(file, runInd, msgr);
     msgr.print("RUN = " + std::to_string(runInd));
     msgr.print("SEED = " + std::to_string(seed));
 }
@@ -140,11 +141,11 @@ Core(   Msgr& msgr,
 template <typename realT> 
 void Core<realT>::
 make_seed(
-    const std::string& seedFname,
+    const std::filesystem::directory_entry& file,
     Msgr* msgr
 )
 {
-    if (const auto msg = "No seed file found. Creating a new seed file " + seedFname;
+    if (const auto msg = "No seed file found. Creating a new seed file " + file.path().string();
         msgr)
         msgr->print(msg);
     else
@@ -155,9 +156,9 @@ make_seed(
     constexpr int sd1 = 100'000'000;
     constexpr int sd2 = 2100'000'000;
     std::uniform_int_distribution<uint> seed_d(sd1, sd2);
-    std::ofstream file {seedFname, std::ios::binary};
-    if (!file.is_open()) {
-        if (const auto msg = "Unable to create seed file "+seedFname;
+    std::ofstream ofs {file, std::ios::binary};
+    if (!ofs.is_open()) {
+        if (const auto msg = "Unable to create seed file "+file.path().string();
             msgr)
             msgr->exit(msg);
         else
@@ -165,27 +166,28 @@ make_seed(
     }
     for (szt i=0; i<num_saved_seeds; i++) {
         const uint s = seed_d(g);
-        file.write(reinterpret_cast<const char*>(&s), sizeof(uint));
+        ofs.write(reinterpret_cast<const char*>(&s), sizeof(uint));
     }
 }
 
 template <typename realT> 
 uint Core<realT>::
 readin_seed(
-    const std::string& seedFname,
+    const std::filesystem::directory_entry& file,
     szt runInd,
     Msgr& msgr
 )
 {
-    msgr.print("Reading from file " + seedFname + " seed no: " +
+    const auto fname {file.path().string()};
+    msgr.print("Reading from file " + fname + " seed no: " +
                std::to_string(runInd));
     
-    std::ifstream file {seedFname, std::ios::binary};
-    if (!file.is_open())
-        msgr.exit("Unable to open file "+seedFname);
-    file.seekg(static_cast<std::fstream::off_type>(runInd * sizeof(uint)), file.beg);
+    std::ifstream ifs {file, std::ios::binary};
+    if (!ifs.is_open())
+        msgr.exit("Unable to open file " + fname);
+    ifs.seekg(static_cast<std::fstream::off_type>(runInd * sizeof(uint)), ifs.beg);
     auto seed {common::huge<uint>};
-    file.read(reinterpret_cast<char*>(&seed), sizeof(uint));
+    ifs.read(reinterpret_cast<char*>(&seed), sizeof(uint));
 
     return seed;
 }

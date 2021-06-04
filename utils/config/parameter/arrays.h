@@ -35,6 +35,7 @@
 #define UTILS_CONFIG_PARAMETER_ARRAYS_H
 
 #include <array>
+#include <filesystem>
 #include <sstream>
 #include <string>
 #include <type_traits>
@@ -79,13 +80,13 @@ public:
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
-    * \param fname Configuration file name.
+    * \param file Configuration file.
     * \param range Acceptable range of parameter values.
     * \param msgr \a Msgr used for the output.
     * \see Msgr 
     */
     explicit Par(const std::string& name,
-                  const std::string& fname,
+                  const std::filesystem::directory_entry& file,
                   const std::vector<Q>& range,
                   Msgr* msgr=nullptr);
 
@@ -140,12 +141,12 @@ template <typename T, szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
-     const std::string& fname,
+     const std::filesystem::directory_entry& file,
      const std::vector<Q>& range,
      Msgr* msgr )
     : Base<T> {name}
 {
-    this->load(fname);
+    this->load(file);
     try {
         check_range(range, msgr);
     } catch (const exceptions::ParOutOfRange<T,false>&) {

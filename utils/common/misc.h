@@ -43,12 +43,11 @@
 #include <sys/stat.h>
 #include <vector>
 
-//#include <boost/filesystem.hpp>
 #include "constants.h"
 
 #ifdef USE_UTILS_XASSERT
     #define XASSERT(EX, msg) \
-        (void)((EX) || (utils::common::assert_fun(#EX, __FILE__, __LINE__, msg), 0))
+        (void)((EX) || (utils::common::assert_fun<__LINE__>(#EX, __FILE__, msg), 0))
 #else
     #define XASSERT(EX, msg)
 #endif
@@ -56,36 +55,35 @@
 /// General stuff.
 namespace utils::common {
 
-/// Convert a double \b number to string.
-std::string operator"" _str (long double number);
-
-/// Convert an unsigned long long \b number to string.
-std::string operator"" _str (unsigned long long number);
-
 /// Assertion function called from XASSERT macro.
+template <int L>
 long long assert_fun(
     const char* EX,
     const char *file,
-    int line,
-    const std::string& msg );
+    const std::string& msg )
+{
+    std::cerr << "Assertion (" + std::string(EX) + ") failed! \n" +
+               "File " + file + ", Line " + std::to_string(L) + "\n" +
+               "Reason: " + msg << std::endl;
+    std::abort();
+}
 
 /// Trin the string \b str from whitespaces.
+template <char c=' '>
 std::string trim(
-    const std::string& str,
-    const std::string& whitespace  // = " "
-);
+    const std::string& str
+)
+{
+    const auto strBegin {str.find_first_not_of(c)};
+    if (strBegin == std::string::npos)
+        return "";                        // no content
 
-/// Check that the file named \b name exists.
-bool file_exists( const std::string& name );
-//bool fileExists( const std::string& name );
+    const auto strEnd {str.find_last_not_of(c)};
+    const auto strRange {strEnd - strBegin + 1};
 
-/// Check that the directory named \b pathstrconst exists.
-bool directory_exists( const std::string& pathstrconst );
-//void check_directory(const std::string& s );
+    return str.substr(strBegin, strRange);
+}
 
-/// Cop file named \b fname1 to \b fname2.
-void copy_text_file(const std::string& fname1,
-                    const std::string& fname2);
 
 /// Sum at compile time.
 template <typename T,

@@ -33,7 +33,7 @@
 #define UTILS_CONFIG_READER_H
 
 #include <array>
-#include <string>
+#include <filesystem>
 #include <vector>
 
 #include "../common/misc.h"
@@ -51,24 +51,27 @@ namespace utils::config {
 class Reader {
 
     using Msgr = common::Msgr;
-
-    const std::string fname;  ///< name of the configuration file.
+    using path = std::filesystem::path;
+//    namespace fs = std::filesystem;
+    using dir_entry = std::filesystem::directory_entry;
 
 public:
 
+    const dir_entry file;  ///< Name of the configuration file.
+
     /**
     * \brief Constructor creating the configuration file-specific instance.
-    * \param fname Name of the configuration file.
+    * \param file Name of the configuration file.
     * \param msgr Messanger used for outputing.
     */
-    Reader( const std::string& fname,
+    Reader( const dir_entry& file,
             Msgr* msgr
         )
-        : fname {check_fname(fname)}
+        : file {check_name(file)}
         , msgr {msgr}
     {
         if (msgr != nullptr)
-            msgr->print("\nReading config from: " + fname);
+            msgr->print("\nReading config from: " + file.path().string());
     }
     
     /**
@@ -82,7 +85,7 @@ public:
     auto operator()(const std::string& s,
                     const std::vector<T>& range ) const
     {
-        return parameter::Par<T,true>(s, fname, range, msgr)();
+        return parameter::Par<T,true>(s, file, range, msgr)();
     }
 
     /**
@@ -96,7 +99,7 @@ public:
     auto operator()(const std::string& s,
                     const std::array<T,2>& range ) const
     {
-        return parameter::Par<T,false>(s, fname, range, msgr)();
+        return parameter::Par<T,false>(s, file, range, msgr)();
     }
 
     /**
@@ -110,21 +113,21 @@ public:
     auto operator()(const std::string& s,
                     const std::vector<std::array<T,N>>& range) const
     {
-        return parameter::Par<std::array<T,N>,false>(s, fname, range, msgr)();
+        return parameter::Par<std::array<T,N>,false>(s, file, range, msgr)();
     }
 
     /**
     * \brief Checks if file with name \p fname exists.
-    * \param fname Expected name of the file.
+    * \param f Expected file.
     * \return Name of the confuguration file if it is found.
     */
-    static std::string check_fname( const std::string& fname )
+    static auto check_name(const dir_entry& f) -> dir_entry
     {
-        if (!common::file_exists(fname))
+        if (!f.is_regular_file())
             common::exceptions::simple(
-                "Error: no config file provided " + fname, nullptr);
+                "Error: no config file provided " + f.path().string(), nullptr);
 
-        return fname;
+        return f;
     }
 
     /**
@@ -134,24 +137,29 @@ public:
     * \param signature Case-specific signature present in the file name.
     * \param compartment Name of the compartment specified in the configuration.
     */
-    void copy( const std::string& path,
+    void copy( const path& path,
                const std::string& signature,
                const std::string& compartment ) const
     {
-        const auto cfgCopy {path + "cfgCopy_" + compartment+signature + ".txt"};
-        msgr->print("Copying "+compartment + " config to " + cfgCopy);
-        common::copy_text_file(fname, cfgCopy);
-    }
-
-    /**
-    * \brief Extracts directory name.
-    * \return Directory name.
-    */
-    std::string path() const noexcept
-    {
-        auto found {fname.find_last_of("/\\")};
-        XASSERT(found < fname.npos, "ConfigReader: fname cannot be splitted");
-        return fname.substr(0, found) + common::SLASH;
+        const dir_entry cfgCopy {
+            file.path().parent_path() /
+                (std::string("cfgCopy_") + compartment+signature + ".txt")
+        };
+        msgr->print("Copying "+compartment+" config to "+cfgCopy.path().string());
+        if (cfgCopy.exists()) {
+            try {
+                std::filesystem::remove(cfgCopy);
+            }
+            catch (std::filesystem::filesystem_error const& e) {
+                msgr->print(std::string(e.what()) + "\n");
+            }
+        }
+        try {
+            std::filesystem::copy_file(file, cfgCopy);
+        }
+        catch (std::filesystem::filesystem_error const& e) {
+                msgr->print(std::string(e.what()) + "\n");
+        }
     }
 
 private:

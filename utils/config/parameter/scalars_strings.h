@@ -34,6 +34,7 @@
 #ifndef UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H
 #define UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H
 
+#include <filesystem>
 #include <sstream>
 
 #include "../../common/misc.h"
@@ -75,28 +76,28 @@ public:
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
-    * \param fname Name of the configuration file.
+    * \param file Configuration file.
     * \param range Acceptable range of parameter values.
     * \param msgr \a Msgr used for the output.
     * \see Msgr
     */
     explicit Par(
              const std::string& name,
-             const std::string& fname,
+             const std::filesystem::directory_entry& file,
              const std::vector<T>& range,
              Msgr* msgr=nullptr);
 
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
-    * \param fname Name of the configuration file.
+    * \param file Configuration file.
     * \param range Acceptable range of parameter values.
     * \param msgr \a Msgr used for the output.
     * \see Msgr
     */
     explicit Par(
              const std::string& name,
-             const std::string& fname,
+             const std::filesystem::directory_entry& file,
              const std::array<T,2>& range,
              Msgr* msgr=nullptr);
 
@@ -130,13 +131,13 @@ public:
     * \details Static function for reading a parameter without instantiating
     * this class object.
     * \param name Name of the parameter.
-    * \param fname Name of the configuration file.
+    * \param file Configuration file.
     * \param range Acceptable range of parameter values.
     * \param msgr \a Msgr used for the output.
     * \return Parameter values (the whole vector).
     */
     static auto readin(const std::string& name,
-                       const std::string& fname,
+                       const std::filesystem::directory_entry& file,
                        const std::vector<Q>& range,
                        Msgr* msgr=nullptr);
 
@@ -184,12 +185,12 @@ template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
 Par( const std::string& name,
-     const std::string& fname,
+     const std::filesystem::directory_entry& file,
      const std::vector<T>& range,
      Msgr* msgr )
     : Base<T> {name}
 {
-    this->load(fname);
+    this->load(file);
     check_range(range, msgr);
     print(msgr);
 }
@@ -199,12 +200,12 @@ template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
 Par( const std::string& name,
-     const std::string& fname,
+     const std::filesystem::directory_entry& file,
      const std::array<T,2>& range,
      Msgr* msgr )
     : Base<T> {name}
 {
-    this->load(fname);
+    this->load(file);
     check_range(range, msgr);
     print(msgr);
 }
@@ -235,11 +236,11 @@ template <typename T, bool isDiscrete>
 auto Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
 readin( const std::string& name,
-        const std::string& fname,
+        const std::filesystem::directory_entry& file,
         const std::vector<Q>& range,
         Msgr* msgr )
 {
-    return Par<Q,isDiscrete> {name, fname, range, msgr}();
+    return Par<Q,isDiscrete> {name, file, range, msgr}();
 }
 
 

@@ -34,6 +34,7 @@
 #ifndef UTILS_CONFIG_PARAMETER_VECTORS_H
 #define UTILS_CONFIG_PARAMETER_VECTORS_H
 
+#include <filesystem>
 #include <sstream>
 #include <type_traits>
 #include <vector>
@@ -81,13 +82,13 @@ public:
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
-    * \param fname Name of the configuration file.
+    * \param file Configuration file.
     * \param range Acceptable range of parameter values.
     * \param msgr \a Msgr used for the output.
     * \see Msgr
     */
     explicit Par(const std::string& name,
-                  const std::string& fname,
+                  const std::filesystem::directory_entry& file,
                   const std::vector<Q>& range,
                   Msgr* msgr=nullptr);
 
@@ -105,13 +106,13 @@ public:
     * \details Static function for reading a parameter without instantiating
     * this class object.
     * \param name Name of the parameter.
-    * \param fname Name of the configuration file.
+    * \param file Configuration file.
     * \param msgr \a Msgr used for the output.
     * \return Parameter values (the whole vector).
     */
     static auto readin(
         const std::string& name,
-        const std::string& fname,
+        const std::filesystem::directory_entry& file,
         Msgr* msgr=nullptr
     );
     
@@ -163,12 +164,12 @@ Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_fundamental<T>::value>>::
 Par( const std::string& name,
-     const std::string& fname,
+     const std::filesystem::directory_entry& file,
      const std::vector<Q>& range,
      Msgr* msgr )
     : Base<Q> {name}
 {
-    this->load(fname);
+    this->load(file);
     check_range(range, msgr);
     print(msgr);
 }
@@ -206,11 +207,11 @@ auto Par<std::vector<T>,
          std::enable_if_t<std::is_fundamental<T>::value>>::
 readin(
     const std::string& name,
-    const std::string& fname,
+    const std::filesystem::directory_entry& file,
     Msgr* msgr
 )
 {
-    return Par<Q,isDiscrete> {name, fname, msgr}();
+    return Par<Q,isDiscrete> {name, file, msgr}();
 }
 
 
