@@ -17,7 +17,7 @@ BIOCHEMICAL_DIR := $(SRC_DIR)biochemical/
 COMMON_DIR := $(SRC_DIR)common/
 
 SRCS_BIOCHEMICAL := pdb.cpp
-SRCS_COMMON := threads.cpp misc.cpp msgr.cpp exceptions.cpp
+SRCS_COMMON := threads.cpp msgr.cpp exceptions.cpp
 
 SRCS_BIOCHEMICAL_ALL := $(patsubst %,$(BIOCHEMICAL_DIR)%,$(SRCS_BIOCHEMICAL))
 SRCS_COMMON_ALL := $(patsubst %,$(COMMON_DIR)%,$(SRCS_COMMON))
@@ -47,11 +47,8 @@ CFLAGS := -c -Wall -O3 -msse4 -march=native -std=c++20 -fPIC
 
 $(TARGET) : $(OBJS_ALL)
 	mkdir -p $(TARGET_DIR)
-	$(AR) -rcs $@ $(OBJS_ALL)
-
-$(OBJS_DIR)misc.o : $(COMMON_DIR)misc.cpp \
-	$(COMMON_DIR)misc.h
-	$(CC) $(CFLAGS) $< -o $@
+	$(AR) -rcs $@ $(OBJS_ALL) && \
+    ranlib $(TARGET)
 
 $(OBJS_DIR)threads.o : $(COMMON_DIR)threads.cpp \
 	$(COMMON_DIR)constants.h \
@@ -69,7 +66,7 @@ $(OBJS_DIR)msgr.o : $(COMMON_DIR)msgr.cpp \
 $(OBJS_DIR)pdb.o : $(BIOCHEMICAL_DIR)pdb.cpp \
 	$(ARRAYS_DIR)array3.h \
 	$(COMMON_DIR)msgr.h
-	$(CC) $(CFLAGS) -S $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJS_DIR)exceptions.o : $(COMMON_DIR)exceptions.cpp \
 	$(COMMON_DIR)constants.h \
