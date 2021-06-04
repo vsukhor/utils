@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(utils
-    VERSION 1.1.0
-    DESCRIPTION "Utility library."
+    VERSION 1.2.1
+    DESCRIPTION "A cooection of misc code for common use in other repos."
     LANGUAGES CXX)
 
     add_compile_options(-O3 -msse4 -fPIC)
@@ -12,11 +12,10 @@ project(utils
     add_library(utils STATIC
                 utils/biochemical/pdb.cpp
                 utils/common/threads.cpp
-                utils/common/misc.cpp
                 utils/common/msgr.cpp
                 utils/common/exceptions.cpp)
 
-    target_compile_features(utils PRIVATE cxx_std_17)
+    target_compile_features(utils PRIVATE cxx_std_20)
 
     target_include_directories(utils PUBLIC utils/biochemical
                                             utils/arrays
@@ -60,10 +59,10 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 endif()
 
-# Testing only available if this is the main app
-# Emergency override MODERN_CMAKE_BUILD_TESTING provided as well
-if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR UTILS_BUILD_TESTING) AND BUILD_TESTING)
-    add_subdirectory(tests)
-endif()
+option(BUILD_TESTS "Build test files" OFF)
+#if(BUILD_TESTS)
+#    enable_testing()
+#    add_subdirectory(tests)
+#endif()
 
 
