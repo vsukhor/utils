@@ -48,7 +48,7 @@ namespace utils {
 
 namespace common {
 template <typename>
-class Geometric;
+struct Geometric;
 }  // namespace common
 
 /// 3-element arrays.
