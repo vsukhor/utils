@@ -187,7 +187,12 @@ Par( const std::string& name,
     : Base<Q> {check_name(name)}
 {
     this->load(file);
-    check_range(range, msgr);
+    try {
+        check_range(range, msgr);
+    }
+    catch (exceptions::ParOutOfRange<T,isDiscrete> e) {
+        std::exit(EXIT_FAILURE);
+    }
     print(msgr);
 }
 
