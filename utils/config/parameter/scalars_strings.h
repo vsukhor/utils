@@ -25,7 +25,7 @@
 
 /**
  * \file scalars_strings.h
- * \brief Parameters of fundamental or string type.
+ * \brief Parameters of arithmetic type.
  * \details Contains template partial specialization for classes encapsulating
  * confuguration file parameters of fundamental or string type.
  + \author Valerii Sukhorukov
@@ -60,12 +60,14 @@ class Par<T,isDiscrete,
     : public Base<T> {
 
     using Q = T;
-    using Base<T>::get_name;
+    using Base<T>::check_name;
     using Base<T>::isLoaded_;
     
-    Q p_;        ///< The parameter value.
+    Q p_;  ///< The parameter value.
     
 public:    
+
+    using Base<T>::get_name;
 
     /**
     * \brief Constructor.
@@ -82,10 +84,11 @@ public:
     * \see Msgr
     */
     explicit Par(
-             const std::string& name,
-             const std::filesystem::directory_entry& file,
-             const std::vector<T>& range,
-             Msgr* msgr=nullptr);
+        const std::string& name,
+        const std::filesystem::directory_entry& file,
+        const std::vector<T>& range,
+        Msgr* msgr=nullptr
+    );
 
     /**
     * \brief Constructor.
@@ -96,10 +99,11 @@ public:
     * \see Msgr
     */
     explicit Par(
-             const std::string& name,
-             const std::filesystem::directory_entry& file,
-             const std::array<T,2>& range,
-             Msgr* msgr=nullptr);
+        const std::string& name,
+        const std::filesystem::directory_entry& file,
+        const std::array<T,2>& range,
+        Msgr* msgr=nullptr
+    );
 
 /*    void check_range( const std::array<T,2>& r, Msgr& msgr )
     {
@@ -136,10 +140,12 @@ public:
     * \param msgr \a Msgr used for the output.
     * \return Parameter values (the whole vector).
     */
-    static auto readin(const std::string& name,
-                       const std::filesystem::directory_entry& file,
-                       const std::vector<Q>& range,
-                       Msgr* msgr=nullptr);
+    static auto readin(
+        const std::string& name,
+        const std::filesystem::directory_entry& file,
+        const std::vector<Q>& range,
+        Msgr* msgr=nullptr
+    );
 
     /**
     * \brief Print the the parameter to std::cout and logfile.
@@ -167,7 +173,6 @@ private:
     * \param value Value to search for.
     */
     void initialize(std::string value) final;
-
 };    
 
 
@@ -177,7 +182,7 @@ template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
                                             std::is_same<T,std::string>::value>>::
 Par( const std::string& name )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
 {}
 
 
@@ -188,7 +193,7 @@ Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::vector<T>& range,
      Msgr* msgr )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
 {
     this->load(file);
     check_range(range, msgr);
@@ -203,7 +208,7 @@ Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::array<T,2>& range,
      Msgr* msgr )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
 {
     this->load(file);
     check_range(range, msgr);
@@ -225,8 +230,8 @@ check_range( const W& r,
             throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
     }
     else {
-        XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
-        if (p_<r[0] || p_>r[1])
+        XASSERT(r.size() == 2, "size of r must be 2 for continuous parameters");
+        if (p_ < r[0] || p_ > r[1])
             throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
     }
 }
