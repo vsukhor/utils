@@ -49,11 +49,11 @@ namespace utils::common {
 */
 class Msgr {
 
+public:
+
     using outstream = std::ostream;
     using logstream = std::ofstream;
 
-
-public:
 
     outstream* so {};  ///< Screen out stream.
     logstream* sl {};  ///< Logfile stream.
@@ -164,6 +164,7 @@ prn(
 
     *io << v << " ";
     if (endline) *io << std::endl;
+    io->flush();
 }
 
 
