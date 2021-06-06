@@ -45,31 +45,39 @@
 
 namespace utils::config::parameter {
 
-// specialization for vectors of fundamental types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// specialization for vectors of arithmetic types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* \brief Parameters of std vector of continuous fundamental types.
+* \brief Parameters of std vector of continuous arithmetic types.
 * \details Partial template specialization for for parameters of std vector of
-* continuous fundamental types.
-* \tparam T Parameter type: must be std::is_fundamental.
+* continuous arithmetic types.
+* \tparam T Parameter type: must be std::is_arithmetic.
 * \tparam isDiscrete Specifies if the vector components accept discrete
 * or continous values.
 */
 template <typename T, bool isDiscrete>
 class Par<std::vector<T>,
          isDiscrete,
-         std::enable_if_t<std::is_fundamental<T>::value>>
+         std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T>
 {
     using Q = std::vector<T>;
 
-    using Base<T>::get_name;
+    using Base<T>::check_name;
     using Base<T>::isLoaded_;
 
-    Q p_;                ///< The parameter value.
-    szt expectedSize_ {common::huge<szt>};    ///< Expected size of the vector.
+    Q p_;  ///< The parameter value.
+    szt expectedSize_ {common::huge<szt>};   ///< Expected size of the vector.
     
 public:    
+
+    using Base<T>::get_name;
+
+    /**
+    * \brief Constructor.
+    * \param name Name of the parameter.
+    */
+    explicit Par(const std::string& name);
 
     /**
     * \brief Constructor.
@@ -88,9 +96,9 @@ public:
     * \see Msgr
     */
     explicit Par(const std::string& name,
-                  const std::filesystem::directory_entry& file,
-                  const std::vector<Q>& range,
-                  Msgr* msgr=nullptr);
+                 const std::filesystem::directory_entry& file,
+                 const std::vector<Q>& range,
+                 Msgr* msgr=nullptr);
 
     /**
     * \brief Check that the read in parameter value is within the range set by \p r.
@@ -151,10 +159,19 @@ private:
 template <typename T, bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
-    std::enable_if_t<std::is_fundamental<T>::value>>::
+    std::enable_if_t<std::is_arithmetic_v<T>>>::
+Par( const std::string& name )
+    : Base<T> {check_name(name)}
+{}
+
+
+template <typename T, bool isDiscrete>
+Par<std::vector<T>,
+    isDiscrete,
+    std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
      const szt expectedSize )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
     , expectedSize_ {expectedSize}
 {}
 
@@ -162,12 +179,12 @@ Par( const std::string& name,
 template <typename T, bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
-    std::enable_if_t<std::is_fundamental<T>::value>>::
+    std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::vector<Q>& range,
      Msgr* msgr )
-    : Base<Q> {name}
+    : Base<Q> {check_name(name)}
 {
     this->load(file);
     check_range(range, msgr);
@@ -178,7 +195,7 @@ Par( const std::string& name,
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range(
     const std::vector<Q>& r,
     Msgr* msgr
@@ -204,7 +221,7 @@ check_range(
 template <typename T, bool isDiscrete>
 auto Par<std::vector<T>,
          isDiscrete,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin(
     const std::string& name,
     const std::filesystem::directory_entry& file,
@@ -218,19 +235,22 @@ readin(
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
-    (msgr != nullptr)
-    ? msgr->print(get_name(), p_, 1)
-    : std::cout << get_name() << " " << p_ << std::endl;
+    if (msgr) {
+        msgr->print_vector(get_name(), p_);
+        return;
+    }
+    std::cout << "Messenger is not initialized for printing "
+                << get_name() << std::endl;
 }
 
 
 template <typename T, bool isDiscrete>
 std::vector<T> Par<std::vector<T>,
                    isDiscrete,
-                   std::enable_if_t<std::is_fundamental<T>::value>>::
+                   std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
     XASSERT(true, get_name());
@@ -241,7 +261,7 @@ operator()() const
 template <typename T, bool isDiscrete>
 T Par<std::vector<T>,
       isDiscrete,
-      std::enable_if_t<std::is_fundamental<T>::value>>::
+      std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator[]( const szt i ) const
 {
     XASSERT(isLoaded_, get_name());
@@ -253,7 +273,7 @@ operator[]( const szt i ) const
 template <typename T, bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( std::string value )
 {
     const std::string emp {" "};
@@ -269,8 +289,10 @@ initialize( std::string value )
         const std::string val {value.substr(0, e)};
         if (val.length() < 1)
             throw common::exceptions::Simple
-                    {"Error in config file: Number of elelments in " + get_name() +
-                     " is " + STR(p_.size()) + " which is insufficient"};
+                {"Error in config file: Number of elelments in " + get_name() +
+                 " is " + std::to_string(p_.size()) + " which is insufficient",
+                 nullptr
+                };
         T tmp;
         std::stringstream(val) >> tmp;
         p_.push_back(tmp);
