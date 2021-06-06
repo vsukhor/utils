@@ -27,7 +27,7 @@
  * \file scalars.h
  * \brief Exception handler for parameters of scalar type.
  * \details A class template specialization for checking parameters of scalar
- * fundamental type read from confuguration files.
+ * arithmetic type read from confuguration files.
  + \author Valerii Sukhorukov
  */
 
@@ -44,18 +44,18 @@
 #include "../../common/msgr.h"
 #include "../parameter/base.h"
 
-/// exceptions namespace.
+/// Exceptions namespace.
 namespace utils::config::exceptions {
 
 /**
 * \brief 'Parameter out of range' exception involving discrete scalars.
 * \details Partial template specialization for for 'Parameter out of range'
 * exception involving discrete scalars.
-* \tparam Q Parameter type: must be std::is_fundamental.
+* \tparam Q Parameter type: must be std::is_arithmetic.
 */
 template <typename Q>
 class ParOutOfRange<Q, true,        // discrete case
-                    std::enable_if_t<std::is_fundamental<Q>::value>>
+                    std::enable_if_t<std::is_arithmetic_v<Q>>>
     : public std::exception {
 
 public:
@@ -97,7 +97,7 @@ private:
 
 template <typename Q>
 ParOutOfRange<Q, true,        // discrete case
-              std::enable_if_t<std::is_fundamental<Q>::value>>::
+              std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
         const std::string& name,
         const Q& p,
@@ -116,7 +116,7 @@ ParOutOfRange(
 
 template <typename Q>
 std::string ParOutOfRange<Q, true,        // discrete case
-            std::enable_if_t<std::is_fundamental<Q>::value>>::
+            std::enable_if_t<std::is_arithmetic_v<Q>>>::
 generate_message(const std::string& name,
                  const Q& p,
                  const std::vector<Q>& r)
@@ -141,12 +141,12 @@ generate_message(const std::string& name,
 /**
 * \brief 'Parameter out of range' exception.
 * \details Partial template specialization for for 'Parameter out of range'
-* exception involving continuous fundamental scalars.
-* \tparam Q Parameter type: must be std::is_fundamental.
+* exception involving continuous arithmetic scalars.
+* \tparam Q Parameter type: must be std::is_arithmetic.
 */
 template <typename Q>
 class ParOutOfRange<Q, false,        // continuous case
-                    std::enable_if_t<std::is_fundamental<Q>::value>>
+                    std::enable_if_t<std::is_arithmetic_v<Q>>>
     : public std::exception {
 
 public:
@@ -183,7 +183,7 @@ public:
 
 private:
 
-    const std::string message;        ///< Message to print.
+    const std::string message;  ///< Message to print.
 
     /**
     * \brief Message-generating function.
@@ -203,7 +203,7 @@ private:
 
 template <typename Q>
 ParOutOfRange<Q, false,        // continuous case
-              std::enable_if_t<std::is_fundamental<Q>::value>>::
+              std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
         const std::string& name,
         const Q& p,
@@ -222,7 +222,7 @@ ParOutOfRange(
 
 template <typename Q>
 ParOutOfRange<Q, false,        // continuous case
-              std::enable_if_t<std::is_fundamental<Q>::value>>::
+                std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
         const std::string& name,
         const Q& p,
@@ -242,14 +242,14 @@ ParOutOfRange(
 template <typename Q>
 template <typename R>
 std::string ParOutOfRange<Q, false,        // continuous case
-                    std::enable_if_t<std::is_fundamental<Q>::value>>::
+                          std::enable_if_t<std::is_arithmetic_v<Q>>>::
 generate_message(const std::string& name,
                  const Q& p,
                  const R& r)
 {
     XASSERT(r.size() == 2, "Incorrect r size in ParOutOfRangeException");
     return "Error in conf specification for parameter '"+name+
-           "' = "+std::to_string(p)+" :"+"\n\tthe value provided "+
+           "' = "+std::to_string(p)+" :"+"\n\tthe value "+
            " is outside the acceptable range "+
            "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
 }
