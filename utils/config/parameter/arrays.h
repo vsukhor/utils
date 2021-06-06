@@ -28,7 +28,7 @@
  * \details Contains template partial specialization for classes encapsulating
  * confuguration file parameter of type std::array and the exception handler
  * class for out of range errors.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_PARAMETER_ARRAYS_H
@@ -51,25 +51,27 @@ namespace utils::config::parameter {
 
 
 /**
-* \brief parameters of std arrays of continuous fundamental types.
+* \brief parameters of std arrays of continuous arithmetic types.
 * \details Partial template specialization for for parameters of std arrays of
-* continuous fundamental types.
-* \tparam T Parameter type: must be std::is_fundamental.
+* continuous arithmetic types.
+* \tparam T Parameter type: must be std::is_arithmetic.
 * \tparam W Length of the std::array.
 */
 template <typename T, szt W>
 class Par<std::array<T,W>, false,
-          std::enable_if_t<std::is_fundamental<T>::value>>
+          std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
 
     using Q = std::array<T,W>;
 
-    using Base<T>::get_name;
+    using Base<T>::check_name;
     using Base<T>::isLoaded_;
 
     Q p_;        ///< The parameter value.
     
 public:
+
+    using Base<T>::get_name;
 
     /**
     * \brief Constructor.
@@ -117,7 +119,7 @@ public:
     * \param i Index in the array.
     * \return Parameter value (the \p i -th component).
     */
-    T operator[](const szt i) const;
+    T operator[](szt i) const;
 
 private:
     
@@ -132,32 +134,34 @@ private:
 
 template <typename T, szt W>
 Par<std::array<T,W>, false,
-    std::enable_if_t<std::is_fundamental<T>::value>>::
+    std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
 {}
+
 
 template <typename T, szt W>
 Par<std::array<T,W>, false,
-    std::enable_if_t<std::is_fundamental<T>::value>>::
+    std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::vector<Q>& range,
      Msgr* msgr )
-    : Base<T> {name}
+    : Base<T> {check_name(name)}
 {
     this->load(file);
     try {
         check_range(range, msgr);
     } catch (const exceptions::ParOutOfRange<T,false>&) {
-        exit(0);
+        std::exit(EXIT_FAILURE);
     }
     print(msgr);
 }
 
+
 template <typename T, szt W>
 void Par<std::array<T,W>, false,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range( const std::vector<Q>& r,
              Msgr* msgr )
 {
@@ -168,9 +172,10 @@ check_range( const std::vector<Q>& r,
             };
 }
 
+
 template <typename T, szt W>
 void Par<std::array<T,W>, false,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
     (msgr)
@@ -183,18 +188,20 @@ print( Msgr* msgr )
       }();
 }
 
+
 template <typename T, szt W>
 std::array<T,W> Par<std::array<T,W>, false,
-                    std::enable_if_t<std::is_fundamental<T>::value>>::
+                    std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
     XASSERT(true, get_name());
     return p_;
 }
 
+
 template <typename T, szt W>
 T Par<std::array<T,W>, false,
-      std::enable_if_t<std::is_fundamental<T>::value>>::
+      std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator[]( const szt i ) const
 {
     XASSERT(isLoaded_, get_name());
@@ -202,9 +209,10 @@ operator[]( const szt i ) const
     return p_[i];
 }
 
+
 template <typename T, szt W>
 void Par<std::array<T,W>, false,
-         std::enable_if_t<std::is_fundamental<T>::value>>::
+         std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( std::string value )
 {
     const std::string emp {" "};
