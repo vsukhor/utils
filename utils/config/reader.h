@@ -39,7 +39,7 @@
 #include "../common/misc.h"
 #include "../common/msgr.h"
 #include "parameter/arrays.h"
-#include "parameter/scalars_strings.h"
+#include "parameter/scalars.h"
 #include "parameter/vectors.h"
 
 /// Configuration namespace.
