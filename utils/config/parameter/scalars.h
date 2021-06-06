@@ -24,18 +24,19 @@
 */
 
 /**
- * \file scalars_strings.h
+ * \file scalars.h
  * \brief Parameters of arithmetic type.
  * \details Contains template partial specialization for classes encapsulating
- * confuguration file parameters of fundamental or string type.
+ * confuguration file parameters of arithmetic type.
  + \author Valerii Sukhorukov
  */
 
-#ifndef UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H
-#define UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H
+#ifndef UTILS_CONFIG_PARAMETER_SCALARS_H
+#define UTILS_CONFIG_PARAMETER_SCALARS_H
 
 #include <filesystem>
 #include <sstream>
+#include <string>
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
@@ -46,17 +47,15 @@
 namespace utils::config::parameter {
 
 /**
-* \brief Parameters of std fundamental scalar or std::string types.
-* \details Partial template specialization for for parameters of std fundamental
-* scalar or std::string types.
-* \tparam T Parameter type: must be std::is_fundamental.
+* \brief Parameters of arithmetic scalar types.
+* \details Partial template specialization for for parameters of arithmetic
+* scalar types.
+* \tparam T Parameter type: must be std::is_arithmetic.
 * \tparam isDiscrete Specifies if the vector components accept discrete of
 *         continous values.
 */
 template <typename T, bool isDiscrete>
-class Par<T,isDiscrete,
-          typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                    std::is_same<T,std::string>::value>>
+class Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
 
     using Q = T;
@@ -179,16 +178,14 @@ private:
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name )
     : Base<T> {check_name(name)}
 {}
 
 
 template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::vector<T>& range,
@@ -202,8 +199,7 @@ Par( const std::string& name,
 
 
 template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
      const std::filesystem::directory_entry& file,
      const std::array<T,2>& range,
@@ -218,8 +214,7 @@ Par( const std::string& name,
 
 template <typename T, bool isDiscrete>
 template <typename W>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range( const W& r,
              Msgr* msgr )
 {
@@ -238,8 +233,7 @@ check_range( const W& r,
 
 
 template <typename T, bool isDiscrete>
-auto Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+auto Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin( const std::string& name,
         const std::filesystem::directory_entry& file,
         const std::vector<Q>& range,
@@ -250,8 +244,7 @@ readin( const std::string& name,
 
 
 template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
     if (msgr != nullptr)
@@ -262,8 +255,7 @@ print( Msgr* msgr )
 
 
 template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 set( const Q& val )
 {
     isLoaded_ = true;
@@ -272,8 +264,7 @@ set( const Q& val )
 
 
 template <typename T, bool isDiscrete>
-T Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+T Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
     XASSERT(isLoaded_, get_name());
@@ -282,8 +273,7 @@ operator()() const
 
 
 template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_fundamental<T>::value ||
-                                            std::is_same<T,std::string>::value>>::
+void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( std::string value )
 {
     std::stringstream(value) >> p_;
@@ -291,4 +281,4 @@ initialize( std::string value )
 
 }  // namespace utils::config::parameter
 
-#endif // UTILS_CONFIG_PARAMETER_SCALARS_STRINGS_H
+#endif // UTILS_CONFIG_PARAMETER_SCALARS_H
