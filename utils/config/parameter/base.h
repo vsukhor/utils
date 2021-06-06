@@ -89,6 +89,12 @@ public:
     */
     void load(const std::filesystem::directory_entry& file);
 
+    /**
+    * \brief Name of the parameter.
+    * \return Name of the parameter.
+    */
+    std::string get_name() const noexcept;
+
 protected:
     
     bool isLoaded_ {};  ///< Flag if the parameter is loaded.
@@ -120,15 +126,11 @@ protected:
     */
     virtual void initialize(std::string value) = 0;
 
-    /**
-    * \brief Name of the parameter.
-    * \return Name of the parameter.
-    */
-    std::string get_name() const noexcept;
+    std::string check_name(const std::string& s) const;
 
 private:
 
-    const std::string name;        ///< parameter name
+    const std::string name;   ///< parameter name
 
     /**
     * \brief Finds the the parameter by \a name in the configuration file stream \p ifs.
@@ -137,7 +139,7 @@ private:
     * \return Bool corresponding to the success/failure of the search.
     */
     bool detect_by_name(std::ifstream& ifs,
-                        std::string& value) const;    // by reference
+                        std::string& value) const;  // by reference
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -236,7 +238,20 @@ load( std::ifstream& ifs )
         {"Error: parameter not loaded: " + name, nullptr};
 }
 
-template <typename Q>
+template <typename Q> inline
+std::string Base<Q>::
+check_name( const std::string& s ) const
+{
+    const auto ss {s.substr(0, s.find(" "))};
+    if (s.size() != ss.size()) {
+        std::cerr << "Incorrect name of configuration parameter: " + s;
+        std::exit(EXIT_FAILURE);
+    }
+    return s;
+}
+
+
+template <typename Q> inline
 std::string Base<Q>::
 get_name() const noexcept
 {
