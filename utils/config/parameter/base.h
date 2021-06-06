@@ -34,7 +34,9 @@
 
 #include <exception>
 #include <filesystem>
+#include <fstream>
 #include <sstream>
+#include <string>
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
@@ -77,6 +79,8 @@ class Base {
 
 public:
 
+    using str = std::string;
+
     /**
     * \brief Reads in parameters from input file stream \p ifs.
     * \param ifs Input file stream to load the parameters.
@@ -93,7 +97,7 @@ public:
     * \brief Name of the parameter.
     * \return Name of the parameter.
     */
-    std::string get_name() const noexcept;
+    auto get_name() const noexcept -> str;
 
 protected:
     
@@ -103,7 +107,7 @@ protected:
     * \brief Constructor.
     * \param name Name of the parameter.
     */
-    explicit Base(std::string name);  // by pass-by-value + move
+    explicit Base(str name);  // by pass-by-value + move
 
     // The rule of five is triggered by the virtual destructor,
     // the defaults suffice.
@@ -124,29 +128,29 @@ protected:
     * \brief Initialize the parameter from the config file.
     * \param value Value to search for.
     */
-    virtual void initialize(std::string value) = 0;
+    virtual void initialize(str value) = 0;
 
-    std::string check_name(const std::string& s) const;
+    auto check_name(const str& s) const -> str;
 
 private:
 
-    const std::string name;   ///< parameter name
+    const str name;   ///< parameter name
 
     /**
     * \brief Finds the the parameter by \a name in the configuration file stream \p ifs.
     * \param ifs Input file stream to load the parameter.
-    * \param[out] value std::string containig value(s) of the parameter searched.
+    * \param[out] value str containig value(s) of the parameter searched.
     * \return Bool corresponding to the success/failure of the search.
     */
     bool detect_by_name(std::ifstream& ifs,
-                        std::string& value) const;  // by reference
+                        str& value) const;  // by reference
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template <typename Q>
 Base<Q>::
-Base( std::string name )
+Base( str name )
     : name {std::move(name)}
 {}
 
@@ -156,17 +160,17 @@ template <typename Q>
 bool Base<Q>::
 detect_by_name(
     std::ifstream& ifs,
-    std::string& value
+    str& value
 ) const
 {    
-    const std::string emp {" "};
-    const std::string tab {"\t"};
+    const str emp {" "};
+    const str tab {"\t"};
     
-    std::string line;
+    str line;
     getline(ifs, line);
     
     ulong commentpos = line.find_first_of('#');
-    if (commentpos != std::string::npos)
+    if (commentpos != str::npos)
         line.erase(commentpos);
     
     if (!line.length())
@@ -178,14 +182,14 @@ detect_by_name(
         return false;
     
     int parnameend = -1;
-    if (     line.find_first_of(emp) == std::string::npos &&
-             line.find_first_of(tab) != std::string::npos)
+    if (     line.find_first_of(emp) == str::npos &&
+             line.find_first_of(tab) != str::npos)
         parnameend = static_cast<int>(line.find_first_of(tab));
-    else if (line.find_first_of(emp) != std::string::npos &&
-             line.find_first_of(tab) == std::string::npos)
+    else if (line.find_first_of(emp) != str::npos &&
+             line.find_first_of(tab) == str::npos)
         parnameend = static_cast<int>(line.find_first_of(emp));
-    else if (line.find_first_of(emp) != std::string::npos &&
-             line.find_first_of(tab) != std::string::npos)
+    else if (line.find_first_of(emp) != str::npos &&
+             line.find_first_of(tab) != str::npos)
         parnameend = std::min(static_cast<int>(line.find_first_of(emp)),
                               static_cast<int>(line.find_first_of(tab)));
     const auto parname = line.substr(0, static_cast<size_t>(parnameend));
@@ -204,8 +208,8 @@ template <typename Q>
 void Base<Q>::
 load( const std::filesystem::directory_entry& file )
 {
-    std::string parname;
-    std::string value;
+    str parname;
+    str value;
     std::ifstream ifs {file};
     if (!ifs.is_open()) {
         throw common::exceptions::Simple
@@ -227,7 +231,7 @@ load( std::ifstream& ifs )
     ifs.clear();
     ifs.seekg(0, std::ios::beg);
     while (ifs.good()) {
-        std::string value;
+        str value;
         if (!detect_by_name(ifs, value))
             continue;
         initialize(value);
@@ -239,8 +243,8 @@ load( std::ifstream& ifs )
 }
 
 template <typename Q> inline
-std::string Base<Q>::
-check_name( const std::string& s ) const
+auto Base<Q>::
+check_name( const str& s ) const -> str
 {
     const auto ss {s.substr(0, s.find(" "))};
     if (s.size() != ss.size()) {
@@ -252,8 +256,8 @@ check_name( const std::string& s ) const
 
 
 template <typename Q> inline
-std::string Base<Q>::
-get_name() const noexcept
+auto Base<Q>::
+get_name() const noexcept -> str
 {
     return name;
 }
