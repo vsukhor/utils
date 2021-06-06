@@ -251,7 +251,7 @@ generate_message(const std::string& name,
     return "Error in conf specification for parameter '"+name+
            "' = "+std::to_string(p)+" :"+"\n\tthe value "+
            " is outside the acceptable range "+
-           "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ]";
+           "[ "+std::to_string(r[0])+", "+std::to_string(r[1])+" ].\n";
 }
 
 }   // namespace utils::config::exceptions
