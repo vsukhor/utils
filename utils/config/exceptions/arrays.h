@@ -46,15 +46,15 @@
 namespace utils::config::exceptions {
 
 /**
-* \brief 'Parameter out of range' exception for continuous fundamental std arrays.
+* \brief 'Parameter out of range' exception for continuous arithmetic arrays.
 * \details Partial template specialization for for 'Parameter out of range'
-* exception involving continuous fundamental std arrays.
-* \tparam T Parameter type: must be std::is_fundamental.
+* exception involving continuous arithmetic std arrays.
+* \tparam T Parameter type: must be std::is_arithmetic.
 * \tparam W Length of the std::array.
 */
 template<typename T, std::size_t W>
 class ParOutOfRange<std::array<T,W>, false,
-                    std::enable_if_t<std::is_fundamental<T>::value>>
+                    std::enable_if_t<std::is_arithmetic_v<T>>>
     : public std::exception {
 
     using Q = std::array<T,W>;
@@ -82,7 +82,7 @@ public:
 
 template<typename T, std::size_t W>
 ParOutOfRange<std::array<T,W>, false,
-              std::enable_if_t<std::is_fundamental<T>::value>>::
+              std::enable_if_t<std::is_arithmetic_v<T>>>::
 ParOutOfRange(
         const std::string& name,
         const Q& p,
