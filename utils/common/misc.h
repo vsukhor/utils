@@ -65,7 +65,7 @@ long long assert_fun(
     std::cerr << "Assertion (" + std::string(EX) + ") failed! \n" +
                "File " + file + ", Line " + std::to_string(L) + "\n" +
                "Reason: " + msg << std::endl;
-    std::abort();
+    std::exit(EXIT_FAILURE);
 }
 
 /// Trin the string \b str from whitespaces.
