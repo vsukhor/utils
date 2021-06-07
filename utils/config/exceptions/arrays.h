@@ -104,7 +104,10 @@ ParOutOfRange(
         "Error in conf specification for parameter '" +
         name + "' = " + print(p) + " :" + "\n\tthe value " +
         " is outside the acceptable range "+print(r);
-    msgr->print<true>(s);
+    if (msgr != nullptr)
+        msgr->print<true>(s);
+    else
+        std::cerr << s << std::endl;
 }
 
 }   // namespace utils::config::exceptions
