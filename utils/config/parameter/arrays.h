@@ -71,13 +71,15 @@ class Par<std::array<T,W>, false,
     
 public:
 
+    using str = std::string;
+
     using Base<T>::get_name;
 
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
     */
-    explicit Par(const std::string& name);
+    explicit Par(const str& name);
 
     /**
     * \brief Constructor.
@@ -87,7 +89,7 @@ public:
     * \param msgr \a Msgr used for the output.
     * \see Msgr 
     */
-    explicit Par(const std::string& name,
+    explicit Par(const str& name,
                   const std::filesystem::directory_entry& file,
                   const std::vector<Q>& range,
                   Msgr* msgr=nullptr);
@@ -127,7 +129,7 @@ private:
     * \brief Initialize the parameter from the config file.
     * \param value Value to search for.
     */
-    void initialize(std::string value) final;
+    void initialize(str value) final;
 };    
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -135,7 +137,7 @@ private:
 template <typename T, szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name )
+Par( const str& name )
     : Base<T> {check_name(name)}
 {}
 
@@ -143,7 +145,7 @@ Par( const std::string& name )
 template <typename T, szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name,
+Par( const str& name,
      const std::filesystem::directory_entry& file,
      const std::vector<Q>& range,
      Msgr* msgr )
@@ -213,16 +215,16 @@ operator[]( const szt i ) const
 template <typename T, szt W>
 void Par<std::array<T,W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-initialize( std::string value )
+initialize( str value )
 {
-    const std::string emp {" "};
-    const std::string tab {"\t"};
+    const str emp {" "};
+    const str tab {"\t"};
     szt i {};
     while (value.length() && i<W) {
         ulong e {value.find(emp)};
-        if (e == std::string::npos) e = value.find(tab);
-        if (e == std::string::npos) e = value.length();
-        const std::string val {value.substr(0, e)};
+        if (e == str::npos) e = value.find(tab);
+        if (e == str::npos) e = value.length();
+        const str val {value.substr(0, e)};
         if (val.length() < 1)
             throw common::exceptions::Simple
                 {"Error in config file: Number of elelments in " + get_name() +
