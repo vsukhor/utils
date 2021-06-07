@@ -29,13 +29,13 @@ jobs:
                 cc: "clang",
                 cxx: "clang++",
                 generators: "Ninja"
-          }
+            }
 
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies on macos
-        if: startsWith(matrix.config.os, 'macos')
-        run: |
+      if: startsWith(matrix.config.os, 'macos')
+      run: |
           brew install cmake ninja
           ninja --version
           cmake --version
