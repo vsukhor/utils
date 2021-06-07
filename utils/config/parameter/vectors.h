@@ -41,6 +41,7 @@
 
 #include "../../common/misc.h"
 #include "../../common/msgr.h"
+#include "../exceptions/vectors.h"
 #include "base.h"
 
 namespace utils::config::parameter {
@@ -71,20 +72,21 @@ class Par<std::vector<T>,
     
 public:    
 
-    using Base<T>::get_name;
+    using str = std::string;
 
+    using Base<T>::get_name;
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
     */
-    explicit Par(const std::string& name);
+    explicit Par(const str& name);
 
     /**
     * \brief Constructor.
     * \param name Name of the parameter.
     * \param expectedSize Expected size of the parameter vector.
     */
-    explicit Par(const std::string& name,
+    explicit Par(const str& name,
                  szt expectedSize);
                  
     /**
@@ -95,9 +97,9 @@ public:
     * \param msgr \a Msgr used for the output.
     * \see Msgr
     */
-    explicit Par(const std::string& name,
+    explicit Par(const str& name,
                  const std::filesystem::directory_entry& file,
-                 const std::vector<Q>& range,
+                 const std::vector<std::array<T,2>>& range,
                  Msgr* msgr=nullptr);
 
     /**
@@ -106,7 +108,7 @@ public:
     * \param msgr \a Msgr used for the output.
     * \see Msgr
     */
-    void check_range(const std::vector<Q>& r,
+    void check_range(const std::vector<std::array<T,2>>& r,
                      Msgr* msgr=nullptr);
 
     /**
@@ -119,7 +121,7 @@ public:
     * \return Parameter values (the whole vector).
     */
     static auto readin(
-        const std::string& name,
+        const str& name,
         const std::filesystem::directory_entry& file,
         Msgr* msgr=nullptr
     );
@@ -150,7 +152,7 @@ private:
     * \brief Initialize the parameter from the config file.
     * \param value Value to search for.
     */
-    void initialize(std::string value) final;
+    void initialize(str value) final;
 };    
 
 
@@ -160,7 +162,7 @@ template <typename T, bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name )
+Par( const str& name )
     : Base<T> {check_name(name)}
 {}
 
@@ -169,7 +171,7 @@ template <typename T, bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name,
+Par( const str& name,
      const szt expectedSize )
     : Base<T> {check_name(name)}
     , expectedSize_ {expectedSize}
@@ -180,11 +182,11 @@ template <typename T, bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name,
+Par( const str& name,
      const std::filesystem::directory_entry& file,
-     const std::vector<Q>& range,
+     const std::vector<std::array<T,2>>& range,
      Msgr* msgr )
-    : Base<Q> {check_name(name)}
+    : Base<T> {check_name(name)}
 {
     this->load(file);
     try {
@@ -202,24 +204,19 @@ void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range(
-    const std::vector<Q>& r,
+    const std::vector<std::array<T,2>>& r,
     Msgr* msgr
 )
 {
     if (!r.size()) return;   // use this case to omit string checkups
 
-    XASSERT(!isDiscrete || r.size()==2,
-            "size of r must be 2 for continuous parameters");
-    if constexpr (isDiscrete) {
-        if (std::find(r.begin(), r.end(), p_) == r.end())
+    XASSERT(r.size() == p_.size(),
+            "Size of range vector must be to the size of imported vector.");
+
+    for (szt i=0; i<r.size(); i++)
+        if (p_[i] < r[i][0] || p_[i] > r[i][1])
             throw exceptions::ParOutOfRange<Q,isDiscrete>
-                {get_name(), p_, r, msgr};
-    }
-    else {
-        if (p_<r[0] || p_>r[1])
-            throw exceptions::ParOutOfRange<Q,isDiscrete>
-                {get_name(), p_, r, msgr};
-    }
+                {get_name(), i, p_[i], r[i], msgr};
 }
 
 
@@ -228,7 +225,7 @@ auto Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin(
-    const std::string& name,
+    const str& name,
     const std::filesystem::directory_entry& file,
     Msgr* msgr
 )
@@ -279,19 +276,24 @@ template <typename T, bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-initialize( std::string value )
+initialize( str value )
 {
-    const std::string emp {" "};
-    const std::string tab {"\t"};
-    const std::string exceptMessage
-            {"Improper Config::" + get_name()+
-             " initialization: Excessive data size"};
 
+    auto size_message = [&](const str& s, szt n) {
+        return std::string
+            {"Improper Config::" + get_name()+
+             " initialization: " + s + " data: \nExpected are " +
+             std::to_string(expectedSize_) + " elements, read " +
+             std::to_string(n) + " elements"};
+    };
+
+    const str emp {" "};
+    const str tab {"\t"};
     while (value.length()) {
         ulong e {value.find(emp)};
-        if (e == std::string::npos) e = value.find(tab);
-        if (e == std::string::npos) e = value.length();
-        const std::string val {value.substr(0, e)};
+        if (e == str::npos) e = value.find(tab);
+        if (e == str::npos) e = value.length();
+        const str val {value.substr(0, e)};
         if (val.length() < 1)
             throw common::exceptions::Simple
                 {"Error in config file: Number of elelments in " + get_name() +
@@ -302,14 +304,12 @@ initialize( std::string value )
         std::stringstream(val) >> tmp;
         p_.push_back(tmp);
         value.erase(0, e);
-        while (value.substr(0, 1) != emp ||
-               value.substr(0, 1) != tab)
-            value.erase(value.begin());
+        value = common::trim(value);
         if (p_.size() > expectedSize_)
-            throw common::exceptions::Simple {exceptMessage, nullptr};
+            throw common::exceptions::Simple {size_message("Excessive", p_.size()), nullptr};
     }
     if (p_.size() != expectedSize_)
-        throw common::exceptions::Simple {exceptMessage, nullptr};
+        throw common::exceptions::Simple {size_message("Incorrect", p_.size()), nullptr};
 }
 
 }    // namespace utils::config::parameter
