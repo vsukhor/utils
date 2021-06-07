@@ -37,8 +37,8 @@ target_link_libraries(unittests PRIVATE gtest_main)
 
 gtest_discover_tests(unittests)
 
-#add_custom_command(
-#    TARGET unittests
-#    POST_BUILD
-#    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests> ${CMAKE_CURRENT_SOURCE_DIR}
-#)
+add_custom_command(
+    TARGET unittests
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests> ${CMAKE_CURRENT_SOURCE_DIR}
+)
