@@ -52,7 +52,6 @@ class Reader {
 
     using Msgr = common::Msgr;
     using path = std::filesystem::path;
-//    namespace fs = std::filesystem;
     using dir_entry = std::filesystem::directory_entry;
 
 public:
@@ -124,14 +123,15 @@ public:
     static auto check_name(const dir_entry& f) -> dir_entry
     {
         if (!f.is_regular_file())
-            common::exceptions::simple(
-                "Error: no config file provided " + f.path().string(), nullptr);
+            throw common::exceptions::Simple(
+                "Error: file provided '" + f.path().string() +
+                "' is not a valid config file.", nullptr);
 
         return f;
     }
 
     /**
-    * \brief Copies \p compartment - specific configuration file to directory \p path.
+    * \brief Copies \p compartment - specific config. file to directory \p path.
     * \note The directory is expected to exist.
     * \param path Directory name to which file should be copied.
     * \param signature Case-specific signature present in the file name.
