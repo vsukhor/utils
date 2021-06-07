@@ -504,7 +504,7 @@ ellipsoid_cap_vol(
     const T h
 ) noexcept
 {    
-    return pi<T> * a*b/(c*c) * h*h * (c - h/three<T>);
+    return pi<T> * a * b / (c*c) * h*h * (c - h / three<T>);
 }
 
 
@@ -537,8 +537,8 @@ spheroid_surf_area(
         const auto c2 = r[2]*r[2];
         
         if (r[0] < r[2]) {                    // prolate spheroid
-            const auto e = std::sqrt(one<T> - a2/c2);
-            return twopi<T> * (a2 + std::asin(e) * r[0]*r[2] / e);
+            const auto e = std::sqrt(one<T> - a2 / c2);
+            return twopi<T> * (a2 + std::asin(e) * r[0] * r[2] / e);
         }
         if (r[0] > r[2]) {                    // oblate spheroid
             const auto e = std::sqrt(one<T> - c2 / a2);
