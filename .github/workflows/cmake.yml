@@ -27,7 +27,7 @@ jobs:
                 generators: "Ninja"
             }
             - {
-                name: "Ubuntu_GCC_11",
+                name: "Ubuntu gcc-11",
                 os: ubuntu-latest,
                 build_type: "Release",
                 cc: "gcc",
@@ -37,7 +37,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Install dependencies on macOS
       if: startsWith(matrix.config.os, 'macos')
       run: |
           brew install ninja
@@ -48,6 +48,9 @@ jobs:
     - name: Install dependencies on Ubuntu_GCC_11
       if: startsWith(matrix.config.name, 'Ubuntu_GCC_11')
       run: |
+          mkdir -p ${{github.workspace}}/build
+          mkdir -p ${{github.workspace}}/build/tests
+          cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
           echo =============== Update gcc== ====================================
           echo gcc version before:
           gcc --version
