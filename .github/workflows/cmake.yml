@@ -32,10 +32,9 @@ jobs:
     - name: Install dependencies on macos
       if: startsWith(matrix.config.os, 'macos')
       run: |
-          brew install cmake ninja
-          ninja --version
-          cmake --version
-          mkdir ${{github.workspace}}/build/tests
+          brew install ninja
+          mkdir -p ${{github.workspace}}/build
+          mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
 
     - name: Configure CMake
