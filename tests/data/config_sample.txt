@@ -1,0 +1,13 @@
+# Single-value parameters:
+myValue          = 30.2
+negativeReal     = -45.3e-6
+edge_length (mm) = 3.e+4   # starting from the previous node
+intPositive      = 74
+badUInt          = -74
+
+# Multiple-value parameters:
+reaction_rates   = 0.87 33.4 64.326 50.22 #(1/sec)
+dimensionality   = 2 12  # in x- and y-directions respectivley
+
+# String:
+stringpar = stringValue
