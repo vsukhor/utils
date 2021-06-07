@@ -68,4 +68,18 @@ exit( const std::string& s ) const noexcept
     ::exit(EXIT_FAILURE);
 }
 
+void Msgr::
+exit( const char *fmt, ... ) noexcept
+{
+	va_list va;
+	va_start(va, fmt);
+	const auto n = vsprintf(buf, fmt, va);
+	va_end(va);
+	const auto s = std::string(buf).substr(0, std::size_t(n));
+	if (sl) prn(sl, s, 1);
+	if (so) prn(so, s, 1);
+
+	::exit(EXIT_FAILURE);
+}
+
 }  // namespace utils::common

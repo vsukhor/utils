@@ -90,7 +90,7 @@ public:
     template <typename V, auto N>
     void print_array( const std::string& name,
                       const std::array<V,N>& v
-                    ) const noexcept;
+                    ) noexcept;
 
     /**
     * \brief Print named std::vector .
@@ -117,7 +117,14 @@ public:
     */
     void exit(const std::string& s) const noexcept;
 
+    template <bool end=true>
+		void print(const char *fmt, ...) noexcept;
+
+    void exit(const char *fmt, ...) noexcept;
+
 private:
+
+    char buf [1024];
 
     /**
     * \brief Check that the stream used is valid.
@@ -171,7 +178,7 @@ prn(
 template <bool endline> inline
 void Msgr::
 print( const std::string& s ) const noexcept
-{    
+{
     if (sl) prn(sl, s, endline);
     if (so) prn(so, s, endline);
 }
@@ -182,7 +189,7 @@ void Msgr::
 print_array(
     const std::string& name,
     const std::array<V,N>& v
-) const noexcept
+) noexcept
 {
     print<false>(name+"[]:  ");
     for (const auto o : v)
@@ -202,6 +209,21 @@ print_vector(
     for (const auto o : v)
         print<false>(std::to_string(o));
 }
+
+template <bool end>
+void Msgr::
+print( const char *fmt, ... ) noexcept
+{
+	va_list va;
+	va_start(va, fmt);
+	const auto n = vsprintf(buf, fmt, va);
+	va_end(va);
+	const auto s = std::string(buf).substr(0, static_cast<size_t>(n));
+	if (sl) prn(sl, s, end);
+	if (so) prn(so, s, end);
+//	prn(er, se, s, end);
+}
+
 
 }  // namespace utils::common
 
