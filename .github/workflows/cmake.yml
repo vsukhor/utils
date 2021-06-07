@@ -35,6 +35,7 @@ jobs:
           brew install cmake ninja
           ninja --version
           cmake --version
+          mkdir ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
 
     - name: Configure CMake
