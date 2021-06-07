@@ -199,7 +199,7 @@ public:
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
     static void read(
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         std::vector<Pdb>& a,
         vec2str& other,
         Msgr& msgr
@@ -211,7 +211,7 @@ public:
     /// \param other Non-atom records.
     /// \param msgr Output message processor.
     static void write(
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const std::vector<Pdb>& a,
         const vec2str& other,
         Msgr& msgr

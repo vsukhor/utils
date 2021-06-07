@@ -90,7 +90,7 @@ public:
     * \see Msgr 
     */
     explicit Par(const str& name,
-                  const std::filesystem::directory_entry& file,
+                  const std::filesystem::path& file,
                   const std::vector<Q>& range,
                   Msgr* msgr=nullptr);
 
@@ -146,7 +146,7 @@ template <typename T, szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const str& name,
-     const std::filesystem::directory_entry& file,
+     const std::filesystem::path& file,
      const std::vector<Q>& range,
      Msgr* msgr )
     : Base<T> {check_name(name)}

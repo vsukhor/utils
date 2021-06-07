@@ -378,7 +378,7 @@ is_in_aminoacid() const noexcept
 
 void Pdb::
 read(
-    const std::filesystem::directory_entry& file,
+    const std::filesystem::path& file,
     std::vector<Pdb>& a,
     vec2str& other,
     Msgr& msgr
@@ -386,7 +386,7 @@ read(
 {
     std::ifstream fin {file};
     if (!fin.is_open())
-        msgr.exit("Unable to open file for reading at " + file.path().string());
+        msgr.exit("Unable to open file for reading at " + file.string());
 
     a.clear();
     other.clear();
@@ -410,7 +410,7 @@ read(
 
 void Pdb::
 write(
-    const std::filesystem::directory_entry& file,
+    const std::filesystem::path& file,
     const std::vector<Pdb>& a,
     const vec2str& other,
     Msgr& msgr
@@ -418,7 +418,7 @@ write(
 {
     std::ofstream fout {file};
     if (!fout.is_open())
-        msgr.exit("Unable to open file for writing at " + file.path().string());
+        msgr.exit("Unable to open file for writing at " + file.string());
 
     szt i = 0;
     if (!other.empty())

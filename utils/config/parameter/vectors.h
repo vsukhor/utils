@@ -98,7 +98,7 @@ public:
     * \see Msgr
     */
     explicit Par(const str& name,
-                 const std::filesystem::directory_entry& file,
+                 const std::filesystem::path& file,
                  const std::vector<std::array<T,2>>& range,
                  Msgr* msgr=nullptr);
 
@@ -122,7 +122,7 @@ public:
     */
     static auto readin(
         const str& name,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         Msgr* msgr=nullptr
     );
     
@@ -183,7 +183,7 @@ Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const str& name,
-     const std::filesystem::directory_entry& file,
+     const std::filesystem::path& file,
      const std::vector<std::array<T,2>>& range,
      Msgr* msgr )
     : Base<T> {check_name(name)}
@@ -226,7 +226,7 @@ auto Par<std::vector<T>,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin(
     const str& name,
-    const std::filesystem::directory_entry& file,
+    const std::filesystem::path& file,
     Msgr* msgr
 )
 {

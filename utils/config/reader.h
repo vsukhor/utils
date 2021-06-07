@@ -52,25 +52,24 @@ class Reader {
 
     using Msgr = common::Msgr;
     using path = std::filesystem::path;
-    using dir_entry = std::filesystem::directory_entry;
 
 public:
 
-    const dir_entry file;  ///< Name of the configuration file.
+    const path file;  ///< Name of the configuration file.
 
     /**
     * \brief Constructor creating the configuration file-specific instance.
     * \param file Name of the configuration file.
     * \param msgr Messanger used for outputing.
     */
-    Reader( const dir_entry& file,
+    Reader( const path& file,
             Msgr* msgr
         )
         : file {check_name(file)}
         , msgr {msgr}
     {
         if (msgr != nullptr)
-            msgr->print("\nReading config from: " + file.path().string());
+            msgr->print("\nReading config from: " + file.string());
     }
     
     /**
@@ -120,14 +119,15 @@ public:
     * \param f Expected file.
     * \return Name of the confuguration file if it is found.
     */
-    static auto check_name(const dir_entry& f) -> dir_entry
+    static auto check_name(const path& f) -> path
     {
-        if (!f.is_regular_file())
-            throw common::exceptions::Simple(
-                "Error: file provided '" + f.path().string() +
-                "' is not a valid config file.", nullptr);
+        if (std::filesystem::exists(f) &&
+              std::filesystem::is_regular_file(f))
+            return f;
 
-        return f;
+        throw common::exceptions::Simple(
+            "Error: file provided '" + f.string() +
+            "' is not a valid config file.", nullptr);
     }
 
     /**
@@ -137,16 +137,16 @@ public:
     * \param signature Case-specific signature present in the file name.
     * \param compartment Name of the compartment specified in the configuration.
     */
-    void copy( const path& path,
+    void copy( const std::filesystem::path& path,
                const std::string& signature,
                const std::string& compartment ) const
     {
-        const dir_entry cfgCopy {
-            file.path().parent_path() /
+        const std::filesystem::path cfgCopy {
+            file.parent_path() /
                 (std::string("cfgCopy_") + compartment+signature + ".txt")
         };
-        msgr->print("Copying "+compartment+" config to "+cfgCopy.path().string());
-        if (cfgCopy.exists()) {
+        msgr->print("Copying "+compartment+" config to "+cfgCopy.string());
+        if (std::filesystem::exists(cfgCopy)) {
             try {
                 std::filesystem::remove(cfgCopy);
             }

@@ -84,7 +84,7 @@ public:
     */
     explicit Par(
         const std::string& name,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const std::vector<T>& range,
         Msgr* msgr=nullptr
     );
@@ -99,7 +99,7 @@ public:
     */
     explicit Par(
         const std::string& name,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const std::array<T,2>& range,
         Msgr* msgr=nullptr
     );
@@ -141,7 +141,7 @@ public:
     */
     static auto readin(
         const std::string& name,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const std::vector<Q>& range,
         Msgr* msgr=nullptr
     );
@@ -187,7 +187,7 @@ Par( const std::string& name )
 template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
-     const std::filesystem::directory_entry& file,
+     const std::filesystem::path& file,
      const std::vector<T>& range,
      Msgr* msgr )
     : Base<T> {check_name(name)}
@@ -206,7 +206,7 @@ Par( const std::string& name,
 template <typename T, bool isDiscrete>
 Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par( const std::string& name,
-     const std::filesystem::directory_entry& file,
+     const std::filesystem::path& file,
      const std::array<T,2>& range,
      Msgr* msgr )
     : Base<T> {check_name(name)}
@@ -245,7 +245,7 @@ check_range( const W& r,
 template <typename T, bool isDiscrete>
 auto Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin( const std::string& name,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const std::vector<Q>& range,
         Msgr* msgr )
 {

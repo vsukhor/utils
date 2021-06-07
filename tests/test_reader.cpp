@@ -15,7 +15,7 @@ protected:
     using Reader = utils::config::Reader;
     static constexpr const int PRINT_PRECISION {6};
 
-    const std::filesystem::directory_entry file;
+    const std::filesystem::path file;
 
     ReaderTest()
         : file {std::filesystem::current_path() / "tests" /
@@ -26,7 +26,7 @@ protected:
 TEST_F(ReaderTest, CheckName)
 {
     EXPECT_NO_THROW(Reader::check_name(file));
-    const std::filesystem::directory_entry fakefile {
+    const std::filesystem::path fakefile {
         std::filesystem::current_path() / "tests" / "data" / "fake.txt" };
     testing::internal::CaptureStderr();
     EXPECT_ANY_THROW(Reader::check_name(fakefile));
@@ -37,8 +37,8 @@ TEST_F(ReaderTest, Constructor)
 {
     EXPECT_NO_THROW(Reader(file, nullptr));
     Reader r {file, nullptr};
-    ASSERT_STREQ(file.path().string().c_str(), r.file.path().string().c_str());
-    const std::filesystem::directory_entry fakefile {
+    ASSERT_STREQ(file.string().c_str(), r.file.string().c_str());
+    const std::filesystem::path fakefile {
         std::filesystem::current_path() / "tests" / "data" / "fake.txt" };
     testing::internal::CaptureStderr();
     EXPECT_ANY_THROW(Reader(fakefile, nullptr));

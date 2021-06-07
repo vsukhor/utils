@@ -21,7 +21,7 @@ protected:
                        "data" / "config_sample.txt" }
     {}
 
-    const std::filesystem::directory_entry file;
+    const std::filesystem::path file;
 };
 
 TEST_F(ParameterTest, Long1)

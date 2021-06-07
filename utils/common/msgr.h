@@ -35,6 +35,7 @@
 #include <array>
 #include <fstream>
 #include <ostream>
+#include <stdarg.h>
 #include <type_traits>
 #include <vector>
 

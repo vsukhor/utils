@@ -91,7 +91,7 @@ public:
     * \brief Reads in parameters from file.
     * \param file Name of the configuration file to load the parameters.
     */
-    void load(const std::filesystem::directory_entry& file);
+    void load(const std::filesystem::path& file);
 
     /**
     * \brief Name of the parameter.
@@ -206,14 +206,14 @@ detect_by_name(
 
 template <typename Q>
 void Base<Q>::
-load( const std::filesystem::directory_entry& file )
+load( const std::filesystem::path& file )
 {
     str parname;
     str value;
     std::ifstream ifs {file};
     if (!ifs.is_open()) {
         throw common::exceptions::Simple
-            {"Unable to open config file: " + file.path().string(), nullptr};
+            {"Unable to open config file: " + file.string(), nullptr};
     }
     try {
         load(ifs);

@@ -73,7 +73,7 @@ public:
     /// \details This is done whenever the working directory does not already
     /// have such a file.
     static void make_seed(
-        const std::filesystem::directory_entry& file,  ///< File with seeds.
+        const std::filesystem::path& file,  ///< File with seeds.
         Msgr* msgr                     ///< Output message processor.
     );
 
@@ -81,7 +81,7 @@ public:
     /// \details This is done whenever the working directory does not already
     /// have such a file.
     static uint readin_seed(
-        const std::filesystem::directory_entry& file,  ///< File with seeds.
+        const std::filesystem::path& file,  ///< File with seeds.
         szt runInd,                    ///< Run index to choose a seed.
         Msgr& msgr                     ///< Output message processor.
     );
@@ -99,7 +99,7 @@ protected:
 
     explicit Core(
         Msgr& msgr,                    ///< Output message processor.
-        const std::filesystem::directory_entry& seedFile,  ///< File with seeds.
+        const std::filesystem::path& seedFile,  ///< File with seeds.
         szt runInd                     ///< Run index to choose a seed.
     );
 
@@ -127,11 +127,11 @@ Core(    Msgr& msgr,
 template <typename realT> 
 Core<realT>::
 Core(   Msgr& msgr,
-        const std::filesystem::directory_entry& file,
+        const std::filesystem::path& file,
         const szt runInd)
     : msgr {msgr}
 {
-    if (!file.is_regular_file())
+    if (!std::filesystem::is_regular_file(file))
         make_seed(file, &msgr);
     seed = readin_seed(file, runInd, msgr);
     msgr.print("RUN = " + std::to_string(runInd));
@@ -141,11 +141,11 @@ Core(   Msgr& msgr,
 template <typename realT> 
 void Core<realT>::
 make_seed(
-    const std::filesystem::directory_entry& file,
+    const std::filesystem::path& file,
     Msgr* msgr
 )
 {
-    if (const auto msg = "No seed file found. Creating a new seed file " + file.path().string();
+    if (const auto msg = "No seed file found. Creating a new seed file " + file.string();
         msgr)
         msgr->print(msg);
     else
@@ -158,7 +158,7 @@ make_seed(
     std::uniform_int_distribution<uint> seed_d(sd1, sd2);
     std::ofstream ofs {file, std::ios::binary};
     if (!ofs.is_open()) {
-        if (const auto msg = "Unable to create seed file "+file.path().string();
+        if (const auto msg = "Unable to create seed file "+file.string();
             msgr)
             msgr->exit(msg);
         else
@@ -173,12 +173,12 @@ make_seed(
 template <typename realT> 
 uint Core<realT>::
 readin_seed(
-    const std::filesystem::directory_entry& file,
+    const std::filesystem::path& file,
     szt runInd,
     Msgr& msgr
 )
 {
-    const auto fname {file.path().string()};
+    const auto fname {file.string()};
     msgr.print("Reading from file " + fname + " seed no: " +
                std::to_string(runInd));
     

@@ -45,7 +45,7 @@ protected:
 
     const std::filesystem::path scratch_dir;
     bool scratch_dir_created;
-    const std::filesystem::directory_entry file;
+    const std::filesystem::path file;
     Msgr::logstream* fstr {};
 };
 

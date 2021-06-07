@@ -87,7 +87,7 @@ public:
     /// \param ii Run index.
     /// \param msgr Output message processor.
     explicit Boost(
-        const std::filesystem::directory_entry& seedFile,
+        const std::filesystem::path& seedFile,
         szt ii,
         Msgr& msgr);
 
@@ -309,7 +309,7 @@ private:
 
 template <typename realT>
 Boost<realT>::
-Boost( const std::filesystem::directory_entry& seedFile,
+Boost( const std::filesystem::path& seedFile,
        const szt ii,
        Msgr& msgr)
     : Core<realT> {msgr, seedFile, ii}
