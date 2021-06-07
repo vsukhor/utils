@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(utils
-    VERSION 1.2.1
+    VERSION 1.2.2
     DESCRIPTION "A cooection of misc code for common use in other repos."
     LANGUAGES CXX)
 
     add_compile_options(-O3 -msse4 -fPIC)
+    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
     set(CMAKE_CXX_EXTENSIONS OFF)
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
@@ -14,8 +16,6 @@ project(utils
                 utils/common/threads.cpp
                 utils/common/msgr.cpp
                 utils/common/exceptions.cpp)
-
-    target_compile_features(utils PRIVATE cxx_std_20)
 
     target_include_directories(utils PUBLIC utils/biochemical
                                             utils/arrays
@@ -31,11 +31,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 #    option(EXPORT_COMPILE_COMMANDS "Compile commands are visible" ON)
-    set(CMAKE_VERBOSE_MAKEFILE ON)
+    set(CMAKE_VERBOSE_MAKEFILE OFF)
 
     # Docs with Doxygen
-    option(BUILD_DOC "Build documentation" ON)
-    if(BUILD_DOC)
+    option(BUILD_DOC "Build documentation" False)
+    if(False)
         find_package(Doxygen)
         if(Doxygen_FOUND)
             # set input and output files
@@ -59,10 +59,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 endif()
 
-option(BUILD_TESTS "Build test files" OFF)
-#if(BUILD_TESTS)
-#    enable_testing()
-#    add_subdirectory(tests)
-#endif()
-
-
+option(BUILD_TESTS "Build test files" True)
+if(True)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
