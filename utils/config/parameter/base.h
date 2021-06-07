@@ -217,7 +217,7 @@ load( const std::filesystem::path& file )
     }
     try {
         load(ifs);
-    } catch (common::exceptions::Simple& e) {
+    } catch (const common::exceptions::Simple&) {
         return;
     }
 }

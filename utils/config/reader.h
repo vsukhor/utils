@@ -150,14 +150,14 @@ public:
             try {
                 std::filesystem::remove(cfgCopy);
             }
-            catch (std::filesystem::filesystem_error const& e) {
+            catch (const std::filesystem::filesystem_error& e) {
                 msgr->print(std::string(e.what()) + "\n");
             }
         }
         try {
             std::filesystem::copy_file(file, cfgCopy);
         }
-        catch (std::filesystem::filesystem_error const& e) {
+        catch (const std::filesystem::filesystem_error& e) {
                 msgr->print(std::string(e.what()) + "\n");
         }
     }

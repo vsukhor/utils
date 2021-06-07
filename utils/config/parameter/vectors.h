@@ -192,7 +192,7 @@ Par( const str& name,
     try {
         check_range(range, msgr);
     }
-    catch (exceptions::ParOutOfRange<T,isDiscrete> e) {
+    catch (const exceptions::ParOutOfRange<T,isDiscrete>&) {
         std::exit(EXIT_FAILURE);
     }
     print(msgr);
