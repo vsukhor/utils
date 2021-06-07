@@ -215,7 +215,7 @@ ParOutOfRange(
     if (msgr != nullptr)
         msgr->print(message);
     else
-        std::cout << message;
+        std::cerr << message;
         
     throw *this;
 }
@@ -234,7 +234,7 @@ ParOutOfRange(
     if (msgr != nullptr)
         msgr->print(message);
     else
-        std::cout << message;
+        std::cerr << message;
 
     throw *this;
 }
