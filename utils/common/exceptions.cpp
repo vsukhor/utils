@@ -44,7 +44,7 @@ int simple( const std::string& msg,
     if (msgr)
         msgr->print<true>(msg);
     else
-        std::cout << msg << std::endl;
+        std::cerr << msg << std::endl;
 
     exit(EXIT_FAILURE);
 
@@ -58,7 +58,7 @@ Simple(const std::string& msg,
     if (msgr != nullptr)
         msgr->print<true>(msg);
     else
-        std::cout << msg << std::endl;
+        std::cerr << msg << std::endl;
 }
 
 }    // namespace utils::common::exceptions
