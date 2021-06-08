@@ -1,4 +1,4 @@
-name: CMake_Ubuntu_latest_gcc-11
+name: CMake
 
 on:
   push:
@@ -12,24 +12,41 @@ env:
 
 jobs:
   build:
-    name: "Ubuntu_latest_gcc-11"
-    runs-on: ubuntu-latest
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}  # on all machines specified
     strategy:
         fail-fast: false
-        config:
-        - {
-            name: "Ubuntu_latest_gcc-11",
-            os: ubuntu-latest,
-            build_type: "Release",
-            cc: "gcc",
-            cxx: "g++",
-            generators: "Ninja"
-          }
+        matrix:
+            config:
+            - {
+                name: "macOS_Latest_Clang",
+                os: macos-latest,
+                build_type: "Release",
+                cc: "clang",
+                cxx: "clang++",
+                generators: "Ninja"
+            }
+            - {
+                name: "Ubuntu_latest_gcc-11",
+                os: ubuntu-latest,
+                build_type: "Release",
+                cc: "gcc",
+                cxx: "g++",
+                generators: "Ninja"
+            }
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install dependencies on macOS_Clang
+      if: startsWith(matrix.config.name, 'macOS_Latest_Clang')
+      run: |
+          brew install ninja
+          mkdir -p ${{github.workspace}}/build
+          mkdir -p ${{github.workspace}}/build/tests
+          cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
 
-    - name: Install dependencies
+    - name: Install dependencies on Ubuntu_latest_gcc-11
+      if: startsWith(matrix.config.name, 'Ubuntu_latest_gcc-11')
       run: |
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
@@ -64,5 +81,5 @@ jobs:
 
     - uses: actions/upload-artifact@v2
       with:
-        name: libutils.a
+        name: libutils-${{ matrix.config.os }}.a
         path: ${{github.workspace}}/lib/libutils.a
