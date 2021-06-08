@@ -35,7 +35,7 @@ would need the availability of [boost](https://www.boost.org/) (only the headers
 or [NVIDIA cuRAND](https://developer.nvidia.com/curand), 
 depending on the factory type chosen, in the system where an executable using these classes is built.
 
-The library can be compiled with a C++20-capable compiler. 
+The library can be compiled with a C++20 - capable compiler. 
 It was is tested on macOS (clang-12) and on Ubuntu (gcc-11).
 There are two ways for building the library:  
 
