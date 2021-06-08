@@ -19,7 +19,7 @@ jobs:
         matrix:
             config:
             - {
-                name: "macOS Latest Clang",
+                name: "macOS_Latest_Clang",
                 os: macos-latest,
                 build_type: "Release",
                 cc: "clang",
@@ -37,8 +37,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies on macOS
-      if: startsWith(matrix.config.os, 'macos')
+    - name: Install dependencies on macOS_Clang
+      if: startsWith(matrix.config.name, 'macOS_Latest_Clang')
       run: |
           brew install ninja
           mkdir -p ${{github.workspace}}/build
@@ -78,3 +78,8 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ${{github.workspace}}/tests/unittests_utils
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: libutils.a
+        path: ${{github.workspace}}/lib/libutils.a
