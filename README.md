@@ -36,7 +36,7 @@ or [NVIDIA cuRAND](https://developer.nvidia.com/curand),
 depending on the factory type chosen, in the system where an executable using these classes is built.
 
 The library can be compiled with a C++20-capable compiler. 
-It was is tested on macOS (using either gcc-11 or clang-12) and on Ubuntu (gcc-11).
+It was is tested on macOS (clang-12) and on Ubuntu (gcc-11).
 There are two ways for building the library:  
 
 1. On systems having cmake (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
