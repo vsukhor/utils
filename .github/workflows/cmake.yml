@@ -51,7 +51,7 @@ jobs:
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
-          echo =============== Update gcc== ====================================
+          echo =============== Update gcc ======================================
           echo gcc version before:
           gcc --version
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
