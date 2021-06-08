@@ -6,3 +6,5 @@ manual_make/obj/
 xcode/
 docs/html/**
 docs/latex/**
+tests/unittests_utils
+
