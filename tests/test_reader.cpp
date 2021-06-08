@@ -1,3 +1,28 @@
+/* =============================================================================
+
+ Copyright (C) 2009-2021 Valerii Sukhorukov. All Rights Reserved.
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+================================================================================
+*/
+
 #include <filesystem>
 
 #include "gtest/gtest.h"
@@ -5,7 +30,7 @@
 #include "../utils/common/constants.h"
 #include "../utils/config/reader.h"
 
-namespace reader_test {
+namespace {
 
 class ReaderTest
     : public testing::Test {
@@ -43,23 +68,6 @@ TEST_F(ReaderTest, Constructor)
     testing::internal::CaptureStderr();
     EXPECT_ANY_THROW(Reader(fakefile, nullptr));
     testing::internal::GetCapturedStderr();
-//    ASSERT_STREQ(cfg.workingDirOut.c_str(), workingDir.c_str());
-//    ASSERT_STREQ(cfg.fnameSuffix.c_str(), fnameSuffix.c_str());
-//    ASSERT_STREQ(cfg.runName.c_str(), runName.c_str());
-//    ASSERT_FLOAT_EQ(cfg.timeTotal, 20.f);
-//    ASSERT_EQ(cfg.logFrequency, 100);
-//    ASSERT_EQ(cfg.saveFrequency, 20000);
-//    ASSERT_FLOAT_EQ(cfg.edgeLength, 0.2f);
-//    ASSERT_EQ(cfg.mtmassini, 1000);
-//    ASSERT_EQ(cfg.segmassini, 20);
-//    ASSERT_TRUE(cfg.use_fission);
-//    ASSERT_FLOAT_EQ(cfg.rate_fission, 1.f);
-//    ASSERT_TRUE(cfg.use_11_fusion);
-//    ASSERT_FLOAT_EQ(cfg.fusion_rate_11, .1f);
-//    ASSERT_TRUE(cfg.use_12_fusion);
-//    ASSERT_FLOAT_EQ(cfg.fusion_rate_12, .002f);
-//    ASSERT_TRUE(cfg.use_1L_fusion);
-//    ASSERT_FLOAT_EQ(cfg.fusion_rate_1L, .005f);
 }
 
 TEST_F(ReaderTest, FunctScalar)
@@ -107,4 +115,4 @@ TEST_F(ReaderTest, FunctArrayInt)
         ASSERT_EQ(p1[i], rr[i]);
 }
 
-}  // namespace reader_test
+}  // namespace
