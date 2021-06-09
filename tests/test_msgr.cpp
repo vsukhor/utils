@@ -103,12 +103,12 @@ TEST_F(MsgrTest, SetFormats)
 TEST_F(MsgrTest, PrintFalse)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"Hello world!"};
-    std::string ss {"Hello world! "};
+    const std::string s0 {"Hello world!"};
+    const std::string ss {"Hello world! "};
 
     testing::internal::CaptureStdout();
     msgr.print<false>(s0);
-    std::string t1 {testing::internal::GetCapturedStdout()};
+    const std::string t1 {testing::internal::GetCapturedStdout()};
     ASSERT_STREQ(ss.c_str(), t1.c_str());
 
     std::ifstream ifs {file};
@@ -123,12 +123,12 @@ TEST_F(MsgrTest, PrintFalse)
 TEST_F(MsgrTest, PrintTrue)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"Hello world!"};
-    std::string ss {"Hello world! \n"};
+    const std::string s0 {"Hello world!"};
+    const std::string ss {"Hello world! \n"};
 
     testing::internal::CaptureStdout();
     msgr.print<true>(s0);
-    std::string t1 = testing::internal::GetCapturedStdout();
+    const std::string t1 {testing::internal::GetCapturedStdout()};
     ASSERT_STREQ(ss.c_str(), t1.c_str());
 
     std::ifstream ifs {file};
@@ -143,13 +143,13 @@ TEST_F(MsgrTest, PrintTrue)
 TEST_F(MsgrTest, PrintArrayULong)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"the name"};
+    const std::string s0 {"the name"};
     const std::array<unsigned long, 3> a0 {{34, 56, 78}};
-    std::string exp = {s0 + "[]:   34 56 78  \n"};
+    const std::string exp = {s0 + "[]:   34 56 78  \n"};
 
     testing::internal::CaptureStdout();
     msgr.print_array<unsigned long,3>(s0, a0);
-    std::string t1 = testing::internal::GetCapturedStdout();
+    const std::string t1 {testing::internal::GetCapturedStdout()};
     ASSERT_STREQ(exp.c_str(), t1.c_str());
 
     std::ifstream ifs {file};
@@ -164,13 +164,13 @@ TEST_F(MsgrTest, PrintArrayULong)
 TEST_F(MsgrTest, PrintArrayDouble)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"the name"};
+    const std::string s0 {"the name"};
     const std::array<double, 3> a0 {{34.74, 56.99, 78.62}};
-    std::string exp = {s0 + "[]:   34.740000 56.990000 78.620000  \n"};
+    const std::string exp = {s0 + "[]:   34.74 56.99 78.62  \n"};
 
     testing::internal::CaptureStdout();
     msgr.print_array<double,3>(s0, a0);
-    std::string t1 = testing::internal::GetCapturedStdout();
+    const std::string t1 {testing::internal::GetCapturedStdout()};
     ASSERT_STREQ(exp.c_str(), t1.c_str());
 
     std::ifstream ifs {file};
@@ -185,14 +185,14 @@ TEST_F(MsgrTest, PrintArrayDouble)
 TEST_F(MsgrTest, PrintVectorULong)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"the name"};
+    const std::string s0 {"the name"};
     const std::vector<unsigned long> a0 {34, 56, 78};
-    std::string exp = {s0 + "[]:   34 56 78 "};
+    const std::string exp = {s0 + "[]:   34 56 78 "};
 
     testing::internal::CaptureStdout();
     msgr.print_vector<unsigned long>(s0, a0);
-    std::string t1 = testing::internal::GetCapturedStdout();
-    ASSERT_STREQ(exp.c_str(), t1.c_str());
+    const std::string t1 {testing::internal::GetCapturedStdout()};
+    ASSERT_STREQ((exp+" \n").c_str(), t1.c_str());
 
     std::ifstream ifs {file};
     ASSERT_FALSE(ifs.fail());
@@ -200,20 +200,20 @@ TEST_F(MsgrTest, PrintVectorULong)
     std::string line {};
     while (std::getline(ifs, line))
         t2 += line;
-    ASSERT_STREQ(exp.c_str(), t2.c_str());
+    ASSERT_STREQ((exp+" ").c_str(), t2.c_str());
 }
 
 TEST_F(MsgrTest, PrintVectorDouble)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s0 {"the name"};
+    const std::string s0 {"the name"};
     const std::vector<double> a0 {34.74, 56.99, 78.62};
-    std::string exp = {s0 + "[]:   34.740000 56.990000 78.620000 "};
+    const std::string exp = {s0 + "[]:   34.74 56.99 78.62 "};
 
     testing::internal::CaptureStdout();
     msgr.print_vector<double>(s0, a0);
-    std::string t1 = testing::internal::GetCapturedStdout();
-    ASSERT_STREQ(exp.c_str(), t1.c_str());
+    const std::string t1 {testing::internal::GetCapturedStdout()};
+    ASSERT_STREQ((exp+" \n").c_str(), t1.c_str());
 
     std::ifstream ifs {file};
     ASSERT_FALSE(ifs.fail());
@@ -221,13 +221,13 @@ TEST_F(MsgrTest, PrintVectorDouble)
     std::string line {};
     while (std::getline(ifs, line))
         t2 += line;
-    ASSERT_STREQ(exp.c_str(), t2.c_str());
+    ASSERT_STREQ((exp+" ").c_str(), t2.c_str());
 }
 
 TEST_F(MsgrTest, Exit1)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s {"QWERTY"};
+    const std::string s {"QWERTY"};
 
     testing::internal::CaptureStdout();
     ASSERT_EXIT(msgr.exit(s), testing::ExitedWithCode(EXIT_FAILURE), "");
@@ -237,11 +237,11 @@ TEST_F(MsgrTest, Exit1)
 TEST_F(MsgrTest, Exit2)
 {
     Msgr msgr {&std::cout, fstr, PRINT_PRECISION};
-    std::string s {"QWERTY"};
+    const std::string s {"QWERTY"};
 
     testing::internal::CaptureStdout();
     ASSERT_EXIT(msgr.exit(s), testing::ExitedWithCode(EXIT_FAILURE), "");
-    std::string t = testing::internal::GetCapturedStdout();
+    const std::string t {testing::internal::GetCapturedStdout()};
     ASSERT_STREQ((s+" \n").c_str(), t.c_str());
 }
 

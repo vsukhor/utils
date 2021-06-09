@@ -35,6 +35,7 @@
 #include <array>
 #include <fstream>
 #include <ostream>
+#include <sstream>
 #include <stdarg.h>
 #include <type_traits>
 #include <vector>
@@ -91,7 +92,7 @@ public:
     template <typename V, auto N>
     void print_array( const std::string& name,
                       const std::array<V,N>& v
-                    ) noexcept;
+                    ) const noexcept;
 
     /**
     * \brief Print named std::vector .
@@ -102,26 +103,44 @@ public:
     template <typename V>
     void print_vector( const std::string& name,
                        const std::vector<V>& v
-                     ) noexcept;
+                     ) const noexcept;
+
+//    /**
+//    * \brief Print std::string.
+//    * \tparam endline Finish with line end.
+//    * \param s String to print.
+//    */
+//    template <bool endline=true>
+//    void print(const std::string& s) const noexcept;
+
+//    /**
+//    * \brief Print std::string out and exit.
+//    * \param s String to print.
+//    */
+//    void exit(const std::string& s) const noexcept;
+
+//    template <bool end=true>
+//		void print(const char *fmt, ...) noexcept;
 
     /**
-    * \brief Print std::string.
+    * \brief Print an data series of of various types.
+    * \details Based on proposition stackoverflow.com proposition by geza:
+    * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
     * \tparam endline Finish with line end.
-    * \param s String to print.
+    * \param values Values to print.
     */
-    template <bool endline=true>
-    void print(const std::string& s) const noexcept;
+    template <bool endline=true, typename... T>
+    void print(T... values) const;
 
     /**
-    * \brief Print std::string out and exit.
-    * \param s String to print.
+    * \brief Print an data series of of various types and exit the process.
+    * \details Based on proposition stackoverflow.com proposition by geza:
+    * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
+    * \tparam endline Finish with line end.
+    * \param values Values to print.
     */
-    void exit(const std::string& s) const noexcept;
-
-    template <bool end=true>
-		void print(const char *fmt, ...) noexcept;
-
-    void exit(const char *fmt, ...) noexcept;
+    template <typename... T>
+    void exit(T... values);
 
 private:
 
@@ -176,26 +195,17 @@ prn(
 }
 
 
-template <bool endline> inline
-void Msgr::
-print( const std::string& s ) const noexcept
-{
-    if (sl) prn(sl, s, endline);
-    if (so) prn(so, s, endline);
-}
-
-
 template <typename V, auto N> inline
 void Msgr::
 print_array(
     const std::string& name,
     const std::array<V,N>& v
-) noexcept
+) const noexcept
 {
     print<false>(name+"[]:  ");
     for (const auto o : v)
-        print<false>(std::to_string(o));
-    print<true>("");
+        print<false>(o);
+    print("");
 }
 
 
@@ -204,27 +214,43 @@ void Msgr::
 print_vector(
     const std::string& name,
     const std::vector<V>& v
-) noexcept
+) const noexcept
 {
     print<false>(name+"[]:  ");
     for (const auto o : v)
-        print<false>(std::to_string(o));
+        print<false,V>(o);
+    print<true>("");
 }
 
-template <bool end>
+
+template <bool endline, typename... T> inline
 void Msgr::
-print( const char *fmt, ... ) noexcept
+print(T... values) const
 {
-	va_list va;
-	va_start(va, fmt);
-	const auto n = vsprintf(buf, fmt, va);
-	va_end(va);
-	const auto s = std::string(buf).substr(0, static_cast<size_t>(n));
-	if (sl) prn(sl, s, end);
-	if (so) prn(so, s, end);
-//	prn(er, se, s, end);
+    std::ostringstream s;
+
+    (s << ... << values);
+    s.flush();
+
+	if (sl) prn(sl, s.str(), endline);
+	if (so) prn(so, s.str(), endline);
 }
 
+
+template <typename... T> inline
+void Msgr::
+exit(T... values)
+{
+    std::ostringstream s;
+
+    (s << ... << values);
+    s.flush();
+
+	if (sl) prn(sl, s.str(), true);
+	if (so) prn(so, s.str(), true);
+
+    ::exit(EXIT_FAILURE);
+}
 
 }  // namespace utils::common
 
