@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(utils
-    VERSION 1.2.2
+    VERSION 1.3.0
     DESCRIPTION "A cooection of misc code for common use in other repos."
     LANGUAGES CXX)
 
