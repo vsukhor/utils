@@ -41,16 +41,12 @@ depending on the factory type chosen, in the system where an executable using th
 
 The library can be compiled with a C++20 - capable compiler.
 It was is tested on macOS (clang-12) and on Ubuntu (gcc-11).
-There are two ways for building the library:  
 
-1. On systems having cmake (ver. 3.15 or higher) installed, the build can be performed e.g. as follows:  
-    * cd utils
-    * mkdir build
-    * cmake -S . -B build
-    * cmake --build build
-
-2. cmake-independent Makefile is given as an example for a manulal build.
-    Please see beginning of the [Makefile](manual_make/Makefile) for instructions.
+With cmake (ver. 3.15 or higher) do:
+    `git clone https://github.com/vsukhor/utils.git`
+    `cd utils`
+    `cmake -S . -B build`
+    `cmake --build build`
 
 ### License
 
