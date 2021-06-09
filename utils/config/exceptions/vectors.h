@@ -66,7 +66,7 @@ public:
     * \param name Name of the parameter that triggered the exception.
     * \param p Parameter value (out of range).
     * \param r Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
+    * \param msgr Pointer to \a Msgr used for the output.
     * \see Msgr
     */
     explicit ParOutOfRange(

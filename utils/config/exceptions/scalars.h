@@ -158,7 +158,7 @@ public:
     * \param name Name of the parameter that triggered the exception.
     * \param p Parameter value (out of range).
     * \param r Acceptable range of parameter values.
-    * \see Msgr
+    * \param msgr Pointer to \a Msgr used for the output.
     */
     explicit ParOutOfRange(
             const std::string& name,
@@ -173,7 +173,7 @@ public:
     * \param name Name of the parameter that triggered the exception.
     * \param p Parameter value (out of range).
     * \param r Acceptable range of parameter values.
-    * \see Msgr
+    * \param msgr Pointer to \a Msgr used for the output.
     */
     explicit ParOutOfRange(
             const std::string& name,
