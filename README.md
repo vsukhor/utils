@@ -43,10 +43,10 @@ The library can be compiled with a C++20 - capable compiler.
 It was is tested on macOS (clang-12) and on Ubuntu (gcc-11).
 
 With cmake (ver. 3.15 or higher) do:
-    `git clone https://github.com/vsukhor/utils.git`
-    `cd utils`
-    `cmake -S . -B build`
-    `cmake --build build`
+    `git clone https://github.com/vsukhor/utils.git`  
+    `cd utils`  
+    `cmake -S . -B build`  
+    `cmake --build build`  
 
 ### License
 
