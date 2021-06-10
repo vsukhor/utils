@@ -645,7 +645,7 @@ uniform_on_spheriod(
 template <typename realT> constexpr
 auto Boost<realT>::
 uniform_on_ellipse(
-    const A2r& r    ///< ellipse dimensions: r = { a, b }
+    const A2r& r    ///< ellipse dimensions: r = {a, b}
 ) noexcept -> A2r
 {
     // Inclination of the candidate point:
@@ -660,7 +660,7 @@ uniform_on_ellipse(
 template <typename realT> constexpr
 auto Boost<realT>::
 uniform_in_ellipse(
-    const A2r& r    ///< ellipse dimensions: r = { a, b }
+    const A2r& r    ///< ellipse dimensions: r = {a, b}
 ) noexcept -> A2r
 {
     const auto rho = r01u();

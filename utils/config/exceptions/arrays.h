@@ -103,7 +103,7 @@ ParOutOfRange(
     const std::string s =
         "Error in conf specification for parameter '" +
         name + "' = " + print(p) + " :" + "\n\tthe value " +
-        " is outside the acceptable range "+print(r);
+        " is outside the acceptable range " + print(r);
     if (msgr != nullptr)
         msgr->print<true>(s);
     else

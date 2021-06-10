@@ -114,28 +114,28 @@ private:
 
 template <typename realT> 
 Core<realT>::
-Core(    Msgr& msgr,
-        const uint seed,
-        const std::string& runName) noexcept
+Core(Msgr& msgr,
+     const uint seed,
+     const std::string& runName) noexcept
     : seed {seed}
     , msgr {msgr}
 {
-    msgr.print("RUN " + runName);
-    msgr.print("SEED = " + std::to_string(seed));
+    msgr.print("RUN ", runName);
+    msgr.print("SEED = ", seed);
 }
 
 template <typename realT> 
 Core<realT>::
-Core(   Msgr& msgr,
-        const std::filesystem::path& file,
-        const szt runInd)
+Core(Msgr& msgr,
+     const std::filesystem::path& file,
+     const szt runInd)
     : msgr {msgr}
 {
     if (!std::filesystem::is_regular_file(file))
         make_seed(file, &msgr);
     seed = readin_seed(file, runInd, msgr);
-    msgr.print("RUN = " + std::to_string(runInd));
-    msgr.print("SEED = " + std::to_string(seed));
+    msgr.print("RUN = ", runInd);
+    msgr.print("SEED = ", seed);
 }
 
 template <typename realT> 
@@ -154,7 +154,7 @@ make_seed(
     std::mt19937 g {mainSeed};
 
     constexpr int sd1 = 100'000'000;
-    constexpr int sd2 = 2100'000'000;
+    constexpr int sd2 = 2'100'000'000;
     std::uniform_int_distribution<uint> seed_d(sd1, sd2);
     std::ofstream ofs {file, std::ios::binary};
     if (!ofs.is_open()) {
@@ -178,13 +178,11 @@ readin_seed(
     Msgr& msgr
 )
 {
-    const auto fname {file.string()};
-    msgr.print("Reading from file " + fname + " seed no: " +
-               std::to_string(runInd));
+    msgr.print("Reading from file ", file, " seed no: ", runInd);
     
     std::ifstream ifs {file, std::ios::binary};
-    if (!ifs.is_open())
-        msgr.exit("Unable to open file " + fname);
+    if (ifs.fail())
+        msgr.exit("Unable to open file ", file);
     ifs.seekg(static_cast<std::fstream::off_type>(runInd * sizeof(uint)), ifs.beg);
     auto seed {common::huge<uint>};
     ifs.read(reinterpret_cast<char*>(&seed), sizeof(uint));

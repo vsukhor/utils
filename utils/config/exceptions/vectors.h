@@ -100,7 +100,7 @@ ParOutOfRange(
         " of parameter '" + name + "' = " + std::to_string(p) + " :" +
         "\n\tthe value " + " is outside the acceptable range "+print(r);
     if (msgr)
-        msgr->print<true>(s);
+        msgr->print(s);
     else
         std::cerr << s << std::endl;
 }

@@ -69,7 +69,7 @@ public:
         , msgr {msgr}
     {
         if (msgr != nullptr)
-            msgr->print("\nReading config from: " + file.string());
+            msgr->print("\nReading config from: ", file);
     }
     
     /**
@@ -143,22 +143,22 @@ public:
     {
         const std::filesystem::path cfgCopy {
             file.parent_path() /
-                (std::string("cfgCopy_") + compartment+signature + ".txt")
+                (std::string("cfgCopy_") + compartment + signature + ".txt")
         };
-        msgr->print("Copying "+compartment+" config to "+cfgCopy.string());
+        msgr->print("Copying "+compartment+" config to ", cfgCopy);
         if (std::filesystem::exists(cfgCopy)) {
             try {
                 std::filesystem::remove(cfgCopy);
             }
             catch (const std::filesystem::filesystem_error& e) {
-                msgr->print(std::string(e.what()) + "\n");
+                msgr->print(e.what());
             }
         }
         try {
             std::filesystem::copy_file(file, cfgCopy);
         }
         catch (const std::filesystem::filesystem_error& e) {
-                msgr->print(std::string(e.what()) + "\n");
+                msgr->print(e.what());
         }
     }
 

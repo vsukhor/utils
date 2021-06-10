@@ -77,7 +77,7 @@ public:
 
 private:
 
-    const std::string message;        ///< message to print
+    const std::string message;  ///< message to print
 
     /**
     * Message-generating function.

@@ -42,7 +42,7 @@ int simple( const std::string& msg,
             Msgr* msgr )
 {
     if (msgr)
-        msgr->print<true>(msg);
+        msgr->print(msg);
     else
         std::cerr << msg << std::endl;
 
@@ -56,7 +56,7 @@ Simple(const std::string& msg,
                 Msgr* msgr)
 {
     if (msgr != nullptr)
-        msgr->print<true>(msg);
+        msgr->print(msg);
     else
         std::cerr << msg << std::endl;
 }

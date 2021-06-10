@@ -27,7 +27,7 @@
  * \brief std::exception-derived classes for checking confuguration parameters.
  * \details Implementation of std::exception-derived classes for checking
  * the parameters read from confuguration files.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_EXCEPTIONS_H
@@ -45,10 +45,10 @@
 namespace utils::common::exceptions {
 
 /**
-* \brief Simple process termination as a global function.
-* \details Outputs message \p msg to \a Msgr.
-* \param msg Message to output.
-* \see Msgr
+ * \brief Simple process termination as a global function.
+ * \details Outputs message \p msg to \a Msgr.
+ * \param msg Message to output.
+ * \see Msgr
 */
 int simple(const std::string& msg,
            Msgr* msgr);

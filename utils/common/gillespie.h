@@ -86,7 +86,7 @@ public :
     * \brief Prints reaction propensities to \p os.
     * \param os Stream to print to.
     */
-    void printScores(std::ostream & os) const;
+    void printScores(std::ostream& os) const;
 
     /**
     * \brief Prints a log record with the information on current reaction.
@@ -298,6 +298,6 @@ printScores( std::ostream& os ) const
            << rc[i]->get_score() << " ";
 }
 
-}    // namespace utils::common
+}  // namespace utils::common
 
 #endif // UTILS_COMMON_GILLESPIE_H

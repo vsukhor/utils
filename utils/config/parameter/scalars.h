@@ -258,7 +258,7 @@ void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
     if (msgr != nullptr)
-        msgr->print(get_name() + " = " + common::STR(p_));
+        msgr->print(get_name(), " = ", p_);
     else
         std::cout << get_name() << " = " << p_ << std::endl;
 }

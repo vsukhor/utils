@@ -136,15 +136,12 @@ public:
     * \brief Print an data series of of various types and exit the process.
     * \details Based on proposition stackoverflow.com proposition by geza:
     * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
-    * \tparam endline Finish with line end.
     * \param values Values to print.
     */
     template <typename... T>
     void exit(T... values);
 
 private:
-
-    char buf [1024];
 
     /**
     * \brief Check that the stream used is valid.
