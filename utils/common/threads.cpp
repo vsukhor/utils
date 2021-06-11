@@ -29,9 +29,10 @@
  * \author Valerii Sukhorukov
  */
 
+#include <exception>
+
 #include "threads.h"
 
-/// General stuff.
 namespace utils::common {
 
 Threads::
@@ -43,23 +44,19 @@ Threads(const szt offset,
     : num {nThreads}
 {
     szt threadsSupported {std::thread::hardware_concurrency()};
-    if (nThreads > threadsSupported) {
-        std::cout << "Warning: thread number set exceeds the CPU concurrency: "
-                  << nThreads << " " << threadsSupported
-                  << std::endl;
-        exit(0); 
-    }
-    if (nThreads < 1) {
-        std::cout << "Error in Threads: nThreads provided is not supprted "
-                  << nThreads << std::endl;
-        exit(0); 
-    }
-    if (nThreads > 12 && wht == Weights::CircleCenter) {
-        std::cout << "Error in Threads: for Circular weights only up to max 12 "
-                  << "threads are supported. nThreads ordered: "
-                  << nThreads << std::endl;
-        exit(0);
-    }
+    if (nThreads > threadsSupported)
+        throw std::runtime_error(
+            "Ordered number of threads " + std::to_string(nThreads) +
+            " exceeds the CPU concurrency: " + std::to_string(threadsSupported));
+    if (nThreads < 1)
+        throw std::runtime_error(
+            "Error in Threads: nThreads ordered " + std::to_string(nThreads) +
+            "is not supprted ");
+    if (nThreads > 12 && wht == Weights::CircleCenter)
+        throw std::runtime_error(
+            "Error in Threads: for Circular weights only up to max 12 "
+            "threads are supported. nThreads ordered: " +
+            std::to_string(nThreads));
 
     szt w {size - 2*omittedBoundaries};
     const szt rest {w % num};
@@ -72,10 +69,9 @@ Threads(const szt offset,
         set_chunks_circular(w, rest);    // arc sector area: A = r*r*phi/2
     else if (wht == Weights::TriangleDecr)
         set_chunks_triangleDecr(size - 2*omittedBoundaries);
-    else { 
-        std::cout << "Error in Threads: Weight type is not defined" << std::endl; 
-        exit(0); 
-    }
+    else
+        throw std::runtime_error("Error in Threads: Weight type is not defined");
+
     i1.resize(num);
     i2.resize(num);
     i1[0] = offset + omittedBoundaries;
