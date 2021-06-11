@@ -66,8 +66,7 @@ constexpr auto make_iota_array(T const offset) noexcept
 /// \brief Generic array template.
 /// \tparam N Array length.
 /// \tparam T Type of the elements.
-/// \tparam Enabler SFINAE Enabler
-template <unsigned N, typename T, typename Enabler=void>
+template <unsigned N, Arithmetic T>
 class array {};
 
 }  // namespace utils::arrays
