@@ -41,6 +41,7 @@ jobs:
       if: startsWith(matrix.config.name, 'macOS_Latest_Clang')
       run: |
           brew install ninja
+          brew install boost
           mkdir -p ${{github.workspace}}/build
           mkdir -p ${{github.workspace}}/build/tests
           cp -r ${{github.workspace}}/tests/data ${{github.workspace}}/build/tests
@@ -60,6 +61,9 @@ jobs:
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
           echo gcc version after
           gcc --version
+          echo =============== Get BOOST =======================================
+          sudo apt-get update
+          sudo apt-get install libboost-all-dev
           echo =============== Update ninja ====================================
           echo ninja version before
           ninja --version
