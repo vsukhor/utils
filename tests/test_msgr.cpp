@@ -31,48 +31,9 @@
 
 #include "../utils/common/msgr.h"
 
+#include "test_msgr.h"
+
 namespace {
-
-class MsgrTest
-    : public testing::Test {
-
-protected:
-
-    using Msgr = utils::common::Msgr;
-    static constexpr const int PRINT_PRECISION {6};
-
-    MsgrTest()
-        : scratch_dir {std::filesystem::current_path() / "tests" / "scratch"}
-        , scratch_dir_created {}
-        , file {scratch_dir / "msgr_test.txt"}
-    {}
-
-    void SetUp() override
-    {
-        if (!std::filesystem::exists(scratch_dir)) {
-            scratch_dir_created = true;
-            std::filesystem::create_directory(scratch_dir);
-        }
-        fstr = new Msgr::logstream {file};
-    }
-
-    void TearDown() override
-    {
-        if (fstr) {
-            if (fstr->is_open()) fstr->close();
-            delete fstr;
-        }
-        if (std::filesystem::exists(file))
-            std::filesystem::remove(file);
-        if (scratch_dir_created)
-            std::filesystem::remove(scratch_dir);
-    }
-
-    const std::filesystem::path scratch_dir;
-    bool scratch_dir_created;
-    const std::filesystem::path file;
-    Msgr::logstream* fstr {};
-};
 
 TEST_F(MsgrTest, ConstructorDefault)
 {
