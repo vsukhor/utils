@@ -43,13 +43,13 @@
 
 namespace utils::arrays {
 
-/// Two-element arrays.
-/// This class specializes array template for two-element array of
+/// \brief Two-element arrays.
+/// \details This class specializes array template for two-element array of
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 2-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template <common::Arithmetic T>
-class array<2,T> {
+template <typename T>
+class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
 
 static constexpr int len {2};
 

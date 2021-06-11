@@ -31,8 +31,6 @@
 #ifndef UTILS_ARRAYS_MISC_H
 #define UTILS_ARRAYS_MISC_H
 
-#include "../common/constants.h"
-
 /// Custom arrays.
 namespace utils::arrays {
 
@@ -69,7 +67,7 @@ constexpr auto make_iota_array(T const offset) noexcept
 /// \tparam N Array length.
 /// \tparam T Type of the elements.
 /// \tparam Enabler SFINAE Enabler
-template <unsigned N, common::Arithmetic T, typename Enabler=void>
+template <unsigned N, typename T, typename Enabler=void>
 class array {};
 
 }  // namespace utils::arrays

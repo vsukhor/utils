@@ -46,19 +46,20 @@
 namespace utils {
 
 namespace common {
-template <common::Arithmetic>
+template <typename>
 struct Geometric;
 }  // namespace common
 
+/// 3-element arrays.
 namespace arrays {
 
-/// Three-element arrays.
-/// This class specializes array template for three-element array
+/// \brief Three-element arrays.
+/// \details This class specializes array template for three-element array
 /// of arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 3-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template <common::Arithmetic T>
-class array<3,T> {
+template <typename T>
+class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 
 static constexpr int len {3};
 

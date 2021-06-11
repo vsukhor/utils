@@ -39,21 +39,22 @@
 #include "../common/misc.h"
 #include "_misc.h"
 
+/// Arbitrary-size arrays.
 namespace utils::arrays {
 
 /// Max array length with specific class.
 inline constexpr int MAX_SPECIFIED_LENGTH = 4;
 
-/// Arbitrary-size arrays.
-/// This class specializes array template for N-element array of
+
+/// \brief Arbitrary-size arrays.
+/// \details This class specializes array template for N-element array of
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in N-dimensional geometric applications.
 /// \tparam N Array length.
 /// \tparam T Type of the elements.
-template <unsigned N, common::Arithmetic T>
-class array<N,T,std::enable_if_t<
-        std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>
-> {
+template <unsigned N, typename T>
+class array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
+                                 std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>> {
 
 static constexpr int len {N};
 
