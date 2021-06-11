@@ -24,10 +24,10 @@
 */
 
 /**
-* \file threads.h
-* \brief Implements class Threads.
-* \author Valerii Sukhorukov
-*/
+ * \file threads.h
+ * \brief Implements class Threads.
+ * \author Valerii Sukhorukov
+ */
 
 #include "threads.h"
 

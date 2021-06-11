@@ -51,12 +51,12 @@ namespace utils::config::parameter {
 
 
 /**
-* \brief parameters of std arrays of continuous arithmetic types.
-* \details Partial template specialization for for parameters of std arrays of
-* continuous arithmetic types.
-* \tparam T Parameter type: must be std::is_arithmetic.
-* \tparam W Length of the std::array.
-*/
+ * parameters of std arrays of continuous arithmetic types.
+ * Partial template specialization for for parameters of std arrays of
+ * continuous arithmetic types.
+ * \tparam T Parameter type: must be std::is_arithmetic.
+ * \tparam W Length of the std::array.
+ */
 template <typename T, szt W>
 class Par<std::array<T,W>, false,
           std::enable_if_t<std::is_arithmetic_v<T>>>
@@ -76,59 +76,59 @@ public:
     using Base<T>::get_name;
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     */
     explicit Par(const str& name);
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param range Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr 
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param range Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     explicit Par(const str& name,
                   const std::filesystem::path& file,
                   const std::vector<Q>& range,
                   Msgr* msgr=nullptr);
 
     /**
-    * \brief Check that the read in parameter value is within the range set by \p r.
-    * \param r Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Check that the read in parameter value is within the range set by \p r.
+     * \param r Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     void check_range(const std::vector<Q>& r,
                      Msgr* msgr=nullptr);
 
     /**
-    * \brief Print the the parameter to std::cout and logfile.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Print the the parameter to std::cout and logfile.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     void print(Msgr* msgr=nullptr) final;
 
     /**
-    * \brief The parameter values.
-    * \return Parameter values (the whole array).
-    */
+     * The parameter values.
+     * \return Parameter values (the whole array).
+     */
     Q operator()() const;
 
     /**
-    * \brief Specific component of the parameter array.
-    * \param i Index in the array.
-    * \return Parameter value (the \p i -th component).
-    */
+     * Specific component of the parameter array.
+     * \param i Index in the array.
+     * \return Parameter value (the \p i -th component).
+     */
     T operator[](szt i) const;
 
 private:
     
     /**
-    * \brief Initialize the parameter from the config file.
-    * \param value Value to search for.
-    */
+     * Initialize the parameter from the config file.
+     * \param value Value to search for.
+     */
     void initialize(str value) final;
 };    
 
@@ -180,7 +180,7 @@ void Par<std::array<T,W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
-    (msgr)
+    msgr != nullptr
     ? msgr->print_array(get_name(), p_)
     : [&]() {
          std::cout << get_name() << " ";

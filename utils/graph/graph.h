@@ -25,7 +25,7 @@
 /**
  * \file graph.h
  * \brief Abstract graphs.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_GRAPH_GRAPH_H
@@ -44,10 +44,10 @@
 namespace utils::graph {
 
 /**
-  * \brief Stores routines essential for an abstract graph.
-  * \details Graphs are collections of nodes (vertexes) interconnected by edges.
-  * \tparam ET Edge type.
-  */
+ * Stores routines essential for an abstract graph.
+ * Graphs are collections of nodes (vertexes) interconnected by edges.
+ * \tparam ET Edge type.
+ */
 template <typename ET>
 class Graph {
 
@@ -68,15 +68,15 @@ public:
     using adjLT = common::vec2<ET>;
 
     /**
-    * \brief Breadth first search on the graph
-    * \details Determines if vertex \p tar belongs to the graph.
-    * \param ajl Adjacency list of the graph.
-    * \param q Auxiliary deque.
-    * \param visited Auxiliary vector of flags deniting visited status
-    * of graph vertexes.
-    * \param tar Searched vertex.
-    * \return 1/0 if \p tar is found/not found respectively.
-    */
+     * Breadth first search on the graph
+     * Determines if vertex \p tar belongs to the graph.
+     * \param ajl Adjacency list of the graph.
+     * \param q Auxiliary deque.
+     * \param visited Auxiliary vector of flags deniting visited status
+     * of graph vertexes.
+     * \param tar Searched vertex.
+     * \return 1/0 if \p tar is found/not found respectively.
+     */
     auto bfs(
         const adjLT& ajl,
         std::deque<vertex_t>& q,        // by reference
@@ -85,16 +85,16 @@ public:
     ) const;
 
     /**
-    * \brief Compute paths connecting a vertex in the graph
-    * \details Computes paths starting at vertex \p source to other vertexes
-    * in the connected component of the graph specified by the djacency list \p ajl.
-    * Implements Dijkstra's algorithm
-    * \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
-    * \param[in] source Vertex from which the paths are computed.
-    * \param[in] ajl Adjacency list of the graph.
-    * \param[out] min_distance Minimal distances.
-    * \param[out] previous Path vertexes.
-    */
+     * Compute paths connecting a vertex in the graph
+     * Computes paths starting at vertex \p source to other vertexes
+     * in the connected component of the graph specified by the djacency list \p ajl.
+     * Implements Dijkstra's algorithm
+     * \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
+     * \param[in] source Vertex from which the paths are computed.
+     * \param[in] ajl Adjacency list of the graph.
+     * \param[out] min_distance Minimal distances.
+     * \param[out] previous Path vertexes.
+     */
     void compute_paths(
         vertex_t source,
         const adjLT& ajl,
@@ -103,14 +103,14 @@ public:
     ) const;
 
     /**
-    * \brief The shortest path between two graph vertexes.
-    * \details Calculates the shortest path between graph vertexes \p v1 and \p v2
-    * using \ref compute_paths(vertex_t, const adjLT&).
-    * \param v1 First vertex.
-    * \param v2 Second vertex.
-    * \param ajl Adjacency list of the graph.
-    * \return The shortest path between vertexes \p v1 and \p v2.
-    */
+     * The shortest path between two graph vertexes.
+     * Calculates the shortest path between graph vertexes \p v1 and \p v2
+     * using \ref compute_paths(vertex_t, const adjLT&).
+     * \param v1 First vertex.
+     * \param v2 Second vertex.
+     * \param ajl Adjacency list of the graph.
+     * \return The shortest path between vertexes \p v1 and \p v2.
+     */
     pathT shortest_path(
         vertex_t v1,
         vertex_t v2,
@@ -118,62 +118,62 @@ public:
     );
 
     /**
-    * \brief Resets adjacency list of the graph.
-    * \details Resets components of adjacency list \p al to weight values \p w.
-    * \param al Adjacency list of the graph.
-    * \param w Desired edge weights.
-    */
+     * Resets adjacency list of the graph.
+     * Resets components of adjacency list \p al to weight values \p w.
+     * \param al Adjacency list of the graph.
+     * \param w Desired edge weights.
+     */
     void reset_al(
         adjLT& al,        // by reference
         weight_t w
     );
     
     /**
-    * \brief Convert list to a std::vector.
-    */
+     * Convert list to a std::vector.
+     */
     static std::vector<vertex_t> list2vector(
         const std::list<vertex_t>& l
     );
 
     /**
-    * \brief Creates graph adjacency matrix from its adjacency list.
-    * \param[in] ajl Adjacency list of the graph.
-    * \param[out] agm Adjacency matrix of the graph.
-    */
+     * Creates graph adjacency matrix from its adjacency list.
+     * \param[in] ajl Adjacency list of the graph.
+     * \param[out] agm Adjacency matrix of the graph.
+     */
     void adjacency_matrix(
         const adjLT& ajl,
         vec2int& agm        // by reference
     ) const;
 
     /**
-    * \brief Creates graph laplacian matrix from its adjacency matrix.
-    * \param[in] agm Adjacency matrix of the graph.
-    * \param[out] lm Laplacian matrix of the graph.
-    */
+     * Creates graph laplacian matrix from its adjacency matrix.
+     * \param[in] agm Adjacency matrix of the graph.
+     * \param[out] lm Laplacian matrix of the graph.
+     */
     void laplacian_matrix(
         const vec2int& agm,
         vec2int& lm
     );
     
     /**
-    * \brief Prints adjacency list of the graph.
-    * \details Prints full adjacency list of the graph \p ajl to output stream \p os.
-    * \note Please use cautiosly with large graphs.
-    * \param ajl Adjacency list of the graph.
-    * \param os Output stream.
-    */
+     * Prints adjacency list of the graph.
+     * Prints full adjacency list of the graph \p ajl to output stream \p os.
+     * \note Please use cautiosly with large graphs.
+     * \param ajl Adjacency list of the graph.
+     * \param os Output stream.
+     */
     static void print_adjacency_list(
         const adjLT& ajl,
         std::ostream& os    // by reference
     );
 
     /**
-    * \brief Prints adjacency list of the graph.
-    * \details Prints neighbours of the graph vertex \p v to output stream \p os.
-    * \param v Vertex, which neighbours are printed.
-    * \param ajl Adjacency list of the graph.
-    * \param os Output stream.
-    */
+     * Prints adjacency list of the graph.
+     * Prints neighbours of the graph vertex \p v to output stream \p os.
+     * \param v Vertex, which neighbours are printed.
+     * \param ajl Adjacency list of the graph.
+     * \param os Output stream.
+     */
     static void print_adjacency_list_line(
         vertex_t v,
         const adjLT& ajl,
@@ -379,6 +379,6 @@ print_adjacency_list_line(
     os << std::endl;
 }
 
-}    // namespace utils::graph
+}  // namespace utils::graph
 
 #endif  // UTILS_GRAPH_GRAPH_H

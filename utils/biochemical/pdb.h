@@ -38,10 +38,10 @@
 #include "../common/misc.h"
 #include "../common/msgr.h"
 
-/// \brief Biochemistry-related stuff.
+/// Biochemistry-related stuff.
 namespace utils::biochemical {
 
-/// \brief Encapsulates Protein Data Bank formatting and file io.
+/// Encapsulates Protein Data Bank formatting and file io.
 class Pdb {
 
     using A3f = arrays::A3<float>;
@@ -122,7 +122,7 @@ public:
         const std::string& element
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         uint ind,
         const std::string& chainID,
@@ -133,25 +133,25 @@ public:
         const std::string& element
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         const std::string& record,
         ulong segm
     ) noexcept;
 
-    /// \brief Formated reading of a line record from a pdb file.
+    /// Formated reading of a line record from a pdb file.
     /// \param record Record in the pdb file.
     void format_as_pdb(
         const std::string& record
     ) noexcept;
 
-    /// \brief Produce an atom-specific formatted record for a pdb file.
+    /// Produce an atom-specific formatted record for a pdb file.
     /// \param msgr Output message processor.
     std::string format_as_pdb(
         Msgr& msgr
     ) const;
 
-    /// \brief Produce an atom-specific formatted record for a pdb file.
+    /// Produce an atom-specific formatted record for a pdb file.
     /// \param p Atom position coordinates.
     /// \param msgr Output message processor.
     std::string format_as_pdb(
@@ -159,7 +159,7 @@ public:
         Msgr& msgr
     ) const;
 
-    /// \brief Produce an atom-specific formatted record for a pdb file.
+    /// Produce an atom-specific formatted record for a pdb file.
     /// \param p Atom position coordinates.
     /// \param msgr Output message processor.
     std::string format_as_pdb(
@@ -167,7 +167,7 @@ public:
         Msgr& msgr
     ) const;
 
-    /// \brief Produce an atom-specific formatted record for a pdb file.
+    /// Produce an atom-specific formatted record for a pdb file.
     /// \param a Atom-specific record.
     /// \param msgr Output message processor.
     static std::string format_as_pdb(
@@ -175,7 +175,7 @@ public:
         Msgr& msgr
     );
 
-    /// \brief Produce an atom-specific formatted record for a pdb file.
+    /// Produce an atom-specific formatted record for a pdb file.
     static std::string format_as_pdb(
         const std::string& recn,
         uint iatom,
@@ -190,10 +190,10 @@ public:
         const std::string& chge,
         Msgr& msgr );
 
-    /// \brief Determine if the atom is part of an aminoacid.
+    /// Determine if the atom is part of an aminoacid.
     bool is_in_aminoacid() const noexcept;
 
-    /// \brief Read from a pdb file.
+    /// Read from a pdb file.
     /// \param file The file to read from.
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
@@ -205,7 +205,7 @@ public:
         Msgr& msgr
     );
 
-    /// \brief Write to a pdb file.
+    /// Write to a pdb file.
     /// \param file The file to write to.
     /// \param a Atom-specific records.
     /// \param other Non-atom records.
@@ -219,23 +219,22 @@ public:
        
 private:
 
-    /// \brief Convert record name string to index.
+    /// Convert record name string to index.
     /// \param s "HETATM" or "ATOM  ".
     int irecn(const std::string& s) const noexcept;
 
-    /// \brief Get record name.
+    /// Get record name.
     /// \return "HETATM" or "ATOM  ".
     std::string recname() const noexcept; 
 
-    /// \brief Convert record name index to string.
+    /// Convert record name index to string.
     /// \return "HETATM" or "ATOM  ".
     static std::string irecname2str(int irecname) noexcept;
     
-    /// \brief Determine van Der Waals radius based on the atom data.
+    /// Determine van Der Waals radius based on the atom data.
     float set_vdW() const noexcept;
-
 };
 
-}    // namespace utils::biochemical
+}  // namespace utils::biochemical
 
 #endif // UTILS_BIOCHEMICAL_PDB_H

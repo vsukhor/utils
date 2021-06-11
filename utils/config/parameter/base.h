@@ -25,7 +25,7 @@
 /**
  * \file base.h
  * \brief Contains the base class for configuration parameters.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_PARAMETER_BASE_H
@@ -49,15 +49,14 @@ using Msgr = common::Msgr;
 using szt = common::szt;
 using ulong = common::ulong;
 
-
 namespace exceptions {
 
 /**
-* \brief Generic template for 'Parameter out of range' exception.
-* \tparam Q Parameter type.
-* \tparam isDiscrete Specifies if the parameter takes discrete values only.
-* \tparam Enabler SFINAE enabler.
-*/
+ * Generic template for 'Parameter out of range' exception.
+ * \tparam Q Parameter type.
+ * \tparam isDiscrete Specifies if the parameter takes discrete values only.
+ * \tparam Enabler SFINAE enabler.
+ */
 template <typename Q, bool isDiscrete, typename Enabler = void>
 class ParOutOfRange
     : public std::exception
@@ -69,11 +68,10 @@ class ParOutOfRange
 ////////////////////////////////////////////////////////////////////////////////
 namespace parameter {
 
-
 /**
-* \brief Base class for configuration parameters.
-* \tparam Q Parameter type.
-*/
+ * Base class for configuration parameters.
+ * \tparam Q Parameter type.
+ */
 template <typename Q>
 class Base {
 
@@ -82,21 +80,21 @@ public:
     using str = std::string;
 
     /**
-    * \brief Reads in parameters from input file stream \p ifs.
-    * \param ifs Input file stream to load the parameters.
-    */
+     * Reads in parameters from input file stream \p ifs.
+     * \param ifs Input file stream to load the parameters.
+     */
     void load(std::ifstream& ifs);
 
     /**
-    * \brief Reads in parameters from file.
-    * \param file Name of the configuration file to load the parameters.
-    */
+     * Reads in parameters from file.
+     * \param file Name of the configuration file to load the parameters.
+     */
     void load(const std::filesystem::path& file);
 
     /**
-    * \brief Name of the parameter.
-    * \return Name of the parameter.
-    */
+     * Name of the parameter.
+     * \return Name of the parameter.
+     */
     auto get_name() const noexcept -> str;
 
 protected:
@@ -104,9 +102,9 @@ protected:
     bool isLoaded_ {};  ///< Flag if the parameter is loaded.
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     */
     explicit Base(str name);  // by pass-by-value + move
 
     // The rule of five is triggered by the virtual destructor,
@@ -118,16 +116,16 @@ protected:
     virtual ~Base() noexcept = default;         ///< virtual destructor
 
     /**
-    * \brief Print the the parameter to std::cout and logfile.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Print the the parameter to std::cout and logfile.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     virtual void print(Msgr* msgr=nullptr) = 0;
 
     /**
-    * \brief Initialize the parameter from the config file.
-    * \param value Value to search for.
-    */
+     * Initialize the parameter from the config file.
+     * \param value Value to search for.
+     */
     virtual void initialize(str value) = 0;
 
     auto check_name(const str& s) const -> str;
@@ -137,11 +135,11 @@ private:
     const str name;   ///< parameter name
 
     /**
-    * \brief Finds the the parameter by \a name in the configuration file stream \p ifs.
-    * \param ifs Input file stream to load the parameter.
-    * \param[out] value str containig value(s) of the parameter searched.
-    * \return Bool corresponding to the success/failure of the search.
-    */
+     * Finds the the parameter by \a name in the configuration file stream \p ifs.
+     * \param ifs Input file stream to load the parameter.
+     * \param[out] value str containig value(s) of the parameter searched.
+     * \return Bool corresponding to the success/failure of the search.
+     */
     bool detect_by_name(std::ifstream& ifs,
                         str& value) const;  // by reference
 };
@@ -265,10 +263,9 @@ get_name() const noexcept -> str
 // template for Par xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* \brief Generic template for parameter classes.
-* \tparam Q Parameter type.
-* \tparam isDiscrete Specifies if the parameter takes discrete values only.
-* \tparam Enabler SFINAE enabler
+ * \brief Generic template for parameter classes.
+ * \tparam Q Parameter type.
+ * \tparam isDiscrete Specifies if the parameter takes discrete values only.
 */
 template <typename Q, bool isDiscrete, typename Enabler=void>
 class Par : public Base<Q>

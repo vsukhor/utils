@@ -23,10 +23,15 @@
 ================================================================================
 */
 
+/// \file pdb.h
+/// \brief Implements class PDB.
+/// \author Valerii Sukhorukov
+
+
 #include "../common/misc.h"
 #include "pdb.h"
 
-/// \brief Biochemistry-related stuff.
+/// Biochemistry-related stuff.
 namespace utils::biochemical {
 
 float Pdb::scaling;   ///< Convert nm <-> A; nanometers are used internally.

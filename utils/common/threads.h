@@ -24,10 +24,10 @@
 */
 
 /**
-* \file threads.h
-* Contains class Threads.
-* \author Valerii Sukhorukov
-*/
+ * \file threads.h
+ * Contains class Threads.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_COMMON_THREADS_H
 #define UTILS_COMMON_THREADS_H
@@ -43,19 +43,19 @@
 namespace utils::common {
 
 /**
-* \class Threads threads.h
-* \brief Simple threading utility class.
-* \details Implements convenience class for handling a collection
-* of std::thread objects.
-*/
+ * \class Threads threads.h
+ * \brief Simple threading utility class.
+ * \details Implements convenience class for handling a collection
+ * of std::thread objects.
+ */
 class Threads {
 
 public:
 
     /**
-    * \brief Enumerates basic load sharing modes.
-    * \details Names three modes of load distribution between threads.
-    */
+     * \brief Enumerates basic load sharing modes.
+     * \details Names three modes of load distribution between threads.
+     */
     enum class Weights {
         CircleCenter,   ///< Circle-shaped load distribution.
         Equal,          ///< Uniform load sharing.
@@ -69,14 +69,14 @@ public:
     std::vector<std::thread> thr;  ///< Container holding the threads.
 
     /**
-    * \brief Constructor.
-    * \details Creates threads based on a set of work units.
-    * \param offset Offset from the start of work unit container.
-    * \param size Size of the work unit container shared among the threads.
-    * \param omittedBoundaries Boundsary work units to discard.
-    * \param wht Relative weiting.
-    * \param nThreads Thread number.
-    */
+     * \brief Constructor.
+     * \details Creates threads based on a set of work units.
+     * \param offset Offset from the start of work unit container.
+     * \param size Size of the work unit container shared among the threads.
+     * \param omittedBoundaries Boundsary work units to discard.
+     * \param wht Relative weiting.
+     * \param nThreads Thread number.
+     */
     explicit Threads(
         szt offset,
         szt size,
@@ -85,39 +85,38 @@ public:
         ulong nThreads );
     
     /**
-    * Joins the threads.
-    */
+     * Joins the threads.
+     */
     void join();
     
     // Various weights for relative thread loads
     /**
-    * \brief Sets weighting factors according to \a Weights::Equal.
-    * \param w Total number of work units.
-    * \param rest Number of work units remaining after the optimal distribution.
-    */
+     * \brief Sets weighting factors according to \a Weights::Equal.
+     * \param w Total number of work units.
+     * \param rest Number of work units remaining after the optimal distribution.
+     */
     void set_chunks_equal(szt w, szt rest);
 
     /**
-    * \brief Sets weighting factors according to \a Weights::CircleCenter.
-    * \param w Total number of work units.
-    * \param rest Number of work units remaining after the optimal distribution.
-    */
+     * \brief Sets weighting factors according to \a Weights::CircleCenter.
+     * \param w Total number of work units.
+     * \param rest Number of work units remaining after the optimal distribution.
+     */
     void set_chunks_circular(szt w, szt rest);
     /**
-    * \brief Sets weighting factors according to \a Weights::TriangleDecr.
-    * \param size Total number of work units.
-    */
+     * \brief Sets weighting factors according to \a Weights::TriangleDecr.
+     * \param size Total number of work units.
+     */
     void set_chunks_triangleDecr(szt size);
 
     /**
-    * \brief Prints work unit borders for particular threads.
-    * \param withCout Specifies if printing to cout.
-    * \param msgr \a Msgr used for the output.
-    */
-    void print_regions(bool withCout,
-                       Msgr& msgr);
+     * \brief Prints work unit borders for particular threads.
+     * \param withCout Specifies if printing to cout.
+     * \param msgr \a Msgr used for the output.
+     */
+    void print_regions(bool withCout, Msgr& msgr);
 };
 
 }  // namespace utils::common
 
-#endif // UTILS_COMMON_THREADS_H
+#endif  // UTILS_COMMON_THREADS_H

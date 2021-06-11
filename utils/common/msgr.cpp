@@ -24,10 +24,10 @@
 */
 
 /**
-* \file msgr.cpp
-* Implements class Msgr.
-* \author Valerii Sukhorukov
-*/
+ * \file msgr.cpp
+ * Implements class Msgr.
+ * \author Valerii Sukhorukov
+ */
 
 #include "msgr.h"
 

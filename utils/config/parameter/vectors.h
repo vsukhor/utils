@@ -49,13 +49,13 @@ namespace utils::config::parameter {
 // specialization for vectors of arithmetic types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
-* \brief Parameters of std vector of continuous arithmetic types.
-* \details Partial template specialization for for parameters of std vector of
-* continuous arithmetic types.
-* \tparam T Parameter type: must be std::is_arithmetic.
-* \tparam isDiscrete Specifies if the vector components accept discrete
-* or continous values.
-*/
+ * Parameters of std vector of continuous arithmetic types.
+ * Partial template specialization for for parameters of std vector of
+ * continuous arithmetic types.
+ * \tparam T Parameter type: must be std::is_arithmetic.
+ * \tparam isDiscrete Specifies if the vector components accept discrete
+ * or continous values.
+ */
 template <typename T, bool isDiscrete>
 class Par<std::vector<T>,
          isDiscrete,
@@ -76,50 +76,50 @@ public:
 
     using Base<T>::get_name;
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     */
     explicit Par(const str& name);
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    * \param expectedSize Expected size of the parameter vector.
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     * \param expectedSize Expected size of the parameter vector.
+     */
     explicit Par(const str& name,
                  szt expectedSize);
                  
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param range Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param range Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     explicit Par(const str& name,
                  const std::filesystem::path& file,
                  const std::vector<std::array<T,2>>& range,
                  Msgr* msgr=nullptr);
 
     /**
-    * \brief Check that the read in parameter value is within the range set by \p r.
-    * \param r Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Check that the read in parameter value is within the range set by \p r.
+     * \param r Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     void check_range(const std::vector<std::array<T,2>>& r,
                      Msgr* msgr=nullptr);
 
     /**
-    * \brief Read a parameter without instantiating.
-    * \details Static function for reading a parameter without instantiating
-    * this class object.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param msgr \a Msgr used for the output.
-    * \return Parameter values (the whole vector).
-    */
+     * Read a parameter without instantiating.
+     * Static function for reading a parameter without instantiating
+     * this class object.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param msgr \a Msgr used for the output.
+     * \return Parameter values (the whole vector).
+     */
     static auto readin(
         const str& name,
         const std::filesystem::path& file,
@@ -127,31 +127,31 @@ public:
     );
     
     /**
-    * \brief Print the the parameter to std::cout and logfile.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Print the the parameter to std::cout and logfile.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     void print(Msgr* msgr=nullptr) final;
     
     /**
-    * \brief The parameter values.
-    * \return Parameter values (the whole vector).
-    */
+     * The parameter values.
+     * \return Parameter values (the whole vector).
+     */
     Q operator()() const;
     
     /**
-    * \brief Specific component of the parameter vector.
-    * \param i Index in the vaector.
-    * \return  Parameter value (the \p i -th component).
-    */
+     * Specific component of the parameter vector.
+     * \param i Index in the vaector.
+     * \return  Parameter value (the \p i -th component).
+     */
     T operator[](szt i) const;
 
 private:
     
     /**
-    * \brief Initialize the parameter from the config file.
-    * \param value Value to search for.
-    */
+     * Initialize the parameter from the config file.
+     * \param value Value to search for.
+     */
     void initialize(str value) final;
 };    
 

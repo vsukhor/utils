@@ -24,10 +24,10 @@
 */
 
 /**
-* \file msgr.h
-* \brief Contains class Msgr.
-* \author Valerii Sukhorukov
-*/
+ * \file msgr.h
+ * \brief Contains class Msgr.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_COMMON_MSGR_H
 #define UTILS_COMMON_MSGR_H
@@ -44,11 +44,11 @@
 namespace utils::common {
 
 /**
-* \class Msgr msgr.h
-* \brief Convenient formatted text output to the screen and a logfile.
-* \details Implements convenience class for formatted text output
-* to std::cout and to a logfile.
-*/
+ * \class Msgr msgr.h
+ * \brief Convenient formatted text output to the screen and a logfile.
+ * \details Implements convenience class for formatted text output
+ * to std::cout and to a logfile.
+ */
 class Msgr {
 
 public:
@@ -64,11 +64,11 @@ public:
     Msgr() = default;
 
     /**
-    * \brief Constructor.
-    * \param so Screen out stream.
-    * \param sl File out stream.
-    * \param precision Precision of real numbers.
-    */
+     * \brief Constructor.
+     * \param so Screen out stream.
+     * \param sl File out stream.
+     * \param precision Precision of real numbers.
+     */
     explicit Msgr(
         outstream* so,
         logstream* sl,
@@ -76,86 +76,69 @@ public:
     );
     
     /**
-    * \brief Set formatting parameters.
-    * \param precision Precision of real numbers
-    */
+     * \brief Set formatting parameters.
+     * \param precision Precision of real numbers
+     */
     void set_formats(int precision) noexcept;
 
 
     /**
-    * \brief Print std::array.
-    * \tparam V Data type of array elements.
-    * \tparam N Number of array elements.
-    * \param name Name/title.
-    * \param v Array data.
-    */
+     * \brief Print std::array.
+     * \tparam V Data type of array elements.
+     * \tparam N Number of array elements.
+     * \param name Name/title.
+     * \param v Array data.
+     */
     template <typename V, auto N>
     void print_array( const std::string& name,
                       const std::array<V,N>& v
                     ) const noexcept;
 
     /**
-    * \brief Print named std::vector .
-    * \tparam V Data type of vector elements.
-    * \param name Name/title.
-    * \param v Vector data.
-    */
+     * \brief Print named std::vector .
+     * \tparam V Data type of vector elements.
+     * \param name Name/title.
+     * \param v Vector data.
+     */
     template <typename V>
     void print_vector( const std::string& name,
                        const std::vector<V>& v
                      ) const noexcept;
 
-//    /**
-//    * \brief Print std::string.
-//    * \tparam endline Finish with line end.
-//    * \param s String to print.
-//    */
-//    template <bool endline=true>
-//    void print(const std::string& s) const noexcept;
-
-//    /**
-//    * \brief Print std::string out and exit.
-//    * \param s String to print.
-//    */
-//    void exit(const std::string& s) const noexcept;
-
-//    template <bool end=true>
-//		void print(const char *fmt, ...) noexcept;
-
     /**
-    * \brief Print an data series of of various types.
-    * \details Based on proposition stackoverflow.com proposition by geza:
-    * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
-    * \tparam endline Finish with line end.
-    * \param values Values to print.
-    */
+     * \brief Print an data series of of various types.
+     * \details Based on proposition stackoverflow.com proposition by geza:
+     * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
+     * \tparam endline Finish with line end.
+     * \param values Values to print.
+     */
     template <bool endline=true, typename... T>
     void print(T... values) const;
 
     /**
-    * \brief Print an data series of of various types and exit the process.
-    * \details Based on proposition stackoverflow.com proposition by geza:
-    * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
-    * \param values Values to print.
-    */
+     * \brief Print an data series of of various types and exit the process.
+     * \details Based on proposition stackoverflow.com proposition by geza:
+     * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
+     * \param values Values to print.
+     */
     template <typename... T>
     void exit(T... values);
 
 private:
 
     /**
-    * \brief Check that the stream used is valid.
-    * \tparam S Stream type.
-    */
+     * \brief Check that the stream used is valid.
+     * \tparam S Stream type.
+     */
     template <typename S>
     static constexpr auto is_valid_stream() noexcept;
 
     /**
-    * \brief Print to a stream \p io.
-    * \tparam IO Stream type.
-    * \param v String to print.
-    * \param endline Specifies if the line end should be added.
-    */
+     * \brief Print to a stream \p io.
+     * \tparam IO Stream type.
+     * \param v String to print.
+     * \param endline Specifies if the line end should be added.
+     */
     template <typename IO>
     void prn(IO* io,
              const std::string& v,

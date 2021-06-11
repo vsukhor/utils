@@ -26,7 +26,7 @@
 /**
  * \file vertex_edge.h
  * \brief Description of vertexes and edges for use in graphs.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_GRAPH_VERTEX_EDGE_H
@@ -37,7 +37,7 @@
 /// Abstract graph circuitry.
 namespace utils::graph {
 
- /// Weight classification of graph edges.
+/// Weight classification of graph edges.
 enum class EdgeMode {
 
     weighted,
@@ -47,10 +47,10 @@ enum class EdgeMode {
 
 
 /**
-  * \brief Implements a graph edge connected to a vertex.
-  * \tparam fT Floating point type.
-  * \tparam iT Integer type.
-  * \tparam LinkMode Weitghted/unweighted mode.
+ * Implements a graph edge connected to a vertex.
+ * \tparam fT Floating point type.
+ * \tparam iT Integer type.
+ * \tparam LinkMode Weitghted/unweighted mode.
  */
 template <typename fT,
           typename iT,
@@ -59,10 +59,10 @@ struct EdgeType {};
 
 
 /**
-  * \brief Specification of \a EdgeType for weighted edges.
-  * \details Implements a graph edge connected to a vertex in weighted mode.
-  * \tparam fT Floating point type.
-  * \tparam iT Integer type.
+ * Specification of \a EdgeType for weighted edges.
+ * Implements a graph edge connected to a vertex in weighted mode.
+ * \tparam fT Floating point type.
+ * \tparam iT Integer type.
  */
 template <typename fT,
           typename iT>
@@ -78,7 +78,7 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
     weight_t weight;    ///< Weight of the connecting edge.
 
     /**
-     * \brief Constructor.
+     * Constructor.
      * \param target Vertex to which this edge is to bind the parent vertex.
      * \param weight Weight of the edge (default is one).
      */
@@ -92,36 +92,33 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
 };
 
 
-/**
-  * \brief Specification of \a EdgeType for unweighted edges.
-  * \details Implements a graph edge connected to a vertex in unweighted mode.
-  * \tparam fT Floating point type.
-  * \tparam iT Integer type.
- */
+
+/// Specification of \a EdgeType for unweighted edges.
+/// Implements a graph edge connected to a vertex in unweighted mode.
+/// \tparam fT Floating point type.
+/// \tparam iT Integer type.
 template <typename fT,
           typename iT>
 struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
-    using vertex_t = iT;    ///< Type alias for vertex index.
-    using weight_t = fT;    ///< Type alias for edge weight.
+    using vertex_t = iT;  ///< Type alias for vertex index.
+    using weight_t = fT;  ///< Type alias for edge weight.
 
     /// Maximal edge weight allowed.
     static constexpr weight_t max_weight {common::huge<weight_t>};
     /// Weight of the connecting edge.
     static constexpr weight_t weight {common::one<weight_t>};
 
-    vertex_t target;    ///< Target neighbour index.
+    vertex_t target;  ///< Target neighbour index.
 
-    /**
-     * \brief Constructor.
-     * \param target Target vertex.
-     */
+    /// Constructor.
+    /// \param target Target vertex.
     explicit EdgeType(vertex_t target)
         : target {target}
     {}
 };
 
 
-}    // namespace utils::graph
+}  // namespace utils::graph
 
 #endif  // UTILS_GRAPH_VERTEX_EDGE_H

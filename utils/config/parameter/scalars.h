@@ -28,7 +28,7 @@
  * \brief Parameters of arithmetic type.
  * \details Contains template partial specialization for classes encapsulating
  * confuguration file parameters of arithmetic type.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_PARAMETER_SCALARS_H
@@ -47,13 +47,11 @@
 namespace utils::config::parameter {
 
 /**
-* \brief Parameters of arithmetic scalar types.
-* \details Partial template specialization for for parameters of arithmetic
-* scalar types.
-* \tparam T Parameter type: must be std::is_arithmetic.
-* \tparam isDiscrete Specifies if the vector components accept discrete of
-*         continous values.
-*/
+ * Parameters of arithmetic scalar types.
+ * Partial template specialization for for parameters of arithmetic
+ * scalar types.
+ * \tparam T Parameter type: must be std::is_arithmetic continous values.
+ */
 template <typename T, bool isDiscrete>
 class Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
@@ -69,19 +67,19 @@ public:
     using Base<T>::get_name;
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     */
     explicit Par(const std::string& name);
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param range Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param range Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     explicit Par(
         const std::string& name,
         const std::filesystem::path& file,
@@ -90,13 +88,13 @@ public:
     );
 
     /**
-    * \brief Constructor.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param range Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Constructor.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param range Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     explicit Par(
         const std::string& name,
         const std::filesystem::path& file,
@@ -104,41 +102,27 @@ public:
         Msgr* msgr=nullptr
     );
 
-/*    void check_range( const std::array<T,2>& r, Msgr& msgr )
-    {
-        if (isDiscrete) {
-            if (std::find(r.begin(), r.end(), p_) == r.end())
-                throw exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
-        }
-        else {
-            XASSERT(r.size()==2, "size of r must be 2 for continuous parameters");
-            if (p_<r[0] || p_>r[1])
-                throw exceptions::ParOutOfRange<T,isDiscrete>(name(), p_, r, msgr);
-        }
-    }
-*/
-
     /**
-    * \brief Check that the read in parameter value is within the range set by \p r.
-    * \tparam W Acceptable range of parameter values.
-    * \param r Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Check that the read in parameter value is within the range set by \p r.
+     * \tparam W Acceptable range of parameter values.
+     * \param r Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     template <typename W>
     void check_range(const W& r,
                      Msgr* msgr=nullptr);
 
     /**
-    * \brief Read a parameter without instantiating.
-    * \details Static function for reading a parameter without instantiating
-    * this class object.
-    * \param name Name of the parameter.
-    * \param file Configuration file.
-    * \param range Acceptable range of parameter values.
-    * \param msgr \a Msgr used for the output.
-    * \return Parameter values (the whole vector).
-    */
+     * Read a parameter without instantiating.
+     * Static function for reading a parameter without instantiating
+     * this class object.
+     * \param name Name of the parameter.
+     * \param file Configuration file.
+     * \param range Acceptable range of parameter values.
+     * \param msgr \a Msgr used for the output.
+     * \return Parameter values (the whole vector).
+     */
     static auto readin(
         const std::string& name,
         const std::filesystem::path& file,
@@ -147,30 +131,30 @@ public:
     );
 
     /**
-    * \brief Print the the parameter to std::cout and logfile.
-    * \param msgr \a Msgr used for the output.
-    * \see Msgr
-    */
+     * Print the the parameter to std::cout and logfile.
+     * \param msgr \a Msgr used for the output.
+     * \see Msgr
+     */
     void print(Msgr* msgr=nullptr) final;
 
     /**
-    * \brief Set the field \a p_ to the value \p val.
-    * \param val New value of the parameter.
-    */
+     * Set the field \a p_ to the value \p val.
+     * \param val New value of the parameter.
+     */
     void set(const Q& val);
 
     /**
-    * \brief The parameter value.
-    * \return Parameter value.
-    */
+     * The parameter value.
+     * \return Parameter value.
+     */
     Q operator()() const;
     
 private:
 
     /**
-    * \brief Initialize the parameter from the config file.
-    * \param value Value to search for.
-    */
+     * Initialize the parameter from the config file.
+     * \param value Value to search for.
+     */
     void initialize(std::string value) final;
 };    
 

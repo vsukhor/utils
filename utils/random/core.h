@@ -56,29 +56,29 @@ class Core {
 
     // Ensure that the template parameter is a floating type.
     static_assert(
-        std::is_floating_point<realT>::value,
+        std::is_floating_point_v<realT>,
         "Class Core can only be instantiated with floating point types"
     );
 
 public:
 
-    ///< Number of seeds in the 'seed' file.
+    /// Number of seeds in the 'seed' file.
     static constexpr szt num_saved_seeds {1'000'001};
-    ///< Size of the buffer for storing random numbers.
+    /// Size of the buffer for storing random numbers.
     static constexpr int bufferSize {1'000'000};
-    ///< Master seed.
+    /// Master seed.
     static constexpr int mainSeed {1'234'567'890};
 
-    /// \brief Produce \p num_saved_seeds seeds and store them in a file.
+    /// Produce \p num_saved_seeds seeds and store them in a file.
     /// \details This is done whenever the working directory does not already
     /// have such a file.
     static void make_seed(
         const std::filesystem::path& file,  ///< File with seeds.
-        Msgr* msgr                     ///< Output message processor.
+        Msgr* msgr                          ///< Output message processor.
     );
 
-    /// \brief Produce \p num_saved_seeds seeds and store them in a file.
-    /// \details This is done whenever the working directory does not already
+    /// Produce \p num_saved_seeds seeds and store them in a file.
+    /// This is done whenever the working directory does not already
     /// have such a file.
     static uint readin_seed(
         const std::filesystem::path& file,  ///< File with seeds.
@@ -86,17 +86,19 @@ public:
         Msgr& msgr                     ///< Output message processor.
     );
 
-    /// \brief \a seed getter.
+    /// Seed getter.
     auto theSeed() { return seed; }
 
 protected:
 
+    /// Constructor.
     explicit Core(
         Msgr& msgr,                   ///< Output message processor.
         uint seed,                    ///< Seed to use.
         const std::string& runName    ///< Human-readable run index.
     ) noexcept;
 
+    /// Constructor.
     explicit Core(
         Msgr& msgr,                    ///< Output message processor.
         const std::filesystem::path& seedFile,  ///< File with seeds.
