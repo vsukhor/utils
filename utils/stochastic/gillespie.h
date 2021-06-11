@@ -24,10 +24,10 @@
 */
 
 /**
-* \file gillespie.h
-* \brief Contains class Gillespie.
-* \author Valerii Sukhorukov
-*/
+ * \file gillespie.h
+ * \brief Contains class Gillespie.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_STOCHASTIC_GILLESPIE_H
 #define UTILS_STOCHASTIC_GILLESPIE_H
@@ -49,7 +49,7 @@ namespace utils::stochastic {
  * of D.T. Gillespie <https://pubs.acs.org/doi/abs/10.1021/j100540a008>
  * \tparam RF random factory class.
  * \tparam Reaction base class for reactions.
-*/
+ */
 template <typename RF, typename Reaction>
 class Gillespie {
 
@@ -64,18 +64,18 @@ public :
     /**
      * \brief Constructor.
      * \param rnd Random class factory.
-    */
+     */
     explicit Gillespie(RF& rnd) noexcept;
 
     /**
      * \brief Adds a reaction \p r to the reaction collection.
      * \param r Unique pointer to the new reaction.
-    */
+     */
     void add_reaction(std::unique_ptr<Reaction> r);
 
     /**
      * \brief Performs neccessary settings of the class members.
-    */
+     */
     void initialize() noexcept;
 
     bool set_asum() noexcept;
@@ -84,39 +84,39 @@ public :
     /**
      * \brief Getter for the time till the nest reaction event.
      * \return Time till the nest reaction event.
-    */
+     */
     [[nodiscard]] realT tau() const noexcept { return tau_; }
 
     /**
      * \brief Prints reaction propensities to \p os.
      * \param os Stream to print to.
-    */
+     */
     void printScores(std::ostream& os) const;
 
     /**
      * \brief Prints a log record with the information on current reaction.
      * \param os Stream to record to.
-    */
+     */
     void log_data(std::ostream& os) const;
 
     /**
      * \brief Number of reactions.
      * \return Number of reactions.
-    */
+     */
     [[nodiscard]] constexpr auto num_reactions() const noexcept -> szt;
 
     /**
      * \brief Short human readable name of the reaction.
      * \param ind index of the reaction.
      * \returns Short human readable name of the reaction indexed by \p ind.
-    */
+     */
     [[nodiscard]] std::string short_name(szt ind) const noexcept;
 
     /**
      * \brief Finds reaction from its name.
      * \param name Name of the reaction to find.
      * \returns Pointer to the reaction \p name ot nullptr if does not exist.
-    */
+     */
     Reaction* get_reaction(const std::string& name) const;
 
 private:
@@ -136,18 +136,18 @@ private:
 
     /**
      * \brief Sets the time \tau_ till the next reaction event.
-    */
+     */
     void set_tau() noexcept;
 
     /**
      * \brief Sets index of the reaction to fire in the next event.
-    */
+     */
     void set_rind() noexcept;
 
     /**
      * \brief Produces pointer to the current reaction.
      * \return Pointer to the current reaction.
-    */
+     */
     constexpr Reaction* currRc() const noexcept;
 
 };
