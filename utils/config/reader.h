@@ -26,7 +26,7 @@
 /**
  * \file reader.h
  * \brief Convenience class reading parameters from confuguration files.
- + \author Valerii Sukhorukov
+ * \author Valerii Sukhorukov
  */
 
 #ifndef UTILS_CONFIG_READER_H
@@ -45,9 +45,7 @@
 /// Configuration namespace.
 namespace utils::config {
 
-/**
-* Convenience class reading parameters from confuguration files.
-*/
+/// Convenience class reading parameters from confuguration files.
 class Reader {
 
     using Msgr = common::Msgr;
@@ -58,10 +56,10 @@ public:
     const path file;  ///< Name of the configuration file.
 
     /**
-    * \brief Constructor creating the configuration file-specific instance.
-    * \param file Name of the configuration file.
-    * \param msgr Messanger used for outputing.
-    */
+     * Constructor creating the configuration file-specific instance.
+     * \param file Name of the configuration file.
+     * \param msgr Messanger used for outputing.
+     */
     Reader( const path& file,
             Msgr* msgr
         )
@@ -73,12 +71,12 @@ public:
     }
     
     /**
-    * \brief Value of the parameter read in from the configuration file.
-    * \tparam T Parameter type.
-    * \param s Parameter name.
-    * \param range Acceptable range of parameter values.
-    * \return Value of the parameter read in.
-    */
+     * Value of the parameter read in from the configuration file.
+     * \tparam T Parameter type.
+     * \param s Parameter name.
+     * \param range Acceptable range of parameter values.
+     * \return Value of the parameter read in.
+     */
     template <typename T>
     auto operator()(const std::string& s,
                     const std::vector<T>& range ) const
@@ -87,12 +85,12 @@ public:
     }
 
     /**
-    * \brief Value of the parameter read in from the configuration file.
-    * \tparam T Parameter type.
-    * \param s Parameter name.
-    * \param range Acceptable range of parameter values.
-    * \return Value of the parameter read in.
-    */
+     * Value of the parameter read in from the configuration file.
+     * \tparam T Parameter type.
+     * \param s Parameter name.
+     * \param range Acceptable range of parameter values.
+     * \return Value of the parameter read in.
+     */
     template <typename T>
     auto operator()(const std::string& s,
                     const std::array<T,2>& range ) const
@@ -101,12 +99,12 @@ public:
     }
 
     /**
-    * \brief Value of the parameter read in from the configuration file.
-    * \tparam T Parameter type.
-    * \param s Parameter name.
-    * \param range Acceptable range of parameter values.
-    * \return Value of the parameter read in.
-    */
+     * Value of the parameter read in from the configuration file.
+     * \tparam T Parameter type.
+     * \param s Parameter name.
+     * \param range Acceptable range of parameter values.
+     * \return Value of the parameter read in.
+     */
     template <typename T, auto N>
     auto operator()(const std::string& s,
                     const std::vector<std::array<T,N>>& range) const
@@ -115,10 +113,10 @@ public:
     }
 
     /**
-    * \brief Checks if file with name \p fname exists.
-    * \param f Expected file.
-    * \return Name of the confuguration file if it is found.
-    */
+     * Checks if file with name \p fname exists.
+     * \param f Expected file.
+     * \return Name of the confuguration file if it is found.
+     */
     static auto check_name(const path& f) -> path
     {
         if (std::filesystem::exists(f) &&
@@ -131,12 +129,12 @@ public:
     }
 
     /**
-    * \brief Copies \p compartment - specific config. file to directory \p path.
-    * \note The directory is expected to exist.
-    * \param path Directory name to which file should be copied.
-    * \param signature Case-specific signature present in the file name.
-    * \param compartment Name of the compartment specified in the configuration.
-    */
+     * Copies \p compartment - specific config. file to directory \p path.
+     * \note The directory is expected to exist.
+     * \param path Directory name to which file should be copied.
+     * \param signature Case-specific signature present in the file name.
+     * \param compartment Name of the compartment specified in the configuration.
+     */
     void copy( const std::filesystem::path& path,
                const std::string& signature,
                const std::string& compartment ) const

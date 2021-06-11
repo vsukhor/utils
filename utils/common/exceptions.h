@@ -49,7 +49,7 @@ namespace utils::common::exceptions {
  * \details Outputs message \p msg to \a Msgr.
  * \param msg Message to output.
  * \see Msgr
-*/
+ */
 int simple(const std::string& msg,
            Msgr* msgr);
 
@@ -57,8 +57,8 @@ int simple(const std::string& msg,
 // Simple exceptions ===========================================================
 
 /**
-* \brief Uncomplicated process termination with exception.
-*/
+ * \brief Uncomplicated process termination with exception.
+ */
 class Simple
     : public std::exception {
 
@@ -68,16 +68,16 @@ public:
     Simple() = default;
 
     /**
-    * \brief Constructor for printing to a log record.
-    * \details Outputs message \p msg to \a Msgr for standard
-    * output (if \p msgr is nullptr).
-    * \param msg Message to output.
-    * \param msgr Output message processor.
-    */
+     * \brief Constructor for printing to a log record.
+     * \details Outputs message \p msg to \a Msgr for standard
+     * output (if \p msgr is nullptr).
+     * \param msg Message to output.
+     * \param msgr Output message processor.
+     */
     explicit Simple(const std::string& msg,
                     Msgr* msgr);
 };
 
-}    // namespace utils::common::exceptions
+}  // namespace utils::common::exceptions
 
 #endif // UTILS_CONFIG_EXCEPTIONS_H

@@ -23,11 +23,10 @@
 ================================================================================
 */
 
-/**
-* \file _misc.h
-* \brief Generic array template.
-* \author Valerii Sukhorukov
-*/
+/// \file _misc.h
+/// \brief Generic array template.
+/// \author Valerii Sukhorukov
+
 
 #ifndef UTILS_ARRAYS_MISC_H
 #define UTILS_ARRAYS_MISC_H

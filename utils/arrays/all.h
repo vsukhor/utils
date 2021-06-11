@@ -22,11 +22,10 @@
 
 ============================================================================== */
 
-/**
-* \file all.h
-* \brief Generic array templates.
-* \author Valerii Sukhorukov
-*/
+/// \file all.h
+/// \brief Generic array templates.
+/// \author Valerii Sukhorukov
+
 
 #ifndef UTILS_ARRAYS_ARRAY_H
 #define UTILS_ARRAYS_ARRAY_H
