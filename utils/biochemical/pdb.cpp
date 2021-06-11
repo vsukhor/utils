@@ -29,7 +29,7 @@
 /// \brief Biochemistry-related stuff.
 namespace utils::biochemical {
 
-float Pdb::scaling;    ///< Convert nm <-> A; nanometers are used internally.
+float Pdb::scaling;   ///< Convert nm <-> A; nanometers are used internally.
 
 Pdb::Pdb(
         const std::string& chainID,
@@ -386,7 +386,7 @@ read(
 {
     std::ifstream fin {file};
     if (!fin.is_open())
-        msgr.exit("Unable to open file for reading at " + file.string());
+        msgr.exit("Unable to open file for reading at ", file);
 
     a.clear();
     other.clear();
@@ -418,7 +418,7 @@ write(
 {
     std::ofstream fout {file};
     if (!fout.is_open())
-        msgr.exit("Unable to open file for writing at " + file.string());
+        msgr.exit("Unable to open file for writing at ", file);
 
     szt i = 0;
     if (!other.empty())
