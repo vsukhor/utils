@@ -142,8 +142,7 @@ public:
                const std::string& compartment ) const
     {
         const std::filesystem::path cfgCopy {
-            file.parent_path() /
-                (std::string("cfgCopy_") + compartment + signature + ".txt")
+            path / (std::string("cfgCopy_")+compartment+signature+".txt")
         };
         msgr->print("Copying "+compartment+" config to ", cfgCopy);
         if (std::filesystem::exists(cfgCopy)) {
