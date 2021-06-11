@@ -23,11 +23,10 @@
 ================================================================================
 */
 
-/**
-* \file array2.h
-* \brief Two-element arrays.
-* \author Valerii Sukhorukov
-*/
+/// \file array2.h
+/// \brief Two-element arrays.
+/// \author Valerii Sukhorukov
+
 
 #ifndef UTILS_ARRAYS_ARRAY2_H
 #define UTILS_ARRAYS_ARRAY2_H
@@ -42,16 +41,15 @@
 #include "../common/misc.h"
 #include "_misc.h"
 
-/// Two-element arrays.
 namespace utils::arrays {
 
-/// \brief Two-element arrays.
-/// \details This class specializes array template for two-element array of
+/// Two-element arrays.
+/// This class specializes array template for two-element array of
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 2-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template <typename T>
-class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
+template <common::Arithmetic T>
+class array<2,T> {
 
 static constexpr int len {2};
 

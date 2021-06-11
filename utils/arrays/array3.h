@@ -23,11 +23,10 @@
 ================================================================================
 */
 
-/**
-* \file array3.h
-* \brief Three-element arrays.
-* \author Valerii Sukhorukov
-*/
+/// \file array3.h
+/// \brief Three-element arrays.
+/// \author Valerii Sukhorukov
+
 
 #ifndef UTILS_ARRAYS_ARRAY3_H
 #define UTILS_ARRAYS_ARRAY3_H
@@ -47,20 +46,19 @@
 namespace utils {
 
 namespace common {
-template <typename>
+template <common::Arithmetic>
 struct Geometric;
 }  // namespace common
 
-/// 3-element arrays.
 namespace arrays {
 
-/// \brief Three-element arrays.
-/// \details This class specializes array template for three-element array
+/// Three-element arrays.
+/// This class specializes array template for three-element array
 /// of arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 3-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template <typename T>
-class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+template <common::Arithmetic T>
+class array<3,T> {
 
 static constexpr int len {3};
 

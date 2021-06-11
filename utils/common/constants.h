@@ -60,6 +60,8 @@ using ulong = unsigned long;
 using uint = unsigned int;
 using szt = std::size_t;
 
+template <typename T> concept Arithmetic = std::is_arithmetic_v<T>;
+
 // container typedefs ==========================================================
 
 // std vector-based 2, 3, 4-dim containers
