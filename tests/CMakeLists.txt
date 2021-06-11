@@ -14,6 +14,11 @@ endif()
 
 include(GoogleTest)
 
+find_package(Boost REQUIRED)
+if(Boost_FOUND)
+  include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
 add_executable(unittests_utils
 	test_parameter.cpp
 	test_misc.cpp
