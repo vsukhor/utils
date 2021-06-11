@@ -32,12 +32,8 @@
 
 #include "exceptions.h"
 
-/// \brief Exeption and exit handlers.
 namespace utils::common::exceptions {
 
-/// \brief Print a message and exit.
-/// \param msg Message text.
-/// \param msgr The reporter.
 int simple( const std::string& msg,
             Msgr* msgr )
 {
@@ -48,7 +44,7 @@ int simple( const std::string& msg,
 
     exit(EXIT_FAILURE);
 
-    return EXIT_FAILURE;         // pro forma
+    return EXIT_FAILURE;  // pro forma
 }
 
 Simple::
@@ -61,4 +57,4 @@ Simple(const std::string& msg,
         std::cerr << msg << std::endl;
 }
 
-}    // namespace utils::common::exceptions
+}  // namespace utils::common::exceptions

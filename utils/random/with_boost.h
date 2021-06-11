@@ -139,6 +139,7 @@ public:
     /// direction  (i.e. \p th == 0).
     /// \param[in] inclMinMax Min, max constrains on inclination.
     /// \param[in] azimMinMax Min, max constrains on azimuth.
+    /// \param[in] azimSymmetric Switch if the szimuth is symmetric.
     /// \param[out] phPole Inclination of the resulting point.
     /// \param[out] th Azimuth of the resulting point.
     /// \return Point on a sphere uinformly distributed within angular boundaries.
@@ -150,10 +151,11 @@ public:
         realT& th
     ) noexcept -> A3r;
 
-    /// \brief A point uinformly distributed within boundaries on a sphere surface.
+    /// A point uinformly distributed within boundaries on a sphere surface.
     /// Implements trigonometric method.
     /// \param solidAngle Surface patch where the random point may belong to;
     /// set it to pi for the whole surface.
+    /// \param r Shpere of radius.
     /// \param poleDir [0,1,2] is the index of the axis around which \p
     /// solidAngle is set.
     /// \return A point uinformly distributed within \p solidAngle on a
@@ -172,6 +174,7 @@ public:
     /// \param poleDir [0,1,2] is the index of the axis around which \p
     /// solidAngle is set.
     /// \param bias [-1,0,1]: -1 towards poles; 1 towards equator, 0 no bias
+    /// \param biasPar Bias strength.
     /// \return A point uinformly distributed within \p solidAngle on a
     /// shperoid of semi-axes dimensions \p r.
     auto uniform_on_spheriod(

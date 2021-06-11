@@ -56,9 +56,7 @@ int simple(const std::string& msg,
 
 // Simple exceptions ===========================================================
 
-/**
- * \brief Uncomplicated process termination with exception.
- */
+/// Uncomplicated process termination with exception.
 class Simple
     : public std::exception {
 
