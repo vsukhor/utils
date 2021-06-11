@@ -5,25 +5,27 @@ project(utils
     DESCRIPTION "A cooection of misc code for common use in other repos."
     LANGUAGES CXX)
 
-    add_compile_options(-O3 -msse4 -fPIC)
-    set(CMAKE_CXX_STANDARD 20)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+add_compile_options(-O3 -msse4 -fPIC)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
-    add_library(utils STATIC
-                utils/biochemical/pdb.cpp
-                utils/common/threads.cpp
-                utils/common/msgr.cpp
-                utils/common/exceptions.cpp)
+add_library(utils STATIC
+            utils/biochemical/pdb.cpp
+            utils/common/threads.cpp
+            utils/common/msgr.cpp
+            utils/common/exceptions.cpp)
 
-    target_include_directories(utils PUBLIC utils/biochemical
-                                            utils/arrays
-                                            utils/graph
-                                            utils/common
-                                            utils/config
-                                            utils/random
-                                            utils/volumetric_data)
+target_include_directories(utils PUBLIC utils/biochemical
+                                        utils/arrays
+                                        utils/graph
+                                        utils/common
+                                        utils/config
+                                        utils/random
+                                        utils/volumetric_data)
+
+target_compile_features(utils PRIVATE cxx_std_20)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
