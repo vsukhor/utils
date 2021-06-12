@@ -42,7 +42,7 @@ protected:
     static constexpr const int PRINT_PRECISION {6};
 
     MsgrTest()
-        : scratch_dir {std::filesystem::current_path() / "tests" / "scratch"}
+        : scratch_dir {std::filesystem::current_path()/"tests"/"scratch_msgr"}
         , scratch_dir_created {}
         , file {scratch_dir / "msgr_test.txt"}
     {}
