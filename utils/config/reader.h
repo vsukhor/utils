@@ -124,7 +124,7 @@ public:
             return f;
 
         throw common::exceptions::Simple(
-            "Error: file provided '" + f.string() +
+            "Error: file '" + f.string() +
             "' is not a valid config file.", nullptr);
     }
 
