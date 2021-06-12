@@ -85,7 +85,6 @@ private:
      * \param name Name of the parameter that triggered the exception.
      * \param p Parameter value (out of range).
      * \param r Acceptable range of parameter values.
-     * \param msgr Pointer to \a Msgr used for the output.
      */
     std::string generate_message(
             const std::string& name,
