@@ -161,10 +161,8 @@ make_seed(
         if (const auto msg = "Unable to create seed file "+file.string();
             msgr)
             msgr->exit(msg);
-        else {
-            std::cerr << msg << std::endl;
-            std::exit(EXIT_FAILURE);
-        }
+        else
+            common::exit(msg);
     }
     for (szt i=0; i<num_saved_seeds; i++) {
         const uint s = seed_d(g);

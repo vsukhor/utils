@@ -243,10 +243,8 @@ auto Base<Q>::
 check_name( const str& s ) const -> str
 {
     const auto ss {s.substr(0, s.find(" "))};
-    if (s.size() != ss.size()) {
-        std::cerr << "Incorrect name of configuration parameter: " + s;
-        std::exit(EXIT_FAILURE);
-    }
+    if (s.size() != ss.size())
+        common::exit("Incorrect name of configuration parameter: " + s);
     return s;
 }
 

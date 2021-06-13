@@ -266,6 +266,12 @@ szt find( const std::vector<T>& b,
     return j.size();
 }
 
+void exit(const std::string& s)
+{
+    std::cerr << s << std::endl;
+    std::exit(EXIT_FAILURE);
+};
+
 /// Uncomplicated process termination with exception.
 class Exception
     : public std::exception {
