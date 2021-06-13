@@ -12,8 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 add_library(utils STATIC
-            utils/biochemical/pdb.cpp
-            utils/common/exceptions.cpp)
+            utils/biochemical/pdb.cpp)
 
 target_include_directories(utils PUBLIC utils/biochemical
                                         utils/arrays
