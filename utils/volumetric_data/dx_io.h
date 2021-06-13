@@ -58,7 +58,7 @@ void save_as_DX(
         Arrays::A3<T> origin,        // by value
         Arrays::A3<T> delta,         // by value
         const std::string& units,
-        common::Msgr& msgr
+        Msgr& msgr
 )
 {
     if (units == "nm") {
@@ -139,7 +139,7 @@ void read_as_DX(
         Arrays::A3<common::szt>& ms,
         const std::vector<common::uint>& bin,
         const std::string& units,
-        common::Msgr &msgr
+        Msgr &msgr
 )
 {
     if (bin[0] != 1 ||

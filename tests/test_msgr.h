@@ -38,7 +38,7 @@ class MsgrTest
 
 protected:
 
-    using Msgr = utils::common::Msgr;
+    using Msgr = utils::Msgr;
     static constexpr const int PRINT_PRECISION {6};
 
     MsgrTest()
