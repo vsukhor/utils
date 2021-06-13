@@ -55,12 +55,14 @@ class Gillespie {
 
 public :
 
-    using realT = float;
+    using realT = typename RF::real;
     using szt = common::szt;
     template <typename T> using vup = std::vector<std::unique_ptr<T>>;
+
     static constexpr auto hugeszt = common::huge<szt>;
     static constexpr auto real0 = static_cast<realT>(0);
     static constexpr auto real1 = static_cast<realT>(1);
+
     /**
      * \brief Constructor.
      * \param rnd Random class factory.
@@ -122,7 +124,7 @@ public :
 private:
 
     vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
-    std::vector<realT> a;          ///< Vector of protensitioe.
+    std::vector<realT> a;          ///< Vector of propensities.
     szt                rind {hugeszt}; ///< Index of the current reaction.
     realT              tau_ {};    ///< Time till the next reaction event.
     RF&                rnd;        ///< Random number generator.

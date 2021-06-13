@@ -50,6 +50,7 @@ class Reaction {
 public:  // Only constant parameters are public.
 
     using Msgr = common::Msgr;
+    using real = typename RF::real;
     using szt = common::szt;
     using ulong = common::ulong;
 
