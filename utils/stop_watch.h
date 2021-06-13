@@ -51,7 +51,7 @@ struct StopWatch {
         /// A point in time.
         std::chrono::time_point<std::chrono::system_clock> h;
 
-        std::time_t c {huge<std::time_t>};  ///< ctime-based instance.
+        std::time_t c {common::huge<std::time_t>};  ///< ctime-based instance.
         std::string str {};   ///< String-based representation.
 
         /// Current time.
@@ -68,13 +68,13 @@ struct StopWatch {
     /// Duration between \a start and \a stop formatted as a string..
     std::string duration() {
         diff = stop.h - start.h;
-        return STR(diff.count());
+        return std::to_string(diff.count());
     }
 
 private:
 
     /// Duration in std::chrono format.
-    std::chrono::duration<double> diff {huge<double>};
+    std::chrono::duration<double> diff {common::huge<double>};
 
 };
 
