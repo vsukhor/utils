@@ -163,7 +163,7 @@ make_seed(
             msgr->exit(msg);
         else {
             std::cerr << msg << std::endl;
-            std::exit(EXIT_FAILURE)
+            std::exit(EXIT_FAILURE);
         }
     }
     for (szt i=0; i<num_saved_seeds; i++) {
