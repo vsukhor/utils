@@ -40,7 +40,6 @@
 
 #include "../../common/misc.h"
 #include "../../msgr.h"
-#include "../../common/exceptions.h"
 
 /// Configuration module
 namespace utils::config {
