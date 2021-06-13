@@ -219,8 +219,8 @@ checkCudaErrors(
 )
 {
     if (err != CURAND_STATUS_SUCCESS)
-        throw common::exceptions::Simple(
-            "CURAND error: " + common::STR(err), this->msgr);
+        throw common::Exception(
+            "CURAND error: " + std::to_string(err), this->msgr);
 }
 template<typename realT>
 void Cuda<realT>::
@@ -229,8 +229,8 @@ checkCudaErrors(
 )
 {
     if (err != cudaSuccess)
-        throw common::exceptions::Simple(
-            "CUDA error: " + common::STR(err), this->msgr);
+        throw common::Exception(
+            "CUDA error: " + std::to_string(err), this->msgr);
 }
 
 }  // namespace utils::random

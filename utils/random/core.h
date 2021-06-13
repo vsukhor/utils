@@ -37,7 +37,6 @@
 #include <type_traits>
 #include <vector>
 
-#include "../common/exceptions.h"
 #include "../common/misc.h"
 #include "../msgr.h"
 
@@ -162,8 +161,10 @@ make_seed(
         if (const auto msg = "Unable to create seed file "+file.string();
             msgr)
             msgr->exit(msg);
-        else
-            common::exceptions::simple(msg, nullptr);
+        else {
+            std::cerr << msg << std::endl;
+            std::exit(EXIT_FAILURE)
+        }
     }
     for (szt i=0; i<num_saved_seeds; i++) {
         const uint s = seed_d(g);

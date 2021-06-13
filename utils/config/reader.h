@@ -122,9 +122,10 @@ public:
               std::filesystem::is_regular_file(f))
             return f;
 
-        throw common::exceptions::Simple(
+        throw common::Exception {
             "Error: file '" + f.string() +
-            "' is not a valid config file.", nullptr);
+            "' is not a valid config file.", nullptr
+        };
     }
 
     /**

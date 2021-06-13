@@ -226,7 +226,7 @@ initialize( str value )
         if (e == str::npos) e = value.length();
         const str val {value.substr(0, e)};
         if (val.length() < 1)
-            throw common::exceptions::Simple
+            throw common::Exception
                 {"Error in config file: Number of elelments in " + get_name() +
                  " is " + common::STR(p_.size()) + " which is insufficient",
                  nullptr};
@@ -238,7 +238,7 @@ initialize( str value )
         i++;
     }
     if (i < W)
-        throw common::exceptions::Simple {
+        throw common::Exception {
             "Improper Config::" + get_name() +
             " initialization: Data size insufficient", nullptr};
 }

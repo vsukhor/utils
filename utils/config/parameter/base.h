@@ -209,12 +209,12 @@ load( const std::filesystem::path& file )
     str value;
     std::ifstream ifs {file};
     if (!ifs.is_open()) {
-        throw common::exceptions::Simple
+        throw common::Exception
             {"Unable to open config file: " + file.string(), nullptr};
     }
     try {
         load(ifs);
-    } catch (const common::exceptions::Simple&) {
+    } catch (const common::Exception&) {
         return;
     }
 }
@@ -235,7 +235,7 @@ load( std::ifstream& ifs )
         isLoaded_ = true;
         return;
     }
-    throw common::exceptions::Simple
+    throw common::Exception
         {"Error: parameter not loaded: " + name, nullptr};
 }
 

@@ -295,7 +295,7 @@ initialize( str value )
         if (e == str::npos) e = value.length();
         const str val {value.substr(0, e)};
         if (val.length() < 1)
-            throw common::exceptions::Simple
+            throw common::Exception
                 {"Error in config file: Number of elelments in " + get_name() +
                  " is " + std::to_string(p_.size()) + " which is insufficient",
                  nullptr
@@ -306,10 +306,10 @@ initialize( str value )
         value.erase(0, e);
         value = common::trim(value);
         if (p_.size() > expectedSize_)
-            throw common::exceptions::Simple {size_message("Excessive", p_.size()), nullptr};
+            throw common::Exception {size_message("Excessive", p_.size()), nullptr};
     }
     if (p_.size() != expectedSize_)
-        throw common::exceptions::Simple {size_message("Incorrect", p_.size()), nullptr};
+        throw common::Exception {size_message("Incorrect", p_.size()), nullptr};
 }
 
 }    // namespace utils::config::parameter

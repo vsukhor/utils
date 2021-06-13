@@ -55,7 +55,6 @@ struct Geometric {
     using A2t = arrays::A2<T>;
     using A3t = arrays::A3<T>;
     using A3i = arrays::A3<int>;
-    using SimpleException = exceptions::Simple;
 
     static constexpr auto RAD2GRAD = static_cast<T>(180);
 
@@ -548,7 +547,7 @@ spheroid_surf_area(
         }
         return four<T> * pi<T> * a2;        // sphere
     }
-    throw SimpleException(
+    throw common::Exception(
         "Error in spheroid_surf_area: spheroid r[0] == r[1] is required", &msgr);
 }
 

@@ -43,6 +43,7 @@
 #include <sys/stat.h>
 #include <vector>
 
+#include "../msgr.h"
 #include "constants.h"
 
 #ifdef USE_UTILS_XASSERT
@@ -264,6 +265,33 @@ szt find( const std::vector<T>& b,
 
     return j.size();
 }
+
+/// Uncomplicated process termination with exception.
+class Exception
+    : public std::exception {
+
+public:
+
+    /// \brief Default constructor.
+    Exception() = default;
+
+    /**
+     * \brief Constructor for printing to a log record.
+     * \details Outputs message \p msg to \a Msgr for standard
+     * output (if \p msgr is nullptr).
+     * \param msg Message to output.
+     * \param msgr Output message processor.
+     */
+    explicit Exception(const std::string& msg,
+                    Msgr* msgr)
+    {
+        if (msgr != nullptr)
+            msgr->print(msg);
+        else
+            std::cerr << msg << std::endl;
+    }
+
+};
 
 /// \brief Find index of the last minimal vector element.
 /// \return Index of the last minimal element of vector \b v
