@@ -43,8 +43,8 @@ Threads(const szt offset,
         const ulong nThreads )
     : num {nThreads}
 {
-    szt threadsSupported {std::thread::hardware_concurrency()};
-    if (nThreads > threadsSupported)
+    if (szt threadsSupported {std::thread::hardware_concurrency()};
+        nThreads > threadsSupported)
         throw std::runtime_error(
             "Ordered number of threads " + std::to_string(nThreads) +
             " exceeds the CPU concurrency: " + std::to_string(threadsSupported));
