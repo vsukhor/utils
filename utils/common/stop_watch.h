@@ -28,19 +28,19 @@
 * \author Valerii Sukhorukov
 */
 
-#ifndef UTILS_COMMON_STOP_WATCH_H
-#define UTILS_COMMON_STOP_WATCH_H
+#ifndef UTILS_STOP_WATCH_H
+#define UTILS_STOP_WATCH_H
 
 #include <chrono>
 #include <ctime>
 
-#include "constants.h"
+#include "common/constants.h"
 
-/// General stuff.
-namespace utils::common {
+/// Library outer namespace.
+namespace utils {
 
 /// \struct StopWatch stop_watch.h
-/// \brief Simple stop watch class.
+/// \brief Simple stop watch class using std::chrono::system_clock.
 /// \details Implements convenience class for measuring time duration.
 struct StopWatch {
 
@@ -78,6 +78,6 @@ private:
 
 };
 
-}  // namespace utils::common
+}  // namespace utils
 
-#endif // UTILS_COMMON_STOP_WATCH_H
+#endif // UTILS_STOP_WATCH_H
