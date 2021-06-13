@@ -266,10 +266,11 @@ szt find( const std::vector<T>& b,
     return j.size();
 }
 
+template <auto E=EXIT_FAILURE>
 void exit(const std::string& s)
 {
     std::cerr << s << std::endl;
-    std::exit(EXIT_FAILURE);
+    std::exit(E);
 };
 
 /// Uncomplicated process termination with exception.
