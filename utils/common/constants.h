@@ -185,10 +185,10 @@ template <typename T> constexpr std::array<T,2> mhugehuge {{-huge<T>, huge<T>}};
 
 // Range borders as two-element std vectors of arrays. =========================
 
-template <auto N> constexpr std::vector rangeBools {falses<N>, trues<N>};
-template <auto N> constexpr vecarr<bool,N> vecarrFT {falses<N>, trues<N>};
-template <typename T, auto N> constexpr vecarr<T,N> vecarr0H {zeros<T,N>, huges<T,N>};
-template <typename T, auto N> constexpr vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>};
+template <auto N> const std::vector rangeBools {falses<N>, trues<N>};
+template <auto N> const vecarr<bool,N> vecarrFT {falses<N>, trues<N>};
+template <typename T, auto N> const vecarr<T,N> vecarr0H {zeros<T,N>, huges<T,N>};
+template <typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>};
 
 // ANSI colors =================================================================
 
