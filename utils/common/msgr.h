@@ -73,13 +73,29 @@ public:
         outstream* so,
         logstream* sl,
         int precision
-    );
+    )
+        : so {so}
+        , sl {sl}
+    {
+        set_formats(precision);
+    }
+
     
     /**
      * \brief Set formatting parameters.
      * \param precision Precision of real numbers
      */
-    void set_formats(int precision) noexcept;
+    void set_formats(int precision) noexcept
+    {
+        if (so) {
+            so->precision(precision);
+            so->setf(std::ios::scientific);
+        }
+        if (sl) {
+            sl->precision(precision);
+            sl->setf(std::ios::scientific);
+        }
+    }
 
 
     /**

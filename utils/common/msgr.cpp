@@ -35,29 +35,5 @@
 namespace utils::common {
 
 
-Msgr::
-Msgr( outstream* so,
-      logstream* sl,
-      const int precision
-    )
-    : so {so}
-    , sl {sl}
-{
-    set_formats(precision);
-}
-
-
-void Msgr::
-set_formats( const int precision ) noexcept
-{
-    if (so) {
-        so->precision(precision);
-        so->setf(std::ios::scientific);
-    }
-    if (sl) {
-        sl->precision(precision);
-        sl->setf(std::ios::scientific);
-    }
-}
 
 }  // namespace utils::common
