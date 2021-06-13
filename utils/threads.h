@@ -25,21 +25,107 @@
 
 /**
  * \file threads.h
- * \brief Implements class Threads.
+ * Contains class Threads.
  * \author Valerii Sukhorukov
  */
 
-#include <exception>
+#ifndef UTILS_THREADS_H
+#define UTILS_THREADS_H
 
-#include "threads.h"
+#include <iostream>
+#include <thread>
+#include <vector>
 
-namespace utils::common {
+#include "common/misc.h"
+#include "common/msgr.h"
 
-Threads::
+/// General stuff.
+namespace utils::threads {
+
+using szt = common::szt;
+using ulong = common::ulong;
+
+/**
+ * \brief Enumerates basic load sharing modes.
+ * \details Names three modes of load distribution between threads.
+ */
+enum class Weights {
+    CircleCenter,   ///< Circle-shaped load distribution.
+    Equal,          ///< Uniform load sharing.
+    TriangleDecr    ///< Right triangle-shaped distribution
+};
+
+
+/**
+ * \class Threads threads.h
+ * \brief Implements weighted thread loads.
+ * \details Implements convenience class for handling a collection
+ * of std::thread objects.
+ */
+template <Weights W>
+class Threads {
+
+public:
+
+    const szt        num;     ///< Number of threads.
+    std::vector<szt> chs;     ///< Per-thread amounts of relative load.
+    std::vector<szt> i1, i2;  ///< Range borders.
+
+    std::vector<std::thread> thr;  ///< Container holding the threads.
+
+    /**
+     * \brief Constructor.
+     * \details Creates threads based on a set of work units.
+     * \param offset Offset from the start of work unit container.
+     * \param size Size of the work unit container shared among the threads.
+     * \param omittedBoundaries Boundsary work units to discard.
+     * \param wht Relative weiting.
+     * \param nThreads Thread number.
+     */
+    explicit Threads(
+        szt offset,
+        szt size,
+        ulong omittedBoundaries,
+        ulong nThreads );
+    
+    /**
+     * Joins the threads.
+     */
+    void join();
+    
+    // Various weights for relative thread loads
+    /**
+     * \brief Sets weighting factors according to \a Weights::Equal.
+     * \param w Total number of work units.
+     * \param rest Number of work units remaining after the optimal distribution.
+     */
+    void set_chunks_equal(szt w, szt rest);
+
+    /**
+     * \brief Sets weighting factors according to \a Weights::CircleCenter.
+     * \param w Total number of work units.
+     * \param rest Number of work units remaining after the optimal distribution.
+     */
+    void set_chunks_circular(szt w, szt rest);
+    /**
+     * \brief Sets weighting factors according to \a Weights::TriangleDecr.
+     * \param size Total number of work units.
+     */
+    void set_chunks_triangleDecr(szt size);
+
+    /**
+     * \brief Prints work unit borders for particular threads.
+     * \param withCout Specifies if printing to cout.
+     * \param msgr \a Msgr used for the output.
+     */
+    void print_regions(bool withCout, common::Msgr& msgr);
+};
+
+template <Weights W>
+Threads<W>::
 Threads(const szt offset,
         const szt size,
         const ulong omittedBoundaries,
-        const Weights wht,
         const ulong nThreads )
     : num {nThreads}
 {
@@ -52,7 +138,7 @@ Threads(const szt offset,
         throw std::runtime_error(
             "Error in Threads: nThreads ordered " + std::to_string(nThreads) +
             "is not supprted ");
-    if (nThreads > 12 && wht == Weights::CircleCenter)
+    if (nThreads > 12 && W == Weights::CircleCenter)
         throw std::runtime_error(
             "Error in Threads: for Circular weights only up to max 12 "
             "threads are supported. nThreads ordered: " +
@@ -61,13 +147,13 @@ Threads(const szt offset,
     szt w {size - 2*omittedBoundaries};
     const szt rest {w % num};
     w -= rest;
-    
+
     chs.resize(num);
-    if (     wht == Weights::Equal)
+    if constexpr (     W == Weights::Equal)
         set_chunks_equal(w, rest);
-    else if (wht == Weights::CircleCenter)
+    else if constexpr (W == Weights::CircleCenter)
         set_chunks_circular(w, rest);    // arc sector area: A = r*r*phi/2
-    else if (wht == Weights::TriangleDecr)
+    else if constexpr (W == Weights::TriangleDecr)
         set_chunks_triangleDecr(size - 2*omittedBoundaries);
     else
         throw std::runtime_error("Error in Threads: Weight type is not defined");
@@ -83,25 +169,28 @@ Threads(const szt offset,
     thr.resize(num);
 }
 
-void Threads::
+template <Weights W>
+void Threads<W>::
 join()
 {
-    for (auto& o : thr) 
+    for (auto& o : thr)
         o.join();
 }
 
 // Various chunk sizes for flexible thread loads
-inline void Threads::
+template <Weights W>
+void Threads<W>::
 set_chunks_equal( const szt w, const szt rest )
 {
     for (szt ith=0; ith<num; ith++) {
         chs[ith] = w/num;
-        if (ith < rest) 
+        if (ith < rest)
             chs[ith]++;
     }
 }
 
-void Threads::
+template <Weights W>
+void Threads<W>::
 set_chunks_circular( const szt w, const szt rest )
 {
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
@@ -115,29 +204,29 @@ set_chunks_circular( const szt w, const szt rest )
 //     %                'num': the number of threads
 //     % Then, to find 'h':
 //     syms h;  vpasolve(2*pi*k/num == 2*acos(1-h) - sin(2*acos(1-h)), h) / 2
-// 
+//
     switch (num) {
-    case 1 :                                            
+    case 1 :
         chs[0] = w;
-        break;                                     
+        break;
 
     case 2 :
         chs[0] = szt(0.5000000 * w);
         chs[1] = w - chs[0];
-        break;                                     
+        break;
 
     case 3 :
         chs[0] = szt(0.3675340 * w);
         chs[1] = szt(0.6324660 * w) - chs[0];
         chs[2] =                 w - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 4 :
         chs[0] = szt(0.2980136 * w);
         chs[1] = szt(0.5000000 * w) - chs[0];
         chs[2] = szt(0.7019864 * w) - chs[1] - chs[0];
         chs[3] =                  w - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 5 :
         chs[0] = szt(0.2540691 * w);
@@ -145,7 +234,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[2] = szt(0.5788681 * w) - chs[1] - chs[0];
         chs[3] = szt(0.7459309 * w) - chs[2] - chs[1] - chs[0];
         chs[4] =                  w - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 6 :
         chs[0] = szt(0.2233536 * w);
@@ -154,7 +243,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[3] = szt(0.6324660 * w) - chs[2] - chs[1] - chs[0];
         chs[4] = szt(0.7766464 * w) - chs[3] - chs[2] - chs[1] - chs[0];
         chs[5] =                 w - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 7 :
         chs[0] = szt(0.2004697 * w);
@@ -164,7 +253,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[4] = szt(0.6717389 * w) - chs[3] - chs[2] - chs[1] - chs[0];
         chs[5] = szt(0.7995303 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[6] =                  w - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 8 :
         chs[0] = szt(0.1826477 * w);
@@ -175,7 +264,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[5] = szt(0.7019864 * w) - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[6] = szt(0.8173523 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[7] =                  w - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 9 :
         chs[0] = szt(0.16830735 * w);
@@ -187,7 +276,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[6] = szt(0.72613071 * w) - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[7] = szt(0.83169265 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[8] =                   w - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 10 :
         chs[0] = szt(0.15647559 * w);
@@ -200,7 +289,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[7] = szt(0.74593092 * w) - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[8] = szt(0.84352441 * w) - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[9] =                   w - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 11 :
         chs[0]  = szt(0.14651773 * w);
@@ -214,7 +303,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[8]  = szt(0.76251583 * w) - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[9]  = szt(0.85348227 * w) - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[10] =                   w - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
 
     case 12 :
         chs[0]  = szt(0.13800066 * w);
@@ -229,24 +318,25 @@ set_chunks_circular( const szt w, const szt rest )
         chs[9]  = szt(0.77664636 * w) - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[10] = szt(0.86199934 * w) - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
         chs[11] =                  w - chs[10] - chs[9] - chs[8] - chs[7] - chs[6] - chs[5] - chs[4] - chs[3] - chs[2] - chs[1] - chs[0];
-        break;                                     
+        break;
     }
-    
-    for (szt ith=0; ith<rest; ith++) 
+
+    for (szt ith=0; ith<rest; ith++)
         chs[ith]++;
 }
 
-void Threads::
+template <Weights W>
+void Threads<W>::
 set_chunks_triangleDecr( const szt size )
 {
     szt w {};
-    for (szt i=size; i>0; i--) 
+    for (szt i=size; i>0; i--)
         w += i;
     const szt e = w/num;
     const szt rest = w%num;
 
     std::vector<szt> dchs(num, e);
-    for (szt i=0; i<rest; i++) 
+    for (szt i=0; i<rest; i++)
         dchs[i]++;
 
     szt n(size);
@@ -261,13 +351,14 @@ set_chunks_triangleDecr( const szt size )
     chs.back() = n;
 }
 
-void Threads::
+template <Weights W>
+void Threads<W>::
 print_regions( const bool withCout,
-               Msgr& msgr )
+               common::Msgr& msgr )
 {
     if (withCout && msgr.so) {
         *msgr.so << " Thread borders: ";
-        for (szt ith=0; ith<num; ith++) 
+        for (szt ith=0; ith<num; ith++)
             *msgr.so << i1[ith] << " to "
                      << i2[ith]-1 << "; ";
         *msgr.so << std::endl;
@@ -281,4 +372,7 @@ print_regions( const bool withCout,
     }
 }
 
-}    // namespace utils::common
+
+}  // namespace utils::threads
+
+#endif  // UTILS_THREADS_H
