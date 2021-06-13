@@ -40,7 +40,7 @@
 #include <vector>
 
 #include "../../common/misc.h"
-#include "../../common/msgr.h"
+#include "../../msgr.h"
 #include "../exceptions/vectors.h"
 #include "base.h"
 

@@ -37,7 +37,7 @@
 #include <vector>
 
 #include "../common/misc.h"
-#include "../common/msgr.h"
+#include "../msgr.h"
 #include "parameter/arrays.h"
 #include "parameter/scalars.h"
 #include "parameter/vectors.h"
@@ -48,7 +48,6 @@ namespace utils::config {
 /// Convenience class reading parameters from confuguration files.
 class Reader {
 
-    using Msgr = common::Msgr;
     using path = std::filesystem::path;
 
 public:

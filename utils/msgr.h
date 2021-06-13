@@ -29,8 +29,8 @@
  * \author Valerii Sukhorukov
  */
 
-#ifndef UTILS_COMMON_MSGR_H
-#define UTILS_COMMON_MSGR_H
+#ifndef UTILS_MSGR_H
+#define UTILS_MSGR_H
 
 #include <array>
 #include <fstream>
@@ -40,8 +40,8 @@
 #include <type_traits>
 #include <vector>
 
-/// General stuff.
-namespace utils::common {
+/// Library outer namespace.
+namespace utils {
 
 /**
  * \class Msgr msgr.h
@@ -248,6 +248,6 @@ exit(T... values)
     ::exit(EXIT_FAILURE);
 }
 
-}  // namespace utils::common
+}  // namespace utils
 
-#endif // UTILS_COMMON_MSGR_H
+#endif // UTILS_MSGR_H

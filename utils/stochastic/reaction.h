@@ -36,7 +36,7 @@
 #include <utility>
 
 #include "../common/misc.h"
-#include "../common/msgr.h"
+#include "../msgr.h"
 #include "gillespie.h"
 
 namespace utils::stochastic {
@@ -49,7 +49,6 @@ class Reaction {
 
 public:  // Only constant parameters are public.
 
-    using Msgr = common::Msgr;
     using real = typename RF::real;
     using szt = common::szt;
     using ulong = common::ulong;
@@ -155,7 +154,7 @@ public:  // Only constant parameters are public.
 
 protected:
 
-    common::Msgr& msgr;  ///< ref: Output message processor.
+    Msgr& msgr;  ///< ref: Output message processor.
 
     /** All necessary updates after the given reaction event was executed.
      * \details Pure virtual function: Network and reaction updates necessary

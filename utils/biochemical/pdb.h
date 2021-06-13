@@ -36,7 +36,7 @@
 
 #include "../arrays/all.h"
 #include "../common/misc.h"
-#include "../common/msgr.h"
+#include "../msgr.h"
 
 /// Biochemistry-related stuff.
 namespace utils::biochemical {
@@ -45,7 +45,6 @@ namespace utils::biochemical {
 class Pdb {
 
     using A3f = arrays::A3<float>;
-    using Msgr = common::Msgr;
     using szt = common::szt;
     using uint = common::uint;
     using ulong = common::ulong;

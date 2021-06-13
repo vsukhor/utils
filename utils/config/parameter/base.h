@@ -39,13 +39,12 @@
 #include <string>
 
 #include "../../common/misc.h"
-#include "../../common/msgr.h"
+#include "../../msgr.h"
 #include "../../common/exceptions.h"
 
 /// Configuration module
 namespace utils::config {
 
-using Msgr = common::Msgr;
 using szt = common::szt;
 using ulong = common::ulong;
 

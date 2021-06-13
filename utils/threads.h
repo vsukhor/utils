@@ -37,9 +37,9 @@
 #include <vector>
 
 #include "common/misc.h"
-#include "common/msgr.h"
+#include "msgr.h"
 
-/// General stuff.
+/// Provies distribution of load among threads.
 namespace utils::threads {
 
 using szt = common::szt;
@@ -47,7 +47,7 @@ using ulong = common::ulong;
 
 /**
  * \brief Enumerates basic load sharing modes.
- * \details Names three modes of load distribution between threads.
+ * \details Defines three modes of load distribution between threads.
  */
 enum class Weights {
     CircleCenter,   ///< Circle-shaped load distribution.
@@ -61,6 +61,7 @@ enum class Weights {
  * \brief Implements weighted thread loads.
  * \details Implements convenience class for handling a collection
  * of std::thread objects.
+ * \tparam W Type of relative load distribweightution.
  */
 template <Weights W>
 class Threads {
@@ -79,14 +80,14 @@ public:
      * \param offset Offset from the start of work unit container.
      * \param size Size of the work unit container shared among the threads.
      * \param omittedBoundaries Boundsary work units to discard.
-     * \param wht Relative weiting.
      * \param nThreads Thread number.
      */
     explicit Threads(
         szt offset,
         szt size,
         ulong omittedBoundaries,
-        ulong nThreads );
+        ulong nThreads
+    );
     
     /**
      * Joins the threads.
@@ -118,7 +119,7 @@ public:
      * \param withCout Specifies if printing to cout.
      * \param msgr \a Msgr used for the output.
      */
-    void print_regions(bool withCout, common::Msgr& msgr);
+    void print_regions(bool withCout, Msgr& msgr);
 };
 
 template <Weights W>
@@ -126,7 +127,7 @@ Threads<W>::
 Threads(const szt offset,
         const szt size,
         const ulong omittedBoundaries,
-        const ulong nThreads )
+        const ulong nThreads)
     : num {nThreads}
 {
     if (szt threadsSupported {std::thread::hardware_concurrency()};
@@ -354,7 +355,7 @@ set_chunks_triangleDecr( const szt size )
 template <Weights W>
 void Threads<W>::
 print_regions( const bool withCout,
-               common::Msgr& msgr )
+               Msgr& msgr )
 {
     if (withCout && msgr.so) {
         *msgr.so << " Thread borders: ";

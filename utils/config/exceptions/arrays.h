@@ -40,7 +40,7 @@
 #include <string>
 #include <vector>
 
-#include "../../common/msgr.h"
+#include "../../msgr.h"
 #include "../parameter/base.h"
 
 namespace utils::config::exceptions {

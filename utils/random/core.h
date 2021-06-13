@@ -39,13 +39,12 @@
 
 #include "../common/exceptions.h"
 #include "../common/misc.h"
-#include "../common/msgr.h"
+#include "../msgr.h"
 
 /// Pseugo-random number generation.
 namespace utils::random {
 
 using szt = common::szt;
-using Msgr = common::Msgr;
 using szt = common::szt;
 using uint = common::uint;
 

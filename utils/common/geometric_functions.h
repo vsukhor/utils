@@ -31,9 +31,10 @@
 #define UTILS_COMMON_GEOMETRIC_FUNCTIONS
 
 #include "../arrays/all.h"
+#include "../msgr.h"
 #include "exceptions.h"
 #include "misc.h"
-#include "msgr.h"
+
 
 /// General stuff.
 namespace utils::common {

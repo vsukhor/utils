@@ -29,7 +29,7 @@
 
 #include "gtest/gtest.h"
 
-#include "../utils/common/msgr.h"
+#include "../utils/msgr.h"
 
 namespace {
 

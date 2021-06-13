@@ -41,7 +41,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "../../common/msgr.h"
+#include "../../msgr.h"
 #include "../parameter/base.h"
 
 /// Exceptions namespace.

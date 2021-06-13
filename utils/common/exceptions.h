@@ -39,7 +39,7 @@
 #include <string>
 #include <vector>
 
-#include "msgr.h"
+#include "../msgr.h"
 
 /// Exeption and exit handlers.
 namespace utils::common::exceptions {

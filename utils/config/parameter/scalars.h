@@ -39,7 +39,7 @@
 #include <string>
 
 #include "../../common/misc.h"
-#include "../../common/msgr.h"
+#include "../../msgr.h"
 #include "../exceptions/scalars.h"
 #include "base.h"
 
