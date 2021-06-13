@@ -122,7 +122,7 @@ Core(Msgr& msgr,
     : seed {seed}
     , msgr {msgr}
 {
-    msgr.print("RUN ", runName);
+    msgr.print("RUN = ", runName);
     msgr.print("SEED = ", seed);
 }
 

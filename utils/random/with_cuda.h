@@ -24,10 +24,10 @@
 */
 
 /**
-* \file with_cuda.h
-* Contains class Cuda.
-* \author Valerii Sukhorukov
-*/
+ * \file with_cuda.h
+ * Contains class Cuda.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_RANDOM_WITH_CUDA_H
 #define UTILS_RANDOM_WITH_CUDA_H
@@ -50,15 +50,15 @@ class Cuda
     // Ensure that the template parameter is a floating type:
     static_assert(
         std::is_floating_point<realT>::value,
-        "Class Core can only be instantiated with floating point types"
+        "Class Cuda can only be instantiated with floating-point types."
     );
 
     using Core<realT>::buffersize;
 
-    realT* rU01;         ///< Buffer array for storing random numbers (host).
-    realT* d_Rand;       ///< Buffer array for storing random numbers (device).
+    realT* rU01;    ///< Buffer array for storing random numbers (host).
+    realT* d_Rand;  ///< Buffer array for storing random numbers (device).
     
-    int rU01_ind;        ///< Index of the current random number in \a rU01.
+    int rU01_ind;   ///< Index of the current random number in \a rU01.
                                                 
     std::mt19937      gCPU; ///< Random number generator using CPU.
     curandGenerator_t gGPU; ///< Random number generator using GPU.

@@ -69,6 +69,7 @@ class Boost
 
 public:
 
+    using real = realT;
     using A2r = arrays::A2<realT>;
     using A3r = arrays::A3<realT>;
     static constexpr auto half = common::half<realT>;
@@ -410,7 +411,7 @@ uniform0(const szt max)
 {            
     XASSERT(max > 0, "Boost<realT>::uniform0 requires max > 0");
 
-    auto ir {static_cast<szt>(r01u() * max)};
+    auto ir = static_cast<szt>(r01u() * max);
     
     while (ir >= max) 
         ir = static_cast<szt>(r01u() * max);
@@ -427,7 +428,7 @@ uniform1( const intT max )
 {            
     // Ensure that the template parameter is a floating type
     static_assert(std::is_integral<intT>::value,
-                  "class Geometric can only be instantiated with integer types");
+                  "This function can only be instantiated with integer types");
     
     XASSERT(max > 0, "Boost<realT>::uniform1 requires max > 0 ");
     
