@@ -298,9 +298,8 @@ private:
     std::array<realT, bufferSize> rU01;
 
     /// Index of the current random number in \a rU01.
-    volatile long rU01_ind;
+    volatile size_t rU01_ind;
 
-//    boost::mt19937 g;   ///< Random number generator.
     std::mt19937 g;       ///< Random number generator.
 
     /// Populate the buffer array \a rU01 with a new butch of random numbers.
@@ -316,10 +315,9 @@ Boost( const unsigned seed,
        const std::string& runName,
        Msgr& msgr)
     : Core<realT> {seed, runName, msgr}
-    , rU01_ind {-1}
+    , rU01_ind {bufferSize}
 {
     g.seed(this->get_seed());
-    prepare_uniform_real01();
 }
 
 
@@ -328,10 +326,9 @@ Boost<realT>::
 Boost( const unsigned runIndex,
        Msgr& msgr)
     : Core<realT> {runIndex, msgr}
-    , rU01_ind {-1}
+    , rU01_ind {bufferSize}
 {
     g.seed(this->get_seed());
-    prepare_uniform_real01();
 }
 
 
@@ -360,7 +357,7 @@ realT Boost<realT>::
 r01u()
 {
     auto counter = rU01_ind + 1;  // local because of rU01_ind volatility
-    if (counter == bufferSize) {
+    if (counter >= bufferSize) {
         prepare_uniform_real01();
         rU01_ind = 0;
     }

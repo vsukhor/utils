@@ -92,7 +92,8 @@ protected:
 private:
 
     unsigned seed {common::huge<unsigned>};  ///< The seed
-    Msgr& msgr;                              ///< Output message processor.
+
+    Msgr& msgr;  ///< Output message processor.
 };
 
 
