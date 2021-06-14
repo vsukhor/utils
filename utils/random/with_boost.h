@@ -83,22 +83,21 @@ public:
 //    /// \brief Default constructor.
 //    Boost() = default;
 
-    /// \brief Constructor.
-    /// \param seedFile Name of the file contining seeds.
-    /// \param ii Run index.
-    /// \param msgr Output message processor.
-    explicit Boost(
-        const std::filesystem::path& seedFile,
-        szt ii,
-        Msgr& msgr);
-
-    /// \brief Constructor.
+    /// \brief Constructor setting the seed uncoupled from run index.
     /// \param seed Random number generator seed.
     /// \param runName Human-readable run index.
     /// \param msgr Output message processor.
     explicit Boost(
-        uint seed,
+        unsigned seed,
         const std::string& runName,
+        Msgr& msgr
+    );
+
+    /// \brief Constructor setting the seed depending on run index.
+    /// \param runIndex Run index.
+    /// \param msgr Output message processor.
+    explicit Boost(
+        unsigned runIndex,
         Msgr& msgr
     );
 
@@ -313,26 +312,25 @@ private:
 
 template <typename realT>
 Boost<realT>::
-Boost( const std::filesystem::path& seedFile,
-       const szt ii,
+Boost( const unsigned seed,
+       const std::string& runName,
        Msgr& msgr)
-    : Core<realT> {msgr, seedFile, ii}
+    : Core<realT> {seed, runName, msgr}
     , rU01_ind {-1}
 {
-    g.seed(this->theSeed());
+    g.seed(this->get_seed());
     prepare_uniform_real01();
 }
 
 
 template <typename realT>
 Boost<realT>::
-Boost( const uint seed,
-       const std::string& runName,
+Boost( const unsigned runIndex,
        Msgr& msgr)
-    : Core<realT> {msgr, seed, runName}
+    : Core<realT> {runIndex, msgr}
     , rU01_ind {-1}
 {
-    g.seed(this->theSeed());
+    g.seed(this->get_seed());
     prepare_uniform_real01();
 }
 
@@ -827,6 +825,6 @@ gaussian_number_constrained(
     return res;
 }
 
-}    // namespace utils::random
+}  // namespace utils::random
 
 #endif // UTILS_RANDOM_WITH_BOOST_H

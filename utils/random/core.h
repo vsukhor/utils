@@ -44,7 +44,6 @@
 namespace utils::random {
 
 using szt = common::szt;
-using szt = common::szt;
 using uint = common::uint;
 
 /// \brief Base class for random number factories.
@@ -60,53 +59,40 @@ class Core {
 
 public:
 
-    /// Number of seeds in the 'seed' file.
-    static constexpr szt num_saved_seeds {1'000'001};
     /// Size of the buffer for storing random numbers.
     static constexpr int bufferSize {1'000'000};
     /// Master seed.
     static constexpr int mainSeed {1'234'567'890};
 
     /// Produce \p num_saved_seeds seeds and store them in a file.
-    /// \details This is done whenever the working directory does not already
-    /// have such a file.
-    static void make_seed(
-        const std::filesystem::path& file,  ///< File with seeds.
-        Msgr* msgr                          ///< Output message processor.
-    );
-
-    /// Produce \p num_saved_seeds seeds and store them in a file.
     /// This is done whenever the working directory does not already
     /// have such a file.
-    static uint readin_seed(
-        const std::filesystem::path& file,  ///< File with seeds.
-        szt runInd,                    ///< Run index to choose a seed.
-        Msgr& msgr                     ///< Output message processor.
-    );
+    static uint make_seed(
+        uint runInd      ///< Run index to choose a seed.
+    ) noexcept;
 
     /// Seed getter.
-    auto theSeed() { return seed; }
+    auto get_seed() { return seed; }
 
 protected:
 
-    /// Constructor.
+    /// Constructor setting the seed uncoupled from run index.
     explicit Core(
-        Msgr& msgr,                   ///< Output message processor.
-        uint seed,                    ///< Seed to use.
-        const std::string& runName    ///< Human-readable run index.
+        unsigned seed,                ///< Seed to use.
+        const std::string& runName,   ///< Human-readable run index.
+        Msgr& msgr                    ///< Output message processor.
     ) noexcept;
 
-    /// Constructor.
+    /// Constructor setting the seed depending on run index.
     explicit Core(
-        Msgr& msgr,                    ///< Output message processor.
-        const std::filesystem::path& seedFile,  ///< File with seeds.
-        szt runInd                     ///< Run index to choose a seed.
-    );
+        unsigned runInd,    ///< Run index to choose a seed.
+        Msgr& msgr          ///< Output message processor.
+    ) noexcept;
 
 private:
 
-    uint  seed {common::huge<uint>};  ///< The seed
-    Msgr& msgr;                       ///< Output message processor.
+    unsigned seed {common::huge<unsigned>};  ///< The seed
+    Msgr& msgr;                              ///< Output message processor.
 };
 
 
@@ -114,9 +100,11 @@ private:
 
 template <typename realT> 
 Core<realT>::
-Core(Msgr& msgr,
-     const uint seed,
-     const std::string& runName) noexcept
+Core(
+    const unsigned seed,
+    const std::string& runName,
+    Msgr& msgr
+) noexcept
     : seed {seed}
     , msgr {msgr}
 {
@@ -126,70 +114,36 @@ Core(Msgr& msgr,
 
 template <typename realT> 
 Core<realT>::
-Core(Msgr& msgr,
-     const std::filesystem::path& file,
-     const szt runInd)
-    : msgr {msgr}
+Core(
+    const unsigned runInd,
+    Msgr& msgr
+) noexcept
+    : seed {make_seed(runInd)}
+    , msgr {msgr}
 {
-    if (!std::filesystem::is_regular_file(file))
-        make_seed(file, &msgr);
-    seed = readin_seed(file, runInd, msgr);
     msgr.print("RUN = ", runInd);
     msgr.print("SEED = ", seed);
 }
 
 template <typename realT> 
-void Core<realT>::
+uint Core<realT>::
 make_seed(
-    const std::filesystem::path& file,
-    Msgr* msgr
-)
+    const uint runInd
+) noexcept
 {
-    if (const auto msg = "No seed file found. Creating a new seed file " + file.string();
-        msgr)
-        msgr->print(msg);
-    else
-        std::cout << msg << std::endl;
-
     std::mt19937 g {mainSeed};
 
     constexpr int sd1 = 100'000'000;
     constexpr int sd2 = 2'100'000'000;
+
     std::uniform_int_distribution<uint> seed_d(sd1, sd2);
-    std::ofstream ofs {file, std::ios::binary};
-    if (!ofs.is_open()) {
-        if (const auto msg = "Unable to create seed file "+file.string();
-            msgr)
-            msgr->exit(msg);
-        else
-            common::exit(msg);
-    }
-    for (szt i=0; i<num_saved_seeds; i++) {
-        const uint s = seed_d(g);
-        ofs.write(reinterpret_cast<const char*>(&s), sizeof(uint));
-    }
+    uint s {};
+    for (uint i=0; i<runInd; i++)
+        s = seed_d(g);
+
+    return s;
 }
 
-template <typename realT> 
-uint Core<realT>::
-readin_seed(
-    const std::filesystem::path& file,
-    szt runInd,
-    Msgr& msgr
-)
-{
-    msgr.print("Reading from file ", file, " seed no: ", runInd);
-    
-    std::ifstream ifs {file, std::ios::binary};
-    if (ifs.fail())
-        msgr.exit("Unable to open file ", file);
-    ifs.seekg(static_cast<std::fstream::off_type>(runInd * sizeof(uint)), ifs.beg);
-    auto seed {common::huge<uint>};
-    ifs.read(reinterpret_cast<char*>(&seed), sizeof(uint));
-
-    return seed;
-}
-
-}    // namespace utils::random
+}  // namespace utils::random
 
 #endif // UTILS_RANDOM_CORE_H

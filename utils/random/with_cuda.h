@@ -68,22 +68,21 @@ public:
 //    /// \brief Default constructor.
 //    Cuda() = default;
 
-    /// \brief Constructor.
-    /// \param seedFname Name of the file contining seeds.
-    /// \param ii Run index.
-    /// \param msgr Output message processor.
-    explicit Cuda(
-        const std::string& seedFname,
-        common::szt ii,
-        Msgr& msgr);
-
-    /// \brief Constructor.
+    /// \brief Constructor setting the seed uncoupled from run index.
     /// \param seed Random number generator seed.
     /// \param runName Human-readable run index.
     /// \param msgr Output message processor.
     explicit Cuda(
-        int seed,
+        unsigned seed,
         const std::string& runName,
+        Msgr& msgr);
+
+    /// \brief Constructor setting the seed depending on run index.
+    /// \param seedFname Name of the file contining seeds.
+    /// \param runIndex Run index.
+    /// \param msgr Output message processor.
+    explicit Cuda(
+        unsigned runIndex,
         Msgr& msgr);
 
     // The rule of five is triggered by the destructor, the defaults suffice:
@@ -117,12 +116,28 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename realT> 
+template <typename realT>
 Cuda<realT>::
-Cuda(   const std::string& seedFname,
-        const common::szt ii,
-        Msgr& msgr )
-    : Core<realT> {msgr, seedFname, ii}
+Cuda(
+    const unsigned seed,
+    const std::string& runName,
+    Msgr& msgr)
+    : Core<realT> {seed, runName, msgr}
+{
+    gCPU.seed(this->seed);
+
+    initialize_CUDA_rng();
+
+    rU01_ind = -1;
+    prepare_uniform_real01();
+}
+
+template <typename realT>
+Cuda<realT>::
+Cuda(
+    const unsigned runInd,
+    Msgr& msgr)
+    : Core<realT> {runInd, msgr}
 {
     
     gCPU.seed(this->seed);
@@ -133,22 +148,7 @@ Cuda(   const std::string& seedFname,
     prepare_uniform_real01();
 }
 
-template <typename realT> 
-Cuda<realT>::
-Cuda(   const int seed,
-        const std::string& runName,
-        Msgr& msgr )
-    : Core<realT> {msgr, seed, runName}
-{
-    gCPU.seed(this->seed);
-    
-    initialize_CUDA_rng();
-    
-    rU01_ind = -1;
-    prepare_uniform_real01();
-}
-
-template <typename realT> 
+template <typename realT>
 Cuda<realT>::
 ~Cuda()
 {
