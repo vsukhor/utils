@@ -32,7 +32,6 @@
 
 #include "../arrays/all.h"
 #include "../msgr.h"
-#include "exceptions.h"
 #include "misc.h"
 
 
