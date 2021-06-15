@@ -29,8 +29,8 @@
 * \author Valerii Sukhorukov
 */
 
-#ifndef UTILS_COMMON_CONSTANTS_H
-#define UTILS_COMMON_CONSTANTS_H
+#ifndef UTILS_CONSTANTS_H
+#define UTILS_CONSTANTS_H
 
 #include <array>
 #include <cmath>
@@ -41,8 +41,8 @@
 #include <type_traits>
 #include <vector>
 
-/// General stuff.
-namespace utils::common {
+/// Library namespace.
+namespace utils {
 
 //#define STR(x) std::to_string(x)
 template <typename T>
@@ -212,6 +212,6 @@ constexpr auto ANSI_BOLD_ON    = "\x1b[1m";
 constexpr auto ANSI_BOLD_OFF   = "\x1b[22m";
 constexpr auto ANSI_INVERSE_ON = "\x1b[7m";
 
-}  // namespace utils::common
+}  // namespace utils
 
-#endif // UTILS_COMMON_CONSTANTS_H
+#endif // UTILS_CONSTANTS_H
