@@ -140,11 +140,11 @@ TEST_F(ParameterTest, Int2)
     using Par = nsp::Par<T, false>;
 
     testing::internal::CaptureStdout(); // avoide polluting stdout
-    Par p1 {"intPositive", file, utils::common::zerohuge<T>};
+    Par p1 {"intPositive", file, utils::zerohuge<T>};
     ASSERT_EQ(p1(), 74);
-    Par p2 {"badUInt", file, utils::common::mhugehuge<T>};
+    Par p2 {"badUInt", file, utils::mhugehuge<T>};
     ASSERT_EQ(p2(), -74);
-    ASSERT_EXIT(Par("badUInt", file, utils::common::zerohuge<T>),
+    ASSERT_EXIT(Par("badUInt", file, utils::zerohuge<T>),
         testing::ExitedWithCode(EXIT_FAILURE), "");
     testing::internal::GetCapturedStdout();
 }
@@ -156,11 +156,11 @@ TEST_F(ParameterTest, Double2)
     using Par = nsp::Par<T, false>;
 
     testing::internal::CaptureStdout(); // avoide polluting stdout
-    Par p1 {"myValue", file, utils::common::zerohuge<T>};
+    Par p1 {"myValue", file, utils::zerohuge<T>};
     ASSERT_EQ(p1(), 30.2);
-    Par p2 {"negativeReal", file, utils::common::mhugehuge<T>};
+    Par p2 {"negativeReal", file, utils::mhugehuge<T>};
     ASSERT_EQ(p2(), -45.3e-6);
-    ASSERT_EXIT(Par("negativeReal", file, utils::common::zerohuge<T>),
+    ASSERT_EXIT(Par("negativeReal", file, utils::zerohuge<T>),
         testing::ExitedWithCode(EXIT_FAILURE), "");
     testing::internal::GetCapturedStdout();
 }
