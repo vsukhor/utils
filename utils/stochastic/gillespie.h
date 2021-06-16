@@ -55,7 +55,7 @@ class Gillespie {
 
 public :
 
-    using realT = typename RF::real;
+    using real = typename RF::real;
     template <typename T> using vup = std::vector<std::unique_ptr<T>>;
 
     /**
@@ -82,7 +82,7 @@ public :
      * \brief Getter for the time till the nest reaction event.
      * \return Time till the nest reaction event.
      */
-    [[nodiscard]] realT tau() const noexcept { return tau_; }
+    [[nodiscard]] real tau() const noexcept { return tau_; }
 
     /**
      * \brief Prints reaction propensities to \p os.
@@ -119,15 +119,15 @@ public :
 private:
 
     vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
-    std::vector<realT> a;          ///< Vector of propensities.
+    std::vector<real>  a;          ///< Vector of propensities.
     szt                rind {huge<szt>}; ///< Index of the current reaction.
-    realT              tau_ {};    ///< Time till the next reaction event.
+    real               tau_ {};    ///< Time till the next reaction event.
     RF&                rnd;        ///< Random number generator.
     szt                nreact {};  ///< Total number of reactions.
     std::vector<szt>   rtype;      ///< Human-readable abbrev. of reaction names.
-    std::vector<realT> csums;      ///< Cumulative sum.
-    realT              asum {};    ///< Total propensity of the reaction set.
-    std::vector<realT> auxf;       ///< Auxiliary vector of nreact reals.
+    std::vector<real>  csums;      ///< Cumulative sum.
+    real               asum {};    ///< Total propensity of the reaction set.
+    std::vector<real>  auxf;       ///< Auxiliary vector of nreact reals.
     std::vector<szt>   auxi;       ///< Auxiliary vector of nreact integers.
     std::vector<szt>   rinds;      ///< Reaction indexes.
 
@@ -212,7 +212,7 @@ set_rind() noexcept
         auxf[i] = a[i] / asum;
     std::partial_sum(auxf.begin(), auxf.end(), csums.begin());
 
-    realT ran {};
+    real ran {};
     do ran = rnd.r01u(); 
     while (ran >= csums[nreact-1]);
 
@@ -227,7 +227,7 @@ template <typename RF, typename Reaction>
 void Gillespie<RF,Reaction>::
 set_tau() noexcept
 {
-    realT ran {};
+    real ran {};
     do ran = rnd.r01u(); 
     while (ran <= zero<real> || ran >= one<real>);
 
