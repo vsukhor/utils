@@ -37,8 +37,8 @@
 #include <type_traits>
 #include <vector>
 
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "_misc.h"
 #include "array2.h"
 
@@ -539,7 +539,7 @@ T other_than( const array<2,T>& p
             p == array<2,T>(n[2], n[0])) ? n[1] :
           ((p == array<2,T>(n[1], n[2]) ||
             p == array<2,T>(n[2], n[1])) ? n[0] :
-            -utils::common::one<T>));
+            -one<T>));
 }
 
 constexpr T sum() const noexcept

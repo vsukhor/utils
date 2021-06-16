@@ -36,14 +36,11 @@
 #include <thread>
 #include <vector>
 
-#include "common/misc.h"
+#include "constants.h"
 #include "msgr.h"
 
 /// Provies distribution of load among threads.
 namespace utils::threads {
-
-using szt = common::szt;
-using ulong = common::ulong;
 
 /**
  * \brief Enumerates basic load sharing modes.

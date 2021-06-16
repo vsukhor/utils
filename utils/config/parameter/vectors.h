@@ -39,7 +39,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "../../common/misc.h"
+#include "../../constants.h"
 #include "../../msgr.h"
 #include "../exceptions/vectors.h"
 #include "base.h"
@@ -68,7 +68,7 @@ class Par<std::vector<T>,
     using Base<T>::isLoaded_;
 
     Q p_;  ///< The parameter value.
-    szt expectedSize_ {common::huge<szt>};   ///< Expected size of the vector.
+    szt expectedSize_ {huge<szt>};   ///< Expected size of the vector.
     
 public:    
 

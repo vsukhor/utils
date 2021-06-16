@@ -242,7 +242,7 @@ format_as_pdb(
     record << std::right;
 
     // columns 7-11   Integer   Pdb serial number
-    record << common::STR(iatom);
+    record << STR(iatom);
 
     // column  12  empty
     record << " ";
@@ -267,7 +267,7 @@ format_as_pdb(
 
     // columns 23-26  Integer  resSeq   Residue sequence number
     record.width(4);
-    record << common::STR(uint(ires));
+    record << STR(uint(ires));
 
     // column  27   AChar  iCode  Code for insertion of residues
     record << " ";
@@ -385,7 +385,7 @@ void Pdb::
 read(
     const std::filesystem::path& file,
     std::vector<Pdb>& a,
-    vec2str& other,
+    vec2<std::string>& other,
     Msgr& msgr
 )
 {
@@ -417,7 +417,7 @@ void Pdb::
 write(
     const std::filesystem::path& file,
     const std::vector<Pdb>& a,
-    const vec2str& other,
+    const vec2<std::string>& other,
     Msgr& msgr
 )
 {

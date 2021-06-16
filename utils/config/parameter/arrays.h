@@ -228,7 +228,7 @@ initialize( str value )
         if (val.length() < 1)
             throw common::Exception
                 {"Error in config file: Number of elelments in " + get_name() +
-                 " is " + common::STR(p_.size()) + " which is insufficient",
+                 " is " + STR(p_.size()) + " which is insufficient",
                  nullptr};
         std::stringstream(val) >> p_[i];
         value.erase(0, e);

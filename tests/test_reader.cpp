@@ -27,8 +27,8 @@
 
 #include "gtest/gtest.h"
 
-#include "../utils/common/constants.h"
 #include "../utils/config/reader.h"
+#include "../utils/constants.h"
 
 namespace {
 

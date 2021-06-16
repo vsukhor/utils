@@ -32,7 +32,7 @@
 #ifndef UTILS_GRAPH_VERTEX_EDGE_H
 #define UTILS_GRAPH_VERTEX_EDGE_H
 
-#include "../common/constants.h"
+#include "../constants.h"
 
 /// Abstract graph circuitry.
 namespace utils::graph {

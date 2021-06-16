@@ -36,6 +36,7 @@
 
 #include "../arrays/all.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "../msgr.h"
 
 /// Biochemistry-related stuff.
@@ -45,17 +46,13 @@ namespace utils::biochemical {
 class Pdb {
 
     using A3f = arrays::A3<float>;
-    using szt = common::szt;
-    using uint = common::uint;
-    using ulong = common::ulong;
-    using vec2str = common::vec2<std::string>;
 
 public:
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3f         pos {common::huge<float>};           ///< Atom position.
-    uint        ind {common::huge<decltype(ind)>};   ///< Atom insex.
+    A3f         pos {huge<float>};           ///< Atom position.
+    uint        ind {huge<decltype(ind)>};   ///< Atom insex.
     int         irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
     ulong       pdbsegment {};   ///< Segment name.
     std::string name;            ///< Pdb name.
@@ -200,7 +197,7 @@ public:
     static void read(
         const std::filesystem::path& file,
         std::vector<Pdb>& a,
-        vec2str& other,
+        vec2<std::string>& other,
         Msgr& msgr
     );
 
@@ -212,7 +209,7 @@ public:
     static void write(
         const std::filesystem::path& file,
         const std::vector<Pdb>& a,
-        const vec2str& other,
+        const vec2<std::string>& other,
         Msgr& msgr
     );
        

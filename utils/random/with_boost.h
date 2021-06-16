@@ -47,8 +47,8 @@
 #include <boost/random/uniform_int_distribution.hpp>
 
 #include "../arrays/all.h"
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "core.h"
 
 /// Pseugo-random number generation.
@@ -72,16 +72,6 @@ public:
     using real = realT;
     using A2r = arrays::A2<realT>;
     using A3r = arrays::A3<realT>;
-    static constexpr auto half = common::half<realT>;
-    static constexpr auto one = common::one<realT>;
-    static constexpr auto two = common::two<realT>;
-    static constexpr auto zero = common::zero<realT>;
-    static constexpr auto pi = common::pi<realT>;
-    static constexpr auto twopi = common::twopi<realT>;
-    static constexpr auto halfpi = common::halfpi<realT>;
-
-//    /// \brief Default constructor.
-//    Boost() = default;
 
     /// \brief Constructor setting the seed uncoupled from run index.
     /// \param seed Random number generator seed.
@@ -434,7 +424,7 @@ template <typename realT> constexpr
 realT Boost<realT>::
 uniform0(const realT max)
 {            
-    XASSERT(max > zero, "Boost<realT>::uniform0 requires max > 0 ");
+    XASSERT(max > zero<realT>, "Boost<realT>::uniform0 requires max > 0 ");
 
     auto ir = r01u() * max;    
     
@@ -452,15 +442,15 @@ uniform_direction( const realT solidAngle ) noexcept -> A3r
 {
     do {
         // inclination of the candidate point on a sphere surface
-        const auto ph = pi * (r01u() - half);
+        const auto ph = pi<realT> * (r01u() - half<realT>);
         if (ph > solidAngle) continue;
         
         // azimuth of the candidate point on a sphere surface
-        auto th = twopi * (r01u() - half);
+        auto th = twopi<realT> * (r01u() - half<realT>);
         
         // if upper altitude paralleles are shorter, reject some
         // points positioned outside their length:
-        if (std::abs(th) < pi * std::cos(ph)) {
+        if (std::abs(th) < pi<realT> * std::cos(ph)) {
             // Spread the remaining points over the length of the parallele:
             th /= std::cos(ph);
             
@@ -490,27 +480,27 @@ uniform_direction(
 {
     while (true) {
         // Inclination of the candidate point on a sphere surface:
-        const auto ph = pi*r01u() - halfpi;
-        if (ph >  halfpi - inclMinMax[0] ||
-            ph <= halfpi - inclMinMax[1]) continue;
+        const auto ph = pi<realT> * r01u() - halfpi<realT>;
+        if (ph >  halfpi<realT> - inclMinMax[0] ||
+            ph <= halfpi<realT> - inclMinMax[1]) continue;
 
         // Azimuth of the candidate point on a sphere surface:
-        th = twopi * r01u() - pi;    // [-pi, pi)
+        th = twopi<realT> * r01u() - pi<realT>;    // [-pi, pi)
 
         // If upper altitude paralleles are shorter, reject some points
         // positioned outside their length:
-        if (std::abs(th) < pi * std::cos(ph)) {
+        if (std::abs(th) < pi<realT> * std::cos(ph)) {
             // 'th' is spread the remaining points over the length of the parallele.
             th /= std::cos(ph);
             bool reject = th <  azimMinMax[0] ||
                           th >= azimMinMax[1];
             if (azimSymmetric)
                 reject = reject &&
-                        (th >= -pi + azimMinMax[1] &&
-                         th <   pi + azimMinMax[0]);
+                        (th >= -pi<realT> + azimMinMax[1] &&
+                         th <   pi<realT> + azimMinMax[0]);
             if (reject) continue;
 
-            phPole = halfpi - ph;    // relative to the pole
+            phPole = halfpi<realT> - ph;    // relative to the pole
 
             return { std::cos(ph) * std::cos(th),
                      std::cos(ph) * std::sin(th),
@@ -518,7 +508,7 @@ uniform_direction(
         }
     }
 
-    return zero;
+    return zero<realT>;
 }
 
 
@@ -535,25 +525,25 @@ uniform_on_sphere(
     const int poleDir
 ) noexcept -> A3r
 {    
-    XASSERT(solidAngle > zero &&
-            solidAngle <= pi,
+    XASSERT(solidAngle > zero<realT> &&
+            solidAngle <= pi<realT>,
             "Error in Random::uniform_on_sphere: incorrect solidAngle");
-    XASSERT(r > zero,
+    XASSERT(r > zero<realT>,
             "Error in Random::uniform_on_sphere: incorrect r");
     XASSERT(poleDir >= 0 &&
             poleDir <= 2,
             "Error in Random::uniform_on_sphere: incorrect poleDir");
 
     while (true) {
-        const auto u = two * r01u() - one;
+        const auto u = two<realT> * r01u() - one<realT>;
         if (u < std::cos(solidAngle))
             // reject the points outside the cap set by solidAngle,
             // i.e one with hieght h = r * (1 - std::cos(solidAngle))
             continue;
         
-        const auto v = std::sqrt(one - u*u);
+        const auto v = std::sqrt(one<realT> - u*u);
         // Inclination of the candidate point on a sphere surface:
-        const auto ph = twopi * r01u();
+        const auto ph = twopi<realT> * r01u();
 
         const auto vcp = v * std::cos(ph);
         const auto vsp = v * std::sin(ph);
@@ -585,10 +575,10 @@ uniform_on_spheriod(
 ) noexcept -> A3r
 {
     // Check that the pole direction is along one of the major axes: 0, 1, 2:
-    XASSERT(solidAngle > zero &&
-            solidAngle <= pi,
+    XASSERT(solidAngle > zero<realT> &&
+            solidAngle <= pi<realT>,
             "Error in Random::uniform_on_spheriod: incorrect solidAngle");
-    XASSERT(r > zero,
+    XASSERT(r > zero<realT>,
             "Error in Random::uniform_on_spheriod: incorrect r");
     XASSERT(poleDir >= 0 &&
             poleDir <= 2,
@@ -598,10 +588,10 @@ uniform_on_spheriod(
 
     while (true) {
         // Inclination of the candidate point on a sphere surface:
-        const auto phi = twopi * r01u();
+        const auto phi = twopi<realT> * r01u();
 
-        const auto u = two * r01u() - one;
-        const auto v = std::sqrt(one - u*u);
+        const auto u = two<realT> * r01u() - one<realT>;
+        const auto v = std::sqrt(one<realT> - u*u);
 
         const auto x = r[0] * v * std::cos(phi);
         const auto y = r[0] * v * std::sin(phi);
@@ -628,12 +618,12 @@ uniform_on_spheriod(
 
         if (bias == -1)  // Bias towards poles.
             if (std::acos(std::abs(z) / res.norm()) >
-                gaussian_number_constrained(zero, biasPar, zero, halfpi))
+                gaussian_number_constrained(zero<realT>, biasPar, zero<realT>, halfpi<realT>))
                 continue;
 
         if (bias == 1) // Bias towards equator.
             if (std::acos(std::sqrt(x*x + y*y) / res.norm()) >
-                 gaussian_number_constrained(zero, biasPar, zero, halfpi))
+                 gaussian_number_constrained(zero<realT>, biasPar, zero<realT>, halfpi<realT>))
                 continue;
         // No bias.
         return res;
@@ -648,7 +638,7 @@ uniform_on_ellipse(
 ) noexcept -> A2r
 {
     // Inclination of the candidate point:
-    const auto phi = twopi * r01u();
+    const auto phi = twopi<realT> * r01u();
 
     return { r[0] * std::cos(phi),
              r[1] * std::sin(phi) };
@@ -664,7 +654,7 @@ uniform_in_ellipse(
 {
     const auto rho = r01u();
     // Inclination of the candidate point:
-    const auto phi = twopi * r01u();
+    const auto phi = twopi<realT> * r01u();
     
     // (x, y) is a random point inside a circle of radius 1
     const auto x = std::sqrt(rho) * std::cos(phi);
@@ -696,7 +686,7 @@ exponential_number(
     const realT mi
 ) noexcept
 {
-    XASSERT(mi >= zero, "Boost<realT>::exponentialNum requires mi >= 0");
+    XASSERT(mi >= zero<realT>, "Boost<realT>::exponentialNum requires mi >= 0");
 
     return - mi * std::log(r01u());
 }
@@ -709,7 +699,7 @@ poisson_number(
     const realT lambda
 ) noexcept
 {
-    if (lambda <= zero)
+    if (lambda <= zero<realT>)
         return 0;
     boost::random::poisson_distribution<uint> poissonDistr(lambda);
     return poissonDistr(g);
@@ -737,7 +727,7 @@ multinomial_number(
     const uint k
 )  noexcept
 {
-    std::vector<realT> p (k - 1, one / k);
+    std::vector<realT> p (k - 1, one<realT> / k);
     return multinomial_number(n, p);
 }
 
@@ -774,8 +764,8 @@ weibull_number(
     const realT k
 )  noexcept
 {
-    return lambda * std::pow((-std::log(one - r01u())),
-                             one / k);
+    return lambda * std::pow((-std::log(one<realT> - r01u())),
+                             one<realT> / k);
 }
 
 
@@ -788,7 +778,7 @@ logistic_number(
 )  noexcept
 {
     const auto u = r01u();
-    return mi + s * (std::log(u) - std::log(one - u));
+    return mi + s * (std::log(u) - std::log(one<realT> - u));
 }
 
 

@@ -44,7 +44,6 @@
 /// Library namespace.
 namespace utils {
 
-//#define STR(x) std::to_string(x)
 template <typename T>
 constexpr auto STR(T x)
 {
@@ -76,25 +75,25 @@ template <typename T> using vup = std::vector<std::unique_ptr<T>>;
 
 // common constants ============================================================
 
-template <typename T> constexpr T zero {static_cast<T>(0.L)};
-template <typename T> constexpr T half {static_cast<T>(.5L)};
-template <typename T> constexpr T thrd {static_cast<T>(1.L/3.L)};
-template <typename T> constexpr T one {static_cast<T>(1.L)};
-template <typename T> constexpr T two {static_cast<T>(2.L)};
-template <typename T> constexpr T three {static_cast<T>(3.L)};
-template <typename T> constexpr T four {static_cast<T>(4.L)};
-template <typename T> constexpr T five {static_cast<T>(5.L)};
-template <typename T> constexpr T six {static_cast<T>(6.L)};
-template <typename T> constexpr T ten {static_cast<T>(10.L)};
+template <typename T> constexpr auto zero = static_cast<T>(0);
+template <typename T> constexpr auto thrd = static_cast<T>(1.L/3.L);
+template <typename T> constexpr auto half = static_cast<T>(.5L);
+template <typename T> constexpr auto one = static_cast<T>(1);
+template <typename T> constexpr auto two = static_cast<T>(2);
+template <typename T> constexpr auto three = static_cast<T>(3);
+template <typename T> constexpr auto four = static_cast<T>(4);
+template <typename T> constexpr auto five = static_cast<T>(5);
+template <typename T> constexpr auto six = static_cast<T>(6);
+template <typename T> constexpr auto ten = static_cast<T>(10);
 
-template <typename T> constexpr T
-    pi {static_cast<T>(3.1415926535897932384626433832795L)};
-template <typename T> constexpr T
-    twopi {two<T>*pi<T>};
-template <typename T> constexpr T
-    halfpi {half<T>*pi<T>};
-template <typename T> constexpr T
-    sqrtPI {static_cast<T>(1.7724538509055160272981674833411L)};
+template <typename T> constexpr auto
+    pi = static_cast<T>(3.1415926535897932384626433832795L);
+template <typename T> constexpr auto
+    twopi = two<T> * pi<T>;
+template <typename T> constexpr auto
+    halfpi = half<T>*pi<T>;
+template <typename T> constexpr auto
+    sqrtPI = static_cast<T>(1.7724538509055160272981674833411L);
 
 template <typename T, typename Enabler = void> constexpr T sqrt2PI;
 template <typename T> inline constexpr T

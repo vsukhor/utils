@@ -36,8 +36,8 @@
 #include <cmath>
 #include <fstream>
 
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 
 /// General stuff.
 namespace utils::stochastic {
@@ -56,12 +56,7 @@ class Gillespie {
 public :
 
     using realT = typename RF::real;
-    using szt = common::szt;
     template <typename T> using vup = std::vector<std::unique_ptr<T>>;
-
-    static constexpr auto hugeszt = common::huge<szt>;
-    static constexpr auto real0 = static_cast<realT>(0);
-    static constexpr auto real1 = static_cast<realT>(1);
 
     /**
      * \brief Constructor.
@@ -125,7 +120,7 @@ private:
 
     vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
     std::vector<realT> a;          ///< Vector of propensities.
-    szt                rind {hugeszt}; ///< Index of the current reaction.
+    szt                rind {huge<szt>}; ///< Index of the current reaction.
     realT              tau_ {};    ///< Time till the next reaction event.
     RF&                rnd;        ///< Random number generator.
     szt                nreact {};  ///< Total number of reactions.
@@ -204,9 +199,9 @@ template <typename RF, typename Reaction>
 bool Gillespie<RF,Reaction>::
 set_asum() noexcept
 {
-    asum = std::accumulate(a.begin(), a.end(), real0);
+    asum = std::accumulate(a.begin(), a.end(), zero<real>);
     
-    return asum != real0;
+    return asum != zero<real>;
 }
 
 template <typename RF, typename Reaction>
@@ -234,9 +229,9 @@ set_tau() noexcept
 {
     realT ran {};
     do ran = rnd.r01u(); 
-    while (ran <= real0 || ran >= real1);
+    while (ran <= zero<real> || ran >= one<real>);
 
-    tau_ = std::log(real1 / ran) / asum;
+    tau_ = std::log(one<real> / ran) / asum;
     XASSERT(!std::isnan(tau_), "Tau is nan");
 }
 
@@ -255,7 +250,7 @@ template <typename RF, typename Reaction> constexpr
 Reaction* Gillespie<RF,Reaction>::
 currRc() const noexcept
 {
-    return rind < hugeszt ? rc[rtype[rind]].get()
+    return rind < huge<szt> ? rc[rtype[rind]].get()
                             : nullptr;
 }
 
@@ -286,9 +281,9 @@ log_data( std::ostream& os ) const
     };
 
     os << " tau " << tau_
-       << " rt " << (rind!=hugeszt ? "" : "000")
+       << " rt " << (rind != huge<szt> ? "" : "000")
                   << pad_zeros(rind);
-    if (rind != hugeszt)
+    if (rind != huge<szt>)
         os << " " << currRc()->shortName;
 }
 

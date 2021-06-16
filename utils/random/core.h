@@ -38,13 +38,11 @@
 #include <vector>
 
 #include "../common/misc.h"
+#include "../constants.h"
 #include "../msgr.h"
 
 /// Pseugo-random number generation.
 namespace utils::random {
-
-using szt = common::szt;
-using uint = common::uint;
 
 /// \brief Base class for random number factories.
 /// \tparam realT Floating point type.
@@ -91,7 +89,7 @@ protected:
 
 private:
 
-    unsigned seed {common::huge<unsigned>};  ///< The seed
+    unsigned seed {huge<unsigned>};  ///< The seed
 
     Msgr& msgr;  ///< Output message processor.
 };

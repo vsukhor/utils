@@ -35,8 +35,8 @@
 #include <fstream>
 #include <vector>
 
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "_misc.h"
 
 /// Arbitrary-size arrays.

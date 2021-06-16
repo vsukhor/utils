@@ -50,8 +50,6 @@ class Reaction {
 public:  // Only constant parameters are public.
 
     using real = typename RF::real;
-    using szt = common::szt;
-    using ulong = common::ulong;
 
 	static std::vector<std::string>	activeInstances;
 

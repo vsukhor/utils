@@ -43,8 +43,8 @@
 #include <sys/stat.h>
 #include <vector>
 
+#include "../constants.h"
 #include "../msgr.h"
-#include "constants.h"
 
 #ifdef USE_UTILS_XASSERT
     #define XASSERT(EX, msg) \

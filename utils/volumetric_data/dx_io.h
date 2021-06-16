@@ -31,8 +31,8 @@
 #define UTILS_VOLUMETRIC_DX_IO
 
 #include "../arrays/all.h"
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "../msgr.h"
 
 /// Volume data io.

@@ -37,8 +37,8 @@
 #include <type_traits>
 #include <vector>
 
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "_misc.h"
 
 namespace utils::arrays {

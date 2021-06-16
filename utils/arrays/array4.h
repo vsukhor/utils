@@ -35,8 +35,8 @@
 #include <fstream>
 #include <vector>
 
-#include "../common/constants.h"
 #include "../common/misc.h"
+#include "../constants.h"
 #include "_misc.h"
 
 /// 4-element arrays.
@@ -622,7 +622,7 @@ T other_than(
             p == array<3,T>(n[1], n[2], n[3]) ||
             p == array<3,T>(n[2], n[3], n[1]) ||
             p == array<3,T>(n[2], n[1], n[3])) ? n[0]
-            : -utils::common::one<T>)));
+            : -one<T>)));
 }
 
 constexpr T sum() const noexcept

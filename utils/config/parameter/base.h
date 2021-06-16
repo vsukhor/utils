@@ -38,14 +38,11 @@
 #include <sstream>
 #include <string>
 
-#include "../../common/misc.h"
+#include "../../constants.h"
 #include "../../msgr.h"
 
 /// Configuration module
 namespace utils::config {
-
-using szt = common::szt;
-using ulong = common::ulong;
 
 namespace exceptions {
 
