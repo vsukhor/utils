@@ -219,8 +219,9 @@ set_rind() noexcept
     for (szt i=0; i<nreact; i++)
         auxi[i] = szt(ran < csums[i]);
 
-    const szt rindnum {common::find(auxi, rinds)};
-    rind = *std::min_element(rinds.begin(), rinds.begin()+rindnum);
+    const auto rindnum {common::find(auxi, rinds)};
+    rind = *std::min_element(rinds.begin(),
+                             rinds.begin() + static_cast<long>(rindnum));
 }
 
 template <typename RF, typename Reaction>

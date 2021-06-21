@@ -83,7 +83,7 @@ constexpr array( const array& p ) noexcept
 constexpr array( const std::array<T,N>& p ) noexcept
 {
     for (const auto i : ii)
-        n[i] = p[i];
+        n[i] = p[static_cast<szt>(i)];
 }
 
 array( array&& p ) noexcept = default;

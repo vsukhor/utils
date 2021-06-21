@@ -63,9 +63,9 @@ long long assert_fun(
     const char *file,
     const std::string& msg )
 {
-    std::cerr << "Assertion (" + std::string(EX) + ") failed! \n" +
-               "File " + file + ", Line " + std::to_string(L) + "\n" +
-               "Reason: " + msg << std::endl;
+    std::cerr << "Assertion (" << EX << ") failed! \n"
+              << "File " << file << ", Line " << L << "\n"
+              << "Reason: " + msg << std::endl;
     std::exit(EXIT_FAILURE);
 }
 

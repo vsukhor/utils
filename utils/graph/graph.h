@@ -51,8 +51,7 @@ namespace utils::graph {
 template <typename ET>
 class Graph {
 
-    using vec2int = common::vec2<int>;
-    using szt = common::szt;
+    using vec2int = vec2<int>;
 
 public:
 
@@ -65,7 +64,7 @@ public:
     using pathT = std::vector<vertex_t>;
 
     /// Type alias for the graph adjacency list.
-    using adjLT = common::vec2<ET>;
+    using adjLT = vec2<ET>;
 
     /**
      * Breadth first search on the graph
@@ -227,7 +226,7 @@ compute_paths(
     min_distance[source] = 0;
 
     previous.resize(n);
-    std::fill(previous.begin(), previous.end(), common::huge<vertex_t>);
+    std::fill(previous.begin(), previous.end(), huge<vertex_t>);
     
     std::set<std::pair<weight_t, vertex_t>> vertex_queue;
     vertex_queue.insert(std::make_pair(min_distance[source], source));
@@ -273,7 +272,7 @@ shortest_path(
     // Shortest path to a specific vertex u:
     auto get_shortest_path_to = [&](vertex_t u) {
         std::list<vertex_t> path;
-        for (; u != common::huge<vertex_t>; u = previous[u])
+        for (; u != huge<vertex_t>; u = previous[u])
             path.push_front(u);
 
         return path;
@@ -297,7 +296,7 @@ reset_al(
 {
     for (auto& o : al)
         for (auto& oo : o)
-            oo = {common::huge<vertex_t>, w};
+            oo = {huge<vertex_t>, w};
 }
 
 
