@@ -204,7 +204,7 @@ load( const std::filesystem::path& file )
     str parname;
     str value;
     std::ifstream ifs {file};
-    if (!ifs.is_open()) {
+    if (ifs.fail()) {
         throw common::Exception
             {"Unable to open config file: " + file.string(), nullptr};
     }
