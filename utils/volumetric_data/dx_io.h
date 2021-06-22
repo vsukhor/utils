@@ -68,7 +68,7 @@ void save_as_DX(
     else if (units != "A")
         msgr.exit("Error while saving volume map: length units not supported");
     std::ofstream fout {filename};
-    if (!fout.is_open())
+    if (fout.fail())
         msgr.exit("Error while saving volume map: Unable to open file: " +
                   filename);
 
@@ -149,7 +149,7 @@ void read_as_DX(
                   filename);
 
     std::ifstream fin {filename, std::ios::in};
-    if (!fin.is_open())
+    if (fin.fail())
         msgr.exit("Error while reading volume map: Unable to open file at " +
                   filename);
 
