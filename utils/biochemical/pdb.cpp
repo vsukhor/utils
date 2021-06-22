@@ -390,7 +390,7 @@ read(
 )
 {
     std::ifstream fin {file};
-    if (!fin.is_open())
+    if (fin.fail())
         msgr.exit("Unable to open file for reading at ", file);
 
     a.clear();
@@ -422,7 +422,7 @@ write(
 )
 {
     std::ofstream fout {file};
-    if (!fout.is_open())
+    if (fout.fail())
         msgr.exit("Unable to open file for writing at ", file);
 
     szt i = 0;
