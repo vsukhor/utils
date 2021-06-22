@@ -34,6 +34,7 @@
 
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "../common/misc.h"
 #include "../msgr.h"
@@ -104,7 +105,7 @@ public:  // Only constant parameters are public.
     /// Set the Gillespie score for this reaction.
     virtual void set_score() noexcept = 0;
     /// Return the Gillespie score for this reaction.
-    virtual real get_score() const noexcept = 0;
+    real get_score() const noexcept { return *score; }
 
     /**
      * \brief Update propensity for a pair of network components.
@@ -112,7 +113,7 @@ public:  // Only constant parameters are public.
      * \param c2 Index of the 2nd component to update.
      */
     virtual void update_prop(szt c1, szt c2) noexcept = 0;
-	virtual void update_prop(const szt c1) noexcept {}
+	virtual void update_prop(szt /* c1 */) noexcept {}
 	virtual void set_prop() noexcept {}
 
     virtual void resize_pr() noexcept {}
@@ -137,25 +138,28 @@ public:  // Only constant parameters are public.
      * \brief The number of times this reaction was fired.
      * \result The number of times this reaction was fired.
      */
-    virtual szt event_count() const noexcept = 0;
+    unsigned long event_count() const noexcept { return eventCount; }
 
     /**
-     * \brief Print the parameters common to all reactions.
+     * Print the parameters common to all reactions.
      * \param le True if new line after the output.
      */
-    virtual void print(const bool le) const
-    {
-        msgr.print<false>(" shortName ", shortName);
-        msgr.print<false>(" rate ", rate);
-        if (le) msgr.print("\n");
-    }
+    virtual void print(bool le) const;
 
 protected:
 
     Msgr& msgr;  ///< ref: Output message processor.
 
+    /// Number of reaction events fired.
+    unsigned long eventCount {};
+
+    real* score {};
+
+    /// Reactions that need a score update after *this has fired.
+    std::vector<Reaction*> dependents;
+
     /** All necessary updates after the given reaction event was executed.
-     * \details Pure virtual function: Network and reaction updates necessary
+     * Pure virtual function: Network and reaction updates necessary
      * after the given reaction event was executed.
      */
     virtual void update_netw_stats() = 0;
@@ -167,10 +171,21 @@ private:
      * \param a Placeholder in the Gillespie object responsible for this
      * reaction score.
      */
-    virtual void attach_score_pointer(real* a) noexcept = 0;
+    void attach_score_pointer(real* a) noexcept { score = a; };
 };
 
 template<typename RF> std::vector<std::string> Reaction<RF>::activeInstances;
+
+template<typename RF>
+void Reaction<RF>::
+print(const bool le) const
+{
+    msgr.print<false>(" shortName ", shortName);
+    msgr.print<false>(" rate ", rate);
+    msgr.print<false>(" score ", *score);
+    msgr.print<false>(" eventCount ", eventCount);
+    if (le) msgr.print("\n");
+}
 
 }  // namespace utils::stochastic
 
