@@ -56,8 +56,6 @@ public:  // Only constant parameters are public.
 
     /// Index in Simulation::rc, i.e. index among all used and not used reactions.
     const szt ind {};
-    /// Reaction rate constant.
-    const real rate {};
 
     const std::string shortName;  ///< Reaction name.
     const std::string fullName;   ///< Reaction name abbreviation.
@@ -87,28 +85,27 @@ public:  // Only constant parameters are public.
               const std::string fullName    // value + move
         )
         : ind {ind}
-        , rate {rate}
         , shortName {std::move(shortName)}
         , fullName {std::move(fullName)}
         , msgr {msgr}
+        , rate {rate}
     {}
 
 
-	// the rule of five is triggered by the virtual destructor, the defaults suffice
+	// The rule of five is triggered by the virtual destructor, the defaults suffice
     Reaction(const Reaction&) = default;             // copy constructor
     Reaction& operator=(const Reaction&) = default;  // copy assignment
     Reaction(Reaction&&) = default;                  // move constructor
     Reaction& operator=(Reaction&&) = default;       // move assignment
 	virtual ~Reaction() noexcept = default; 		 // destructor
 
-
-    /// Set the Gillespie score for this reaction.
+    /// Sets the Gillespie score for this reaction.
     virtual void set_score() noexcept = 0;
-    /// Return the Gillespie score for this reaction.
+    /// Returns the Gillespie score for this reaction.
     real get_score() const noexcept { return *score; }
 
     /**
-     * \brief Update propensity for a pair of network components.
+     * \brief Updates propensity for a pair of network components.
      * \param c1 Index of the 1st component to update.
      * \param c2 Index of the 2nd component to update.
      */
@@ -121,9 +118,8 @@ public:  // Only constant parameters are public.
     /// Execute the raction event.
     virtual void fire() noexcept = 0;
 
-
     /**
-     * \brief Populate the vector of reactions that need a score update.
+     * \brief Populates the vector of reactions that need a score update.
      * \details The update is performed after *this has fired
      * and initializes the propensities and effective rate.
      * \param rc Vector of unique pointers to all reactions taking part in
@@ -132,7 +128,6 @@ public:  // Only constant parameters are public.
     virtual void initialize_dependencies(
         const std::vector<std::unique_ptr<Reaction>>& rc
     ) noexcept = 0;
-
 
     /**
      * \brief The number of times this reaction was fired.
@@ -153,6 +148,9 @@ protected:
     /// Number of reaction events fired.
     unsigned long eventCount {};
 
+    /// Reaction rate constant.
+    real rate {};
+
     real* score {};
 
     /// Reactions that need a score update after *this has fired.
@@ -167,7 +165,7 @@ protected:
 private:
 
     /**
-     * \brief Attach this score to the Gillespie mechanism.
+     * Attaches this score to the Gillespie mechanism.
      * \param a Placeholder in the Gillespie object responsible for this
      * reaction score.
      */
