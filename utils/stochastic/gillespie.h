@@ -55,8 +55,11 @@ class Gillespie {
 
 public :
 
+    using RandFactory = RF;
     using real = typename RF::real;
     template <typename T> using vup = std::vector<std::unique_ptr<T>>;
+
+    RandFactory& rnd;  ///< Random number generator.
 
     /**
      * \brief Constructor.
@@ -122,7 +125,6 @@ private:
     std::vector<real>  a;          ///< Vector of propensities.
     szt                rind {huge<szt>}; ///< Index of the current reaction.
     real               tau_ {};    ///< Time till the next reaction event.
-    RF&                rnd;        ///< Random number generator.
     szt                nreact {};  ///< Total number of reactions.
     std::vector<szt>   rtype;      ///< Human-readable abbrev. of reaction names.
     std::vector<real>  csums;      ///< Cumulative sum.
