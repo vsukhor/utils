@@ -19,6 +19,8 @@ if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
+add_definitions(-DUSE_UTILS_XASSERT)
+
 add_executable(unittests_utils
 	test_parameter.cpp
 	test_misc.cpp
