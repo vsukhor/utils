@@ -125,7 +125,7 @@ generate_message(const std::string& name,
 
     auto print = [](const std::vector<Q>& a) {
         std::string w {"{ "};
-        for(const auto o : a)
+        for (const auto o : a)
             w += std::to_string(o)+" ";
         return w+"}";
     };

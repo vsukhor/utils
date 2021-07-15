@@ -95,7 +95,7 @@ ParOutOfRange(
 
     auto print = [](const Q& a) {
         std::string w{"{ "};
-        for(const auto& o : a)
+        for (const auto& o : a)
             w += "[" + std::to_string(o[0]) + " " + std::to_string(o[1]) + "] ";
         return w+"}";
     };
