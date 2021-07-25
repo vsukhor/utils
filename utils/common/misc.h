@@ -370,6 +370,21 @@ void remove_vector_element( std::vector<T>& v,
     XASSERT(false, "Error in remove_vector_element: element not found");
 }
 
+/// \brief Assembles permutations an input container 'a' in a std::vector.
+/// \tparam T Type of the input container.
+/// \param a Permuted container.
+/// \returns All permutations of the input parameter as std::vector.
+template<typename T> constexpr
+std::vector<T> permutations_of(T a) noexcept
+{
+    std::vector<T> r;
+    do r.push_back(a);
+    while (std::next_permutation(a.begin(), a.end()));
+
+    return r;
+}
+
+
 }  // namespace utils::common
 
 

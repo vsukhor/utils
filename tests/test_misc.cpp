@@ -23,6 +23,7 @@
 ================================================================================
 */
 
+#include <array>
 #include <string>
 
 #include "gtest/gtest.h"
@@ -44,6 +45,23 @@ TEST(TestMisc, Trim)
 
     const std::string s3 {"    ab   "};
     ASSERT_STREQ(utils::common::trim(s3).c_str(), std::string("ab").c_str());
+}
+
+TEST(TestMisc, Permutations)
+{
+    constexpr std::array<char,3> a {'a', 'b', 'c'};
+    constexpr std::array<std::array<char,3>,6> r {{
+        {'a', 'b', 'c'},
+        {'a', 'c', 'b'},
+        {'b', 'a', 'c'},
+        {'b', 'c', 'a'},
+        {'c', 'a', 'b'},
+        {'c', 'b', 'a'}
+    }};
+
+    const auto w = utils::common::permutations_of(a);
+    for (utils::szt i=0; i<w.size(); i++)
+        EXPECT_TRUE(r[i] == w[i]);
 }
 
 }  // namespace
