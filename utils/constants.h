@@ -91,7 +91,7 @@ template <typename T> constexpr auto
 template <typename T> constexpr auto
     twopi = two<T> * pi<T>;
 template <typename T> constexpr auto
-    halfpi = half<T>*pi<T>;
+    halfpi = half<T> * pi<T>;
 template <typename T> constexpr auto
     sqrtPI = static_cast<T>(1.7724538509055160272981674833411L);
 
@@ -181,6 +181,7 @@ template <typename T> constexpr std::array<T,2> zerohuge {{zero<T>, huge<T>}};
 template <typename T> constexpr std::array<T,2> onehuge {{one<T>, huge<T>}};
 template <typename T> constexpr std::array<T,2> moneone {{-one<T>, one<T>}};
 template <typename T> constexpr std::array<T,2> mhugehuge {{-huge<T>, huge<T>}};
+template <typename T> constexpr std::array<T,2> mhugezero {{-huge<T>, zero<T>}};
 
 // Range borders as two-element std vectors of arrays. =========================
 
