@@ -58,7 +58,7 @@ enum class Weights {
  * \brief Implements weighted thread loads.
  * \details Implements convenience class for handling a collection
  * of std::thread objects.
- * \tparam W Type of relative load distribweightution.
+ * \tparam W Type of relative load distribution.
  */
 template <Weights W>
 class Threads {
