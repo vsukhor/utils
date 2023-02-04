@@ -50,14 +50,17 @@ namespace utils::stochastic {
  * \tparam RF random factory class.
  * \tparam Reaction base class for reactions.
  */
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 class Gillespie {
 
 public :
 
     using RandFactory = RF;
     using real = typename RF::real;
-    template <typename T> using vup = std::vector<std::unique_ptr<T>>;
+
+    template<typename T>
+    using vup = std::vector<std::unique_ptr<T>>;
 
     RandFactory& rnd;  ///< Random number generator.
 
@@ -123,7 +126,7 @@ private:
 
     vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
     std::vector<real>  a;          ///< Vector of propensities.
-    szt                rind {huge<szt>}; ///< Index of the current reaction.
+    szt                rind {undefined<szt>}; ///< Index of the current reaction.
     real               tau_ {};    ///< Time till the next reaction event.
     szt                nreact {};  ///< Total number of reactions.
     std::vector<szt>   rtype;      ///< Human-readable abbrev. of reaction names.
@@ -153,20 +156,23 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename RF, typename Reaction> inline
+template<typename RF,
+         typename Reaction>
 Gillespie<RF,Reaction>::
 Gillespie( RF& rnd ) noexcept
     : rnd {rnd}
 {}
 
-template <typename RF, typename Reaction> inline
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 add_reaction( std::unique_ptr<Reaction> rup )
 {
     rc.push_back(std::move(rup));
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 initialize() noexcept
 {
@@ -186,7 +192,8 @@ initialize() noexcept
     rinds.resize(nreact);
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 Reaction* Gillespie<RF,Reaction>::
 get_reaction( const std::string& name ) const
 {
@@ -197,7 +204,8 @@ get_reaction( const std::string& name ) const
     return nullptr;
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 bool Gillespie<RF,Reaction>::
 set_asum() noexcept
 {
@@ -206,7 +214,8 @@ set_asum() noexcept
     return asum != zero<real>;
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 set_rind() noexcept
 {
@@ -226,7 +235,8 @@ set_rind() noexcept
                              rinds.begin() + static_cast<long>(rindnum));
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 set_tau() noexcept
 {
@@ -238,7 +248,8 @@ set_tau() noexcept
     XASSERT(!std::isnan(tau_), "Tau is nan");
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 fire( double& time ) noexcept
 {
@@ -249,29 +260,33 @@ fire( double& time ) noexcept
     currRc()->fire();
 }
 
-template <typename RF, typename Reaction> constexpr
+template<typename RF,
+         typename Reaction> constexpr
 Reaction* Gillespie<RF,Reaction>::
 currRc() const noexcept
 {
-    return rind < huge<szt> ? rc[rtype[rind]].get()
+    return is_defined(rind) ? rc[rtype[rind]].get()
                             : nullptr;
 }
 
-template <typename RF, typename Reaction> constexpr
+template<typename RF,
+         typename Reaction> constexpr
 auto Gillespie<RF,Reaction>::
 num_reactions() const noexcept -> szt
 {
     return rc.size();
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 std::string Gillespie<RF,Reaction>::
 short_name( const szt i ) const noexcept
 {
     return rc[i]->shortName;
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 log_data( std::ostream& os ) const
 {
@@ -284,13 +299,14 @@ log_data( std::ostream& os ) const
     };
 
     os << " tau " << tau_
-       << " rt " << (rind != huge<szt> ? "" : "000")
-                  << pad_zeros(rind);
-    if (rind != huge<szt>)
+       << " rt " << (is_defined(rind) ? "" : "000")
+                 << pad_zeros(rind);
+    if (is_defined(rind))
         os << " " << currRc()->shortName;
 }
 
-template <typename RF, typename Reaction>
+template<typename RF,
+         typename Reaction>
 void Gillespie<RF,Reaction>::
 printScores( std::ostream& os ) const
 {

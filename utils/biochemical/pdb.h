@@ -51,19 +51,19 @@ public:
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3f         pos {huge<float>};           ///< Atom position.
-    uint        ind {huge<decltype(ind)>};   ///< Atom insex.
-    int         irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
-    ulong       pdbsegment {};   ///< Segment name.
-    std::string name;            ///< Pdb name.
-    std::string resname {""};    ///< Residue name.
-    std::string chainID {};      ///< Chain identifier.
-    ulong       resSeq {};       ///< Residue sequence number.
-    float       occupancy {};    ///< Occupancy.
-    float       tempFactor {};   ///< Temperature factor.
-    std::string element;         ///< Name of the element.
-    std::string charge;          ///< Electrostatic charge.
-    float       vdWRad {};       ///< Van Der Waals radius.
+    A3f           pos {undefined<float>};          ///< Atom position.
+    unsigned int  ind {undefined<decltype(ind)>};  ///< Atom insex.
+    int           irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
+    unsigned long pdbsegment {};   ///< Segment name.
+    std::string   name;            ///< Pdb name.
+    std::string   resname {""};    ///< Residue name.
+    std::string   chainID {};      ///< Chain identifier.
+    unsigned long resSeq {};       ///< Residue sequence number.
+    float         occupancy {};    ///< Occupancy.
+    float         tempFactor {};   ///< Temperature factor.
+    std::string   element;         ///< Name of the element.
+    std::string   charge;          ///< Electrostatic charge.
+    float         vdWRad {};       ///< Van Der Waals radius.
 
     /// \brief Constructor.
     explicit Pdb(
@@ -132,7 +132,7 @@ public:
     /// Constructor.
     explicit Pdb(
         const std::string& record,
-        ulong segm
+        unsigned long segm
     ) noexcept;
 
     /// Formated reading of a line record from a pdb file.
@@ -177,7 +177,7 @@ public:
         uint iatom,
         const std::string& atname,
         const std::string& resname,
-        ulong ires,
+        unsigned long ires,
         char ichain,
         const A3f& pos,
         float occ,
@@ -197,7 +197,7 @@ public:
     static void read(
         const std::filesystem::path& file,
         std::vector<Pdb>& a,
-        vec2<std::string>& other,
+        std::vector<std::vector<std::string>>& other,
         Msgr& msgr
     );
 
@@ -209,7 +209,7 @@ public:
     static void write(
         const std::filesystem::path& file,
         const std::vector<Pdb>& a,
-        const vec2<std::string>& other,
+        const std::vector<std::vector<std::string>>& other,
         Msgr& msgr
     );
        

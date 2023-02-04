@@ -43,7 +43,7 @@
 namespace utils::stochastic {
 
 /// An abstract base class for all the reactions
-template <typename RF>
+template<typename RF>
 class Reaction {
 
 	friend Gillespie<RF, Reaction<RF>>;
@@ -55,20 +55,14 @@ public:  // Only constant parameters are public.
 	static std::vector<std::string>	activeInstances;
 
     /// Index in Simulation::rc, i.e. index among all used and not used reactions.
-    const szt ind {};
+    const szt ind {undefined<szt>};
 
     const std::string shortName;  ///< Reaction name.
     const std::string fullName;   ///< Reaction name abbreviation.
 
 	static bool is_active(
         const std::unique_ptr<Reaction>& r
-    ) noexcept
-    {
-        return std::find(Reaction::activeInstances.begin(),
-                         Reaction::activeInstances.end(),
-                         r->shortName)
-                != Reaction::activeInstances.end();
-    }
+    ) noexcept;
 
     /**
      * \brief Constructor.
@@ -78,19 +72,13 @@ public:  // Only constant parameters are public.
      * \param shortName Reaction name.
      * \param fullName Reaction name abbreviated.
      */
-    Reaction( Msgr& msgr,
-              const szt ind,
-              const real rate,
-              const std::string shortName,  // value + move
-              const std::string fullName    // value + move
-        )
-        : ind {ind}
-        , shortName {std::move(shortName)}
-        , fullName {std::move(fullName)}
-        , msgr {msgr}
-        , rate {rate}
-    {}
-
+    explicit Reaction(
+        Msgr& msgr,
+        szt ind,
+        real rate,
+        std::string shortName,  // value + move
+        std::string fullName    // value + move
+    );
 
 	// The rule of five is triggered by the virtual destructor, the defaults suffice
     Reaction(const Reaction&) = default;             // copy constructor
@@ -105,7 +93,7 @@ public:  // Only constant parameters are public.
     real get_score() const noexcept { return *score; }
 
     /**
-     * \brief Updates propensity for a pair of network components.
+     * \brief Update propensity for a pair of network components.
      * \param c1 Index of the 1st component to update.
      * \param c2 Index of the 2nd component to update.
      */
@@ -119,9 +107,9 @@ public:  // Only constant parameters are public.
     virtual void fire() noexcept = 0;
 
     /**
-     * \brief Populates the vector of reactions that need a score update.
+     * \brief Populate the vector of reactions that need a score update.
      * \details The update is performed after *this has fired
-     * and initializes the propensities and effective rate.
+     * Initialize the propensities and effective rate.
      * \param rc Vector of unique pointers to all reactions taking part in
      * the simulation.
      */
@@ -156,7 +144,8 @@ protected:
     /// Reactions that need a score update after *this has fired.
     std::vector<Reaction*> dependents;
 
-    /** All necessary updates after the given reaction event was executed.
+    /**
+     * All necessary updates after the given reaction event was executed.
      * Pure virtual function: Network and reaction updates necessary
      * after the given reaction event was executed.
      */
@@ -165,14 +154,45 @@ protected:
 private:
 
     /**
-     * Attaches this score to the Gillespie mechanism.
+     * Attach this score to the Gillespie mechanism.
      * \param a Placeholder in the Gillespie object responsible for this
      * reaction score.
      */
     void attach_score_pointer(real* a) noexcept { score = a; };
 };
 
-template<typename RF> std::vector<std::string> Reaction<RF>::activeInstances;
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+template<typename RF>
+std::vector<std::string> Reaction<RF>::activeInstances;
+
+template<typename RF>
+inline
+bool Reaction<RF>::
+is_active(
+    const std::unique_ptr<Reaction>& r
+) noexcept
+{
+    return std::find(Reaction::activeInstances.begin(),
+                     Reaction::activeInstances.end(),
+                     r->shortName)
+            != Reaction::activeInstances.end();
+}
+
+template<typename RF>
+Reaction<RF>::
+Reaction( Msgr& msgr,
+          const szt ind,
+          const real rate,
+          const std::string shortName,  // value + move
+          const std::string fullName    // value + move
+    )
+    : ind {ind}
+    , shortName {std::move(shortName)}
+    , fullName {std::move(fullName)}
+    , msgr {msgr}
+    , rate {rate}
+{}
 
 template<typename RF>
 void Reaction<RF>::

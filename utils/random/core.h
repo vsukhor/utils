@@ -46,7 +46,7 @@ namespace utils::random {
 
 /// \brief Base class for random number factories.
 /// \tparam realT Floating point type.
-template <typename realT>
+template<typename realT>
 class Core {
 
     // Ensure that the template parameter is a floating type.
@@ -89,7 +89,7 @@ protected:
 
 private:
 
-    unsigned seed {huge<unsigned>};  ///< The seed
+    unsigned seed {undefined<unsigned>};  ///< The seed.
 
     Msgr& msgr;  ///< Output message processor.
 };
@@ -97,7 +97,7 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename realT> 
+template<typename realT> 
 Core<realT>::
 Core(
     const unsigned seed,
@@ -111,7 +111,7 @@ Core(
     msgr.print("SEED = ", seed);
 }
 
-template <typename realT> 
+template<typename realT> 
 Core<realT>::
 Core(
     const unsigned runInd,
@@ -124,7 +124,7 @@ Core(
     msgr.print("SEED = ", seed);
 }
 
-template <typename realT> 
+template<typename realT> 
 uint Core<realT>::
 make_seed(
     const uint runInd

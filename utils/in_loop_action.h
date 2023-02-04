@@ -49,13 +49,13 @@ namespace utils {
  * \brief Implements updating of loop control parameters in iterative process.
  * \tparam Q Type of the parameter variable.
  */
-template <typename Q>
+template<typename Q>
 class InLoopAction {
 
-    template <typename S, typename Enabler=void>
+    template<typename S, typename Enabler=void>
     class Field {};
 
-    template <typename S>
+    template<typename S>
     class Field<S*, typename std::enable_if_t<std::is_pointer_v<S*>>> {
 
     public:
@@ -117,7 +117,7 @@ class InLoopAction {
         S newval {};
     };
 
-    template <typename S>
+    template<typename S>
     class Field<S, typename std::enable_if_t<!std::is_pointer_v<S>>> {
 
     public:
@@ -180,24 +180,25 @@ public:
     Field<Q> start;
     Field<Q> end;
     Field<Q> delta;
-    Field<Q> next {huge<Q>, "next"};
+    Field<Q> next {undefined<Q>, "next"};
 
     Field<bool*> flag0;
     Field<bool*> flag1;
     Field<bool*> flag2;
 
-    explicit InLoopAction ( Msgr& msgr,
-                const std::filesystem::path& path,
-                const std::string& s,
-                const std::string& parName,
-                const Q& val,        // const ref
-                const Q startDefault,
-                const Q endDefault,
-                const Q deltaDefault,
-                const std::pair<bool*, const char*>& flag0={},
-                const std::pair<bool*, const char*>& flag1={},
-                const std::pair<bool*, const char*>& flag2={}
-                );
+    explicit InLoopAction (
+        Msgr& msgr,
+        const std::filesystem::path& path,
+        const std::string& s,
+        const std::string& parName,
+        const Q& val,        // const ref
+        const Q startDefault,
+        const Q endDefault,
+        const Q deltaDefault,
+        const std::pair<bool*, const char*>& flag0={},
+        const std::pair<bool*, const char*>& flag1={},
+        const std::pair<bool*, const char*>& flag2={}
+    );
 
     void check_file();
     void update_next() noexcept;
@@ -216,7 +217,7 @@ private:
     void initialize_checkFile() const;
 };
 
-template <typename Q>
+template<typename Q>
 InLoopAction<Q>::
 InLoopAction ( Msgr& msgr,
                 const std::filesystem::path& path,
@@ -248,7 +249,7 @@ InLoopAction ( Msgr& msgr,
     update_next();
 }
 
-template <typename Q>
+template<typename Q>
 void InLoopAction<Q>::
 initialize_checkFile() const
 {
@@ -264,7 +265,7 @@ initialize_checkFile() const
     flag2.initialize(ofs);
 }
 
-template <typename Q>
+template<typename Q>
 void InLoopAction<Q>::
 check_file()
 {
@@ -291,11 +292,11 @@ check_file()
     if (a || b || c) update_next();        // flags are adjusted inside and does not affect _next
 }
 
-template <typename Q>
+template<typename Q>
 void InLoopAction<Q>::
 update_next() noexcept
 {
-    std::cout << "In "+parName << std::endl;
+    std::cout << "In " + parName << std::endl;
     start.print();
     end.print();
     delta.print();
@@ -303,12 +304,12 @@ update_next() noexcept
     next() = (start() >= val)
            ? (start() <= end())
              ? start()
-             : huge<Q>
+             : undefined<Q>
           : (val + delta() > end())
-             ? huge<Q>
+             ? undefined<Q>
              : val + delta();
     std::cout << "Next event is at: " << next() << std::endl
-               << std::endl;
+              << std::endl;
 }
 
 }  // namespace utils
