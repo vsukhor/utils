@@ -9,6 +9,7 @@ of different types, and uses 'Reader' functor provided by the library to import 
 ```
 #include <array>
 #include <numeric>
+
 #include "config/reader.h"
 
 class ConfigReader {
@@ -18,10 +19,10 @@ class ConfigReader {
 	// Definitions of acceptable range boundaries. 
 	// (Alternatively, these and other definitions may be included from the 'utils' library.)
     
-	template <typename T> constexpr auto huge {std::numeric_limits<T>::max()};
-    template <typename T, auto N> constexpr std::array<T,N> zeros = {};
-    template <typename T, auto N> constexpr std::array<T,N> huges = {filled_array<T,N>(huge)};
-    template <typename T> constexpr std::array<T,2> zerohuge = {static_cast<T>(0.L), huge};
+	template<typename T> constexpr auto huge {std::numeric_limits<T>::max()};
+    template<typename T, auto N> constexpr std::array<T,N> zeros = {};
+    template<typename T, auto N> constexpr std::array<T,N> huges = {filled_array<T,N>(huge)};
+    template<typename T> constexpr std::array<T,2> zerohuge = {static_cast<T>(0.L), huge};
 	constexpr std::array<bool,2> bools = {false, true};
 
 public:

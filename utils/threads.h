@@ -60,7 +60,7 @@ enum class Weights {
  * of std::thread objects.
  * \tparam W Type of relative load distribution.
  */
-template <Weights W>
+template<Weights W>
 class Threads {
 
 public:
@@ -82,8 +82,8 @@ public:
     explicit Threads(
         szt offset,
         szt size,
-        ulong omittedBoundaries,
-        ulong nThreads
+        unsigned long omittedBoundaries,
+        unsigned long nThreads
     );
     
     /**
@@ -119,12 +119,14 @@ public:
     void print_regions(bool withCout, Msgr& msgr);
 };
 
-template <Weights W>
+// IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+template<Weights W>
 Threads<W>::
-Threads(const szt offset,
-        const szt size,
-        const ulong omittedBoundaries,
-        const ulong nThreads)
+Threads( const szt offset,
+         const szt size,
+         const unsigned long omittedBoundaries,
+         const unsigned long nThreads)
     : num {nThreads}
 {
     if (szt threadsSupported {std::thread::hardware_concurrency()};
@@ -167,7 +169,7 @@ Threads(const szt offset,
     thr.resize(num);
 }
 
-template <Weights W>
+template<Weights W>
 void Threads<W>::
 join()
 {
@@ -176,9 +178,10 @@ join()
 }
 
 // Various chunk sizes for flexible thread loads
-template <Weights W>
+template<Weights W>
 void Threads<W>::
-set_chunks_equal( const szt w, const szt rest )
+set_chunks_equal( const szt w,
+                  const szt rest )
 {
     for (szt ith=0; ith<num; ith++) {
         chs[ith] = w/num;
@@ -187,9 +190,10 @@ set_chunks_equal( const szt w, const szt rest )
     }
 }
 
-template <Weights W>
+template<Weights W>
 void Threads<W>::
-set_chunks_circular( const szt w, const szt rest )
+set_chunks_circular( const szt w,
+                     const szt rest )
 {
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
 // where phi is the central angle (in radians)  defining the circle segment.
@@ -323,7 +327,7 @@ set_chunks_circular( const szt w, const szt rest )
         chs[ith]++;
 }
 
-template <Weights W>
+template<Weights W>
 void Threads<W>::
 set_chunks_triangleDecr( const szt size )
 {
@@ -349,7 +353,7 @@ set_chunks_triangleDecr( const szt size )
     chs.back() = n;
 }
 
-template <Weights W>
+template<Weights W>
 void Threads<W>::
 print_regions( const bool withCout,
                Msgr& msgr )

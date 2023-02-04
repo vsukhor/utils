@@ -52,7 +52,8 @@ inline constexpr int MAX_SPECIFIED_LENGTH = 4;
 /// functionaity commonly used in N-dimensional geometric applications.
 /// \tparam N Array length.
 /// \tparam T Type of the elements.
-template <unsigned N, typename T>
+template<unsigned N,
+         typename T>
 class array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
                                  std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>> {
 
@@ -83,7 +84,7 @@ constexpr array( const array& p ) noexcept
 constexpr array( const std::array<T,N>& p ) noexcept
 {
     for (const auto i : ii)
-        n[i] = p[static_cast<szt>(i)];
+        n[i] = p[static_cast<std::size_t>(i)];
 }
 
 array( array&& p ) noexcept = default;

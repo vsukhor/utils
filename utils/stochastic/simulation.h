@@ -50,7 +50,8 @@ using itT = std::uint_fast64_t; ///< Type for counting simulation iterations.
  * \tparam System Typename of the simulated system.
  * \tparam Engine Typename of the engine controlling the simulation progrression.
  */
-template<typename System, typename Engine>
+template<typename System,
+         typename Engine>
 class Simulation {
 
 public:
@@ -68,9 +69,11 @@ public:
 
 protected:
 
+    using ReactionBase = Reaction<typename Engine::RandFactory>;
+
     System& obj;  ///< Ref to the simulated system.
 
-    Msgr& msgr;   ///< 
+    Msgr& msgr;  ///< Logging.
 
     /// Human-readable name of the simulation run.
     const std::string& runName;
@@ -86,8 +89,6 @@ protected:
     /// Flag marking if the system is currently considered equilibrated.
     bool isEquilibrated {};
 
-    using ReactionBase = Reaction<typename Engine::RandFactory>;
-
     // The rule of five is triggered by the destructor, the defaults suffice:
     Simulation(const Simulation&) = default;             // copy constructor
     Simulation& operator=(const Simulation&) = default;  // copy assignment
@@ -100,16 +101,17 @@ protected:
     /// Handler for the case when all reactions are exosted.
     void asum0fun();
 
-    ///< Outputs a log line reporting current system state to a specific stream.
+    ///< Output a log line reporting current system state to a specific stream.
     virtual void log(std::ostream&) = 0;
 
-    ///< Outputs a log line reporting current system state to all Msgr streams.
+    ///< Output a log line reporting current system state to all Msgr streams.
     void log();
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename System, typename Engine>
+template<typename System,
+         typename Engine>
 Simulation<System, Engine>::
 Simulation(
     System& obj,
@@ -127,7 +129,8 @@ Simulation(
     , it {it}
 {}
 
-template <typename System, typename Engine>
+template<typename System,
+         typename Engine>
 void Simulation<System, Engine>::
 asum0fun()
 {
@@ -137,7 +140,8 @@ asum0fun()
                "Termination due to reaction *score == 0 for all reactions used.");
 }
 
-template <typename System, typename Engine>
+template<typename System,
+         typename Engine>
 void Simulation<System, Engine>::
 log()
 {

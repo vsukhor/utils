@@ -52,7 +52,7 @@ enum class EdgeMode {
  * \tparam iT Integer type.
  * \tparam LinkMode Weitghted/unweighted mode.
  */
-template <typename fT,
+template<typename fT,
           typename iT,
           auto LinkMode>
 struct EdgeType {};
@@ -64,8 +64,8 @@ struct EdgeType {};
  * \tparam fT Floating point type.
  * \tparam iT Integer type.
  */
-template <typename fT,
-          typename iT>
+template<typename fT,
+         typename iT>
 struct EdgeType<fT, iT, EdgeMode::weighted> {
 
     using vertex_t = iT;    ///< Type alias for vertex index.
@@ -83,9 +83,9 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
      * \param weight Weight of the edge (default is one).
      */
     explicit EdgeType(
-            vertex_t target,
-            weight_t weight=one<weight_t>
-            )
+        vertex_t target,
+        weight_t weight=one<weight_t>
+    )
         : target {target}
         , weight {weight}
     {}
@@ -97,8 +97,8 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
 /// Implements a graph edge connected to a vertex in unweighted mode.
 /// \tparam fT Floating point type.
 /// \tparam iT Integer type.
-template <typename fT,
-          typename iT>
+template<typename fT,
+         typename iT>
 struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
     using vertex_t = iT;  ///< Type alias for vertex index.
@@ -113,7 +113,7 @@ struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
     /// Constructor.
     /// \param target Target vertex.
-    explicit EdgeType(vertex_t target)
+    explicit EdgeType( vertex_t target )
         : target {target}
     {}
 };

@@ -43,7 +43,7 @@ namespace utils::random {
 
 /// \brief Random number factory based on Cuda rng library.
 /// \tparam realT Floating point type.
-template <typename realT> 
+template<typename realT> 
 class Cuda
     : public Core<realT> {
 
@@ -116,7 +116,7 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename realT>
+template<typename realT>
 Cuda<realT>::
 Cuda(
     const unsigned seed,
@@ -132,7 +132,7 @@ Cuda(
     prepare_uniform_real01();
 }
 
-template <typename realT>
+template<typename realT>
 Cuda<realT>::
 Cuda(
     const unsigned runInd,
@@ -148,7 +148,7 @@ Cuda(
     prepare_uniform_real01();
 }
 
-template <typename realT>
+template<typename realT>
 Cuda<realT>::
 ~Cuda()
 {
@@ -157,7 +157,7 @@ Cuda<realT>::
     free(rU01);
 }
 
-template <typename realT> 
+template<typename realT> 
 void Cuda<realT>::
 initialize_CUDA_rng()
 {
@@ -167,7 +167,7 @@ initialize_CUDA_rng()
      rU01 = (realT *)malloc(buffersize * sizeof(realT));
 }
 // Generates real random numbers with uniform distribution over (0,1]   (!!!)
-template <> 
+template<> 
 void Cuda<float>::
 prepare_uniform_real01()
 {
@@ -177,7 +177,7 @@ prepare_uniform_real01()
                     cudaMemcpyDeviceToHost));
 }
 
-template <> 
+template<> 
 void Cuda<double>::
 prepare_uniform_real01()
 {
@@ -189,7 +189,7 @@ prepare_uniform_real01()
 }
 
 // returns int in the range [0,max-1]
-template <typename realT> 
+template<typename realT> 
 uint Cuda<realT>::
 uniformInt0(
     const uint& max

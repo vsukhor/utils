@@ -47,7 +47,7 @@ namespace utils::arrays {
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 4-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template <typename T>
+template<typename T>
 class array<4,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
 
 static constexpr int len {4};
@@ -622,7 +622,7 @@ T other_than(
             p == array<3,T>(n[1], n[2], n[3]) ||
             p == array<3,T>(n[2], n[3], n[1]) ||
             p == array<3,T>(n[2], n[1], n[3])) ? n[0]
-            : -one<T>)));
+            : -constants::one<T>)));
 }
 
 constexpr T sum() const noexcept

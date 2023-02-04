@@ -57,11 +57,12 @@
 namespace utils::common {
 
 /// Assertion function called from XASSERT macro.
-template <int L>
+template<int L>
 long long assert_fun(
     const char* EX,
     const char *file,
-    const std::string& msg )
+    const std::string& msg
+)
 {
     std::cerr << "Assertion (" << EX << ") failed! \n"
               << "File " << file << ", Line " << L << "\n"
@@ -70,7 +71,7 @@ long long assert_fun(
 }
 
 /// Trin the string \b str from whitespaces.
-template <char c=' '>
+template<char c=' '>
 std::string trim(
     const std::string& str
 )
@@ -87,8 +88,8 @@ std::string trim(
 
 
 /// Sum at compile time.
-template <typename T,
-          typename Q,
+template<typename T,
+        typename Q,
           T (Q::* P)() const> // member function pointer parameter
 struct Adder {
     int operator()(const T& i, const Q& o) const {
@@ -100,7 +101,8 @@ struct Adder {
 namespace Vec2 {
 
 /// Make a 2D vector having the same dimensions as \b as.
-template <typename T1, typename T2> inline
+template<typename T1,
+         typename T2>
 vec2<T1> array_like( const vec2<T2>& as )
 {
     vec2<T1> me(as.size());
@@ -110,7 +112,7 @@ vec2<T1> array_like( const vec2<T2>& as )
 }
 
 /// Make a 2D vector having dimensions \b x and \b y eventually initializing it to \b ini.
-template <typename T> inline
+template<typename T>
 vec2<T> make( const szt x,
               const szt y,
               const T ini )  // =zero<T>
@@ -122,7 +124,7 @@ vec2<T> make( const szt x,
 }
 
 /// Return the size of 2D vector \b v.
-template <typename T> inline
+template<typename T>
 szt size( const vec2<T>& v )
 {
     szt s {};
@@ -132,7 +134,7 @@ szt size( const vec2<T>& v )
 }
 
 /// Add a scalar to 2D vector \b p.
-template <typename T>
+template<typename T>
 void add_scalar( const T d,
                  vec2<T>& p )
 {
@@ -142,7 +144,7 @@ void add_scalar( const T d,
 }
 
 /// Fill 2D vector \b v with value \b val.
-template <typename T> inline
+template<typename T>
 void fill( vec2<T>& v,
            const T val )
 {
@@ -156,7 +158,7 @@ void fill( vec2<T>& v,
 /// 3D stl-based vectors.
 namespace Vec3 {
 
-template <typename T> inline
+template<typename T>
 vec3<T> make( const szt x,
               const szt y,
               const szt z,
@@ -178,7 +180,7 @@ vec3<T> make( const szt x,
 /// \param v The array data.
 /// \param from First array index to use.
 /// \param num Number of array elements to sum up.
-template <typename T> inline
+template<typename T>
 void partial_sum( T const* u,
                   T* v,
                   const szt from,
@@ -195,7 +197,7 @@ void partial_sum( T const* u,
 }
 
 /// Average of the vector elements.
-template <typename T> inline
+template<typename T>
 auto avg( const std::vector<T>& v )
 {
     if constexpr (std::is_integral<T>::value)
@@ -207,7 +209,7 @@ auto avg( const std::vector<T>& v )
 }
 
 /// Variance of the vector elements.
-template <typename T> inline
+template<typename T> 
 T var( const std::vector<T>& n )
 {
     T v {};
@@ -219,7 +221,7 @@ T var( const std::vector<T>& n )
 }
 
 /// Average of the vector elements.
-template <typename T> constexpr
+template<typename T> constexpr
 std::vector<T> exp_num( const T b,
                         const T r,
                         const T dx ) noexcept
@@ -244,7 +246,7 @@ std::vector<T> exp_num( const T b,
 /// \param x Independent variable.
 /// \param x0 Position of the turning point.
 /// \param steepness Steepness parameter.
-template <typename T> constexpr
+template<typename T> constexpr
 T sigmoid_decay( const T x,
                  const T x0,
                  const T steepness ) noexcept
@@ -254,7 +256,7 @@ T sigmoid_decay( const T x,
 
 /// \brief Find non-zero vector elements.
 /// \return how many elements in b /= 0 putting their indices to j
-template <typename T> 
+template<typename T> 
 szt find( const std::vector<T>& b, 
           std::vector<szt>& j ) noexcept
 {
@@ -266,8 +268,8 @@ szt find( const std::vector<T>& b,
     return j.size();
 }
 
-template <auto E=EXIT_FAILURE>
-void exit(const std::string& s)
+template<auto E=EXIT_FAILURE>
+void exit( const std::string& s )
 {
     std::cerr << s << std::endl;
     std::exit(E);
@@ -289,8 +291,8 @@ public:
      * \param msg Message to output.
      * \param msgr Output message processor.
      */
-    explicit Exception(const std::string& msg,
-                    Msgr* msgr)
+    explicit Exception( const std::string& msg,
+                        Msgr* msgr )
     {
         if (msgr != nullptr)
             msgr->print(msg);
@@ -302,7 +304,7 @@ public:
 
 /// \brief Find index of the last minimal vector element.
 /// \return Index of the last minimal element of vector \b v
-template <typename T> constexpr
+template<typename T> constexpr
 szt index_min( const std::vector<T>& v ) noexcept
 {
     szt k {};
@@ -316,7 +318,7 @@ szt index_min( const std::vector<T>& v ) noexcept
 }
 
 /// The standard Gaussian function calculated at position \b x.
-template <typename T> constexpr
+template<typename T> constexpr
 T gaussian( const T x ) noexcept
 {
     return std::exp(-x * x / two<T>) /
@@ -324,7 +326,7 @@ T gaussian( const T x ) noexcept
 }
 
 /// The zero-mean Gaussian function calculated at position \b x.
-template <typename T> constexpr
+template<typename T> constexpr
 T gaussian( const T x,
             const T var ) noexcept
 {
@@ -333,7 +335,7 @@ T gaussian( const T x,
 }
 
 /// The Gaussian function calculated at position \b x.
-template <typename T> constexpr
+template<typename T> constexpr
 T gaussian( const T x,
             const T mean,
             const T var ) noexcept
@@ -343,7 +345,7 @@ T gaussian( const T x,
 }
 
 /// The zero-mean Gaussian function calculated at position \b x.
-template <typename T>
+template<typename T>
 T gaussian_fun( T x,
                 T mean,
                 T sigma )
@@ -358,7 +360,7 @@ T gaussian_fun( T x,
 /// \tparam T Data type (must be EqualityComparable).
 /// \param v The vector.
 /// \param a The value to remove.
-template <typename T>
+template<typename T>
 void remove_vector_element( std::vector<T>& v,
                             const T& a )
 {

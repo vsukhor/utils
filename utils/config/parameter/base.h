@@ -52,7 +52,7 @@ namespace exceptions {
  * \tparam isDiscrete Specifies if the parameter takes discrete values only.
  * \tparam Enabler SFINAE enabler.
  */
-template <typename Q, bool isDiscrete, typename Enabler = void>
+template<typename Q, bool isDiscrete, typename Enabler = void>
 class ParOutOfRange
     : public std::exception
 {};
@@ -67,7 +67,7 @@ namespace parameter {
  * Base class for configuration parameters.
  * \tparam Q Parameter type.
  */
-template <typename Q>
+template<typename Q>
 class Base {
 
 public:
@@ -135,13 +135,15 @@ private:
      * \param[out] value str containig value(s) of the parameter searched.
      * \return Bool corresponding to the success/failure of the search.
      */
-    bool detect_by_name(std::ifstream& ifs,
-                        str& value) const;  // by reference
+    bool detect_by_name(
+        std::ifstream& ifs,
+        str& value              // by reference
+    ) const;
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename Q>
+template<typename Q>
 Base<Q>::
 Base( str name )
     : name {std::move(name)}
@@ -149,7 +151,7 @@ Base( str name )
 
 // If the line contains a valid parname-value combination, returns true and the
 // value, otherwise retruns false.
-template <typename Q>
+template<typename Q>
 bool Base<Q>::
 detect_by_name(
     std::ifstream& ifs,
@@ -162,7 +164,7 @@ detect_by_name(
     str line;
     getline(ifs, line);
     
-    ulong commentpos = line.find_first_of('#');
+    unsigned long commentpos = line.find_first_of('#');
     if (commentpos != str::npos)
         line.erase(commentpos);
     
@@ -197,7 +199,7 @@ detect_by_name(
     return true;
 }
 
-template <typename Q>
+template<typename Q>
 void Base<Q>::
 load( const std::filesystem::path& file )
 {
@@ -215,7 +217,7 @@ load( const std::filesystem::path& file )
     }
 }
 
-template <typename Q>
+template<typename Q>
 void Base<Q>::
 load( std::ifstream& ifs )
 {
@@ -235,7 +237,7 @@ load( std::ifstream& ifs )
         {"Error: parameter not loaded: " + name, nullptr};
 }
 
-template <typename Q> inline
+template<typename Q>
 auto Base<Q>::
 check_name( const str& s ) const -> str
 {
@@ -246,7 +248,7 @@ check_name( const str& s ) const -> str
 }
 
 
-template <typename Q> inline
+template<typename Q>
 auto Base<Q>::
 get_name() const noexcept -> str
 {
@@ -260,7 +262,9 @@ get_name() const noexcept -> str
  * \tparam Q Parameter type.
  * \tparam isDiscrete Specifies if the parameter takes discrete values only.
 */
-template <typename Q, bool isDiscrete, typename Enabler=void>
+template<typename Q,
+         bool isDiscrete,
+         typename Enabler=void>
 class Par : public Base<Q>
 {};
 

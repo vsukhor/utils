@@ -48,7 +48,7 @@ namespace utils::graph {
  * Graphs are collections of nodes (vertexes) interconnected by edges.
  * \tparam ET Edge type.
  */
-template <typename ET>
+template<typename ET>
 class Graph {
 
     using vec2int = vec2<int>;
@@ -183,7 +183,7 @@ public:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename ET>
+template<typename ET>
 auto Graph<ET>::
 bfs(
     const adjLT& ajl,
@@ -210,7 +210,7 @@ bfs(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 compute_paths(
     const vertex_t source,
@@ -257,7 +257,7 @@ compute_paths(
 }
 
 
-template <typename ET>
+template<typename ET>
 typename Graph<ET>::pathT Graph<ET>::
 shortest_path(
     const vertex_t v1,
@@ -287,7 +287,7 @@ shortest_path(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 reset_al(
     adjLT &al,
@@ -300,7 +300,7 @@ reset_al(
 }
 
 
-template <typename ET>
+template<typename ET>
 std::vector<typename Graph<ET>::vertex_t> Graph<ET>::
 list2vector(
     const std::list<vertex_t>& l
@@ -316,7 +316,7 @@ list2vector(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 adjacency_matrix(
     const adjLT& ajl,
@@ -333,7 +333,7 @@ adjacency_matrix(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 laplacian_matrix(
     const vec2int& agm,
@@ -352,7 +352,7 @@ laplacian_matrix(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 print_adjacency_list(
     const adjLT& ajl,
@@ -364,7 +364,7 @@ print_adjacency_list(
 }
 
 
-template <typename ET>
+template<typename ET>
 void Graph<ET>::
 print_adjacency_list_line(
     const vertex_t v,

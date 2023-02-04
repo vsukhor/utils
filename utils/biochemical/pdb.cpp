@@ -37,21 +37,23 @@ namespace utils::biochemical {
 float Pdb::scaling;   ///< Convert nm <-> A; nanometers are used internally.
 
 Pdb::Pdb(
-        const std::string& chainID,
-        const std::string& resname,
-        const std::string& atomname ) noexcept
+    const std::string& chainID,
+    const std::string& resname,
+    const std::string& atomname
+) noexcept
     : name {atomname}
     , resname {resname}
     , chainID {chainID}
 {}
 
 Pdb::Pdb(
-        const uint ind,
-        const std::string& chainID,
-        const uint resSeq,
-        const std::string& resname,
-        const std::string& atomname,
-        const A3f& pos ) noexcept
+    const uint ind,
+    const std::string& chainID,
+    const uint resSeq,
+    const std::string& resname,
+    const std::string& atomname,
+    const A3f& pos
+) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -65,13 +67,14 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const uint ind,
-        const std::string& chainID,
-        const uint resSeq,
-        const std::string& resname,
-        const std::string& atomname,
-        const A3f& pos,
-        const float occupancy ) noexcept
+    const uint ind,
+    const std::string& chainID,
+    const uint resSeq,
+    const std::string& resname,
+    const std::string& atomname,
+    const A3f& pos,
+    const float occupancy
+) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -82,14 +85,15 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const uint ind,
-        const std::string& chainID,
-        const uint resSeq,
-        const std::string& resname,
-        const std::string& atomname,
-        const A3f& pos,
-        const float occupancy,
-        const float tempFactor ) noexcept
+    const uint ind,
+    const std::string& chainID,
+    const uint resSeq,
+    const std::string& resname,
+    const std::string& atomname,
+    const A3f& pos,
+    const float occupancy,
+    const float tempFactor
+) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -101,15 +105,16 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const uint ind,
-        const std::string& chainID,
-        const uint resSeq,
-        const std::string& resname,
-        const std::string& atomname,
-        const A3f& pos,
-        const float occupancy,
-        const float tempFactor,
-        const std::string& element ) noexcept
+    const uint ind,
+    const std::string& chainID,
+    const uint resSeq,
+    const std::string& resname,
+    const std::string& atomname,
+    const A3f& pos,
+    const float occupancy,
+    const float tempFactor,
+    const std::string& element
+) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -122,13 +127,14 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const uint ind,
-        const std::string& chainID,
-        const uint resSeq,
-        const std::string& resname,
-        const std::string& atomname,
-        const A3f& pos,
-        const std::string& element ) noexcept
+    const uint ind,
+    const std::string& chainID,
+    const uint resSeq,
+    const std::string& resname,
+    const std::string& atomname,
+    const A3f& pos,
+    const std::string& element
+) noexcept
     : pos {pos}
     , ind {ind}
     , name {atomname}
@@ -139,8 +145,9 @@ Pdb::Pdb(
 {}
 
 Pdb::Pdb(
-        const std::string& record,
-        const ulong segm ) noexcept
+    const std::string& record,
+    const unsigned long segm
+) noexcept
     : pdbsegment(segm) 
 {
     format_as_pdb(record);
@@ -222,7 +229,7 @@ format_as_pdb(
     const uint iatom,
     const std::string& atname,
     const std::string& resname,
-    const ulong ires,
+    const unsigned long ires,
     const char ichain,
     const A3f& pos,
     const float occ,
@@ -242,7 +249,7 @@ format_as_pdb(
     record << std::right;
 
     // columns 7-11   Integer   Pdb serial number
-    record << STR(iatom);
+    record << std::to_string(iatom);
 
     // column  12  empty
     record << " ";
@@ -267,7 +274,7 @@ format_as_pdb(
 
     // columns 23-26  Integer  resSeq   Residue sequence number
     record.width(4);
-    record << STR(uint(ires));
+    record << std::to_string(static_cast<unsigned int>(ires));
 
     // column  27   AChar  iCode  Code for insertion of residues
     record << " ";
@@ -385,7 +392,7 @@ void Pdb::
 read(
     const std::filesystem::path& file,
     std::vector<Pdb>& a,
-    vec2<std::string>& other,
+    std::vector<std::vector<std::string>>& other,
     Msgr& msgr
 )
 {
@@ -417,7 +424,7 @@ void Pdb::
 write(
     const std::filesystem::path& file,
     const std::vector<Pdb>& a,
-    const vec2<std::string>& other,
+    const std::vector<std::vector<std::string>>& other,
     Msgr& msgr
 )
 {
@@ -425,14 +432,14 @@ write(
     if (fout.fail())
         msgr.exit("Unable to open file for writing at ", file);
 
-    szt i = 0;
+    std::size_t i {};
     if (!other.empty())
-        for (szt j=0; j<other.size(); j++) {
+        for (std::size_t j=0; j<other.size(); j++) {
             while (i < a.size() && a[i].pdbsegment==j) {
                 fout << a[i].format_as_pdb(msgr) << std::endl;
                 i++;
             }
-            for (szt k=0; k<other[j].size(); k++)
+            for (std::size_t k=0; k<other[j].size(); k++)
                 fout << other[j][k] << std::endl;
         }
     else

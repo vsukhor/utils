@@ -56,7 +56,7 @@ namespace utils::random {
 
 /// \brief Random number factory based on Boost distribution functions.
 /// \tparam realT Floating point type.
-template <typename realT>
+template<typename realT>
 class Boost
     : public Core<realT> {
 
@@ -113,7 +113,7 @@ public:
     /// \brief A pseudo-random integer from the range [1, max].
     /// \tparam intT Integer fundamental type.
     /// \param max Max boundary of the sampled range.
-    template <typename intT>
+    template<typename intT>
     constexpr intT uniform1(intT max);
     
     /// \brief A point uinformly distributed within \p solidAngle on the surface of a unit sphere.
@@ -299,11 +299,11 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename realT>
+template<typename realT>
 Boost<realT>::
 Boost( const unsigned seed,
        const std::string& runName,
-       Msgr& msgr)
+       Msgr& msgr )
     : Core<realT> {seed, runName, msgr}
     , rU01_ind {bufferSize}
 {
@@ -311,10 +311,10 @@ Boost( const unsigned seed,
 }
 
 
-template <typename realT>
+template<typename realT>
 Boost<realT>::
 Boost( const unsigned runIndex,
-       Msgr& msgr)
+       Msgr& msgr )
     : Core<realT> {runIndex, msgr}
     , rU01_ind {bufferSize}
 {
@@ -323,7 +323,7 @@ Boost( const unsigned runIndex,
 
 
 // Generates realT random numbers with uniform distribution over [0,1)
-template <> inline
+template<> inline
 void Boost<float>::
 prepare_uniform_real01()
 {
@@ -332,7 +332,7 @@ prepare_uniform_real01()
 }
 
 
-template <> inline
+template<> inline
 void Boost<double>::
 prepare_uniform_real01()
 {
@@ -342,7 +342,7 @@ prepare_uniform_real01()
 
 
 // Returns a random number with uniform distribution over [0,1).
-template <typename realT> inline
+template<typename realT>
 realT Boost<realT>::
 r01u()
 {
@@ -358,7 +358,7 @@ r01u()
 
 
 // Returns int in the range [0, max-1]
-template <typename realT> constexpr
+template<typename realT> constexpr
 int Boost<realT>::
 uniform0( const int max )
 {            
@@ -374,7 +374,7 @@ uniform0( const int max )
 
 
 // Returns uint in the range [0, max-1].
-template <typename realT> constexpr
+template<typename realT> constexpr
 uint Boost<realT>::
 uniform0( const uint max )
 {            
@@ -390,7 +390,7 @@ uniform0( const uint max )
 
 
 // Returns szt in the range [0, max-1].
-template <typename realT> constexpr
+template<typename realT> constexpr
 szt Boost<realT>::
 uniform0(const szt max)
 {            
@@ -406,8 +406,8 @@ uniform0(const szt max)
 
 
 // Returns outT in the range [1, max].
-template <typename realT>
-template <typename intT> constexpr
+template<typename realT>
+template<typename intT> constexpr
 intT Boost<realT>::
 uniform1( const intT max )
 {            
@@ -420,7 +420,7 @@ uniform1( const intT max )
     return uniform0(max) + 1;
 }
 
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 uniform0(const realT max)
 {            
@@ -436,7 +436,7 @@ uniform0(const realT max)
 
 
 // Returns a point uinformly distributed within solidAngle on a shpere.
-template <typename realT> constexpr
+template<typename realT> constexpr
 auto Boost<realT>::
 uniform_direction( const realT solidAngle ) noexcept -> A3r
 {
@@ -468,7 +468,7 @@ uniform_direction( const realT solidAngle ) noexcept -> A3r
 // and azimMinMax. Inclination is limited by inclMinMax [0, pi) around +z
 // axis direction (i.e. phPole == 0). Azimuth is limited by azimMinMax [-pi, pi)
 //  around +x axis direction  (i.e. th == 0).
-template <typename realT> constexpr
+template<typename realT> constexpr
 auto Boost<realT>::
 uniform_direction(
     const A2r& inclMinMax,
@@ -517,7 +517,7 @@ uniform_direction(
 // 'solidAngle' surface patch where the random point may belong to; set it
 //      to pi for the whole surface.
 // 'poleDir' [0,1,2] is the direction of the solidAngle axis.
-template <typename realT> 
+template<typename realT> 
 auto Boost<realT>::
 uniform_on_sphere(
     const realT solidAngle,
@@ -564,7 +564,7 @@ uniform_on_sphere(
 // 'r' is spheroid dimensions: r[0] = a = b, r[1] = c
 // 'poleDir' [0,1,2] is the direction of the solidAngle axis
 // 'bias' [-1,0,1]: -1 to poles; 1 to equator, 0 none
-template <typename realT> 
+template<typename realT> 
 auto Boost<realT>::
 uniform_on_spheriod(
     const realT solidAngle,
@@ -631,7 +631,7 @@ uniform_on_spheriod(
 }
 
 
-template <typename realT> constexpr
+template<typename realT> constexpr
 auto Boost<realT>::
 uniform_on_ellipse(
     const A2r& r    ///< ellipse dimensions: r = {a, b}
@@ -646,7 +646,7 @@ uniform_on_ellipse(
 }
 
 
-template <typename realT> constexpr
+template<typename realT> constexpr
 auto Boost<realT>::
 uniform_in_ellipse(
     const A2r& r    ///< ellipse dimensions: r = {a, b}
@@ -664,7 +664,7 @@ uniform_in_ellipse(
             y * r[1]};
 }
 /*
-template <typename realT> constexpr
+template<typename realT> constexpr
 A2<realT> Boost<realT>::
 uniform_in_ellipse( const A2<realT>& r1,
                     const A2<realT>& r0,
@@ -680,7 +680,7 @@ uniform_in_ellipse( const A2<realT>& r1,
 */
 
 
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 exponential_number(
     const realT mi
@@ -693,7 +693,7 @@ exponential_number(
 
 
 // Returns a poissonian distributed deviate with mean mi.
-template <typename realT>
+template<typename realT>
 uint Boost<realT>::
 poisson_number(
     const realT lambda
@@ -707,7 +707,7 @@ poisson_number(
 
 
 // Returns a binomially distributed deviate.
-template <typename realT>
+template<typename realT>
 uint Boost<realT>::
 binomial_number(
     const uint n,
@@ -720,7 +720,7 @@ binomial_number(
 
 
 // returns a multinomially distributed deviate
-template <typename realT>
+template<typename realT>
 std::vector<uint> Boost<realT>::
 multinomial_number(
     const uint n,
@@ -734,7 +734,7 @@ multinomial_number(
 
 // Distributes n into p.size()+1 slots with probabilities
 // p[0], p[1], ..., p.back(), 1 - sum(p)
-template <typename realT>
+template<typename realT>
 std::vector<uint> Boost<realT>::
 multinomial_number(
     const uint n,
@@ -757,7 +757,7 @@ multinomial_number(
 
 
 // Weibull distribution
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 weibull_number(
     const realT lambda,
@@ -770,7 +770,7 @@ weibull_number(
 
 
 // Logistic distribution.
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 logistic_number(
     const realT mi,
@@ -783,7 +783,7 @@ logistic_number(
 
 
 // Returns a normally distributed deviate N(mi, sigma^2).
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 gaussian_number(
     const realT mi,
@@ -794,7 +794,7 @@ gaussian_number(
 }
 
 
-template <typename realT> constexpr
+template<typename realT> constexpr
 realT Boost<realT>::
 gaussian_number_constrained(
     const realT mi,

@@ -53,7 +53,7 @@ namespace utils::config::exceptions {
  * exception involving discrete scalars.
  * \tparam Q Parameter type: must be std::is_arithmetic.
  */
-template <typename Q>
+template<typename Q>
 class ParOutOfRange<Q, true,        // discrete case
                     std::enable_if_t<std::is_arithmetic_v<Q>>>
     : public std::exception {
@@ -70,10 +70,11 @@ public:
      * \param msgr Pointer to \a Msgr used for the output.
      */
     explicit ParOutOfRange(
-            const std::string& name,
-            const Q& p,
-            const std::vector<Q>& r,
-            Msgr* msgr=nullptr);
+        const std::string& name,
+        const Q& p,
+        const std::vector<Q>& r,
+        Msgr* msgr=nullptr
+    );
 
 private:
 
@@ -87,22 +88,24 @@ private:
      * \param r Acceptable range of parameter values.
      */
     std::string generate_message(
-            const std::string& name,
-            const Q& p,
-            const std::vector<Q>& r);
+        const std::string& name,
+        const Q& p,
+        const std::vector<Q>& r
+    );
 };
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename Q>
+template<typename Q>
 ParOutOfRange<Q, true,
               std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
-        const std::string& name,
-        const Q& p,
-        const std::vector<Q>& r,
-        Msgr* msgr)
+    const std::string& name,
+    const Q& p,
+    const std::vector<Q>& r,
+    Msgr* msgr
+)
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
@@ -114,12 +117,14 @@ ParOutOfRange(
     throw this;
 }
 
-template <typename Q>
+template<typename Q>
 std::string ParOutOfRange<Q, true,
             std::enable_if_t<std::is_arithmetic_v<Q>>>::
-generate_message(const std::string& name,
-                 const Q& p,
-                 const std::vector<Q>& r)
+generate_message(
+    const std::string& name,
+    const Q& p,
+    const std::vector<Q>& r
+)
 {
     XASSERT(r.size() == 2, "Incorrect r size in ParOutOfRangeException");
 
@@ -144,7 +149,7 @@ generate_message(const std::string& name,
  * exception involving continuous arithmetic scalars.
  * \tparam Q Parameter type: must be std::is_arithmetic.
 */
-template <typename Q>
+template<typename Q>
 class ParOutOfRange<Q, false,
                     std::enable_if_t<std::is_arithmetic_v<Q>>>
     : public std::exception {
@@ -161,10 +166,11 @@ public:
      * \param msgr Pointer to \a Msgr used for the output.
     */
     explicit ParOutOfRange(
-            const std::string& name,
-            const Q& p,
-            const std::vector<Q>& r,
-            Msgr* msgr=nullptr);
+        const std::string& name,
+        const Q& p,
+        const std::vector<Q>& r,
+        Msgr* msgr=nullptr
+    );
 
     /**
      * \brief Constructor.
@@ -176,10 +182,11 @@ public:
      * \param msgr Pointer to \a Msgr used for the output.
     */
     explicit ParOutOfRange(
-            const std::string& name,
-            const Q& p,
-            const std::array<Q,2>& r,
-            Msgr* msgr=nullptr);
+        const std::string& name,
+        const Q& p,
+        const std::array<Q,2>& r,
+        Msgr* msgr=nullptr
+    );
 
 private:
 
@@ -193,22 +200,25 @@ private:
      * \param r Acceptable range of parameter values.
      * \tparam R Type of the range specificator.
     */
-    template <typename R>
-    std::string generate_message(const std::string& name,
-                                 const Q& p,
-                                 const R& r);
+    template<typename R>
+    std::string generate_message(
+        const std::string& name,
+        const Q& p,
+        const R& r
+    );
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename Q>
+template<typename Q>
 ParOutOfRange<Q, false,
               std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
-        const std::string& name,
-        const Q& p,
-        const std::vector<Q>& r,
-        Msgr* msgr)
+    const std::string& name,
+    const Q& p,
+    const std::vector<Q>& r,
+    Msgr* msgr
+)
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
@@ -220,14 +230,15 @@ ParOutOfRange(
     throw *this;
 }
 
-template <typename Q>
+template<typename Q>
 ParOutOfRange<Q, false,
                 std::enable_if_t<std::is_arithmetic_v<Q>>>::
 ParOutOfRange(
-        const std::string& name,
-        const Q& p,
-        const std::array<Q,2>& r,
-        Msgr* msgr)
+    const std::string& name,
+    const Q& p,
+    const std::array<Q,2>& r,
+    Msgr* msgr
+)
     : std::exception {}
     , message {generate_message(name, p, r)}
 {
@@ -239,13 +250,15 @@ ParOutOfRange(
     throw *this;
 }
 
-template <typename Q>
-template <typename R>
+template<typename Q>
+template<typename R>
 std::string ParOutOfRange<Q, false,
                           std::enable_if_t<std::is_arithmetic_v<Q>>>::
-generate_message(const std::string& name,
-                 const Q& p,
-                 const R& r)
+generate_message(
+    const std::string& name,
+    const Q& p,
+    const R& r
+)
 {
     XASSERT(r.size() == 2, "Incorrect r size in ParOutOfRangeException");
     return "Error in conf specification for parameter '"+name+

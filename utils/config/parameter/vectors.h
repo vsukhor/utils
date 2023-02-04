@@ -56,10 +56,11 @@ namespace utils::config::parameter {
  * \tparam isDiscrete Specifies if the vector components accept discrete
  * or continous values.
  */
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 class Par<std::vector<T>,
-         isDiscrete,
-         std::enable_if_t<std::is_arithmetic_v<T>>>
+          isDiscrete,
+          std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T>
 {
     using Q = std::vector<T>;
@@ -68,7 +69,7 @@ class Par<std::vector<T>,
     using Base<T>::isLoaded_;
 
     Q p_;  ///< The parameter value.
-    szt expectedSize_ {huge<szt>};   ///< Expected size of the vector.
+    szt expectedSize_ {undefined<szt>};   ///< Expected size of the vector.
     
 public:    
 
@@ -79,15 +80,15 @@ public:
      * Constructor.
      * \param name Name of the parameter.
      */
-    explicit Par(const str& name);
+    explicit Par( const str& name );
 
     /**
      * Constructor.
      * \param name Name of the parameter.
      * \param expectedSize Expected size of the parameter vector.
      */
-    explicit Par(const str& name,
-                 szt expectedSize);
+    explicit Par( const str& name,
+                  szt expectedSize );
                  
     /**
      * Constructor.
@@ -97,10 +98,10 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    explicit Par(const str& name,
-                 const std::filesystem::path& file,
-                 const std::vector<std::array<T,2>>& range,
-                 Msgr* msgr=nullptr);
+    explicit Par( const str& name,
+                  const std::filesystem::path& file,
+                  const std::vector<std::array<T,2>>& range,
+                  Msgr* msgr=nullptr );
 
     /**
      * Check that the read in parameter value is within the range set by \p r.
@@ -108,8 +109,8 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void check_range(const std::vector<std::array<T,2>>& r,
-                     Msgr* msgr=nullptr);
+    void check_range( const std::vector<std::array<T,2>>& r,
+                      Msgr* msgr=nullptr );
 
     /**
      * Read a parameter without instantiating.
@@ -131,7 +132,7 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void print(Msgr* msgr=nullptr) final;
+    void print( Msgr* msgr=nullptr ) final;
     
     /**
      * The parameter values.
@@ -144,7 +145,7 @@ public:
      * \param i Index in the vaector.
      * \return  Parameter value (the \p i -th component).
      */
-    T operator[](szt i) const;
+    T operator[]( szt i ) const;
 
 private:
     
@@ -152,40 +153,49 @@ private:
      * Initialize the parameter from the config file.
      * \param value Value to search for.
      */
-    void initialize(str value) final;
+    void initialize( str value ) final;
 };    
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const str& name )
+Par(
+    const str& name
+)
     : Base<T> {check_name(name)}
 {}
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const str& name,
-     const szt expectedSize )
+Par(
+    const str& name,
+    const szt expectedSize
+)
     : Base<T> {check_name(name)}
     , expectedSize_ {expectedSize}
 {}
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 Par<std::vector<T>,
     isDiscrete,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const str& name,
-     const std::filesystem::path& file,
-     const std::vector<std::array<T,2>>& range,
-     Msgr* msgr )
+Par(
+    const str& name,
+    const std::filesystem::path& file,
+    const std::vector<std::array<T,2>>& range,
+    Msgr* msgr
+)
     : Base<T> {check_name(name)}
 {
     this->load(file);
@@ -199,7 +209,8 @@ Par( const str& name,
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -220,7 +231,8 @@ check_range(
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 auto Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -234,7 +246,8 @@ readin(
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -249,7 +262,8 @@ print( Msgr* msgr )
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 std::vector<T> Par<std::vector<T>,
                    isDiscrete,
                    std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -260,7 +274,8 @@ operator()() const
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 T Par<std::vector<T>,
       isDiscrete,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -272,7 +287,8 @@ operator[]( const szt i ) const
 }
 
 
-template <typename T, bool isDiscrete>
+template<typename T,
+         bool isDiscrete>
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
@@ -290,7 +306,7 @@ initialize( str value )
     const str emp {" "};
     const str tab {"\t"};
     while (value.length()) {
-        ulong e {value.find(emp)};
+        unsigned long e {value.find(emp)};
         if (e == str::npos) e = value.find(tab);
         if (e == str::npos) e = value.length();
         const str val {value.substr(0, e)};
@@ -312,6 +328,6 @@ initialize( str value )
         throw common::Exception {size_message("Incorrect", p_.size()), nullptr};
 }
 
-}    // namespace utils::config::parameter
+}  // namespace utils::config::parameter
 
 #endif // UTILS_CONFIG_PARAMETER_VECTORS_H

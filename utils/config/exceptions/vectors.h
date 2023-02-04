@@ -72,7 +72,8 @@ public:
         szt ind,
         T p,
         const std::array<T,2>& r,
-        Msgr* msgr=nullptr);
+        Msgr* msgr=nullptr
+    );
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -81,11 +82,12 @@ template<typename T>
 ParOutOfRange<std::vector<T>, false,
               std::enable_if_t<std::is_arithmetic_v<T>>>::
 ParOutOfRange(
-        const std::string& name,
-        const szt ind,
-        T p,
-        const std::array<T,2>& r,
-        Msgr* msgr)
+    const std::string& name,
+    const szt ind,
+    T p,
+    const std::array<T,2>& r,
+    Msgr* msgr
+)
     : std::exception {}
 {
     auto print = [](const std::array<T,2>& a) {
@@ -93,10 +95,12 @@ ParOutOfRange(
             w += "[" + std::to_string(a[0]) + " " + std::to_string(a[1]) + "] ";
         return w+"}";
     };
+
     const std::string s =
         "Error in conf specification for element " + std::to_string(ind) +
         " of parameter '" + name + "' = " + std::to_string(p) + " :" +
         "\n\tthe value " + " is outside the acceptable range "+print(r);
+
     if (msgr)
         msgr->print(s);
     else

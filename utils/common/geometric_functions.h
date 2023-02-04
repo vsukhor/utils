@@ -43,7 +43,7 @@ namespace utils::common {
  * \brief A loose collection of geometry-related static functions.
  * \tparam T Floating point type.
  */
-template <typename T>
+template<typename T>
 struct Geometric {
 
     // Make sure that the template parameter is a floating type.
@@ -430,7 +430,7 @@ struct Geometric {
 // IMPLEMENTATION xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
-template <typename T> inline
+template<typename T>
 auto Geometric<T>::
 ellipse(
     const T alpha,
@@ -443,7 +443,7 @@ ellipse(
 
 
 // ellipse area
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 ellipse_area(
     const T a,
@@ -455,7 +455,7 @@ ellipse_area(
 
 
 // ellipsoidal volume
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 ellipsoid_vol(
     const T a,
@@ -467,7 +467,7 @@ ellipsoid_vol(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 bool Geometric<T>::
 is_inside_ellipsoid(
     const A3t& p,
@@ -481,7 +481,7 @@ is_inside_ellipsoid(
 
 
 // Elliptic cylinder volume.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 elliptic_cylinder_vol(
     const T a,
@@ -494,7 +494,7 @@ elliptic_cylinder_vol(
 
 
 // Ellipsoidal cap volume for cap height |h| < c.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 ellipsoid_cap_vol(
     const T a,
@@ -508,7 +508,7 @@ ellipsoid_cap_vol(
 
 
 // Ellipsoidal cap base area for cap height |h| < c.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 ellipsoid_cap_base_area(
     const T a,
@@ -524,7 +524,7 @@ ellipsoid_cap_base_area(
 // Spheroidal surface area.
 // Spheroid is given by r[0:2] = {a, b, c}, a = b,
 // i.e. (x^2+y^2)/a^2 + z^2/c^2 = 1
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 spheroid_surf_area(
     const A3t& r,
@@ -555,7 +555,7 @@ spheroid_surf_area(
 // returns (-1, -1, -1) if spheroid is a shpere,
 // otherwise returns (i, j, k) where (i,j) are axes indexes of unequal
 // dimensions and k is index of the pole axis.
-template <typename T> inline
+template<typename T>
 auto Geometric<T>::
 spheroid_axes_symmetry(
     const A3t& r
@@ -577,7 +577,7 @@ spheroid_axes_symmetry(
 // resulting from the crossection of an ellipsoid
 // x^2/e[0]^2 + y^2/e[1]^2 + z^2/e[2]^2 = 1
 // with plane z = h.
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 ellipsoid_horizontal_crosection0(
     const A3t& e,
@@ -593,7 +593,7 @@ ellipsoid_horizontal_crosection0(
 // Intersection of a line and an ellipsoid
 // d: the line is given by a point v and a direction unit vector d
 // e are the ellipsoid x^2/a^2 + y^2/b^2 + z^2/c^2 = 1 semiaxes e = {a, b, c},
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_ellipsoid(
     const A3t& v,
@@ -644,7 +644,7 @@ intersection_line_ellipsoid(
 // The line is given by a point 'v' = (v0, v1) in plane and
 // a direction vector 'd' = (d0, d1).
 // The ellipse has dimensions 'ab' = (a, b): x^2 / a^2 + y^2 / b^2 = 1.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_ellipse(
     const A2t& v,
@@ -691,7 +691,7 @@ intersection_line_ellipse(
 // angle alpha about the origin, has semi-axes 'ab' = (a, b):
 // (x*cos(alpha) + ysin(alpha))^2 / a^2 + (x*sin(alpha) - y*cos(alpha))^2 / b^2 = 1
 // see https://www.maa.org/external_archive/joma/Volume8/Kalman/General.html
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_ellipse( const A2t& v,
                            const A2t& d,
@@ -750,7 +750,7 @@ intersection_line_ellipse( const A2t& v,
 
 /*
 // Distance of a point p from a plane given by eq. dot(n,x) + o = 0
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 distance_point_plane(
     const A3t& p,
@@ -762,7 +762,7 @@ distance_point_plane(
 }
 
 // intersection of a line segment and and a plane
-template <typename T> constexpr
+template<typename T> constexpr
 bool Geometric<T>::
 intersection_segment_plane(
     const A3t& p1,
@@ -802,7 +802,7 @@ intersection_segment_plane(
 
 
 // Intersection of a line and and a plane.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_plane(
     const A3t& pab,
@@ -834,7 +834,7 @@ intersection_line_plane(
 // The line is defined by a point 'p' and direction vector 'd'.
 // The plane is defined by three points 'v1', 'v2', 'v3'.
 // Returns distance in direction 'd' from 'p0' to the intersection point.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_plane(
     const A3t& p,
@@ -865,7 +865,7 @@ intersection_line_plane(
 // The line is defined by a point 'p' and direction vector 'd'.
 // The plane is defined by a points 'v', and a normal 'n'.
 // Returns distance in direction 'd' from 'p0' to the intersection point.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_plane(
     const A3t& p,
@@ -889,7 +889,7 @@ intersection_line_plane(
 // The line is defined by a point 'p' and direction vector 'd'.
 // The plane is defined by a points 'v', and a normal 'n'.
 // Returns distance in direction 'd' from 'p0' to the intersection point.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_vertical_line_plane(
     const A3t& p,
@@ -908,7 +908,7 @@ intersection_vertical_line_plane(
 
 
 // Intersection of a line and and a cone.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 intersection_line_cone(
     const A3t& w,
@@ -964,7 +964,7 @@ intersection_line_cone(
 
 
 // Projection of a vector 'd' to z=0 plane.
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 proj2z0plane(
     const A3t& d
@@ -974,9 +974,9 @@ proj2z0plane(
 }
 
 
-// Returns as 'rm' a rotation matrix for rotation over 'angle'
+// Return as 'rm' a rotation matrix for rotation over 'angle'
 // around a general axis 'n'.
-template <typename T> constexpr
+template<typename T> constexpr
 void Geometric<T>::
 rotmat(
     const A3t& n,
@@ -1002,9 +1002,9 @@ rotmat(
 }
 
 
-// Returns as 'rm' a rotation matrix for rotation over 'angle'
+// Return as 'rm' a rotation matrix for rotation over 'angle'
 // around an axis parallel to 'x'.
-template <typename T> constexpr
+template<typename T> constexpr
 void Geometric<T>::
 rotmatx(
     T angle,
@@ -1030,9 +1030,9 @@ rotmatx(
 }
 
 
-// Returns as 'rm' a rotation matrix for rotation over 'angle'
+// Return as 'rm' a rotation matrix for rotation over 'angle'
 // around an axis parallel to 'y'.
-template <typename T> constexpr
+template<typename T> constexpr
 void Geometric<T>::
 rotmaty(
     T angle,
@@ -1058,9 +1058,9 @@ rotmaty(
 }
 
 
-// Returns as 'rm' a rotation matrix for rotation over 'angle'
+// Return as 'rm' a rotation matrix for rotation over 'angle'
 // around an axis parallel to 'z'.
-template <typename T> constexpr
+template<typename T> constexpr
 void Geometric<T>::
 rotmatz(
     T angle,
@@ -1089,7 +1089,7 @@ rotmatz(
 // Unit normal at point p on surface of an axis-aligned ellipsoid
 // (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
 // with dimensions r = {a,b,c}.
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 unormal_on_ellipsoid(
     const A3t& r,
@@ -1108,7 +1108,7 @@ unormal_on_ellipsoid(
 
 
 // Given the dimensions of a 3D body, determine if all_sides_are_equal.
-template <typename T> constexpr
+template<typename T> constexpr
 bool Geometric<T>::
 all_sides_are_equal(
     const A3t& e
@@ -1120,7 +1120,7 @@ all_sides_are_equal(
 
 
 // Given the dimensions of a 3D body, determine if two_sides_are_equal.
-template <typename T> constexpr
+template<typename T> constexpr
 bool Geometric<T>::
 two_sides_are_equal(
     const A3t& e
@@ -1132,7 +1132,7 @@ two_sides_are_equal(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 sph2cart(
     const T ph,        // inclination
@@ -1153,7 +1153,7 @@ sph2cart(
 // Conversion of spherical to cartesian coordinates.
 // phi: inclination
 // theta: azimuth
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 sphere2cart(
     const T r,
@@ -1171,7 +1171,7 @@ sphere2cart(
 // Conversion of polar to cartesian coordinates.
 // phi: inclination
 // theta: azimuth
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 polar2cart(
     const T r,
@@ -1184,7 +1184,7 @@ polar2cart(
 
 
 // Point on the line closest to the origin.
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 ptClosest2orgn(
     const A3t& p,
@@ -1201,7 +1201,7 @@ ptClosest2orgn(
 //----------------------------------------------------------------------------------------------------------------------
 
 // point on an ellipsoid closest to line
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 ellipsoid_closest_point2Line(
     const A3t& ptc2o,
@@ -1221,7 +1221,7 @@ ellipsoid_closest_point2Line(
 
 
 // Projection of vector v on a plane given by the normal n.
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 vector_proj2plane(
     const A3t& v,
@@ -1233,7 +1233,7 @@ vector_proj2plane(
 
 
 // Squared distance between two line segments in 3D.
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 squared_dist3D_Segment_to_Segment(
     const A3t& S10,
@@ -1309,7 +1309,7 @@ squared_dist3D_Segment_to_Segment(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 hexagonal_lattice(
     const A2t orig,
@@ -1338,7 +1338,7 @@ hexagonal_lattice(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 auto Geometric<T>::
 numLayers_hexagonal_lattice (
     const szt numVertices
@@ -1357,7 +1357,7 @@ numLayers_hexagonal_lattice (
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 grad2rad(
     const T grad
@@ -1367,7 +1367,7 @@ grad2rad(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 rad2grad(
     const T rad
@@ -1377,7 +1377,7 @@ rad2grad(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 cos_two_segments(
     const A3t& p1,
@@ -1393,7 +1393,7 @@ cos_two_segments(
 }
 
 
-template <typename T> constexpr
+template<typename T> constexpr
 T Geometric<T>::
 dotpr_two_segments(
     const A3t& p1,
@@ -1411,7 +1411,7 @@ dotpr_two_segments(
 
 // Determines if a point is inside a 2D triangle.
 // https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
-template <typename T> inline
+template<typename T>
 bool Geometric<T>::
 point_in_triangle(
     const A2t& p,
@@ -1441,7 +1441,7 @@ point_in_triangle(
 
 // Determines if a point is inside a 2D triangle.
 // https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
-template <typename T> inline
+template<typename T> 
 bool Geometric<T>::
 point_in_triangle(
     const T* p,

@@ -57,7 +57,8 @@ namespace utils::config::parameter {
  * \tparam T Parameter type: must be std::is_arithmetic.
  * \tparam W Length of the std::array.
  */
-template <typename T, szt W>
+template<typename T,
+         szt W>
 class Par<std::array<T,W>, false,
           std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
@@ -67,7 +68,7 @@ class Par<std::array<T,W>, false,
     using Base<T>::check_name;
     using Base<T>::isLoaded_;
 
-    Q p_;        ///< The parameter value.
+    Q p_;  ///< The parameter value.
     
 public:
 
@@ -79,7 +80,7 @@ public:
      * Constructor.
      * \param name Name of the parameter.
      */
-    explicit Par(const str& name);
+    explicit Par( const str& name );
 
     /**
      * Constructor.
@@ -89,10 +90,12 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    explicit Par(const str& name,
-                  const std::filesystem::path& file,
-                  const std::vector<Q>& range,
-                  Msgr* msgr=nullptr);
+    explicit Par(
+        const str& name,
+        const std::filesystem::path& file,
+        const std::vector<Q>& range,
+        Msgr* msgr=nullptr
+    );
 
     /**
      * Check that the read in parameter value is within the range set by \p r.
@@ -100,15 +103,17 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void check_range(const std::vector<Q>& r,
-                     Msgr* msgr=nullptr);
+    void check_range(
+        const std::vector<Q>& r,
+        Msgr* msgr=nullptr
+    );
 
     /**
      * Print the the parameter to std::cout and logfile.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void print(Msgr* msgr=nullptr) final;
+    void print( Msgr* msgr=nullptr ) final;
 
     /**
      * The parameter values.
@@ -121,7 +126,7 @@ public:
      * \param i Index in the array.
      * \return Parameter value (the \p i -th component).
      */
-    T operator[](szt i) const;
+    T operator[]( szt i ) const;
 
 private:
     
@@ -129,26 +134,32 @@ private:
      * Initialize the parameter from the config file.
      * \param value Value to search for.
      */
-    void initialize(str value) final;
+    void initialize( str value ) final;
 };    
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const str& name )
+Par(
+    const str& name
+)
     : Base<T> {check_name(name)}
 {}
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 Par<std::array<T,W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const str& name,
-     const std::filesystem::path& file,
-     const std::vector<Q>& range,
-     Msgr* msgr )
+Par(
+    const str& name,
+    const std::filesystem::path& file,
+    const std::vector<Q>& range,
+    Msgr* msgr
+)
     : Base<T> {check_name(name)}
 {
     this->load(file);
@@ -161,11 +172,14 @@ Par( const str& name,
 }
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 void Par<std::array<T,W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-check_range( const std::vector<Q>& r,
-             Msgr* msgr )
+check_range(
+    const std::vector<Q>& r,
+    Msgr* msgr
+)
 {
     for (szt i=0; i<W; i++)
         if (p_[i]<r[0][i] || p_[i]>r[1][i])
@@ -175,7 +189,8 @@ check_range( const std::vector<Q>& r,
 }
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 void Par<std::array<T,W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
@@ -191,7 +206,8 @@ print( Msgr* msgr )
 }
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 std::array<T,W> Par<std::array<T,W>, false,
                     std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
@@ -201,7 +217,8 @@ operator()() const
 }
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 T Par<std::array<T,W>, false,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator[]( const szt i ) const
@@ -212,7 +229,8 @@ operator[]( const szt i ) const
 }
 
 
-template <typename T, szt W>
+template<typename T,
+         szt W>
 void Par<std::array<T,W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( str value )
@@ -221,7 +239,7 @@ initialize( str value )
     const str tab {"\t"};
     szt i {};
     while (value.length() && i<W) {
-        ulong e {value.find(emp)};
+        unsigned long e {value.find(emp)};
         if (e == str::npos) e = value.find(tab);
         if (e == str::npos) e = value.length();
         const str val {value.substr(0, e)};

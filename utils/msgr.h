@@ -73,30 +73,13 @@ public:
         outstream* so,
         logstream* sl,
         int precision
-    )
-        : so {so}
-        , sl {sl}
-    {
-        set_formats(precision);
-    }
-
+    );
     
     /**
      * \brief Set formatting parameters.
      * \param precision Precision of real numbers
      */
-    void set_formats(int precision) noexcept
-    {
-        if (so) {
-            so->precision(precision);
-            so->setf(std::ios::scientific);
-        }
-        if (sl) {
-            sl->precision(precision);
-            sl->setf(std::ios::scientific);
-        }
-    }
-
+    void set_formats( int precision ) noexcept;
 
     /**
      * \brief Print std::array.
@@ -105,10 +88,11 @@ public:
      * \param name Name/title.
      * \param v Array data.
      */
-    template <typename V, auto N>
-    void print_array( const std::string& name,
-                      const std::array<V,N>& v
-                    ) const noexcept;
+    template<typename V, auto N>
+    void print_array(
+        const std::string& name,
+        const std::array<V,N>& v
+    ) const noexcept;
 
     /**
      * \brief Print named std::vector .
@@ -116,10 +100,11 @@ public:
      * \param name Name/title.
      * \param v Vector data.
      */
-    template <typename V>
-    void print_vector( const std::string& name,
-                       const std::vector<V>& v
-                     ) const noexcept;
+    template<typename V>
+    void print_vector(
+        const std::string& name,
+        const std::vector<V>& v
+    ) const noexcept;
 
     /**
      * \brief Print an data series of of various types.
@@ -128,8 +113,8 @@ public:
      * \tparam endline Finish with line end.
      * \param values Values to print.
      */
-    template <bool endline=true, typename... T>
-    void print(T... values) const;
+    template<bool endline=true, typename... T>
+    void print( T... values ) const;
 
     /**
      * \brief Print an data series of of various types and exit the process.
@@ -137,8 +122,8 @@ public:
      * https://stackoverflow.com/questions/51647834/printf-like-utility-in-c-without-format-specifier/51648068#51648068
      * \param values Values to print.
      */
-    template <typename... T>
-    void exit(T... values);
+    template<typename... T>
+    void exit( T... values );
 
 private:
 
@@ -146,7 +131,7 @@ private:
      * \brief Check that the stream used is valid.
      * \tparam S Stream type.
      */
-    template <typename S>
+    template<typename S>
     static constexpr auto is_valid_stream() noexcept;
 
     /**
@@ -155,17 +140,45 @@ private:
      * \param v String to print.
      * \param endline Specifies if the line end should be added.
      */
-    template <typename IO>
-    void prn(IO* io,
-             const std::string& v,
-             bool endline
-             ) const noexcept;
+    template<typename IO>
+    void prn(
+        IO* io,
+        const std::string& v,
+        bool endline
+    ) const noexcept;
 };
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename S>
+inline
+Msgr::
+Msgr(
+    outstream* so,
+    logstream* sl,
+    int precision
+)
+    : so {so}
+    , sl {sl}
+{
+    set_formats(precision);
+}
+
+inline
+void Msgr::
+set_formats( const int precision ) noexcept
+{
+    if (so) {
+        so->precision(precision);
+        so->setf(std::ios::scientific);
+    }
+    if (sl) {
+        sl->precision(precision);
+        sl->setf(std::ios::scientific);
+    }
+}
+
+template<typename S>
 constexpr auto Msgr::
 is_valid_stream() noexcept
 {
@@ -173,8 +186,7 @@ is_valid_stream() noexcept
            std::is_same_v<S, logstream>;
 }
 
-
-template <typename IO> inline
+template<typename IO>
 void Msgr::
 prn(
     IO* io,
@@ -186,12 +198,13 @@ prn(
                   "Stream type used in Msgr is not valid");
 
     *io << v << " ";
-    if (endline) *io << std::endl;
+    if (endline)
+        *io << std::endl;
     io->flush();
 }
 
 
-template <typename V, auto N> inline
+template<typename V, auto N>
 void Msgr::
 print_array(
     const std::string& name,
@@ -204,8 +217,7 @@ print_array(
     print("");
 }
 
-
-template <typename V> inline
+template<typename V>
 void Msgr::
 print_vector(
     const std::string& name,
@@ -219,9 +231,10 @@ print_vector(
 }
 
 
-template <bool endline, typename... T> inline
+template<bool endline,
+         typename... T>
 void Msgr::
-print(T... values) const
+print( T... values ) const
 {
     std::ostringstream s;
 
@@ -233,7 +246,7 @@ print(T... values) const
 }
 
 
-template <typename... T> inline
+template<typename... T>
 void Msgr::
 exit(T... values)
 {

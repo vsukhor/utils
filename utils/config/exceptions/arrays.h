@@ -74,19 +74,22 @@ public:
         const std::string& name,
         const Q& p,
         const std::vector<Q>& r,
-        Msgr* msgr=nullptr);
+        Msgr* msgr=nullptr
+    );
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<typename T, std::size_t W>
+template<typename T,
+         std::size_t W>
 ParOutOfRange<std::array<T,W>, false,
               std::enable_if_t<std::is_arithmetic_v<T>>>::
 ParOutOfRange(
-        const std::string& name,
-        const Q& p,
-        const std::vector<Q>& r,
-        Msgr* msgr)
+    const std::string& name,
+    const Q& p,
+    const std::vector<Q>& r,
+    Msgr* msgr
+)
     : std::exception {}
 {
     XASSERT((r.size() == 2 && std::all_of(r.begin(), r.end(),
@@ -99,10 +102,12 @@ ParOutOfRange(
             w += "[" + std::to_string(o[0]) + " " + std::to_string(o[1]) + "] ";
         return w+"}";
     };
+
     const std::string s =
         "Error in conf specification for parameter '" +
         name + "' = " + print(p) + " :" + "\n\tthe value " +
         " is outside the acceptable range " + print(r);
+
     if (msgr != nullptr)
         msgr->print<true>(s);
     else

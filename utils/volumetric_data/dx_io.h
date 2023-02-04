@@ -51,14 +51,16 @@ namespace utils::volumetric {
  * \param units Length units used.
  * \param msgr Output message processor.
  */
-template <typename K, typename L, typename T>
+template<typename K,
+         typename L,
+         typename T>
 void save_as_DX(
-        const std::string& filename,
-        const common::vec3<K>& v,
-        Arrays::A3<T> origin,        // by value
-        Arrays::A3<T> delta,         // by value
-        const std::string& units,
-        Msgr& msgr
+    const std::string& filename,
+    const common::vec3<K>& v,
+    arrays::A3<T> origin,        // by value
+    arrays::A3<T> delta,         // by value
+    const std::string& units,
+    Msgr& msgr
 )
 {
     if (units == "nm") {
@@ -130,16 +132,17 @@ void save_as_DX(
 * \param[in] units Length units used.
 * \param msgr Output message processor.
 */
-template <typename K, typename T>
+template<typename K,
+         typename T>
 void read_as_DX(
-        const std::string& filename,
-        common::vec3<K>& v,
-        Arrays::A3<T>& origin,
-        Arrays::A3<T>& delta,
-        Arrays::A3<common::szt>& ms,
-        const std::vector<common::uint>& bin,
-        const std::string& units,
-        Msgr &msgr
+    const std::string& filename,
+    common::vec3<K>& v,
+    arrays::A3<T>& origin,
+    arrays::A3<T>& delta,
+    arrays::A3<common::szt>& ms,
+    const std::vector<common::uint>& bin,
+    const std::string& units,
+    Msgr &msgr
 )
 {
     if (bin[0] != 1 ||

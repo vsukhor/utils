@@ -52,8 +52,10 @@ namespace utils::config::parameter {
  * scalar types.
  * \tparam T Parameter type: must be std::is_arithmetic continous values.
  */
-template <typename T, bool isDiscrete>
-class Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>
+template<typename T,
+         bool isDiscrete>
+class Par<T,isDiscrete,
+          typename std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
 
     using Q = T;
@@ -70,7 +72,7 @@ public:
      * Constructor.
      * \param name Name of the parameter.
      */
-    explicit Par(const std::string& name);
+    explicit Par( const std::string& name );
 
     /**
      * Constructor.
@@ -109,9 +111,11 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    template <typename W>
-    void check_range(const W& r,
-                     Msgr* msgr=nullptr);
+    template<typename W>
+    void check_range(
+        const W& r,
+        Msgr* msgr=nullptr
+    );
 
     /**
      * Read a parameter without instantiating.
@@ -135,13 +139,13 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void print(Msgr* msgr=nullptr) final;
+    void print( Msgr* msgr=nullptr ) final;
 
     /**
      * Set the field \a p_ to the value \p val.
      * \param val New value of the parameter.
      */
-    void set(const Q& val);
+    void set( const Q& val );
 
     /**
      * The parameter value.
@@ -155,25 +159,33 @@ private:
      * Initialize the parameter from the config file.
      * \param value Value to search for.
      */
-    void initialize(std::string value) final;
+    void initialize( std::string value ) final;
 };    
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name )
+template<typename T,
+         bool isDiscrete>
+Par<T,isDiscrete,
+    typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+Par(
+    const std::string& name
+)
     : Base<T> {check_name(name)}
 {}
 
 
-template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name,
-     const std::filesystem::path& file,
-     const std::vector<T>& range,
-     Msgr* msgr )
+template<typename T,
+         bool isDiscrete>
+Par<T,isDiscrete,
+    typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+Par(
+    const std::string& name,
+    const std::filesystem::path& file,
+    const std::vector<T>& range,
+    Msgr* msgr
+)
     : Base<T> {check_name(name)}
 {
     this->load(file);
@@ -187,12 +199,16 @@ Par( const std::string& name,
 }
 
 
-template <typename T, bool isDiscrete>
-Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
-Par( const std::string& name,
-     const std::filesystem::path& file,
-     const std::array<T,2>& range,
-     Msgr* msgr )
+template<typename T,
+         bool isDiscrete>
+Par<T,isDiscrete,
+    typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+Par(
+    const std::string& name,
+    const std::filesystem::path& file,
+    const std::array<T,2>& range,
+    Msgr* msgr
+)
     : Base<T> {check_name(name)}
 {
     this->load(file);
@@ -206,11 +222,15 @@ Par( const std::string& name,
 }
 
 
-template <typename T, bool isDiscrete>
-template <typename W>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
-check_range( const W& r,
-             Msgr* msgr )
+template<typename T,
+         bool isDiscrete>
+template<typename W>
+void Par<T,isDiscrete,
+         typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+check_range(
+    const W& r,
+    Msgr* msgr
+)
 {
     if (!r.size()) return;        // use this case to omit string checkups
 
@@ -226,19 +246,25 @@ check_range( const W& r,
 }
 
 
-template <typename T, bool isDiscrete>
-auto Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
-readin( const std::string& name,
-        const std::filesystem::path& file,
-        const std::vector<Q>& range,
-        Msgr* msgr )
+template<typename T,
+         bool isDiscrete>
+auto Par<T,isDiscrete,
+         typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+readin(
+    const std::string& name,
+    const std::filesystem::path& file,
+    const std::vector<Q>& range,
+    Msgr* msgr
+)
 {
     return Par<Q,isDiscrete> {name, file, range, msgr}();
 }
 
 
-template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+template<typename T,
+         bool isDiscrete>
+void Par<T,isDiscrete,
+         typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 print( Msgr* msgr )
 {
     if (msgr != nullptr)
@@ -248,8 +274,10 @@ print( Msgr* msgr )
 }
 
 
-template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+template<typename T,
+         bool isDiscrete>
+void Par<T,isDiscrete,
+         typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 set( const Q& val )
 {
     isLoaded_ = true;
@@ -257,8 +285,10 @@ set( const Q& val )
 }
 
 
-template <typename T, bool isDiscrete>
-T Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+template<typename T,
+         bool isDiscrete>
+T Par<T,isDiscrete,
+      typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
     XASSERT(isLoaded_, get_name());
@@ -266,8 +296,10 @@ operator()() const
 }
 
 
-template <typename T, bool isDiscrete>
-void Par<T,isDiscrete, typename std::enable_if_t<std::is_arithmetic_v<T>>>::
+template<typename T,
+         bool isDiscrete>
+void Par<T,isDiscrete,
+         typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( std::string value )
 {
     std::stringstream(value) >> p_;
