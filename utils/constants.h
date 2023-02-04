@@ -127,12 +127,12 @@ constexpr T undefined;
 template<typename T>
     constexpr T undefined<T,std::enable_if_t<std::is_fundamental<T>::value>> {huge<T>};
 
-template<typename T> consteval
+template<typename T> constexpr
 bool is_defined(const T a)
 {
     return a != undefined<T>;
 }
-template<typename T> consteval
+template<typename T> constexpr
 bool is_undefined(const T a)
 {
     return a == undefined<T>;
