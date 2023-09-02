@@ -94,7 +94,7 @@ public :
      * \brief Prints reaction propensities to \p os.
      * \param os Stream to print to.
      */
-    void printScores(std::ostream& os) const;
+    void print_scores(std::ostream& os) const;
 
     /**
      * \brief Prints a log record with the information on current reaction.
@@ -308,7 +308,7 @@ log_data( std::ostream& os ) const
 template<typename RF,
          typename Reaction>
 void Gillespie<RF,Reaction>::
-printScores( std::ostream& os ) const
+print_scores( std::ostream& os ) const
 {
     for (szt i=0; i<nreact; i++)
         rc[i]->set_score();
