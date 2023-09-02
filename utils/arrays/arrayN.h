@@ -575,6 +575,35 @@ void write( std::ofstream& ost ) const noexcept
 
 };
 
+/// Input operator.
+template<unsigned N,
+         typename T>
+std::istream& operator>>(
+    std::istream& is,
+    array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
+          std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>>& a
+)
+{
+    for (const auto o: a)
+        is >> o;
+
+    return is;
+}
+
+/// Output operator.
+template<unsigned N,
+         typename T>
+std::ostream& operator<<(
+    std::ostream& os,
+    const array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
+                std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>>& a
+)
+{
+    a.print(os, false);
+
+    return os;
+}
+
 }    // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAYN_H

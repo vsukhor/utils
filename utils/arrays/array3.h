@@ -560,6 +560,27 @@ array unitv() const noexcept
     return *this / norm();
 }
 
+/// A perpendicular array, whose norm is unspecified.
+constexpr
+array orthogonal() const noexcept
+{
+    return std::abs(n[0]) < std::abs(n[1])
+           ? std::abs(n[0]) < std::abs(n[2])
+              ? array {zero<T>, -n[2], n[1]}
+              : array {n[1],    -n[0], zero<T>}
+           : std::abs(n[1]) < std::abs(n[2])
+              ? array{-n[2], zero<T>, n[0]}
+              : array{n[1],  -n[0],   zero<T>};
+}
+
+
+/// A perpendicular array, whose norm is 'nrm'.
+constexpr
+array orthogonal(const T nrm) const noexcept
+{
+    return orthogonal().unitv() * nrm;
+}
+
 // Scalar projection of *this onto array b.
 constexpr
 T scaProjection(
@@ -702,6 +723,13 @@ array rotate(
              rm[0][2] * n[0] + rm[1][2] * n[1] + rm[2][2] * n[2] };
 }
 
+
+constexpr
+T max_component_length() const noexcept
+{
+    return std::max(std::max(std::abs(n[0]), std::abs(n[1])), std::abs(n[2]));
+}
+
 void print(
     std::ostream& os,
     const bool end
@@ -772,6 +800,30 @@ int index_min() const noexcept
 
 
 };
+
+/// Input operator.
+template<typename T>
+std::istream& operator>>(
+    std::istream& is,
+    array<3,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    is >> a[0] >> a[1] >> a[2];
+
+    return is;
+}
+
+/// Output operator.
+template<typename T>
+std::ostream& operator<<(
+    std::ostream& os,
+    const array<3,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    a.print(os, false);
+
+    return os;
+}
 
 }    // namespace arrays
 }    // namespace utils

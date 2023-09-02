@@ -486,6 +486,20 @@ T norm() const noexcept
     return std::sqrt(dotpr());
 }
 
+/// A perpendicular array, whose norm is unspecified.
+[[nodiscard]] constexpr
+array orthogonal() const noexcept
+{
+    return array {-n[1], n[0]};
+}
+
+/// A perpendicular array, whose norm is 'nrm'.
+[[nodiscard]] constexpr
+array orthogonal(const T nrm) const noexcept
+{
+    return orthogonal().unitv() * nrm;
+}
+
 [[nodiscard]] constexpr
 array unitv() const noexcept
 {
@@ -520,7 +534,8 @@ T crosspr(
     return p1[0] * p2[1] - p1[1] * p2[0];
 }
 
-[[nodiscard]] constexpr T crosspr( const array& p ) const noexcept
+[[nodiscard]] constexpr
+T crosspr( const array& p ) const noexcept
 {
     return n[0] * p[1] - n[1] * p[0];
 }
@@ -543,7 +558,12 @@ bool less1(
     return a1[1] < a2[1];
 }
 
-inline
+constexpr
+T max_component_length() const noexcept
+{
+    return std::max(std::abs(n[0]), std::abs(n[1]));
+}
+
 void print(
     std::ostream& os, bool end
 ) const noexcept
@@ -607,7 +627,31 @@ void write( std::ofstream& ost ) const noexcept
 }
 
 };
-    
+
+/// Input operator.
+template<typename T>
+std::istream& operator>>(
+    std::istream& is,
+    array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    is >> a[0] >> a[1];
+
+    return is;
+}
+
+/// Output operator.
+template<typename T>
+std::ostream& operator<<(
+    std::ostream& os,
+    const array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    a.print(os, false);
+
+    return os;
+}
+
 }  // namespace utils::arrays
 
 #endif // UTILS_ARRAYS_ARRAY2_H

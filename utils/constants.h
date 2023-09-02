@@ -104,6 +104,9 @@ template<typename T> constexpr T
         std::pow(twopi<T>, half<T>)
     };
 
+template<typename T> constexpr auto
+    e = static_cast<T>(2.7182818284590452353602874713527L);
+
 // Templates for numerical limits. =============================================
 
 template <typename T, typename Enabler = void>

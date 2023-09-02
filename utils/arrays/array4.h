@@ -691,6 +691,31 @@ void write(
 
 };
 
-}    // namespace utils::arrays
+/// Input operator.
+template<typename T>
+std::istream& operator>>(
+    std::istream& is,
+    array<4,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    is >> a[0] >> a[1] >> a[2] >> a[3];
 
-#endif // UTILS_ARRAYS_ARRAY4_H
+    return is;
+}
+
+/// Output operator.
+template<typename T>
+std::ostream& operator<<(
+    std::ostream& os,
+    const array<4,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+)
+{
+    a.print(os, false);
+
+    return os;
+}
+
+
+}  // namespace utils::arrays
+
+#endif  // UTILS_ARRAYS_ARRAY4_H

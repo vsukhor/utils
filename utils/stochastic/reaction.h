@@ -57,8 +57,8 @@ public:  // Only constant parameters are public.
     /// Index in Simulation::rc, i.e. index among all used and not used reactions.
     const szt ind {undefined<szt>};
 
-    const std::string shortName;  ///< Reaction name.
-    const std::string fullName;   ///< Reaction name abbreviation.
+    const std::string shortName;  ///< Reaction name abbreviation.
+    const std::string fullName;   ///< Extended reaction name.
 
 	static bool is_active(
         const std::unique_ptr<Reaction>& r
@@ -66,11 +66,11 @@ public:  // Only constant parameters are public.
 
     /**
      * \brief Constructor.
-     * \param msgr Output message processor.
-     * \param ind reaction id.
-     * \param rate Reaction rate constant.
-     * \param shortName Reaction name.
-     * \param fullName Reaction name abbreviated.
+     * \param [in,out] msgr Output message processor.
+     * \param [in] ind Reaction id.
+     * \param [in] rate Reaction rate constant.
+     * \param [in] shortName Reaction name.
+     * \param [in] fullName Reaction name abbreviated.
      */
     explicit Reaction(
         Msgr& msgr,
@@ -81,11 +81,11 @@ public:  // Only constant parameters are public.
     );
 
 	// The rule of five is triggered by the virtual destructor, the defaults suffice
-    Reaction(const Reaction&) = default;             // copy constructor
-    Reaction& operator=(const Reaction&) = default;  // copy assignment
-    Reaction(Reaction&&) = default;                  // move constructor
-    Reaction& operator=(Reaction&&) = default;       // move assignment
-	virtual ~Reaction() noexcept = default; 		 // destructor
+    Reaction(const Reaction&) = default;             ///< Copy constructor.
+    Reaction& operator=(const Reaction&) = default;  ///< Copy assignment.
+    Reaction(Reaction&&) = default;                  ///< Move constructor.
+    Reaction& operator=(Reaction&&) = default;       ///< Move assignment.
+	virtual ~Reaction() noexcept = default; 		 ///< Destructor.
 
     /// Sets the Gillespie score for this reaction.
     virtual void set_score() noexcept = 0;
@@ -94,8 +94,8 @@ public:  // Only constant parameters are public.
 
     /**
      * \brief Update propensity for a pair of network components.
-     * \param c1 Index of the 1st component to update.
-     * \param c2 Index of the 2nd component to update.
+     * \param [in] c1 Index of the 1st component to update.
+     * \param [in] c2 Index of the 2nd component to update.
      */
     virtual void update_prop(szt c1, szt c2) noexcept = 0;
 	virtual void update_prop(szt /* c1 */) noexcept {}
@@ -107,11 +107,11 @@ public:  // Only constant parameters are public.
     virtual void fire() noexcept = 0;
 
     /**
-     * \brief Populate the vector of reactions that need a score update.
+     * \brief Populates the vector of reactions that need a score update.
      * \details The update is performed after *this has fired
-     * Initialize the propensities and effective rate.
-     * \param rc Vector of unique pointers to all reactions taking part in
-     * the simulation.
+     *  Initializes the propensities and effective rate.
+     * \param [in] rc Vector of unique pointers to all reactions taking part in
+     *  the simulation.
      */
     virtual void initialize_dependencies(
         const std::vector<std::unique_ptr<Reaction>>& rc
@@ -119,12 +119,13 @@ public:  // Only constant parameters are public.
 
     /**
      * \brief The number of times this reaction was fired.
+     * \details \a eventCount getter.
      * \result The number of times this reaction was fired.
      */
     unsigned long event_count() const noexcept { return eventCount; }
 
     /**
-     * Print the parameters common to all reactions.
+     * \brief Prints the parameters common to all reactions.
      * \param le True if new line after the output.
      */
     virtual void print(bool le) const;
@@ -145,18 +146,18 @@ protected:
     std::vector<Reaction*> dependents;
 
     /**
-     * All necessary updates after the given reaction event was executed.
-     * Pure virtual function: Network and reaction updates necessary
-     * after the given reaction event was executed.
+     * \brief All necessary updates after the given reaction event was executed.
+     * \details Pure virtual function: Network and reaction updates necessary
+     *  after the given reaction event was executed.
      */
     virtual void update_netw_stats() = 0;
 
 private:
 
     /**
-     * Attach this score to the Gillespie mechanism.
-     * \param a Placeholder in the Gillespie object responsible for this
-     * reaction score.
+     * \brief Attaches this score to the Gillespie mechanism.
+     * \param [in] a Placeholder in the Gillespie object responsible for this
+     *  reaction score.
      */
     void attach_score_pointer(real* a) noexcept { score = a; };
 };
