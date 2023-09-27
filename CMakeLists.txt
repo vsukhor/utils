@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.15...3.27)
 
 project(utils
     VERSION 1.3.0
-    DESCRIPTION "A cooection of misc code for common use in other repos."
+    DESCRIPTION "A collection of misc code for common use in other repos."
     LANGUAGES CXX)
 
 add_compile_options(-O3 -msse4 -fPIC)
