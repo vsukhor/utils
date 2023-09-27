@@ -33,6 +33,7 @@
 #define UTILS_COMMON_MISC_H
 
 #include <array>
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <fstream>
