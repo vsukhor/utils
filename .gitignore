@@ -1,6 +1,6 @@
 
 .DS_Store
-build/**
+build*/**
 manual_make/.DS_Store
 manual_make/obj/
 xcode/
