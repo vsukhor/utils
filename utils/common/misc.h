@@ -72,7 +72,7 @@ long long assert_fun(
 }
 
 
-/// Trin the string \b str from whitespaces.
+/// Trim the string \b str from whitespaces.
 template<char c=' '>
 std::string trim(
     const std::string& str

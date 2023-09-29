@@ -21,14 +21,14 @@ endif()
 
 add_definitions(-DUSE_UTILS_XASSERT)
 
-add_executable(unittests_utils
+add_executable(unittests
 	test_parameter.cpp
 	test_misc.cpp
 	test_msgr.cpp
 	test_reader.cpp
 )
 
-include_directories(unittests_utils PUBLIC
+include_directories(unittests PUBLIC
 	../utils/biochemical
 	../utils/arrays
 	../utils/graph
@@ -38,14 +38,14 @@ include_directories(unittests_utils PUBLIC
 	../utils/volumetric_data
 )
 
-target_link_libraries(unittests_utils PRIVATE $<TARGET_FILE:utils>)
-target_link_libraries(unittests_utils PRIVATE gtest gmock)
-target_link_libraries(unittests_utils PRIVATE gtest_main)
+target_link_libraries(unittests PRIVATE $<TARGET_FILE:utils>)
+target_link_libraries(unittests PRIVATE gtest gmock)
+target_link_libraries(unittests PRIVATE gtest_main)
 
-gtest_discover_tests(unittests_utils)
+gtest_discover_tests(unittests)
 
 add_custom_command(
-    TARGET unittests_utils
+    TARGET unittests
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests_utils> ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:unittests> ${CMAKE_CURRENT_SOURCE_DIR}
 )
