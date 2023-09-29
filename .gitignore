@@ -5,6 +5,8 @@ manual_make/.DS_Store
 manual_make/obj/
 xcode/
 .vscode/
+.cache/
+*.user
 docs/html/**
 docs/latex/**
 tests/unittests
