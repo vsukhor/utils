@@ -4,6 +4,7 @@ build*/**
 manual_make/.DS_Store
 manual_make/obj/
 xcode/
+.vscode/
 docs/html/**
 docs/latex/**
 tests/unittests_utils
