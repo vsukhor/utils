@@ -43,7 +43,7 @@
 namespace utils::arrays {
 
 /// Max array length with specific class.
-inline constexpr int MAX_SPECIFIED_LENGTH = 4;
+inline constexpr unsigned MAX_LENGTH_SPECIALIZED = 4;
 
 
 /// \brief Arbitrary-size arrays.
@@ -53,9 +53,9 @@ inline constexpr int MAX_SPECIFIED_LENGTH = 4;
 /// \tparam N Array length.
 /// \tparam T Type of the elements.
 template<unsigned N,
-         typename T>
-class array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
-                                 std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>> {
+         arithmetic T>
+requires (std::greater_equal<>()(N, MAX_LENGTH_SPECIALIZED+1))
+class array<N, T> {
 
 static constexpr int len {N};
 
@@ -573,15 +573,15 @@ void write( std::ofstream& ost ) const noexcept
         ost.write(reinterpret_cast<const char*>(&n[i]), sizeof(T));
 }
 
-};
+};  // class array<N, T>
 
 /// Input operator.
 template<unsigned N,
-         typename T>
+         arithmetic T>
+requires (std::greater_equal<>()(N, MAX_LENGTH_SPECIALIZED+1))
 std::istream& operator>>(
     std::istream& is,
-    array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
-          std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>>& a
+    array<N, T>& a
 )
 {
     for (const auto o: a)
@@ -592,11 +592,11 @@ std::istream& operator>>(
 
 /// Output operator.
 template<unsigned N,
-         typename T>
+         arithmetic T>
+requires (std::greater_equal<>()(N, MAX_LENGTH_SPECIALIZED+1))
 std::ostream& operator<<(
     std::ostream& os,
-    const array<N,T,std::enable_if_t<std::is_arithmetic<T>::value &&
-                std::greater_equal<>()(N,MAX_SPECIFIED_LENGTH+1)>>& a
+    const array<N, T>& a
 )
 {
     a.print(os, false);

@@ -48,8 +48,8 @@ namespace utils::arrays {
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 2-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template<typename T>
-class array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>> {
+template<arithmetic T>
+class array<2, T> {
 
 static constexpr int len {2};
 
@@ -626,13 +626,13 @@ void write( std::ofstream& ost ) const noexcept
     ost.write(reinterpret_cast<const char*>(&n[1]), sizeof(T));
 }
 
-};
+};  // class array<2, T>
 
 /// Input operator.
-template<typename T>
+template<arithmetic T>
 std::istream& operator>>(
     std::istream& is,
-    array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    array<2, T>& a
 )
 {
     is >> a[0] >> a[1];
@@ -641,10 +641,10 @@ std::istream& operator>>(
 }
 
 /// Output operator.
-template<typename T>
+template<arithmetic T>
 std::ostream& operator<<(
     std::ostream& os,
-    const array<2,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    const array<2, T>& a
 )
 {
     a.print(os, false);

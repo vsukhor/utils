@@ -31,6 +31,7 @@
 #define UTILS_ARRAYS_ARRAY_H
 
 /// Custom arrays.
+#include "../constants.h"
 #include "array2.h"
 #include "array3.h"
 #include "array4.h"
@@ -38,10 +39,12 @@
 
 namespace utils::arrays {
 
+
 // Type abbreviations.
-template<typename T> using A2 = arrays::array<2,T>;
-template<typename T> using A3 = arrays::array<3,T>;
-template<typename T> using A4 = arrays::array<4,T>;
+template<arithmetic T> using A2 = arrays::array<2, T>;
+template<arithmetic T> using A3 = arrays::array<3, T>;
+template<arithmetic T> using A4 = arrays::array<4, T>;
+
 
 }  // namespace utils::arrays
 

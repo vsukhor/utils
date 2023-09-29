@@ -60,8 +60,8 @@ namespace arrays {
 /// of arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 3-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template<typename T>
-class array<3,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+template<arithmetic T>
+class array<3, T> {
 
 static constexpr int len {3};
 
@@ -799,13 +799,13 @@ int index_min() const noexcept
 }
 
 
-};
+};  // class array<3, T>
 
 /// Input operator.
-template<typename T>
+template<arithmetic T>
 std::istream& operator>>(
     std::istream& is,
-    array<3,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    array<3, T>& a
 )
 {
     is >> a[0] >> a[1] >> a[2];
@@ -814,10 +814,10 @@ std::istream& operator>>(
 }
 
 /// Output operator.
-template<typename T>
+template<arithmetic T>
 std::ostream& operator<<(
     std::ostream& os,
-    const array<3,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    const array<3, T>& a
 )
 {
     a.print(os, false);

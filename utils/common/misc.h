@@ -71,6 +71,7 @@ long long assert_fun(
     std::exit(EXIT_FAILURE);
 }
 
+
 /// Trin the string \b str from whitespaces.
 template<char c=' '>
 std::string trim(

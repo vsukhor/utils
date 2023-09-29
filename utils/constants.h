@@ -44,6 +44,11 @@
 /// Library namespace.
 namespace utils {
 
+template <typename T> 
+concept arithmetic = std::integral<T> || 
+                     std::floating_point<T>;
+                     
+
 /// Make these definitions available to the whole library by defaule.
 inline namespace constants {
 

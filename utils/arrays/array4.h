@@ -47,8 +47,8 @@ namespace utils::arrays {
 /// arithmetic types. Implements convenient arithmetics as well as some
 /// functionaity commonly used in 4-dimensional geometric applications.
 /// \tparam T Type of the elements.
-template<typename T>
-class array<4,T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+template<arithmetic T>
+class array<4, T> {
 
 static constexpr int len {4};
 
@@ -689,13 +689,13 @@ void write(
 }
 
 
-};
+};  // class array<4, T> 
 
 /// Input operator.
-template<typename T>
+template<arithmetic T>
 std::istream& operator>>(
     std::istream& is,
-    array<4,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    array<4, T>& a
 )
 {
     is >> a[0] >> a[1] >> a[2] >> a[3];
@@ -704,10 +704,10 @@ std::istream& operator>>(
 }
 
 /// Output operator.
-template<typename T>
+template<arithmetic T>
 std::ostream& operator<<(
     std::ostream& os,
-    const array<4,T,std::enable_if_t<std::is_arithmetic_v<T>>>& a
+    const array<4, T>& a
 )
 {
     a.print(os, false);
