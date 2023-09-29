@@ -44,7 +44,7 @@
 /// Library namespace.
 namespace utils {
 
-template <typename T> 
+template<typename T> 
 concept arithmetic = std::integral<T> || 
                      std::floating_point<T>;
                      
@@ -102,68 +102,50 @@ template<typename T> constexpr auto
 template<typename T> constexpr auto
     sqrtPI = static_cast<T>(1.7724538509055160272981674833411L);
 
-template<typename T, typename Enabler = void>
-constexpr T sqrt2PI;
-template<typename T> constexpr T
-    sqrt2PI<T,std::enable_if_t<std::is_arithmetic<T>::value>> {
+template<arithmetic T> constexpr T
+    sqrt2PI {
         std::pow(twopi<T>, half<T>)
     };
 
 template<typename T> constexpr auto
     e = static_cast<T>(2.7182818284590452353602874713527L);
 
-// Templates for numerical limits. =============================================
+// Templates for numeric limits. ===============================================
 
-template <typename T, typename Enabler = void>
-constexpr T EPS;
-template <typename T> constexpr T
-    EPS<T,std::enable_if_t<std::is_fundamental<T>::value>> {
-        std::numeric_limits<T>::epsilon()
-    };
+template<typename T>
+concept numerically_limited = std::numeric_limits<T>::is_specialized;
 
-template <typename T, typename Enabler = void>
-constexpr T huge;
-template <typename T>
-    constexpr T huge<T,std::enable_if_t<std::is_fundamental<T>::value>> {
+template<numerically_limited T>
+constexpr T EPS {std::numeric_limits<T>::epsilon()};
+
+template<numerically_limited T>
+constexpr T huge {
         std::numeric_limits<T>::has_infinity
         ? std::numeric_limits<T>::infinity()
         : std::numeric_limits<T>::max()
     };
 
-template <typename T, typename Enabler = void>
-constexpr T undefined;
-template<typename T>
-    constexpr T undefined<T,std::enable_if_t<std::is_fundamental<T>::value>> {huge<T>};
+template<numerically_limited T>
+constexpr T undefined {huge<T>};
 
-template<typename T> constexpr
+template<numerically_limited T> constexpr
 bool is_defined(const T a)
 {
     return a != undefined<T>;
 }
-template<typename T> constexpr
+template<numerically_limited T> constexpr
 bool is_undefined(const T a)
 {
     return a == undefined<T>;
 }
 
-template<typename T, typename Enabler = void>
-constexpr T MAX;
-template<typename T> constexpr
-T MAX<T,std::enable_if_t<std::is_fundamental<T>::value>> =
-    std::numeric_limits<T>::max();
-template<typename T> constexpr
-T MAX<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
+template<numerically_limited T> constexpr
+T MAX {std::numeric_limits<T>::max()};
 
-template<typename T, typename Enabler = void>
-constexpr T MIN;
-template<typename T> constexpr
-T MIN<T,std::enable_if_t<std::is_fundamental<T>::value>> {
-    std::numeric_limits<T>::min()
-};
-template<typename T> constexpr
-    T MIN<T,std::enable_if_t<std::is_same<T,std::string>::value>> {""};
+template<numerically_limited T> constexpr
+T MIN {std::numeric_limits<T>::min()};
 
-template<typename T> constexpr
+template<numerically_limited T> constexpr
 T INF {std::numeric_limits<T>::infinity()};
 
 // std arrays filled with common constants. ====================================
@@ -174,36 +156,36 @@ T INF {std::numeric_limits<T>::infinity()};
 /// \param val Value to which the array elements are set.
 /// \return std::array initialized to \p val.
 template<typename T,
-         auto N> constexpr
-auto filled_array( const T val )
+         auto N> 
+constexpr
+auto filled_array(const T val)
 {
-    std::array<T,N> a {};
-//    a.fill(val);        // needs c++20 to be constexpr
-    for (auto& o : a)
-        o = val;
+    std::array<T, N> a {};
+    a.fill(val);       
+         
     return a;
 }
 
-template<auto N> constexpr std::array<bool,N> falses {
-    filled_array<bool,N>(false)
+template<auto N> constexpr std::array<bool, N> falses {
+    filled_array<bool, N>(false)
 };
-template<auto N> constexpr std::array<bool,N> trues {
-    filled_array<bool,N>(true)
+template<auto N> constexpr std::array<bool, N> trues {
+    filled_array<bool, N>(true)
 };
-template<typename T, auto N> constexpr std::array<T,N> zeros {
-    filled_array<T,N>(zero<T>)
+template<typename T, auto N> constexpr std::array<T, N> zeros {
+    filled_array<T, N>(zero<T>)
 };
-template<typename T, auto N> constexpr std::array<T,N> ones {
-    filled_array<T,N>(one<T>)
+template<typename T, auto N> constexpr std::array<T, N> ones {
+    filled_array<T, N>(one<T>)
 };
-template<typename T, auto N> constexpr std::array<T,N> hundreds {
-    filled_array<T,N>(static_cast<T>(100.L))
+template<typename T, auto N> constexpr std::array<T, N> hundreds {
+    filled_array<T, N>(static_cast<T>(100.L))
 };
-template<typename T, auto N> constexpr std::array<T,N> huges {
-    filled_array<T,N>(huge<T>)
+template<typename T, auto N> constexpr std::array<T, N> huges {
+    filled_array<T, N>(huge<T>)
 };
-template<typename T, auto N> constexpr std::array<T,N> mhuges {
-    filled_array<T,N>(-huge<T>)
+template<typename T, auto N> constexpr std::array<T, N> mhuges {
+    filled_array<T, N>(-huge<T>)
 };
 
 // Range borders as two-element std arrays. ====================================
