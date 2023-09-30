@@ -23,9 +23,11 @@
 ================================================================================
 */
 
-/// \file core.h
-/// \brief Contains class Random::Core.
-/// \author Valerii Sukhorukov
+/**
+ * \file core.h
+ * \brief Contains class Random::Core.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_RANDOM_CORE_H
 #define UTILS_RANDOM_CORE_H
@@ -45,8 +47,10 @@
 /// Pseugo-random number generation.
 namespace utils::random {
 
-/// \brief Base class for random number factories.
-/// \tparam real Floating point type.
+/**
+ * \brief Base class for random number factories.
+ * \tparam real Floating point type.
+ */
 template<std::floating_point real>
 class Core {
 
@@ -54,14 +58,18 @@ public:
 
     /// Size of the buffer for storing random numbers.
     static constexpr int bufferSize {1'000'000};
+    
     /// Master seed.
     static constexpr int mainSeed {1'234'567'890};
 
-    /// Produce \p num_saved_seeds seeds and store them in a file.
-    /// This is done whenever the working directory does not already
-    /// have such a file.
+    /**
+     * \brief Produces \p num_saved_seeds seeds and stores them to a file.
+     * \note This is only done whenever the working directory does not already
+     * have such a file.
+     * \param runInd Run index to choose a seed.
+     */
     static uint make_seed(
-        uint runInd      ///< Run index to choose a seed.
+        uint runInd      
     ) noexcept;
 
     /// Seed getter.
@@ -69,17 +77,26 @@ public:
 
 protected:
 
-    /// Constructor setting the seed uncoupled from run index.
+    /**
+     * \brief Constructor setting the seed uncoupled from run index.
+     * \param seed    Seed to use.
+     * \param runName Human-readable run index.
+     * \param msgr    Output message processor.
+     */
     explicit Core(
-        unsigned seed,                ///< Seed to use.
-        const std::string& runName,   ///< Human-readable run index.
-        Msgr& msgr                    ///< Output message processor.
+        unsigned seed,                
+        const std::string& runName,   
+        Msgr& msgr                    
     ) noexcept;
 
-    /// Constructor setting the seed depending on run index.
+    /**
+     * \brief Constructor setting the seed depending on run index.
+     * \param runInd Run index to choose a seed.
+     * \param msgr   Output message processor.
+     */
     explicit Core(
-        unsigned runInd,    ///< Run index to choose a seed.
-        Msgr& msgr          ///< Output message processor.
+        unsigned runInd,    
+        Msgr& msgr        
     ) noexcept;
 
 private:
@@ -142,4 +159,4 @@ make_seed(
 
 }  // namespace utils::random
 
-#endif // UTILS_RANDOM_CORE_H
+#endif  // UTILS_RANDOM_CORE_H

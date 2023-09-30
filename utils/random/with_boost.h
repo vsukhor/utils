@@ -76,19 +76,23 @@ public:
     constexpr auto twopi = utils::twopi<real>;
     constexpr auto halfpi = utils::halfpi<real>;
 
-    /// \brief Constructor setting the seed uncoupled from run index.
-    /// \param seed Random number generator seed.
-    /// \param runName Human-readable run index.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Constructor setting the seed uncoupled from run index.
+     * \param seed    Random number generator seed.
+     * \param runName Human-readable run index.
+     * \param msgr    Output message processor.
+     */
     explicit Boost(
         unsigned seed,
         const std::string& runName,
         Msgr& msgr
     );
 
-    /// \brief Constructor setting the seed depending on run index.
-    /// \param runIndex Run index.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Constructor setting the seed depending on run index.
+     * \param runIndex Run index.
+     * \param msgr     Output message processor.
+     */
     explicit Boost(
         unsigned runIndex,
         Msgr& msgr
@@ -97,45 +101,64 @@ public:
     /// A pseudo-random number with uniform distribution over [0,1).
     real r01u();
     
-    /// \brief A pseudo-random signed int from the range [0, max-1].
-    /// \param max Max boundary of the sampled range.
+    /**
+     * \brief A pseudo-random signed int from the range [0, max-1].
+     * \param max Max boundary of the sampled range.
+     */
     constexpr int uniform0(int max);
 
-    /// \brief A pseudo-random unsigned int from the range [0, max-1].
-    /// \param max Max boundary of the sampled range.
+    /**
+     * \brief A pseudo-random unsigned int from the range [0, max-1].
+     * \param max Max boundary of the sampled range.
+     */
     constexpr uint uniform0(uint max);
 
-    /// \brief A pseudo-random std::size_t from the range [0, max-1].
-    /// \param max Max boundary of the sampled range.
+    /**
+     * \brief A pseudo-random std::size_t from the range [0, max-1].
+     * \param max Max boundary of the sampled range.
+     */
     constexpr szt uniform0(szt max);
 
-    // A pseudo-random real from the range [0., max].
-    /// \param max Max boundary of the sampled range.
+    /**
+     * \brief A pseudo-random real from the range [0., max].
+     * \param max Max boundary of the sampled range.
+     */
     constexpr real uniform0(real max);
     
-    /// \brief A pseudo-random integer from the range [1, max].
-    /// \tparam intT Integer fundamental type.
-    /// \param max Max boundary of the sampled range.
-    template<typename intT>
+    /**
+     * \brief A pseudo-random integer from the range [1, max].
+     * \tparam intT Integer fundamental type.
+     * \param max Max boundary of the sampled range.
+     */
+    template<std::unsigned_integral intT>
     constexpr intT uniform1(intT max);
     
-    /// \brief A point uinformly distributed within \p solidAngle on the surface of a unit sphere.
-    /// \param solidAngle Constraining solid angle.
+    /**
+     * \brief Direction sampled from a uniform distribution in 3D.
+     * \param[in] solidAngle Constraining solid angle.
+     * \return Coordinates of a point on the surface of a unit sphere and 
+     * sampled from uinformly distributed directions within \p solidAngle of the 
+     * sphere pole.
+     */
     constexpr auto uniform_direction(
         real solidAngle  //=pi
     ) noexcept -> A3r;
 
-    /// \brief A point uinformly distributed within boundaries on the surface of a unit sphere.
-    /// \details Inclination is limited by \p inclMinMax [0, pi) around +z axis
-    /// direction (i.e. \p phPole == 0).
-    /// Azimuth is limited by \p azimMinMax [-pi, pi) around +x axis
-    /// direction  (i.e. \p th == 0).
-    /// \param[in] inclMinMax Min, max constrains on inclination.
-    /// \param[in] azimMinMax Min, max constrains on azimuth.
-    /// \param[in] azimSymmetric Switch if the szimuth is symmetric.
-    /// \param[out] phPole Inclination of the resulting point.
-    /// \param[out] th Azimuth of the resulting point.
-    /// \return Point on a sphere uinformly distributed within angular boundaries.
+    /**
+     * \brief Direction sampled from a uniform distribution in 3D.
+     * \details Calculates position of a point uinformly distributed within 
+     * boundaries on the surface of a unit sphere. 
+     * Inclination is limited by \p inclMinMax [0, pi) around +z axis
+     * direction (i.e. \p phPole == 0).
+     * Azimuth is limited by \p azimMinMax [-pi, pi) around +x axis
+     * direction  (i.e. \p th == 0).
+     * \param[in] inclMinMax Min, max constrains on inclination.
+     * \param[in] azimMinMax Min, max constrains on azimuth.
+     * \param[in] azimSymmetric Switch if the szimuth is symmetric.
+     * \param[out] phPole Inclination of the resulting point.
+     * \param[out] th Azimuth of the resulting point.
+     * \return Point on a sphere uinformly distributed within angular boundaries.
+     */
     constexpr auto uniform_direction(
         const A2r& inclMinMax,
         const A2r& azimMinMax,
@@ -144,32 +167,36 @@ public:
         real& th
     ) noexcept -> A3r;
 
-    /// A point uinformly distributed within boundaries on a sphere surface.
-    /// Implements trigonometric method.
-    /// \param solidAngle Surface patch where the random point may belong to;
-    /// set it to pi for the whole surface.
-    /// \param r Shpere of radius.
-    /// \param poleDir [0,1,2] is the index of the axis around which \p
-    /// solidAngle is set.
-    /// \return A point uinformly distributed within \p solidAngle on a
-    /// shpere of radius \p r.
+    /**
+     * \brief A point uinformly distributed within boundaries on a sphere surface.
+     * \details Implements trigonometric method.
+     * \param solidAngle Surface patch where the random point may belong to;
+     * set it to pi for the whole surface.
+     * \param r Shpere of radius.
+     * \param poleDir [0,1,2] is the index of the axis around which \p
+     * solidAngle is set.
+     * \return A point uinformly distributed within \p solidAngle on a
+     * shpere of radius \p r .
+     */
     auto uniform_on_sphere(
         real solidAngle,  //=pi,
         real r,  //=one,
         int poleDir    //=2
     ) noexcept -> A3r;
     
-    /// \brief A point uinformly distributed within boundaries on a spheroid surface.
-    /// Implements trigonometric method.
-    /// \param solidAngle Surface patch where the random point may belong to;
-    /// set it to pi for the whole surface.
-    /// \param r Spheroid semi-axes dimensions: r[0] = a = b, r[1] = c
-    /// \param poleDir [0,1,2] is the index of the axis around which \p
-    /// solidAngle is set.
-    /// \param bias [-1,0,1]: -1 towards poles; 1 towards equator, 0 no bias
-    /// \param biasPar Bias strength.
-    /// \return A point uinformly distributed within \p solidAngle on a
-    /// shperoid of semi-axes dimensions \p r.
+    /**
+     * \brief A point uinformly distributed within boundaries on a spheroid surface.
+     * \details Implements trigonometric method.
+     * \param solidAngle Surface patch where the random point may belong to;
+     * set it to pi for the whole surface.
+     * \param r Spheroid semi-axes dimensions: r[0] = a = b, r[1] = c
+     * \param poleDir [0,1,2] is the index of the axis around which \p
+     * solidAngle is set.
+     * \param bias [-1,0,1]: -1 towards poles; 1 towards equator, 0 no bias
+     * \param biasPar Bias strength.
+     * \return A point uinformly distributed within \p solidAngle on a
+     * shperoid of semi-axes dimensions \p r.
+     */
     auto uniform_on_spheriod(
         real solidAngle, //=pi,
         const A2r& r,  //=one,
@@ -178,102 +205,145 @@ public:
         real biasPar  //=zero
     ) noexcept -> A3r;
 
-    /// \brief Uinform directional (angular) distribution
-    /// \details A point on the ellipse boundary from a uinform directional
-    /// (angular) distribution.
-    /// \note This is not a uniform density over the ellipse boundary.
-    /// The ellipse is centered at (0,0)
-    /// \param r Semi-axes dimensions of the ellipse: r = {a, b}.
+    /**
+     * \brief Uinform directional (angular) distribution
+     * \details A point on the ellipse boundary from a uinform directional
+     * (angular) distribution.
+     * \note This is not a uniform density over the ellipse boundary.
+     * The ellipse is centered at (0,0)
+     * \param r Semi-axes dimensions of the ellipse: r = {a, b}.
+     */
     constexpr auto uniform_on_ellipse(
         const A2r& r  //=one
     ) noexcept -> A2r;
 
-    /// \brief Point uinformly distributed over ellipse area .
-    /// \details A point within the ellipse boundary having uinform
-    /// distribution over the ellipse area.
-    /// The ellipse is centered at (0,0)
-    /// \param r Semi-axes dimensions of the ellipse: r = {a, b}.
+    /**
+     * \brief Point uinformly distributed over ellipse area .
+     * \details A point within the ellipse boundary having uinform
+     * distribution over the ellipse area.
+     * The ellipse is centered at (0,0)
+     * \param r Semi-axes dimensions of the ellipse: r = {a, b}.
+     */
     constexpr auto uniform_in_ellipse(
         const A2r& r  //=one
     ) noexcept -> A2r;
 
-/*    /// \brief A shifted point within the ellipse boundary having uinform
-    /// distribution over the ellipse area.
-    /// \param r1 Semi-axes dimensions of the ellipse: r1 = {a, b}.
-    /// \param r0 Ellipse center.
-    /// \param shift Shift.
-    A2<real> uniform_in_ellipse(const A2<real>& r1,
-                                 const A2<real>& r0, 
-                                 const A2<real>& shift=zero) noexcept;
-*/
-    /// \brief Exponentially distributed random numbers.
-    /// \return A pseudo-random number sampled from exponential distribution.
+//  /**
+//     * \brief Uniformly distributed posiiton within ellipse 
+//     * \details A shifted point within the ellipse boundary having uinform
+//     * distribution over the ellipse area.
+//     * \param r1 Semi-axes dimensions of the ellipse: r1 = {a, b}.
+//     * \param r0 Ellipse center.
+//     * \param shift Shift.
+//     */
+//    A2<real> uniform_in_ellipse(const A2r& r1,
+//                                const A2r& r0, 
+//                                const A2r& shift=zero) noexcept;
+
+    /**
+     * \brief Exponentially distributed random numbers.
+     * \param mi Rate parameter of the Exponentiql distribution.
+     * \return A pseudo-random number sampled from Exponential distribution.
+     */
     constexpr real exponential_number(
-        real mi      ///< Rate parameter.
+        real mi      
     ) noexcept;
 
-    /// \brief Poisson distributed random numbers.
-    /// \return A pseudo-random number sampled from Poisson distribution.
+    /** 
+     * \brief Poisson distributed random numbers.
+     * \param lambda Rate parameter of the poissonian distribution.
+     * \return A pseudo-random number sampled from Poisson distribution.
+     */
     uint poisson_number(
-        real lambda  ///< Rate parameter.
+        real lambda  
     ) noexcept;
 
-    /// \brief Weibull distributed random numbers.
-    /// \return A pseudo-random number sampled from Weibull distribution.
+    /**
+     * \brief Weibull distributed random numbers.
+     * \param lambda Scale parameter of the Weibull distribution.
+     * \param k Shape parameter of the Weibull distribution
+     * \return A pseudo-random number sampled from Weibull distribution.
+     */
     constexpr real weibull_number(
-        real lambda,  ///< Scale parameter.
-        real k        ///< Shape parameter.
+        real lambda,  
+        real k        
     )  noexcept;
 
-    /// \brief Logistically distributed random numbers.
-    /// \return A pseudo-random number sampled from logistic distribution.
+    /**
+     * \brief Logistically distributed random numbers.
+     * \param mi Mean of the Logistic distribution.
+     * \param s Scale parameter of the Logistic distribution.
+     * \return A pseudo-random number sampled from Logistic distribution.
+     */
     constexpr real logistic_number(
-        real mi,      ///< Mean.
-        real s        ///< Scale parameter.
+        real mi,      
+        real s       
     )  noexcept;
 
-    /// \brief Binomially distributed (n, p) pseudo-random number.
-    /// \return A pseudo-random number sampled from binomial distribution.
+    /**
+     * \brief Binomially distributed (n, p) pseudo-random number.
+     * \param n Number of trials.
+     * \param p Trial outcome probability.
+     * \return A pseudo-random number sampled from binomial distribution.
+     */
     uint binomial_number(
-        uint n,   ///< Number of trials.
-        real p    ///< Outcome probability.
+        uint n,   
+        real p    
     )  noexcept;
 
-    /// \brief Multinomially distributed pseudo-random numbers.
-    /// \details Of the \p n independent trials each of which leads to a
-    /// success for exactly one of \p k categories,
-    /// with each category having a given fixed success probability.
-    /// \return A vector of multinomially distributed deviates.
+    /**
+     * \brief Multinomially distributed pseudo-random numbers.
+     * \details Of the \p n independent trials each of which leads to a
+     * success for exactly one of \p k categories,
+     * with each category having a given fixed success probability.
+     * \param n Number of trials.
+     * \param k Number of categories.
+     * \return A vector of multinomially distributed deviates.
+     */
     std::vector<uint> multinomial_number(
-        uint n,   ///< Number of trials.
-        uint k    ///< Number of categories.
+        uint n,   
+        uint k  
     )  noexcept;
 
-    /// \brief Multinomially distributed pseudo-random numbers.
-    /// \details Distributes \p n into p.size()+1 slots with
-    /// probabilities p[0], p[1], ..., p.back(), 1 - sum(p)
-    /// \return A vector of multinomially distributed deviates.
+    /**
+     * \brief Multinomially distributed pseudo-random numbers.
+     * \details Distributes \p n into p.size()+1 slots with
+     * probabilities p[0], p[1], ..., p.back(), 1 - sum(p)
+     * \param n Number of trials.
+     * \param p Vector of probabilities.
+     * \return A vector of multinomially distributed deviates.
+     */
     std::vector<uint> multinomial_number(
-        uint n,               ///< Number of trials.
-        std::vector<real> p  ///< Vector of probabilities.
+        uint n,               
+        std::vector<real> p  
     ) noexcept;
 
-    /// \brief Normally distributed pseudo-random number.
-    /// \return Normally distributed deviate N(mi, sigma^2).
+    /**
+     * \brief Normally distributed pseudo-random number.
+     * \param mi Mean.
+     * \param sigma Standard deviation.
+     * \return Normally distributed deviate N(mi, sigma^2).
+     */
     constexpr real gaussian_number(
-        real mi,     ///< Mean.
-        real sigma   ///< Standard deviation.
+        real mi,     
+        real sigma   
     ) noexcept;
 
-    /// \brief Constrained normal deviate.
-    /// \details Normally distributed pseudo-random number constrained
-    /// between \p cmin and \p cmax.
-    /// \return Normally distributed deviate N(mi, sigma^2).
+    /**
+     * \brief Constrained normal deviate.
+     * \details Normally distributed pseudo-random number constrained
+     * between \p cmin and \p cmax.
+     * \param mi Mean.
+     * \param sigma Standard deviation.
+     * \param cmin Lower boundary.
+     * \param cmax Upper boundary.
+     * \return Normally distributed deviate N(mi, sigma^2).
+     */
     constexpr real gaussian_number_constrained(
-        real mi,     ///< Mean.
-        real sigma,  ///< Standard deviation.
-        real cmin,   ///< Min boundary.
-        real cmax    ///< Max boundary.
+        real mi,     
+        real sigma,  
+        real cmin,   
+        real cmax    
     ) noexcept;
     
 private:
@@ -297,7 +367,7 @@ private:
 
     std::mt19937 g;       ///< Random number generator.
 
-    /// Populate the buffer array \a rU01 with a new butch of random numbers.
+    /// Populates the buffer array \a rU01 with a new butch of random numbers.
     void prepare_uniform_real01();
 };
 
@@ -419,14 +489,11 @@ uniform0(const szt max)
 
 // Returns outT in the range [1, max].
 template<std::floating_point real>
-template<typename intT> 
+template<std::unsigned_integral intT> 
 constexpr
 intT Boost<real>::
 uniform1( const intT max )
 {            
-    // Ensure that the template parameter is a floating type
-    static_assert(std::is_integral<intT>::value,
-                  "This function can only be instantiated with integer types");
     
     XASSERT(max > 0, "Boost<real>::uniform1 requires max > 0 ");
     
@@ -438,7 +505,7 @@ constexpr
 real Boost<real>::
 uniform0(const real max)
 {            
-    XASSERT(max > zero<real>, "Boost<real>::uniform0 requires max > 0 ");
+    XASSERT(max > zero, "Boost<real>::uniform0 requires max > 0 ");
 
     auto ir = r01u() * max;    
     
@@ -456,14 +523,14 @@ auto Boost<real>::
 uniform_direction( const real solidAngle ) noexcept -> A3r
 {
     do {
-        // inclination of the candidate point on a sphere surface
+        // Inclination of the candidate point on a sphere surface.
         const auto ph = pi * (r01u() - half);
         if (ph > solidAngle) continue;
         
-        // azimuth of the candidate point on a sphere surface
+        // Azimuth of the candidate point on a sphere surface.
         auto th = twopi * (r01u() - half);
         
-        // if upper altitude paralleles are shorter, reject some
+        // If upper altitude paralleles are shorter, reject some
         // points positioned outside their length:
         if (std::abs(th) < pi * std::cos(ph)) {
             // Spread the remaining points over the length of the parallele:
@@ -506,7 +573,7 @@ uniform_direction(
         // If upper altitude paralleles are shorter, reject some points
         // positioned outside their length:
         if (std::abs(th) < pi * std::cos(ph)) {
-            // 'th' is spread the remaining points over the length of the parallele.
+            // 'th' is spread of the remaining points over the length of the parallele.
             th /= std::cos(ph);
             bool reject = th <  azimMinMax[0] ||
                           th >= azimMinMax[1];
@@ -544,7 +611,7 @@ uniform_on_sphere(
     XASSERT(solidAngle > zero &&
             solidAngle <= pi,
             "Error in Random::uniform_on_sphere: incorrect solidAngle");
-    XASSERT(r > zero<real>,
+    XASSERT(r > zero,
             "Error in Random::uniform_on_sphere: incorrect r");
     XASSERT(poleDir >= 0 &&
             poleDir <= 2,
@@ -720,7 +787,7 @@ poisson_number(
     const real lambda
 ) noexcept
 {
-    if (lambda <= zero<real>)
+    if (lambda <= zero)
         return 0;
     boost::random::poisson_distribution<uint> poissonDistr(lambda);
 
@@ -842,4 +909,4 @@ gaussian_number_constrained(
 
 }  // namespace utils::random
 
-#endif // UTILS_RANDOM_WITH_BOOST_H
+#endif  // UTILS_RANDOM_WITH_BOOST_H

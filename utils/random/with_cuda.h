@@ -32,8 +32,8 @@
 #ifndef UTILS_RANDOM_WITH_CUDA_H
 #define UTILS_RANDOM_WITH_CUDA_H
 
-//#include <cuda_runtime.h>
-//#include <curand.h>
+#include <cuda_runtime.h>
+#include <curand.h>
 
 #include "../common/misc.h"
 #include "core.h"
@@ -47,13 +47,56 @@ template<std::floating_point real>
 class Cuda
     : public Core<real> {
 
-    // Ensure that the template parameter is a floating type:
-    static_assert(
-        std::is_floating_point<real>::value,
-        "Class Cuda can only be instantiated with floating-point types."
+    using Core<real>::buffersize;
+
+public:
+
+//    /// \brief Default constructor.
+//    Cuda() = default;
+
+    /**
+     * \brief Constructor setting the seed uncoupled from run index.
+     * \param seed Random number generator seed.
+     * \param runName Human-readable run index.
+     * \param msgr Output message processor.
+     */
+    explicit Cuda(
+        unsigned seed,
+        const std::string& runName,
+        Msgr& msgr
     );
 
-    using Core<real>::buffersize;
+    /**
+     * \brief Constructor setting the seed depending on run index.
+     * \param seedFname Name of the file contining seeds.
+     * \param runIndex Run index.
+     * \param msgr Output message processor.
+     */
+    explicit Cuda(
+        unsigned runIndex,
+        Msgr& msgr
+    );
+
+    // The rule of five is triggered by the destructor, the defaults suffice:
+    Cuda(const Cuda&) = delete;             ///< Copy constructor.
+    Cuda& operator=(const Cuda&) = delete;  ///< Copy assignment.
+    Cuda(Cuda&&) = delete;                  ///< Move constructor.
+    Cuda& operator=(Cuda&&) = delete;       ///< Move assignment.
+    ~Cuda();                                ///< Destructor.
+
+    /// Initializes CUDA rng machinery.
+    void initialize_CUDA_rng();
+    
+    /// A pseudo-random number with uniform distribution over [0,1).
+    real r01u();
+
+    /**
+     * \brief A pseudo-random unsigned int from the range [0, max-1].
+     * \param max Max boundary of the sampled range.
+     */
+    uint uniformInt0(const uint max);
+
+private:
 
     real* rU01;    ///< Buffer array for storing random numbers (host).
     real* d_Rand;  ///< Buffer array for storing random numbers (device).
@@ -63,54 +106,13 @@ class Cuda
     std::mt19937      gCPU; ///< Random number generator using CPU.
     curandGenerator_t gGPU; ///< Random number generator using GPU.
 
-public:
-
-//    /// \brief Default constructor.
-//    Cuda() = default;
-
-    /// \brief Constructor setting the seed uncoupled from run index.
-    /// \param seed Random number generator seed.
-    /// \param runName Human-readable run index.
-    /// \param msgr Output message processor.
-    explicit Cuda(
-        unsigned seed,
-        const std::string& runName,
-        Msgr& msgr);
-
-    /// \brief Constructor setting the seed depending on run index.
-    /// \param seedFname Name of the file contining seeds.
-    /// \param runIndex Run index.
-    /// \param msgr Output message processor.
-    explicit Cuda(
-        unsigned runIndex,
-        Msgr& msgr);
-
-    // The rule of five is triggered by the destructor, the defaults suffice:
-    Cuda(const Cuda&) = delete;             ///< copy constructor
-    Cuda& operator=(const Cuda&) = delete;  ///< copy assignment
-    Cuda(Cuda&&) = delete;                  ///< move constructor
-    Cuda& operator=(Cuda&&) = delete;       ///< move assignment
-    ~Cuda();                                ///< destructor
-
-    /// Initialize CUDA rng machinery.
-    void initialize_CUDA_rng();
-    
-    /// A pseudo-random number with uniform distribution over [0,1).
-    real r01u();
-
-    /// \brief A pseudo-random unsigned int from the range [0, max-1].
-    /// \param max Max boundary of the sampled range.
-    uint uniformInt0(const uint max);
-
-private:
-
-    /// Populate the buffer array with a new butch of random numbers over (0,1].
+    /// Populates buffer array with a new butch of random numbers over (0,1].
     void prepare_uniform_real01();
 
-    /// Check CUDA errors.
+    /// Checks CUDA errors.
     void checkCudaErrors(const curandStatus_t& e);
 
-    /// Check CUDA errors.
+    /// Checks CUDA errors.
     void checkCudaErrors(const cudaError_t& e);
 };
 
