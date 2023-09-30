@@ -23,10 +23,11 @@
 ================================================================================
 */
 
-/// \file array2.h
-/// \brief Two-element arrays.
-/// \author Valerii Sukhorukov
-
+/**
+ * \file array2.h
+ * \brief Two-element arrays.
+ * \author Valerii Sukhorukov
+*/
 
 #ifndef UTILS_ARRAYS_ARRAY2_H
 #define UTILS_ARRAYS_ARRAY2_H
@@ -43,11 +44,13 @@
 
 namespace utils::arrays {
 
-/// \brief Two-element arrays.
-/// \details This class specializes array template for two-element array of
-/// arithmetic types. Implements convenient arithmetics as well as some
-/// functionaity commonly used in 2-dimensional geometric applications.
-/// \tparam T Type of the elements.
+/**
+ * \brief Two-element arrays.
+ * \details This class specializes array template for two-element array of
+ * arithmetic types. Implements convenient arithmetics as well as some
+ * functionaity commonly used in 2-dimensional geometric applications.
+ * \tparam T Type of the elements.
+ */
 template<arithmetic T>
 class array<2, T> {
 

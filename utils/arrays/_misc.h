@@ -35,11 +35,13 @@
 namespace utils::arrays {
 
 //==============================================================================
-/// \brief A std:iota-like compile-time generator of integers [1, ..., N].
-/// \details A compile-time generator of std:iota-like array of consecutive
-/// integers [1, ..., N].
-/// Adopted from https://stackoverflow.com/users/636019/ildjarn
-/// at https://stackoverflow.com/questions/41660062/how-to-construct-an-stdarray-with-index-sequence
+/**
+ * \brief A std:iota-like compile-time generator of integers [1, ..., N].
+ * \details A compile-time generator of std:iota-like array of consecutive
+ * integers [1, ..., N].
+ * Adopted from https://stackoverflow.com/users/636019/ildjarn
+ * at https://stackoverflow.com/questions/41660062/how-to-construct-an-stdarray-with-index-sequence
+ */
 namespace iota_array {
     template<typename T, T... Ns>
     constexpr std::array<T, sizeof...(Ns)> make_iota_array(
@@ -63,13 +65,15 @@ constexpr auto make_iota_array(T const offset) noexcept
 
 //==============================================================================
 
-/// \brief Generic array template.
-/// \tparam N Array length.
-/// \tparam T Type of the elements. Must be arithmetic.
+/** 
+ * \brief Generic array template.
+ * \tparam N Array length.
+ * \tparam T Type of the elements. Must be arithmetic.
+ */
 template<unsigned N, 
          arithmetic T>
 class array {};
 
 }  // namespace utils::arrays
 
-#endif // UTILS_ARRAYS_MISC_H
+#endif  // UTILS_ARRAYS_MISC_H

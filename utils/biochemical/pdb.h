@@ -22,9 +22,12 @@
 
 ============================================================================== */
 
-/// \file pdb.h
-/// \brief Contains class PDB.
-/// \author Valerii Sukhorukov
+/**
+ * \file pdb.h
+ * \brief Contains class PDB.
+ * \author Valerii Sukhorukov
+ */
+
 
 #ifndef UTILS_BIOCHEMICAL_PDB_H
 #define UTILS_BIOCHEMICAL_PDB_H
@@ -45,14 +48,14 @@ namespace utils::biochemical {
 /// Encapsulates Protein Data Bank formatting and file io.
 class Pdb {
 
-    using A3f = arrays::A3<float>;
-
 public:
+
+    using A3f = utils::arrays::A3<float>;
 
     static float scaling;    ///< Scaling factor for atom position coordinates.
 
-    A3f           pos {undefined<float>};          ///< Atom position.
-    unsigned int  ind {undefined<decltype(ind)>};  ///< Atom insex.
+    A3f           pos {undefined<float>};         ///< Atom position.
+    unsigned int  ind {undefined<unsigned int>};  ///< Atom insex.
     int           irecname {};     ///< Record name   1 : "ATOM  "; 2 : "HETATM".
     unsigned long pdbsegment {};   ///< Segment name.
     std::string   name;            ///< Pdb name.
@@ -65,14 +68,14 @@ public:
     std::string   charge;          ///< Electrostatic charge.
     float         vdWRad {};       ///< Van Der Waals radius.
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         const std::string& chainID,
         const std::string& resname,
         const std::string& atomname
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         uint ind,
         const std::string& chainID,
@@ -82,7 +85,7 @@ public:
         const A3f& pos
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         uint ind,
         const std::string& chainID,
@@ -93,7 +96,7 @@ public:
         float occupancy
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         uint ind,
         const std::string& chainID,
@@ -105,7 +108,7 @@ public:
         float tempFactor
     ) noexcept;
 
-    /// \brief Constructor.
+    /// Constructor.
     explicit Pdb(
         uint ind,
         const std::string& chainID,
@@ -135,43 +138,53 @@ public:
         unsigned long segm
     ) noexcept;
 
-    /// Formated reading of a line record from a pdb file.
-    /// \param record Record in the pdb file.
+    /**
+     * \brief Formated reading of a line record from a pdb file.
+     * \param record Record in the pdb file.
+     */
     void format_as_pdb(
         const std::string& record
     ) noexcept;
 
-    /// Produce an atom-specific formatted record for a pdb file.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Produces an atom-specific formatted record for a pdb file.
+     * \param msgr Output message processor.
+     */
     std::string format_as_pdb(
         Msgr& msgr
     ) const;
 
-    /// Produce an atom-specific formatted record for a pdb file.
-    /// \param p Atom position coordinates.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Produces an atom-specific formatted record for a pdb file.
+     * \param p Atom position coordinates.
+     * \param msgr Output message processor.
+     */
     std::string format_as_pdb(
         const A3f& p,
         Msgr& msgr
     ) const;
 
-    /// Produce an atom-specific formatted record for a pdb file.
-    /// \param p Atom position coordinates.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Produces an atom-specific formatted record for a pdb file.
+     * \param p Atom position coordinates.
+     * \param msgr Output message processor.
+     */
     std::string format_as_pdb(
         float* p,
         Msgr& msgr
     ) const;
 
-    /// Produce an atom-specific formatted record for a pdb file.
-    /// \param a Atom-specific record.
-    /// \param msgr Output message processor.
+    /** 
+     * \brief Produce an atom-specific formatted record for a pdb file.
+     * \param a Atom-specific record.
+     * \param msgr Output message processor.
+     */
     static std::string format_as_pdb(
         const Pdb& a,
         Msgr& msgr
     );
 
-    /// Produce an atom-specific formatted record for a pdb file.
+    /// Produces an atom-specific formatted record for a pdb file.
     static std::string format_as_pdb(
         const std::string& recn,
         uint iatom,
@@ -184,16 +197,19 @@ public:
         float tempf,
         const std::string& elt,
         const std::string& chge,
-        Msgr& msgr );
+        Msgr& msgr 
+    );
 
-    /// Determine if the atom is part of an aminoacid.
+    /// Determines if the atom is part of an aminoacid.
     bool is_in_aminoacid() const noexcept;
 
-    /// Read from a pdb file.
-    /// \param file The file to read from.
-    /// \param a Atom-specific records.
-    /// \param other Non-atom records.
-    /// \param msgr Output message processor.
+    /** 
+     * \brief Reads from a pdb file.
+     * \param file The file to read from.
+     * \param a Atom-specific records.
+     * \param other Non-atom records.
+     * \param msgr Output message processor.
+     */
     static void read(
         const std::filesystem::path& file,
         std::vector<Pdb>& a,
@@ -201,11 +217,13 @@ public:
         Msgr& msgr
     );
 
-    /// Write to a pdb file.
-    /// \param file The file to write to.
-    /// \param a Atom-specific records.
-    /// \param other Non-atom records.
-    /// \param msgr Output message processor.
+    /**
+     * \brief Writes to a pdb file.
+     * \param file The file to write to.
+     * \param a Atom-specific records.
+     * \param other Non-atom records.
+     * \param msgr Output message processor.
+     */
     static void write(
         const std::filesystem::path& file,
         const std::vector<Pdb>& a,
@@ -215,22 +233,28 @@ public:
        
 private:
 
-    /// Convert record name string to index.
-    /// \param s "HETATM" or "ATOM  ".
+    /**
+     * \brief Converts record name string to index.
+     * \param s "HETATM" or "ATOM  ".
+     */
     int irecn(const std::string& s) const noexcept;
 
-    /// Get record name.
-    /// \return "HETATM" or "ATOM  ".
+    /**
+     * \brief Gets record name.
+     * \return "HETATM" or "ATOM  ".
+     */
     std::string recname() const noexcept; 
 
-    /// Convert record name index to string.
-    /// \return "HETATM" or "ATOM  ".
+    /**
+     * \brief Converts record name index to string.
+     * \return "HETATM" or "ATOM  ".
+     */
     static std::string irecname2str(int irecname) noexcept;
     
-    /// Determine van Der Waals radius based on the atom data.
+    /// Determines van Der Waals radius based on the atom data.
     float set_vdW() const noexcept;
 };
 
 }  // namespace utils::biochemical
 
-#endif // UTILS_BIOCHEMICAL_PDB_H
+#endif  // UTILS_BIOCHEMICAL_PDB_H

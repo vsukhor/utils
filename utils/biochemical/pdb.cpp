@@ -23,10 +23,18 @@
 ================================================================================
 */
 
-/// \file pdb.h
-/// \brief Implements class PDB.
-/// \author Valerii Sukhorukov
+/** 
+ * \file pdb.h
+ * \brief Implements class PDB.
+ * \author Valerii Sukhorukov
+ */
 
+#include <algorithm>       // std::find
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "../common/misc.h"
 #include "pdb.h"

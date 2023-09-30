@@ -23,9 +23,11 @@
 ================================================================================
 */
 
-/// \file array4.h
-/// \brief Four-element arrays.
-/// \author Valerii Sukhorukov
+/**
+ * \file array4.h
+ * \brief Four-element arrays.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_ARRAYS_ARRAY4_H
 #define UTILS_ARRAYS_ARRAY4_H
@@ -42,11 +44,12 @@
 /// 4-element arrays.
 namespace utils::arrays {
 
-/// \brief Four-element arrays.
-/// \details This class specializes array template for four-element array of
-/// arithmetic types. Implements convenient arithmetics as well as some
-/// functionaity commonly used in 4-dimensional geometric applications.
-/// \tparam T Type of the elements.
+/** \brief Four-element arrays.
+ * \details This class specializes array template for four-element array of
+ * arithmetic types. Implements convenient arithmetics as well as some
+ * functionaity commonly used in 4-dimensional geometric applications.
+ * \tparam T Type of the elements.
+ */
 template<arithmetic T>
 class array<4, T> {
 

@@ -23,9 +23,11 @@
 ================================================================================
 */
 
-/// \file arrayN.h
-/// \brief Arbitrary-size arrays.
-/// \author Valerii Sukhorukov
+/**
+ * \file arrayN.h
+ * \brief Arbitrary-size arrays.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_ARRAYS_ARRAYN_H
 #define UTILS_ARRAYS_ARRAYN_H
@@ -46,12 +48,14 @@ namespace utils::arrays {
 inline constexpr unsigned MAX_LENGTH_SPECIALIZED = 4;
 
 
-/// \brief Arbitrary-size arrays.
-/// \details This class specializes array template for N-element array of
-/// arithmetic types. Implements convenient arithmetics as well as some
-/// functionaity commonly used in N-dimensional geometric applications.
-/// \tparam N Array length.
-/// \tparam T Type of the elements.
+/** 
+ * \brief Arbitrary-size arrays.
+ * \details This class specializes array template for N-element array of
+ * arithmetic types. Implements convenient arithmetics as well as some
+ * functionaity commonly used in N-dimensional geometric applications.
+ * \tparam N Array length.
+ * \tparam T Type of the elements.
+ */
 template<unsigned N,
          arithmetic T>
 requires (std::greater_equal<>()(N, MAX_LENGTH_SPECIALIZED+1))

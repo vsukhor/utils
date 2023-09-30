@@ -23,15 +23,17 @@
 ================================================================================
 */
 
-/// \file array3.h
-/// \brief Three-element arrays.
-/// \author Valerii Sukhorukov
-
+/**
+ * \file array3.h
+ * \brief Three-element arrays.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_ARRAYS_ARRAY3_H
 #define UTILS_ARRAYS_ARRAY3_H
 
 #include <array>
+#include <concepts>
 #include <cmath>
 #include <fstream>
 #include <type_traits>
@@ -47,7 +49,7 @@ namespace utils {
 
 namespace common {
 
-template<typename>
+template<std::floating_point>
 struct Geometric;
 
 }  // namespace common
@@ -55,11 +57,13 @@ struct Geometric;
 /// 3-element arrays.
 namespace arrays {
 
-/// \brief Three-element arrays.
-/// \details This class specializes array template for three-element array
-/// of arithmetic types. Implements convenient arithmetics as well as some
-/// functionaity commonly used in 3-dimensional geometric applications.
-/// \tparam T Type of the elements.
+/**
+ * \brief Three-element arrays.
+ * \details This class specializes array template for three-element array
+ * of arithmetic types. Implements convenient arithmetics as well as some
+ * functionaity commonly used in 3-dimensional geometric applications.
+ * \tparam T Type of the elements.
+ */
 template<arithmetic T>
 class array<3, T> {
 
@@ -581,7 +585,7 @@ array orthogonal(const T nrm) const noexcept
     return orthogonal().unitv() * nrm;
 }
 
-// Scalar projection of *this onto array b.
+/// Scalar projection of *this onto array b.
 constexpr
 T scaProjection(
     const array& b
@@ -590,7 +594,7 @@ T scaProjection(
     return dotpr(b) / b.norm();
 }
 
-// Vector projection of *this onto array b.
+/// Vector projection of *this onto array b.
 constexpr
 array vecProjection(
     const array& b
