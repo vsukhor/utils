@@ -35,6 +35,7 @@
 #include <list>
 #include <ostream>
 #include <set>
+#include <utility>      // std::pair
 #include <vector>
 
 #include "../common/misc.h"
@@ -111,11 +112,11 @@ public:
      * \param[in] ajl Adjacency list of the graph.
      * \return The shortest path between vertexes \p v1 and \p v2 .
      */
-    pathT shortest_path(
+    auto shortest_path(
         vertex_t v1,
         vertex_t v2,
         const adjLT& ajl
-    );
+    ) -> pathT;
 
     /**
      * \brief Resets adjacency list of the graph.
@@ -130,11 +131,12 @@ public:
     );
     
     /**
-     * Convert list to a std::vector.
+     * \brief Converts list to a std::vector.
+     * \param[in] l Input list.
      */
-    static std::vector<vertex_t> list2vector(
+    static auto list2vector(
         const std::list<vertex_t>& l
-    );
+    ) -> std::vector<vertex_t>;
 
     /**
      * \brief Creates graph adjacency matrix from its adjacency list.
@@ -262,12 +264,12 @@ compute_paths(
 
 
 template<typename ET>
-typename Graph<ET>::pathT Graph<ET>::
+auto Graph<ET>::
 shortest_path(
     const vertex_t v1,
     const vertex_t v2,
     const adjLT& ajl
-)
+) -> pathT
 {
     pathT previous;
     std::vector<weight_t> min_distance;
@@ -305,10 +307,10 @@ reset_al(
 
 
 template<typename ET>
-std::vector<typename Graph<ET>::vertex_t> Graph<ET>::
+auto Graph<ET>::
 list2vector(
     const std::list<vertex_t>& l
-)
+) -> std::vector<vertex_t>
 {
     std::vector<vertex_t> v(l.size());
     typename std::list<vertex_t>::const_iterator itl;

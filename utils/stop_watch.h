@@ -24,7 +24,7 @@
 */
 /**
 * \file stop_watch.h
-* Timing class.
+* \brief Timing class.
 * \author Valerii Sukhorukov
 */
 
@@ -40,9 +40,11 @@
 /// Library outer namespace.
 namespace utils {
 
-/// \struct StopWatch stop_watch.h
-/// \brief Simple stop watch class using std::chrono::system_clock.
-/// \details Implements convenience class for measuring time duration.
+/**
+ * \struct StopWatch stop_watch.h
+ * \brief Simple stop watch class using std::chrono::system_clock.
+ * \details Implements convenience class for measuring time duration.
+ */
 struct StopWatch {
 
     /// An instance in time.
@@ -81,4 +83,4 @@ private:
 
 }  // namespace utils
 
-#endif // UTILS_STOP_WATCH_H
+#endif  // UTILS_STOP_WATCH_H

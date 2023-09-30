@@ -46,7 +46,7 @@ namespace utils::stochastic {
 using itT = std::uint_fast64_t; ///< Type for counting simulation iterations.
 
 /**
- * Interface defining essential components of simulation classes.
+ * \brief Interface defining essential components of simulation classes.
  * \tparam System Typename of the simulated system.
  * \tparam Engine Typename of the engine controlling the simulation progrression.
  */
@@ -90,10 +90,10 @@ protected:
     bool isEquilibrated {};
 
     // The rule of five is triggered by the destructor, the defaults suffice:
-    Simulation(const Simulation&) = default;             // copy constructor
-    Simulation& operator=(const Simulation&) = default;  // copy assignment
-    Simulation(Simulation&&) = default;                  // move constructor
-    Simulation& operator=(Simulation&&) = default;       // move assignment
+    Simulation(const Simulation&) = default;             // Copy constructor.
+    Simulation& operator=(const Simulation&) = default;  // Copy assignment.
+    Simulation(Simulation&&) = default;                  // Move constructor.
+    Simulation& operator=(Simulation&&) = default;       // Move assignment.
 
     /// Main loop running the simulation in continuous time.
     virtual void run_tcont() = 0;
@@ -101,10 +101,10 @@ protected:
     /// Handler for the case when all reactions are exosted.
     void asum0fun();
 
-    ///< Output a log line reporting current system state to a specific stream.
+    /// Output a log line reporting current system state to a specific stream.
     virtual void log(std::ostream&) = 0;
 
-    ///< Output a log line reporting current system state to all Msgr streams.
+    /// Output a log line reporting current system state to all Msgr streams.
     void log();
 };
 

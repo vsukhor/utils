@@ -30,8 +30,14 @@
 #ifndef UTILS_COMMON_GEOMETRIC_FUNCTIONS
 #define UTILS_COMMON_GEOMETRIC_FUNCTIONS
 
+
+#include <concepts>
+#include <cmath>
+#include <vector>
+
 #include "../arrays/all.h"
 #include "../msgr.h"
+#include "../constants.h"
 #include "misc.h"
 
 
@@ -1423,8 +1429,8 @@ squared_dist3D_Segment_to_Segment(
     const auto d = A3r::dotpr(u,w);
     const auto e = A3r::dotpr(v,w);
     const auto D = a*c - b*b;                    // always >= 0
-    real sc, sN, sD = D;            // sc = sN / sD, default sD = D >= 0
-    real tc, tN, tD = D;            // tc = tN / tD, default tD = D >= 0
+    real sc, sN, sD = D;   // sc = sN / sD, default sD = D >= 0
+    real tc, tN, tD = D;   // tc = tN / tD, default tD = D >= 0
     
     // Compute the line Config of the two closest points.
     if (D < SMALL_NUM) {
@@ -1443,7 +1449,7 @@ squared_dist3D_Segment_to_Segment(
             tN = e;
             tD = c;
         }
-        else if (sN > sD) {    // sc > 1  => the s=1 edge is visible
+        else if (sN > sD) {  // sc > 1  => the s=1 edge is visible
             sN = sD;
             tN = e + b;
             tD = c;
@@ -1509,7 +1515,8 @@ hexagonal_lattice(
 }
 
 
-template<std::floating_point real> constexpr
+template<std::floating_point real> 
+constexpr
 auto Geometric<real>::
 numLayers_hexagonal_lattice (
     const szt numVertices
@@ -1528,7 +1535,8 @@ numLayers_hexagonal_lattice (
 }
 
 
-template<std::floating_point real> constexpr
+template<std::floating_point real> 
+constexpr
 real Geometric<real>::
 grad2rad(
     const real grad
@@ -1538,7 +1546,8 @@ grad2rad(
 }
 
 
-template<std::floating_point real> constexpr
+template<std::floating_point real> 
+constexpr
 real Geometric<real>::
 rad2grad(
     const real rad
@@ -1593,7 +1602,7 @@ point_in_triangle(
 {
     auto sign = [](const A2r& p1,
                    const A2r& p2,
-                   const A2r& p3 ) noexcept
+                   const A2r& p3) noexcept
     {
         const auto d {(p1[0] - p3[0]) * (p2[1] - p3[1]) -
                       (p2[0] - p3[0]) * (p1[1] - p3[1])};
@@ -1623,7 +1632,8 @@ point_in_triangle(
     auto sign = [](
         const real* p1,
         const real* p2,
-        const real* p3 ) noexcept
+        const real* p3 
+    ) noexcept
     {
         return {(*p1 - *p3) * (*(p2+1) - *(p3+1)) -
                 (*p2 - *p3) * (*(p1+1) - *(p3+1))};

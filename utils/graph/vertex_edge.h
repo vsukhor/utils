@@ -32,6 +32,8 @@
 #ifndef UTILS_GRAPH_VERTEX_EDGE_H
 #define UTILS_GRAPH_VERTEX_EDGE_H
 
+#include <concepts>
+
 #include "../constants.h"
 
 /// Abstract graph circuitry.
@@ -53,8 +55,8 @@ enum class EdgeMode {
  * \tparam LinkMode Weitghted/unweighted mode.
  */
 template<std::floating_point fT,
-          std::unsigned_integral iT,
-          EdgeMode Mode>
+         std::unsigned_integral iT,
+         EdgeMode Mode>
 struct EdgeType {};
 
 

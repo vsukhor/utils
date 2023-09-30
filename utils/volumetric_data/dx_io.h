@@ -23,12 +23,20 @@
 ================================================================================
 */
 
-/// \file dx_io.h
-/// \brief Functions reading and writing volumetric data using .DX file format.
-/// \author Valerii Sukhorukov
+/**
+ * \file dx_io.h
+ * \brief Functions reading and writing volumetric data using .DX file format.
+ * \author Valerii Sukhorukov
+ */
 
 #ifndef UTILS_VOLUMETRIC_DX_IO
 #define UTILS_VOLUMETRIC_DX_IO
+
+#include <concepts>
+#include <fstream>
+#include <ostream>
+#include <string>
+#include <vector>
 
 #include "../arrays/all.h"
 #include "../common/misc.h"
@@ -51,9 +59,9 @@ namespace utils::volumetric {
  * \param units Length units used.
  * \param msgr Output message processor.
  */
-template<typename K,
-         typename L,
-         typename T>
+template<std::floating_point K,
+         std::floating_point L,
+         arithmetic T>
 void save_as_DX(
     const std::string& filename,
     const common::vec3<K>& v,
@@ -117,7 +125,7 @@ void save_as_DX(
          << std::endl
          << std::endl;
 
-    msgr.print("Finished writing to "+filename);
+    msgr.print("Finished writing to " + filename);
 }
 
 /**
@@ -132,8 +140,8 @@ void save_as_DX(
 * \param[in] units Length units used.
 * \param msgr Output message processor.
 */
-template<typename K,
-         typename T>
+template<arithmetic K,
+         std::floating_point T>
 void read_as_DX(
     const std::string& filename,
     common::vec3<K>& v,
@@ -253,4 +261,4 @@ void read_as_DX(
 
 }  // namespace utils::volumetric
 
-#endif // UTILS_VOLUMETRIC_DX_IO
+#endif  // UTILS_VOLUMETRIC_DX_IO

@@ -25,7 +25,7 @@
 
 /**
  * \file threads.h
- * Contains class Threads.
+ * \brief Contains class Threads.
  * \author Valerii Sukhorukov
  */
 
@@ -87,7 +87,7 @@ public:
     );
     
     /**
-     * Joins the threads.
+     * \brief Joins the threads.
      */
     void join();
     
@@ -118,6 +118,7 @@ public:
      */
     void print_regions(bool withCout, Msgr& msgr);
 };
+
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -180,8 +181,8 @@ join()
 // Various chunk sizes for flexible thread loads
 template<Weights W>
 void Threads<W>::
-set_chunks_equal( const szt w,
-                  const szt rest )
+set_chunks_equal(const szt w,
+                 const szt rest)
 {
     for (szt ith=0; ith<num; ith++) {
         chs[ith] = w/num;
@@ -192,8 +193,8 @@ set_chunks_equal( const szt w,
 
 template<Weights W>
 void Threads<W>::
-set_chunks_circular( const szt w,
-                     const szt rest )
+set_chunks_circular(const szt w,
+                    const szt rest)
 {
 // The coefficients are lengths of circle sagitta h = rnd * (1 - cos(phi/2)),
 // where phi is the central angle (in radians)  defining the circle segment.
