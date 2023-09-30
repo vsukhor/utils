@@ -36,7 +36,7 @@ jobs:
             }
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install dependencies on macOS_Clang
       if: startsWith(matrix.config.name, 'macOS_Latest_Clang')
       run: |
@@ -83,7 +83,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ${{github.workspace}}/tests/unittests
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: libutils-${{ matrix.config.os }}.a
         path: ${{github.workspace}}/lib/libutils.a
