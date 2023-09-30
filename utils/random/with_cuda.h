@@ -47,9 +47,9 @@ template<std::floating_point real>
 class Cuda
     : public Core<real> {
 
-    using Core<real>::buffersize;
-
 public:
+
+    using Real = real;
 
 //    /// \brief Default constructor.
 //    Cuda() = default;
@@ -97,6 +97,8 @@ public:
     uint uniformInt0(const uint max);
 
 private:
+
+    using Core<real>::buffersize;
 
     real* rU01;    ///< Buffer array for storing random numbers (host).
     real* d_Rand;  ///< Buffer array for storing random numbers (device).

@@ -56,6 +56,8 @@ class Core {
 
 public:
 
+    using Real = real;
+
     /// Size of the buffer for storing random numbers.
     static constexpr int bufferSize {1'000'000};
     
@@ -101,7 +103,7 @@ protected:
 
 private:
 
-    auto seed {undefined<unsigned>};  ///< The seed.
+    unsigned seed {undefined<unsigned>};  ///< The seed.
 
     Msgr& msgr;  ///< Output message processor.
 };

@@ -65,6 +65,7 @@ class Boost
 
 public:
 
+    using Real = real;
     using A2r = arrays::A2<real>;
     using A3r = arrays::A3<real>;
 
@@ -591,7 +592,7 @@ uniform_direction(
         }
     }
 
-    return zero<real>;
+    return zero;
 }
 
 
@@ -624,7 +625,7 @@ uniform_on_sphere(
             // i.e one with hieght h = r * (1 - std::cos(solidAngle))
             continue;
         
-        const auto v = std::sqrt(one<real> - u*u);
+        const auto v = std::sqrt(one - u*u);
         // Inclination of the candidate point on a sphere surface:
         const auto ph = twopi * r01u();
 
