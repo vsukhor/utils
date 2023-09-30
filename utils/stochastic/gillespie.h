@@ -43,12 +43,12 @@
 namespace utils::stochastic {
 
 /**
- * \class Gillespie gillespie.h
+ * \class Gillespie.
  * \brief Exact Stochastic Simulation algorithm.
  * \details Implementation of the Exact Stochastic Simulation algorithm
  * of D.T. Gillespie <https://pubs.acs.org/doi/abs/10.1021/j100540a008>
- * \tparam RF random factory class.
- * \tparam Reaction base class for reactions.
+ * \tparam RF Random factory class.
+ * \tparam Reaction Fase class for reactions.
  */
 template<typename RF,
          typename Reaction>
@@ -57,7 +57,7 @@ class Gillespie {
 public :
 
     using RandFactory = RF;
-    using real = typename RF::real;
+    using real = RF::Real;
 
     template<typename T>
     using vup = std::vector<std::unique_ptr<T>>;
@@ -111,7 +111,7 @@ public :
     /**
      * \brief Short human readable name of the reaction.
      * \param ind index of the reaction.
-     * \returns Short human readable name of the reaction indexed by \p ind.
+     * \returns Short human readable name of the reaction indexed by \p ind .
      */
     [[nodiscard]] std::string short_name(szt ind) const noexcept;
 
@@ -137,7 +137,7 @@ private:
     std::vector<szt>   rinds;      ///< Reaction indexes.
 
     /**
-     * \brief Sets the time \tau_ till the next reaction event.
+     * \brief Sets the time delay \tau_ of the next reaction event.
      */
     void set_tau() noexcept;
 
@@ -158,14 +158,14 @@ private:
 
 template<typename RF,
          typename Reaction>
-Gillespie<RF,Reaction>::
+Gillespie<RF, Reaction>::
 Gillespie( RF& rnd ) noexcept
     : rnd {rnd}
 {}
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 add_reaction( std::unique_ptr<Reaction> rup )
 {
     rc.push_back(std::move(rup));
@@ -173,7 +173,7 @@ add_reaction( std::unique_ptr<Reaction> rup )
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 initialize() noexcept
 {
     nreact = rc.size();
@@ -194,7 +194,7 @@ initialize() noexcept
 
 template<typename RF,
          typename Reaction>
-Reaction* Gillespie<RF,Reaction>::
+Reaction* Gillespie<RF, Reaction>::
 get_reaction( const std::string& name ) const
 {
     for (const auto& o : rc)
@@ -206,7 +206,7 @@ get_reaction( const std::string& name ) const
 
 template<typename RF,
          typename Reaction>
-bool Gillespie<RF,Reaction>::
+bool Gillespie<RF, Reaction>::
 set_asum() noexcept
 {
     asum = std::accumulate(a.begin(), a.end(), zero<real>);
@@ -216,7 +216,7 @@ set_asum() noexcept
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 set_rind() noexcept
 {
     for (szt i=0; i<nreact; i++)
@@ -237,7 +237,7 @@ set_rind() noexcept
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 set_tau() noexcept
 {
     real ran {};
@@ -250,7 +250,7 @@ set_tau() noexcept
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 fire( double& time ) noexcept
 {
     set_rind();
@@ -262,7 +262,7 @@ fire( double& time ) noexcept
 
 template<typename RF,
          typename Reaction> constexpr
-Reaction* Gillespie<RF,Reaction>::
+Reaction* Gillespie<RF, Reaction>::
 currRc() const noexcept
 {
     return is_defined(rind) ? rc[rtype[rind]].get()
@@ -271,7 +271,7 @@ currRc() const noexcept
 
 template<typename RF,
          typename Reaction> constexpr
-auto Gillespie<RF,Reaction>::
+auto Gillespie<RF, Reaction>::
 num_reactions() const noexcept -> szt
 {
     return rc.size();
@@ -279,7 +279,7 @@ num_reactions() const noexcept -> szt
 
 template<typename RF,
          typename Reaction>
-std::string Gillespie<RF,Reaction>::
+std::string Gillespie<RF, Reaction>::
 short_name( const szt i ) const noexcept
 {
     return rc[i]->shortName;
@@ -287,7 +287,7 @@ short_name( const szt i ) const noexcept
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF ,Reaction>::
 log_data( std::ostream& os ) const
 {
     auto pad_zeros = [](auto n) {
@@ -307,7 +307,7 @@ log_data( std::ostream& os ) const
 
 template<typename RF,
          typename Reaction>
-void Gillespie<RF,Reaction>::
+void Gillespie<RF, Reaction>::
 print_scores( std::ostream& os ) const
 {
     for (szt i=0; i<nreact; i++)
@@ -321,4 +321,4 @@ print_scores( std::ostream& os ) const
 
 }  // namespace utils::stochastic
 
-#endif // UTILS_STOCHASTIC_GILLESPIE_H
+#endif  // UTILS_STOCHASTIC_GILLESPIE_H
