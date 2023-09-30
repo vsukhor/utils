@@ -41,30 +41,11 @@
 #include "../../constants.h"
 #include "../../msgr.h"
 
-/// Configuration module
-namespace utils::config {
-
-namespace exceptions {
+/// Processing of configuration files.
+namespace utils::config::parameter {
 
 /**
- * Generic template for 'Parameter out of range' exception.
- * \tparam Q Parameter type.
- * \tparam isDiscrete Specifies if the parameter takes discrete values only.
- * \tparam Enabler SFINAE enabler.
- */
-template<typename Q, bool isDiscrete, typename Enabler = void>
-class ParOutOfRange
-    : public std::exception
-{};
-
-}  // namespace exceptions
-
-
-////////////////////////////////////////////////////////////////////////////////
-namespace parameter {
-
-/**
- * Base class for configuration parameters.
+ * \brief Base class for configuration parameters.
  * \tparam Q Parameter type.
  */
 template<typename Q>
@@ -75,50 +56,50 @@ public:
     using str = std::string;
 
     /**
-     * Reads in parameters from input file stream \p ifs.
+     * \brief Reads in parameters from input file stream \p ifs.
      * \param ifs Input file stream to load the parameters.
      */
     void load(std::ifstream& ifs);
 
     /**
-     * Reads in parameters from file.
+     * \brief Reads in parameters from file.
      * \param file Name of the configuration file to load the parameters.
      */
     void load(const std::filesystem::path& file);
 
     /**
-     * Name of the parameter.
+     * \brief Name of the parameter.
      * \return Name of the parameter.
      */
     auto get_name() const noexcept -> str;
 
 protected:
     
-    bool isLoaded_ {};  ///< Flag if the parameter is loaded.
+    bool isLoaded_ {};  ///< Flag indicating if the parameter is loaded.
 
     /**
-     * Constructor.
+     * \brief Constructor.
      * \param name Name of the parameter.
      */
     explicit Base(str name);  // by pass-by-value + move
 
     // The rule of five is triggered by the virtual destructor,
     // the defaults suffice.
-    Base(const Base&) = default;                ///< copy constructor
-    Base& operator=(const Base&) = default;     ///< copy assignment
-    Base(Base&&) = default;                     ///< move constructor
-    Base& operator=(Base&&) noexcept = default; ///< move assignment
-    virtual ~Base() noexcept = default;         ///< virtual destructor
+    Base(const Base&) = default;                ///< Copy constructor.
+    Base& operator=(const Base&) = default;     ///< Copy assignment.
+    Base(Base&&) = default;                     ///< Move constructor.
+    Base& operator=(Base&&) noexcept = default; ///< Move assignment.
+    virtual ~Base() noexcept = default;         ///< Virtual destructor.
 
     /**
-     * Print the the parameter to std::cout and logfile.
+     * \brief Print the the parameter to std::cout and logfile.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
     virtual void print(Msgr* msgr=nullptr) = 0;
 
     /**
-     * Initialize the parameter from the config file.
+     * \brief Initialize the parameter from the config file.
      * \param value Value to search for.
      */
     virtual void initialize(str value) = 0;
@@ -127,13 +108,16 @@ protected:
 
 private:
 
-    const str name;   ///< parameter name
+    const str name;   ///< Parameter name.
 
     /**
-     * Finds the the parameter by \a name in the configuration file stream \p ifs.
+     * \brief Finds the the parameter record in the configuration file stream.
+     * \details The search is done using parameter \a name.
      * \param ifs Input file stream to load the parameter.
      * \param[out] value str containig value(s) of the parameter searched.
      * \return Bool corresponding to the success/failure of the search.
+     *  If the line contains a valid parname-value combination, returns true 
+     *  and the value, otherwise retruns false.
      */
     bool detect_by_name(
         std::ifstream& ifs,
@@ -141,16 +125,15 @@ private:
     ) const;
 };
 
+
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename Q>
 Base<Q>::
-Base( str name )
+Base(str name)
     : name {std::move(name)}
 {}
 
-// If the line contains a valid parname-value combination, returns true and the
-// value, otherwise retruns false.
 template<typename Q>
 bool Base<Q>::
 detect_by_name(
@@ -201,7 +184,7 @@ detect_by_name(
 
 template<typename Q>
 void Base<Q>::
-load( const std::filesystem::path& file )
+load(const std::filesystem::path& file)
 {
     str parname;
     str value;
@@ -219,7 +202,7 @@ load( const std::filesystem::path& file )
 
 template<typename Q>
 void Base<Q>::
-load( std::ifstream& ifs )
+load(std::ifstream& ifs)
 {
     XASSERT(!isLoaded_, "Repeated load of " + name);
     
@@ -239,7 +222,7 @@ load( std::ifstream& ifs )
 
 template<typename Q>
 auto Base<Q>::
-check_name( const str& s ) const -> str
+check_name(const str& s) const -> str
 {
     const auto ss {s.substr(0, s.find(" "))};
     if (s.size() != ss.size())
@@ -255,6 +238,7 @@ get_name() const noexcept -> str
     return name;
 }
 
+
 // template for Par xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
@@ -269,7 +253,6 @@ class Par : public Base<Q>
 {};
 
 
-}  // namespace parameter
-}  // namespace utils::config
+}  // namespace utils::config::parameter
 
 #endif // UTILS_CONFIG_PARAMETER_BASE_H

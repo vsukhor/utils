@@ -51,15 +51,15 @@ namespace utils::config::parameter {
 
 
 /**
- * parameters of std arrays of continuous arithmetic types.
- * Partial template specialization for for parameters of std arrays of
+ * \brief Parameters of continuous arithmetic types packed into std arrays.
+ * \details Partial template specialization for for parameters of std arrays of
  * continuous arithmetic types.
  * \tparam T Parameter type: must be std::is_arithmetic.
  * \tparam W Length of the std::array.
  */
 template<typename T,
          szt W>
-class Par<std::array<T,W>, false,
+class Par<std::array<T, W>, false,
           std::enable_if_t<std::is_arithmetic_v<T>>>
     : public Base<T> {
 
@@ -80,7 +80,7 @@ public:
      * Constructor.
      * \param name Name of the parameter.
      */
-    explicit Par( const str& name );
+    explicit Par(const str& name);
 
     /**
      * Constructor.
@@ -98,7 +98,7 @@ public:
     );
 
     /**
-     * Check that the read in parameter value is within the range set by \p r.
+     * \brief Check that the parameter value is within the range set by \p r.
      * \param r Acceptable range of parameter values.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
@@ -109,39 +109,39 @@ public:
     );
 
     /**
-     * Print the the parameter to std::cout and logfile.
+     * \brief Print the the parameter to std::cout and logfile.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void print( Msgr* msgr=nullptr ) final;
+    void print(Msgr* msgr=nullptr) final;
 
     /**
-     * The parameter values.
+     * \brief The parameter values.
      * \return Parameter values (the whole array).
      */
     Q operator()() const;
 
     /**
-     * Specific component of the parameter array.
+     * \brief Accesses specific component of the parameter array.
      * \param i Index in the array.
      * \return Parameter value (the \p i -th component).
      */
-    T operator[]( szt i ) const;
+    T operator[](szt i) const;
 
 private:
     
     /**
-     * Initialize the parameter from the config file.
+     * \brief Initializes the parameter from the config file.
      * \param value Value to search for.
      */
-    void initialize( str value ) final;
+    void initialize(str value) final;
 };    
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 template<typename T,
          szt W>
-Par<std::array<T,W>, false,
+Par<std::array<T, W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par(
     const str& name
@@ -152,7 +152,7 @@ Par(
 
 template<typename T,
          szt W>
-Par<std::array<T,W>, false,
+Par<std::array<T, W>, false,
     std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par(
     const str& name,
@@ -174,7 +174,7 @@ Par(
 
 template<typename T,
          szt W>
-void Par<std::array<T,W>, false,
+void Par<std::array<T, W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range(
     const std::vector<Q>& r,
@@ -191,9 +191,9 @@ check_range(
 
 template<typename T,
          szt W>
-void Par<std::array<T,W>, false,
+void Par<std::array<T, W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-print( Msgr* msgr )
+print(Msgr* msgr)
 {
     msgr != nullptr
     ? msgr->print_array(get_name(), p_)
@@ -208,7 +208,7 @@ print( Msgr* msgr )
 
 template<typename T,
          szt W>
-std::array<T,W> Par<std::array<T,W>, false,
+std::array<T, W> Par<std::array<T, W>, false,
                     std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
@@ -219,9 +219,9 @@ operator()() const
 
 template<typename T,
          szt W>
-T Par<std::array<T,W>, false,
+T Par<std::array<T, W>, false,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
-operator[]( const szt i ) const
+operator[](const szt i) const
 {
     XASSERT(isLoaded_, get_name());
     XASSERT(i<W, get_name());
@@ -231,9 +231,9 @@ operator[]( const szt i ) const
 
 template<typename T,
          szt W>
-void Par<std::array<T,W>, false,
+void Par<std::array<T, W>, false,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-initialize( str value )
+initialize(str value)
 {
     const str emp {" "};
     const str tab {"\t"};

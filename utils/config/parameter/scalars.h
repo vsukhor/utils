@@ -178,7 +178,7 @@ Par(
 
 template<typename T,
          bool isDiscrete>
-Par<T,isDiscrete,
+Par<T, isDiscrete,
     typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par(
     const std::string& name,
@@ -192,7 +192,7 @@ Par(
     try {
         check_range(range, msgr);
     }
-    catch (const exceptions::ParOutOfRange<T,isDiscrete>&) {
+    catch (const exceptions::ParOutOfRange<T, isDiscrete>&) {
         std::exit(EXIT_FAILURE);
     }
     print(msgr);
@@ -201,12 +201,12 @@ Par(
 
 template<typename T,
          bool isDiscrete>
-Par<T,isDiscrete,
+Par<T, isDiscrete,
     typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 Par(
     const std::string& name,
     const std::filesystem::path& file,
-    const std::array<T,2>& range,
+    const std::array<T, 2>& range,
     Msgr* msgr
 )
     : Base<T> {check_name(name)}
@@ -225,30 +225,30 @@ Par(
 template<typename T,
          bool isDiscrete>
 template<typename W>
-void Par<T,isDiscrete,
+void Par<T, isDiscrete,
          typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range(
     const W& r,
     Msgr* msgr
 )
 {
-    if (!r.size()) return;        // use this case to omit string checkups
+    if (!r.size()) return;   // use this case to omit string checkups
 
     if constexpr (isDiscrete) {
         if (std::find(r.begin(), r.end(), p_) == r.end())
-            throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
+            throw exceptions::ParOutOfRange<T, isDiscrete>(get_name(), p_, r, msgr);
     }
     else {
         XASSERT(r.size() == 2, "size of r must be 2 for continuous parameters");
         if (p_ < r[0] || p_ > r[1])
-            throw exceptions::ParOutOfRange<T,isDiscrete>(get_name(), p_, r, msgr);
+            throw exceptions::ParOutOfRange<T, isDiscrete>(get_name(), p_, r, msgr);
     }
 }
 
 
 template<typename T,
          bool isDiscrete>
-auto Par<T,isDiscrete,
+auto Par<T, isDiscrete,
          typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 readin(
     const std::string& name,
@@ -276,7 +276,7 @@ print( Msgr* msgr )
 
 template<typename T,
          bool isDiscrete>
-void Par<T,isDiscrete,
+void Par<T, isDiscrete,
          typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 set( const Q& val )
 {
@@ -287,7 +287,7 @@ set( const Q& val )
 
 template<typename T,
          bool isDiscrete>
-T Par<T,isDiscrete,
+T Par<T, isDiscrete,
       typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
@@ -298,7 +298,7 @@ operator()() const
 
 template<typename T,
          bool isDiscrete>
-void Par<T,isDiscrete,
+void Par<T, isDiscrete,
          typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 initialize( std::string value )
 {
@@ -307,4 +307,4 @@ initialize( std::string value )
 
 }  // namespace utils::config::parameter
 
-#endif // UTILS_CONFIG_PARAMETER_SCALARS_H
+#endif  // UTILS_CONFIG_PARAMETER_SCALARS_H

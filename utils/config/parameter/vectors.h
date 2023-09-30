@@ -49,8 +49,8 @@ namespace utils::config::parameter {
 // specialization for vectors of arithmetic types xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 /**
- * Parameters of std vector of continuous arithmetic types.
- * Partial template specialization for for parameters of std vector of
+ * \brief Parameters of continuous arithmetic types packed into std vector.
+ * \details Partial template specialization for for parameters of std vector of
  * continuous arithmetic types.
  * \tparam T Parameter type: must be std::is_arithmetic.
  * \tparam isDiscrete Specifies if the vector components accept discrete
@@ -69,6 +69,7 @@ class Par<std::vector<T>,
     using Base<T>::isLoaded_;
 
     Q p_;  ///< The parameter value.
+
     szt expectedSize_ {undefined<szt>};   ///< Expected size of the vector.
     
 public:    
@@ -80,15 +81,15 @@ public:
      * Constructor.
      * \param name Name of the parameter.
      */
-    explicit Par( const str& name );
+    explicit Par(const str& name);
 
     /**
      * Constructor.
      * \param name Name of the parameter.
      * \param expectedSize Expected size of the parameter vector.
      */
-    explicit Par( const str& name,
-                  szt expectedSize );
+    explicit Par(const str& name,
+                 szt expectedSize);
                  
     /**
      * Constructor.
@@ -98,23 +99,23 @@ public:
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    explicit Par( const str& name,
-                  const std::filesystem::path& file,
-                  const std::vector<std::array<T,2>>& range,
-                  Msgr* msgr=nullptr );
+    explicit Par(const str& name,
+                 const std::filesystem::path& file,
+                 const std::vector<std::array<T, 2>>& range,
+                 Msgr* msgr=nullptr);
 
     /**
-     * Check that the read in parameter value is within the range set by \p r.
+     * \brief Checks that the parameter value is within the range set by \p r.
      * \param r Acceptable range of parameter values.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
-    void check_range( const std::vector<std::array<T,2>>& r,
-                      Msgr* msgr=nullptr );
+    void check_range(const std::vector<std::array<T, 2>>& r,
+                     Msgr* msgr=nullptr);
 
     /**
-     * Read a parameter without instantiating.
-     * Static function for reading a parameter without instantiating
+     * \brief Reads a parameter without instantiating.
+     * \details Static function for reading a parameter without instantiating
      * this class object.
      * \param name Name of the parameter.
      * \param file Configuration file.
@@ -128,29 +129,29 @@ public:
     );
     
     /**
-     * Print the the parameter to std::cout and logfile.
+     * \brief Print the the parameter to std::cout and logfile.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
     void print( Msgr* msgr=nullptr ) final;
     
     /**
-     * The parameter values.
+     * \brief The parameter values.
      * \return Parameter values (the whole vector).
      */
     Q operator()() const;
     
     /**
-     * Specific component of the parameter vector.
-     * \param i Index in the vaector.
-     * \return  Parameter value (the \p i -th component).
+     * \brief Accesses a specific component of the parameter vector.
+     * \param i Index in the vector.
+     * \return Parameter value (the \p i -th component).
      */
     T operator[]( szt i ) const;
 
 private:
     
     /**
-     * Initialize the parameter from the config file.
+     * \brief Initialize the parameter from the config file.
      * \param value Value to search for.
      */
     void initialize( str value ) final;
@@ -193,7 +194,7 @@ Par<std::vector<T>,
 Par(
     const str& name,
     const std::filesystem::path& file,
-    const std::vector<std::array<T,2>>& range,
+    const std::vector<std::array<T, 2>>& range,
     Msgr* msgr
 )
     : Base<T> {check_name(name)}
@@ -202,7 +203,7 @@ Par(
     try {
         check_range(range, msgr);
     }
-    catch (const exceptions::ParOutOfRange<T,isDiscrete>&) {
+    catch (const exceptions::ParOutOfRange<T, isDiscrete>&) {
         std::exit(EXIT_FAILURE);
     }
     print(msgr);
@@ -215,7 +216,7 @@ void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
 check_range(
-    const std::vector<std::array<T,2>>& r,
+    const std::vector<std::array<T, 2>>& r,
     Msgr* msgr
 )
 {
@@ -251,7 +252,7 @@ template<typename T,
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-print( Msgr* msgr )
+print(Msgr* msgr)
 {
     if (msgr) {
         msgr->print_vector(get_name(), p_);
@@ -279,7 +280,7 @@ template<typename T,
 T Par<std::vector<T>,
       isDiscrete,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
-operator[]( const szt i ) const
+operator[](const szt i) const
 {
     XASSERT(isLoaded_, get_name());
     XASSERT(i<p_.size(), get_name());
@@ -292,7 +293,7 @@ template<typename T,
 void Par<std::vector<T>,
          isDiscrete,
          std::enable_if_t<std::is_arithmetic_v<T>>>::
-initialize( str value )
+initialize(str value)
 {
 
     auto size_message = [&](const str& s, szt n) {
