@@ -50,16 +50,16 @@ struct Geometric {
     using A3i = arrays::A3<int>;
 
     // Named real constants
-    constexpr auto zero = utils::zero<real>;
-    constexpr auto half = utils::half<real>;
-    constexpr auto one = utils::one<real>;
-    constexpr auto two = utils::two<real>;
-    constexpr auto three = utils::three<real>;
-    constexpr auto four = utils::four<real>;
-    constexpr auto pi = utils::pi<real>;
-    constexpr auto twopi = utils::twopi<real>;
-    constexpr auto halfpi = utils::halfpi<real>;
-    constexpr auto EPS = utils::EPS<real>;
+    static constexpr auto zero = utils::zero<real>;
+    static constexpr auto half = utils::half<real>;
+    static constexpr auto one = utils::one<real>;
+    static constexpr auto two = utils::two<real>;
+    static constexpr auto three = utils::three<real>;
+    static constexpr auto four = utils::four<real>;
+    static constexpr auto pi = utils::pi<real>;
+    static constexpr auto twopi = utils::twopi<real>;
+    static constexpr auto halfpi = utils::halfpi<real>;
+    static constexpr auto EPS = utils::EPS<real>;
 
     static constexpr auto RAD2GRAD = static_cast<real>(180);
 
