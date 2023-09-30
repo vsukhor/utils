@@ -57,7 +57,7 @@ class Gillespie {
 public :
 
     using RandFactory = RF;
-    using real = RF::Real;
+    using real = typename RF::Real;
 
     template<typename T>
     using vup = std::vector<std::unique_ptr<T>>;
