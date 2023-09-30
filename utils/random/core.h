@@ -30,6 +30,7 @@
 #ifndef UTILS_RANDOM_CORE_H
 #define UTILS_RANDOM_CORE_H
 
+#include <concepts>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -45,15 +46,9 @@
 namespace utils::random {
 
 /// \brief Base class for random number factories.
-/// \tparam realT Floating point type.
-template<typename realT>
+/// \tparam real Floating point type.
+template<std::floating_point real>
 class Core {
-
-    // Ensure that the template parameter is a floating type.
-    static_assert(
-        std::is_floating_point_v<realT>,
-        "Class Core can only be instantiated with floating point types"
-    );
 
 public:
 
@@ -89,7 +84,7 @@ protected:
 
 private:
 
-    unsigned seed {undefined<unsigned>};  ///< The seed.
+    auto seed {undefined<unsigned>};  ///< The seed.
 
     Msgr& msgr;  ///< Output message processor.
 };
@@ -97,8 +92,8 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<typename realT> 
-Core<realT>::
+template<std::floating_point real> 
+Core<real>::
 Core(
     const unsigned seed,
     const std::string& runName,
@@ -111,8 +106,9 @@ Core(
     msgr.print("SEED = ", seed);
 }
 
-template<typename realT> 
-Core<realT>::
+
+template<std::floating_point real> 
+Core<real>::
 Core(
     const unsigned runInd,
     Msgr& msgr
@@ -124,8 +120,9 @@ Core(
     msgr.print("SEED = ", seed);
 }
 
-template<typename realT> 
-uint Core<realT>::
+
+template<std::floating_point real> 
+uint Core<real>::
 make_seed(
     const uint runInd
 ) noexcept

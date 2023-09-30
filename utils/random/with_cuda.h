@@ -25,7 +25,7 @@
 
 /**
  * \file with_cuda.h
- * Contains class Cuda.
+ * \brief Contains class Cuda.
  * \author Valerii Sukhorukov
  */
 
@@ -42,21 +42,21 @@
 namespace utils::random {
 
 /// \brief Random number factory based on Cuda rng library.
-/// \tparam realT Floating point type.
-template<typename realT> 
+/// \tparam real Floating point type.
+template<std::floating_point real> 
 class Cuda
-    : public Core<realT> {
+    : public Core<real> {
 
     // Ensure that the template parameter is a floating type:
     static_assert(
-        std::is_floating_point<realT>::value,
+        std::is_floating_point<real>::value,
         "Class Cuda can only be instantiated with floating-point types."
     );
 
-    using Core<realT>::buffersize;
+    using Core<real>::buffersize;
 
-    realT* rU01;    ///< Buffer array for storing random numbers (host).
-    realT* d_Rand;  ///< Buffer array for storing random numbers (device).
+    real* rU01;    ///< Buffer array for storing random numbers (host).
+    real* d_Rand;  ///< Buffer array for storing random numbers (device).
     
     int rU01_ind;   ///< Index of the current random number in \a rU01.
                                                 
@@ -96,7 +96,7 @@ public:
     void initialize_CUDA_rng();
     
     /// A pseudo-random number with uniform distribution over [0,1).
-    realT r01u();
+    real r01u();
 
     /// \brief A pseudo-random unsigned int from the range [0, max-1].
     /// \param max Max boundary of the sampled range.
@@ -114,15 +114,16 @@ private:
     void checkCudaErrors(const cudaError_t& e);
 };
 
+
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<typename realT>
-Cuda<realT>::
+template<std::floating_point real>
+Cuda<real>::
 Cuda(
     const unsigned seed,
     const std::string& runName,
     Msgr& msgr)
-    : Core<realT> {seed, runName, msgr}
+    : Core<real> {seed, runName, msgr}
 {
     gCPU.seed(this->seed);
 
@@ -132,12 +133,13 @@ Cuda(
     prepare_uniform_real01();
 }
 
-template<typename realT>
-Cuda<realT>::
+
+template<std::floating_point real>
+Cuda<real>::
 Cuda(
     const unsigned runInd,
     Msgr& msgr)
-    : Core<realT> {runInd, msgr}
+    : Core<real> {runInd, msgr}
 {
     
     gCPU.seed(this->seed);
@@ -148,8 +150,9 @@ Cuda(
     prepare_uniform_real01();
 }
 
-template<typename realT>
-Cuda<realT>::
+
+template<std::floating_point real>
+Cuda<real>::
 ~Cuda()
 {
     checkCudaErrors(curandDestroyGenerator(gGPU));
@@ -157,15 +160,18 @@ Cuda<realT>::
     free(rU01);
 }
 
-template<typename realT> 
-void Cuda<realT>::
+
+template<std::floating_point real> 
+void Cuda<real>::
 initialize_CUDA_rng()
 {
      checkCudaErrors(curandCreateGenerator(&gGPU, CURAND_RNG_PSEUDO_MTGP32));
      checkCudaErrors(curandSetPseudoRandomGeneratorSeed(gGPU, this->seed));
-     checkCudaErrors(cudaMalloc((void **)&d_Rand, buffersize * sizeof(realT)));
-     rU01 = (realT *)malloc(buffersize * sizeof(realT));
+     checkCudaErrors(cudaMalloc((void **)&d_Rand, buffersize * sizeof(real)));
+     rU01 = (real *)malloc(buffersize * sizeof(real));
 }
+
+
 // Generates real random numbers with uniform distribution over (0,1]   (!!!)
 template<> 
 void Cuda<float>::
@@ -176,6 +182,7 @@ prepare_uniform_real01()
     checkCudaErrors(cudaMemcpy(rU01, d_Rand, buffersize * sizeof(float),
                     cudaMemcpyDeviceToHost));
 }
+
 
 template<> 
 void Cuda<double>::
@@ -188,9 +195,10 @@ prepare_uniform_real01()
                                cudaMemcpyDeviceToHost));
 }
 
+
 // returns int in the range [0,max-1]
-template<typename realT> 
-uint Cuda<realT>::
+template<std::floating_point real> 
+uint Cuda<real>::
 uniformInt0(
     const uint& max
 )
@@ -202,9 +210,10 @@ uniformInt0(
     return ir;
 }
 
+
 // returns a random number with uniform distribution over [0,1)
-template<typename realT>
-realT Cuda<realT>::r01u()
+template<std::floating_point real>
+real Cuda<real>::r01u()
 {    
     if (++rU01_ind == buffersize) {
         prepare_uniform_real01();
@@ -212,8 +221,10 @@ realT Cuda<realT>::r01u()
     }
     return rU01[rU01_ind];
 }
-template<typename realT>
-void Cuda<realT>::
+
+
+template<std::floating_point real>
+void Cuda<real>::
 checkCudaErrors(
     const curandStatus_t& err
 )
@@ -222,8 +233,10 @@ checkCudaErrors(
         throw common::Exception(
             "CURAND error: " + std::to_string(err), this->msgr);
 }
-template<typename realT>
-void Cuda<realT>::
+
+
+template<std::floating_point real>
+void Cuda<real>::
 checkCudaErrors(
     const cudaError_t& err
 )
@@ -232,6 +245,7 @@ checkCudaErrors(
         throw common::Exception(
             "CUDA error: " + std::to_string(err), this->msgr);
 }
+
 
 }  // namespace utils::random
 
