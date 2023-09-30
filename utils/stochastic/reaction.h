@@ -42,7 +42,10 @@
 
 namespace utils::stochastic {
 
-/// An abstract base class for all the reactions
+/**
+ * \brief An abstract base class for all stochastic reactions.
+ * \tparam RF Class generating pseudo-random numbers.
+ */
 template<typename RF>
 class Reaction {
 

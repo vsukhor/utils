@@ -44,8 +44,8 @@
 namespace utils::graph {
 
 /**
- * Stores routines essential for an abstract graph.
- * Graphs are collections of nodes (vertexes) interconnected by edges.
+ * \brief Stores routines essential for an abstract graph.
+ * \details Graphs are collections of nodes (vertexes) interconnected by edges.
  * \tparam ET Edge type.
  */
 template<typename ET>
@@ -56,9 +56,9 @@ class Graph {
 public:
 
     // typedefs
-    using EdgeT = ET;                        ///< Type of the graph edges.
-    using vertex_t = typename ET::vertex_t;  ///< Type of the graph vertexes.
-    using weight_t = typename ET::weight_t;  ///< Weight type of the edges.
+    using EdgeT = ET;               ///< Type of the graph edges.
+    using vertex_t = ET::vertex_t;  ///< Type of the graph vertexes.
+    using weight_t = ET::weight_t;  ///< Weight type of the edges.
 
     /// Type alias for path over consecutively connected vertexes.
     using pathT = std::vector<vertex_t>;
@@ -67,13 +67,13 @@ public:
     using adjLT = vec2<ET>;
 
     /**
-     * Breadth first search on the graph
-     * Determines if vertex \p tar belongs to the graph.
-     * \param ajl Adjacency list of the graph.
-     * \param q Auxiliary deque.
-     * \param visited Auxiliary vector of flags deniting visited status
+     * \brief Breadth first search on the graph
+     * \details Determines if vertex \p tar belongs to the graph.
+     * \param[in] ajl Adjacency list of the graph.
+     * \param[inout] q Auxiliary deque.
+     * \param[inout] visited Auxiliary vector of flags deniting visited status
      * of graph vertexes.
-     * \param tar Searched vertex.
+     * \param[in] tar Searched vertex.
      * \return 1/0 if \p tar is found/not found respectively.
      */
     auto bfs(
@@ -84,15 +84,16 @@ public:
     ) const;
 
     /**
-     * Compute paths connecting a vertex in the graph
-     * Computes paths starting at vertex \p source to other vertexes
-     * in the connected component of the graph specified by the djacency list \p ajl.
+     * \brief Computes paths connecting a vertex in the graph
+     * \details Computes paths starting at vertex \p source to other vertexes
+     * in the connected component of the graph specified 
+     * by the djacency list \p ajl .
      * Implements Dijkstra's algorithm
      * \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
      * \param[in] source Vertex from which the paths are computed.
      * \param[in] ajl Adjacency list of the graph.
-     * \param[out] min_distance Minimal distances.
-     * \param[out] previous Path vertexes.
+     * \param[inout] min_distance Minimal distances.
+     * \param[inout] previous Path vertexes.
      */
     void compute_paths(
         vertex_t source,
@@ -102,13 +103,13 @@ public:
     ) const;
 
     /**
-     * The shortest path between two graph vertexes.
-     * Calculates the shortest path between graph vertexes \p v1 and \p v2
-     * using \ref compute_paths(vertex_t, const adjLT&).
-     * \param v1 First vertex.
-     * \param v2 Second vertex.
-     * \param ajl Adjacency list of the graph.
-     * \return The shortest path between vertexes \p v1 and \p v2.
+     * \brief The shortest path between two graph vertexes.
+     * \details Calculates the shortest path between graph vertexes \p v1 
+     * and \p v2 using \ref compute_paths(vertex_t, const adjLT&) .
+     * \param[in] v1 First vertex.
+     * \param[in] v2 Second vertex.
+     * \param[in] ajl Adjacency list of the graph.
+     * \return The shortest path between vertexes \p v1 and \p v2 .
      */
     pathT shortest_path(
         vertex_t v1,
@@ -117,10 +118,11 @@ public:
     );
 
     /**
-     * Resets adjacency list of the graph.
-     * Resets components of adjacency list \p al to weight values \p w.
-     * \param al Adjacency list of the graph.
-     * \param w Desired edge weights.
+     * \brief Resets adjacency list of the graph.
+     * \details Resets components of adjacency list \p al 
+     * to weight values \p w .
+     * \param[out] al Adjacency list of the graph.
+     * \param[in]  w Desired edge weights.
      */
     void reset_al(
         adjLT& al,        // by reference
@@ -135,7 +137,7 @@ public:
     );
 
     /**
-     * Creates graph adjacency matrix from its adjacency list.
+     * \brief Creates graph adjacency matrix from its adjacency list.
      * \param[in] ajl Adjacency list of the graph.
      * \param[out] agm Adjacency matrix of the graph.
      */
@@ -145,7 +147,7 @@ public:
     ) const;
 
     /**
-     * Creates graph laplacian matrix from its adjacency matrix.
+     * \brief Creates graph laplacian matrix from its adjacency matrix.
      * \param[in] agm Adjacency matrix of the graph.
      * \param[out] lm Laplacian matrix of the graph.
      */
@@ -155,8 +157,9 @@ public:
     );
     
     /**
-     * Prints adjacency list of the graph.
-     * Prints full adjacency list of the graph \p ajl to output stream \p os.
+     * \brief Prints adjacency list of the graph.
+     * \details Prints full adjacency list of the graph \p ajl 
+     * to output stream \p os .
      * \note Please use cautiosly with large graphs.
      * \param ajl Adjacency list of the graph.
      * \param os Output stream.
@@ -167,11 +170,12 @@ public:
     );
 
     /**
-     * Prints adjacency list of the graph.
-     * Prints neighbours of the graph vertex \p v to output stream \p os.
-     * \param v Vertex, which neighbours are printed.
-     * \param ajl Adjacency list of the graph.
-     * \param os Output stream.
+     * \brief Prints adjacency list of the graph.
+     * \details Prints neighbours of the graph vertex \p v 
+     * to output stream \p os .
+     * \param[in] v Vertex, which neighbours are printed.
+     * \param[in] ajl Adjacency list of the graph.
+     * \param[in] os Output stream.
      */
     static void print_adjacency_list_line(
         vertex_t v,

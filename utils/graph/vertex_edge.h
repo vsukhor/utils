@@ -47,25 +47,25 @@ enum class EdgeMode {
 
 
 /**
- * Implements a graph edge connected to a vertex.
+ * \brief Implements a graph edge connected to a vertex.
  * \tparam fT Floating point type.
  * \tparam iT Integer type.
  * \tparam LinkMode Weitghted/unweighted mode.
  */
-template<typename fT,
-          typename iT,
-          auto LinkMode>
+template<std::floating_point fT,
+          std::unsigned_integral iT,
+          EdgeMode Mode>
 struct EdgeType {};
 
 
 /**
- * Specification of \a EdgeType for weighted edges.
- * Implements a graph edge connected to a vertex in weighted mode.
+ * \brief Specification of \a EdgeType for weighted edges.
+ * \details Implements a graph edge connected to a vertex in weighted mode.
  * \tparam fT Floating point type.
  * \tparam iT Integer type.
  */
-template<typename fT,
-         typename iT>
+template<std::floating_point fT,
+         std::unsigned_integral iT>
 struct EdgeType<fT, iT, EdgeMode::weighted> {
 
     using vertex_t = iT;    ///< Type alias for vertex index.
@@ -78,7 +78,7 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
     weight_t weight;    ///< Weight of the connecting edge.
 
     /**
-     * Constructor.
+     * \brief Constructor.
      * \param target Vertex to which this edge is to bind the parent vertex.
      * \param weight Weight of the edge (default is one).
      */
@@ -93,12 +93,14 @@ struct EdgeType<fT, iT, EdgeMode::weighted> {
 
 
 
-/// Specification of \a EdgeType for unweighted edges.
-/// Implements a graph edge connected to a vertex in unweighted mode.
-/// \tparam fT Floating point type.
-/// \tparam iT Integer type.
-template<typename fT,
-         typename iT>
+/**
+ * \brief Specification of \a EdgeType for unweighted edges.
+ * \details Implements a graph edge connected to a vertex in unweighted mode.
+ * \tparam fT Floating point type.
+ * \tparam iT Integer type.
+ */
+template<std::floating_point fT,
+         std::unsigned_integral iT>
 struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
     using vertex_t = iT;  ///< Type alias for vertex index.
@@ -106,13 +108,16 @@ struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
     /// Maximal edge weight allowed.
     static constexpr auto max_weight = huge<weight_t>;
+    
     /// Weight of the connecting edge.
     static constexpr auto weight = one<weight_t>;
 
     vertex_t target;  ///< Target neighbour index.
 
-    /// Constructor.
-    /// \param target Target vertex.
+    /**
+     * \brief Constructor.
+     * \param target Target vertex.
+     */
     explicit EdgeType( vertex_t target )
         : target {target}
     {}
