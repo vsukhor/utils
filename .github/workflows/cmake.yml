@@ -83,7 +83,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ${{github.workspace}}/tests/unittests
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: libutils-${{ matrix.config.os }}.a
         path: ${{github.workspace}}/lib/libutils.a
