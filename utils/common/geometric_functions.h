@@ -1635,8 +1635,8 @@ point_in_triangle(
         const real* p3 
     ) noexcept
     {
-        return {(*p1 - *p3) * (*(p2+1) - *(p3+1)) -
-                (*p2 - *p3) * (*(p1+1) - *(p3+1))};
+        return (*p1 - *p3) * (*(p2+1) - *(p3+1)) -
+               (*p2 - *p3) * (*(p1+1) - *(p3+1));
     };
 
     const real d1 {sign(p, v1, v2)};
