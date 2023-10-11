@@ -75,8 +75,8 @@ template<typename T> using vec3 = std::vector<vec2<T>>;
 template<typename T> using vec4 = std::vector<vec3<T>>;
 
 // std vector and std array
-template<typename T, auto N> using arrvec = std::array<std::vector<T>,N>;
-template<typename T, auto N> using vecarr = std::vector<std::array<T,N>>;
+template<typename T, auto N> using arrvec = std::array<std::vector<T>, N>;
+template<typename T, auto N> using vecarr = std::vector<std::array<T, N>>;
 
 // std vector of unique pointers
 template<typename T> using vup = std::vector<std::unique_ptr<T>>;
@@ -150,11 +150,13 @@ T INF {std::numeric_limits<T>::infinity()};
 
 // std arrays filled with common constants. ====================================
 
-/// \brief produce std::array initialized to \p val.
-/// \tparam T std::array template parameter.
-/// \tparam N std::array template parameter.
-/// \param val Value to which the array elements are set.
-/// \return std::array initialized to \p val.
+/**
+ * \brief produce std::array initialized to \p val.
+ * \tparam T std::array template parameter.
+ * \tparam N std::array template parameter.
+ * \param val Value to which the array elements are set.
+ * \return std::array initialized to \p val.
+ */
 template<typename T,
          auto N> 
 constexpr
@@ -191,19 +193,19 @@ template<typename T, auto N> constexpr std::array<T, N> mhuges {
 // Range borders as two-element std arrays. ====================================
 
 constexpr std::array<bool,2> bools {{false, true}};
-template<typename T> constexpr std::array<T,2> zeroone {{zero<T>, one<T>}};
-template<typename T> constexpr std::array<T,2> zerohuge {{zero<T>, huge<T>}};
-template<typename T> constexpr std::array<T,2> onehuge {{one<T>, huge<T>}};
-template<typename T> constexpr std::array<T,2> moneone {{-one<T>, one<T>}};
-template<typename T> constexpr std::array<T,2> mhugehuge {{-huge<T>, huge<T>}};
-template<typename T> constexpr std::array<T,2> mhugezero {{-huge<T>, zero<T>}};
+template<typename T> constexpr std::array<T, 2> zeroone {{zero<T>, one<T>}};
+template<typename T> constexpr std::array<T, 2> zerohuge {{zero<T>, huge<T>}};
+template<typename T> constexpr std::array<T, 2> onehuge {{one<T>, huge<T>}};
+template<typename T> constexpr std::array<T, 2> moneone {{-one<T>, one<T>}};
+template<typename T> constexpr std::array<T, 2> mhugehuge {{-huge<T>, huge<T>}};
+template<typename T> constexpr std::array<T, 2> mhugezero {{-huge<T>, zero<T>}};
 
 // Range borders as two-element std vectors of arrays. =========================
 
 template<auto N> const std::vector rangeBools {falses<N>, trues<N>};
 template<auto N> const vecarr<bool,N> vecarrFT {falses<N>, trues<N>};
-template<typename T, auto N> const vecarr<T,N> vecarr0H {zeros<T,N>, huges<T,N>};
-template<typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T,N>, ones<T,N>};
+template<typename T, auto N> const vecarr<T,N> vecarr0H {zeros<T, N>, huges<T, N>};
+template<typename T, auto N> const vecarr<T,N> vecarr01 {zeros<T, N>, ones<T, N>};
 
 // ANSI colors =================================================================
 

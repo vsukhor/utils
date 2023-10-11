@@ -52,7 +52,7 @@ public:
 
     using path = std::filesystem::path;
 
-    const path file;  ///< Name of the configuration file.
+    const path file;  ///< Configuration file.
 
     /**
      * \brief Constructor creating the configuration file-specific instance.
@@ -198,6 +198,7 @@ copy(const path& path,
         path / (std::string("cfgCopy_") + compartment + signature + ".txt")
     };
     msgr->print("Copying " + compartment + " config to " + cfgCopy.string());
+    
     if (std::filesystem::exists(cfgCopy)) {
         try {
             std::filesystem::remove(cfgCopy);
