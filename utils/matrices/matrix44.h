@@ -37,7 +37,7 @@
 
 #include "../arrays/all.h"
 #include "../constants.h"
-#include "_misc.h"
+#include "misc.h"
 
 namespace utils::matrices {
 
