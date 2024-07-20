@@ -37,11 +37,74 @@
 #include <ostream>
 #include <sstream>
 #include <stdarg.h>
+#include <string>
 #include <type_traits>
+#include <utility>   // forward
 #include <vector>
 
 /// Library outer namespace.
 namespace utils {
+
+
+struct Colorcodes {
+
+static constexpr const char* BOLD        {"\033[1m"};
+static constexpr const char* RESET       {"\033[0m"};
+static constexpr const char* BLACK       {"\033[30m"};          // Black
+static constexpr const char* RED         {"\033[31m"};          // Red 
+static constexpr const char* GREEN       {"\033[32m"};          // Green 
+static constexpr const char* YELLOW      {"\033[33m"};          // Yellow 
+static constexpr const char* BLUE        {"\033[34m"};          // Blue 
+static constexpr const char* MAGENTA     {"\033[35m"};          // Magenta 
+static constexpr const char* CYAN        {"\033[36m"};          // Cyan 
+static constexpr const char* WHITE       {"\033[37m"};          // White 
+static constexpr const char* BOLDBLACK   {"\033[1m\033[30m"};   // Bold Black 
+static constexpr const char* BOLDRED     {"\033[1m\033[31m"};   // Bold Red 
+static constexpr const char* BOLDGREEN   {"\033[1m\033[32m"};   // Bold Green 
+static constexpr const char* BOLDYELLOW  {"\033[1m\033[33m"};   // Bold Yellow 
+static constexpr const char* BOLDBLUE    {"\033[1m\033[34m"};   // Bold Blue 
+static constexpr const char* BOLDMAGENTA {"\033[1m\033[35m"};   // Bold Magenta 
+static constexpr const char* BOLDCYAN    {"\033[1m\033[36m"};   // Bold Cyan 
+static constexpr const char* BOLDWHITE   {"\033[1m\033[37m"};   // Bold White 
+
+const std::string sBOLD        {BOLD};
+const std::string sRESET       {RESET};
+const std::string sBLACK       {BLACK};          
+const std::string sRED         {RED};         
+const std::string sGREEN       {GREEN};          
+const std::string sYELLOW      {YELLOW};         
+const std::string sBLUE        {BLUE};          
+const std::string sMAGENTA     {MAGENTA};         
+const std::string sCYAN        {CYAN};          
+const std::string sWHITE       {WHITE};          
+const std::string sBOLDBLACK   {BOLDBLACK};   
+const std::string sBOLDRED     {BOLDRED};   
+const std::string sBOLDGREEN   {BOLDGREEN};   
+const std::string sBOLDYELLOW  {BOLDYELLOW};   
+const std::string sBOLDBLUE    {BOLDBLUE};   
+const std::string sBOLDMAGENTA {BOLDMAGENTA};   
+const std::string sBOLDCYAN    {BOLDCYAN};   
+const std::string sBOLDWHITE   {BOLDWHITE};  
+
+
+static constexpr std::array all {
+    BOLD, RESET, 
+    BLACK,     RED,     GREEN,     YELLOW,     BLUE,     MAGENTA,     CYAN,     WHITE,
+    BOLDBLACK, BOLDRED, BOLDGREEN, BOLDYELLOW, BOLDBLUE, BOLDMAGENTA, BOLDCYAN, BOLDWHITE
+};
+
+const std::array<std::string, all.size()> sall {
+    sBOLD, sRESET, 
+    sBLACK,     sRED,     sGREEN,     sYELLOW,     sBLUE,     sMAGENTA,     sCYAN,     sWHITE,
+    sBOLDBLACK, sBOLDRED, sBOLDGREEN, sBOLDYELLOW, sBOLDBLUE, sBOLDMAGENTA, sBOLDCYAN, sBOLDWHITE
+};
+
+};  // struct Colorcodes
+
+constexpr Colorcodes colorcodes;
+
+
+// /////////////////////////////////////////////////////////////////////////////
 
 /**
  * \class Msgr msgr.h
@@ -79,7 +142,7 @@ public:
      * \brief Set formatting parameters.
      * \param precision Precision of real numbers
      */
-    void set_formats( int precision ) noexcept;
+    void set_formats(int precision) noexcept;
 
     /**
      * \brief Print std::array.
@@ -114,7 +177,7 @@ public:
      * \param values Values to print.
      */
     template<bool endline=true, typename... T>
-    void print( T... values ) const;
+    void print(T... values) const;
 
     /**
      * \brief Print an data series of of various types and exit the process.
@@ -123,8 +186,11 @@ public:
      * \param values Values to print.
      */
     template<typename... T>
-    void exit( T... values );
+    void exit(T... values);
 
+    template<typename... T>
+    Msgr& operator<<(T... values);
+    
 private:
 
     /**
@@ -135,6 +201,11 @@ private:
     static constexpr auto is_valid_stream() noexcept;
 
     /**
+     * \brief Removes color codes from the stream directed to a file.
+     */
+    auto rm_colorcode(std::string&& v) const noexcept -> std::string;
+
+    /**
      * \brief Print to a stream \p io.
      * \tparam IO Stream type.
      * \param v String to print.
@@ -143,7 +214,7 @@ private:
     template<typename IO>
     void prn(
         IO* io,
-        const std::string& v,
+        std::string&& v,
         bool endline
     ) const noexcept;
 };
@@ -164,9 +235,10 @@ Msgr(
     set_formats(precision);
 }
 
+
 inline
 void Msgr::
-set_formats( const int precision ) noexcept
+set_formats(const int precision) noexcept
 {
     if (so) {
         so->precision(precision);
@@ -178,6 +250,7 @@ set_formats( const int precision ) noexcept
     }
 }
 
+
 template<typename S>
 constexpr auto Msgr::
 is_valid_stream() noexcept
@@ -186,17 +259,35 @@ is_valid_stream() noexcept
            std::is_same_v<S, logstream>;
 }
 
+
+inline
+auto Msgr::
+rm_colorcode(std::string&& s) const noexcept -> std::string
+{
+    for (const auto& p: colorcodes.sall) {
+        auto n = p.length(); 
+        for (auto i = s.find(p); i != std::string::npos; i = s.find(p)) 
+            s.erase(i, n);
+    }
+
+    return s;
+}
+
+
 template<typename IO>
 void Msgr::
 prn(
     IO* io,
-    const std::string& v,
+    std::string&& v,
     const bool endline
 ) const noexcept
 { 
     static_assert(is_valid_stream<IO>(),
                   "Stream type used in Msgr is not valid");
 
+    if constexpr (std::is_same_v<IO, logstream>) 
+        v = rm_colorcode(std::forward<std::string>(v));
+    
     *io << v << " ";
     if (endline)
         *io << std::endl;
@@ -217,6 +308,7 @@ print_array(
     print("");
 }
 
+
 template<typename V>
 void Msgr::
 print_vector(
@@ -234,7 +326,7 @@ print_vector(
 template<bool endline,
          typename... T>
 void Msgr::
-print( T... values ) const
+print(T... values) const
 {
     std::ostringstream s;
 
@@ -260,6 +352,17 @@ exit(T... values)
 
     ::exit(EXIT_FAILURE);
 }
+
+
+template<typename... T>
+Msgr& Msgr::
+operator<<(T... values)
+{
+    print<false>(values...);
+    
+    return *this;
+}
+
 
 }  // namespace utils
 
