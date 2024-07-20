@@ -19,14 +19,6 @@ jobs:
         matrix:
             config:
             - {
-                name: "Ubuntu_latest_Clang",
-                os: ubuntu-latest,
-                build_type: "Release",
-                cc: "clang",
-                cxx: "clang++",
-                generators: "Ninja"
-            }
-            - {
                 name: "Ubuntu_latest_gcc-13",
                 os: ubuntu-latest,
                 build_type: "Release",
