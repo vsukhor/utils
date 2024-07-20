@@ -133,6 +133,16 @@ public:  // Only constant parameters are public.
      */
     virtual void print(bool le) const;
 
+    /**
+     * Lits names of the reactions which need an update in case of *this firing.
+     */
+    void print_dependents() const;
+
+    /**
+     * Checks that the propensities are consistent among all active reactions.
+     */
+    virtual void check_propensities() {};
+
 protected:
 
     Msgr& msgr;  ///< ref: Output message processor.
@@ -202,12 +212,23 @@ template<typename RF>
 void Reaction<RF>::
 print(const bool le) const
 {
+    msgr.print<false>("Reaction:");
     msgr.print<false>(" shortName ", shortName);
     msgr.print<false>(" rate ", rate);
     msgr.print<false>(" score ", *score);
     msgr.print<false>(" eventCount ", eventCount);
     if (le) msgr.print("\n");
 }
+
+template<typename RF>
+void Reaction<RF>::
+print_dependents() const
+{
+    msgr.print(shortName, " dependents :");
+    for (const auto d : dependents)
+        msgr.print("    ", d->shortName);
+}
+
 
 }  // namespace utils::stochastic
 
