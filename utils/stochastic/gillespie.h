@@ -97,6 +97,11 @@ public :
     void print_scores(std::ostream& os) const;
 
     /**
+     * \brief For each reaction, prints reactions dependent on it.
+     */
+    void print_dependents() const;
+
+    /**
      * \brief Prints a log record with the information on current reaction.
      * \param os Stream to record to.
      */
@@ -121,6 +126,11 @@ public :
      * \returns Pointer to the reaction \p name ot nullptr if does not exist.
      */
     Reaction* get_reaction(const std::string& name) const;
+
+    /**
+     * \brief Checks that the propensities are consistent among all reactions.
+     */
+    void check_propensities();
 
 private:
 
@@ -318,6 +328,25 @@ print_scores( std::ostream& os ) const
            << rc[i]->event_count() << " "
            << rc[i]->get_score() << " ";
 }
+
+template<typename RF,
+         typename Reaction>
+void Gillespie<RF, Reaction>::
+print_dependents() const
+{
+    for (const auto& r: rc)
+        r->print_dependents();
+}
+
+template<typename RF,
+         typename Reaction>
+void Gillespie<RF, Reaction>::
+check_propensities()
+{
+    for (const auto& r: rc)
+        r->check_propensities();
+}
+
 
 }  // namespace utils::stochastic
 
