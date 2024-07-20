@@ -22,9 +22,11 @@ endif()
 add_definitions(-DUSE_UTILS_XASSERT)
 
 add_executable(unittests
-	test_parameter.cpp
+	test_matrix33.cpp
+	test_matrix44.cpp
 	test_misc.cpp
 	test_msgr.cpp
+	test_parameter.cpp
 	test_reader.cpp
 )
 
