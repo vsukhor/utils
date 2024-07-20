@@ -22,7 +22,7 @@
 */
 
 /**
- * \file misc.h
+ * \file geometric_functions.h
  * \brief A collection of genetally useful geometric functions.
  * \author Valerii Sukhorukov
  */
@@ -62,6 +62,8 @@ struct Geometric {
     static constexpr auto two = utils::two<real>;
     static constexpr auto three = utils::three<real>;
     static constexpr auto four = utils::four<real>;
+    static constexpr auto five = utils::five<real>;
+    static constexpr auto six = utils::six<real>;
     static constexpr auto pi = utils::pi<real>;
     static constexpr auto twopi = utils::twopi<real>;
     static constexpr auto halfpi = utils::halfpi<real>;
@@ -282,17 +284,17 @@ struct Geometric {
 
     /**
      * \brief Finds intersection of a line and a plane.
-     * \details The line is defined by a point \p p0 and direction vector \p d .
+     * \details The line is defined by a point \p p and direction vector \p d .
      * The plane is defined by three points \p v1  \p v2  \p v3 .
-     * \param p0 Point on the line.
+     * \param p  Point on the line.
      * \param d  Line direction vector.
      * \param v1 Point on the plane.
      * \param v2 Point on the plane.
      * \param v3 Point on the plane.
-     * \return Distance in direction \p d from \p p0 to the intersection point.
+     * \return Distance in direction \p d from \p p to the intersection point.
      */
     static constexpr real intersection_line_plane(
-        const A3r& p0,      
+        const A3r& p,      
         const A3r& d,        
         const A3r& v1,       
         const A3r& v2,       
@@ -301,16 +303,16 @@ struct Geometric {
 
     /**
      * \brief Finds intersection of a line and a plane.
-     * \details The line is defined by a point \p p0 and direction vector \p d .
+     * \details The line is defined by a point \p p and direction vector \p d .
      * The plane is defined by a point \p v and a normal \p n .
-     * \param p0 Point on the line.
-     * \param d  Line direction vector.
-     * \param v  Point on the plane.
-     * \param n  Plane unit normal vector.
-     * \return Distance in direction \p d from \p p0 to the intersection point.
+     * \param p Point on the line.
+     * \param d Line direction vector.
+     * \param v Point on the plane.
+     * \param n Plane unit normal vector.
+     * \return Distance in direction \p d from \p p to the intersection point.
      */
     static constexpr real intersection_line_plane(
-        const A3r& p0,       
+        const A3r& p,       
         const A3r& d,        
         const A3r& v,        
         const A3r& n       
@@ -601,6 +603,72 @@ struct Geometric {
         const real* v2,
         const real* v3
     ) noexcept;
+
+    /**
+     * \brief Determines intersection of a ray and a triangle in 3D.
+     * \details Finds out if a ray given by its origin \p p and direction \p d 
+     * intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
+     * If true, the intersection point is given by p + t * d
+     * \see Accepted answer at
+     * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+     */
+    static bool ray_intersects_triangle(
+        const A3r& p,
+        const A3r& d,
+        const A3r& v1,
+        const A3r& v2,
+        const A3r& v3,
+        real& t          // [out] ref
+    ) noexcept;
+
+    /**
+     * \brief Determines if a segment intersects a triangle in 3D.
+     * \details Finds out if a segment given by its endpoints \p p1 and \p p2  
+     * intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
+     * \see Accepted answer at
+     * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+     */
+    static bool segment_intersects_triangle(
+        const A3r& p1,
+        const A3r& p2,
+        const A3r& v1,
+        const A3r& v2,
+        const A3r& v3
+    ) noexcept;
+
+    /**
+     * \brief Determines if a point lies inside a tetrahedron.
+     * \details Finds out if a 3D point \p p is inside a tetrahedron 
+     * given by its vertexes \p v1, \p v2, \p v3 and \p v4.
+     * \see Accepted answer at
+     * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+     * -------- This algorithm is very slow !!!! -------------------------------
+     * -------- Use 'point_in_tetrahedron' wt underscore instead ---------------
+     */
+    static bool _point_in_tetrahedron(
+        const A3r& p, 
+        const A3r& v1, 
+        const A3r& v2, 
+        const A3r& v3, 
+        const A3r& v4
+    ) noexcept;
+
+    /**
+     * \brief Determines if a point lies inside a tetrahedron.
+     * \details Finds out if a 3D point \p p is inside a tetrahedron 
+     * given by its vertexes \p v1, \p v2, \p v3 and \p v4.
+     * \see Accepted answer at
+     * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+     * -------- This is the preferred algorithm for a non-vectorized version ---
+     */
+    static bool point_in_tetrahedron(
+        const A3r& p, 
+        const A3r& v1, 
+        const A3r& v2, 
+        const A3r& v3, 
+        const A3r& v4
+    ) noexcept;
+
 };
 
 
@@ -1040,7 +1108,7 @@ intersection_line_plane(
 // Intersection of a line and and a plane.
 // The line is defined by a point 'p' and direction vector 'd'.
 // The plane is defined by a points 'v', and a normal 'n'.
-// Returns distance in direction 'd' from 'p0' to the intersection point.
+// Returns distance in direction 'd' from 'p' to the intersection point.
 template<std::floating_point real> constexpr
 real Geometric<real>::
 intersection_line_plane(
@@ -1647,6 +1715,148 @@ point_in_triangle(
              (d1 > zero || d2 > zero || d3 > zero));
 }
 
+
+// Determines intersection of a ray and a triangle in 3D.
+// Finds out if a ray given by its origin \p and direction \d 
+// intersects a triangle given by its vertexes \p v1, \p v2 and \p v3.
+// If true, the intersection point is given by p + t * d
+// \see Accepted answer at
+// https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+template<std::floating_point real> 
+bool Geometric<real>::
+ray_intersects_triangle(
+//    in Ray R, in vec3 A, in vec3 B, in vec3 C
+    const A3r& p,
+    const A3r& d,
+    const A3r& v1,
+    const A3r& v2,
+    const A3r& v3,  
+    real& t          // ref
+) noexcept
+{ 
+    const auto e1 = v2 - v1;
+    const auto e2 = v3 - v1;
+    const auto n = A3r::crosspr(e1, e2);
+    const auto det = -d.dotpr(n);
+    const auto invdet = one / det;
+    const auto a0  = p - v1;
+    const auto da0 = A3r::crosspr(a0, d);
+    const auto u =  e2.dotpr(da0) * invdet;
+    const auto v = -e1.dotpr(da0) * invdet;
+    t =  a0.dotpr(n) * invdet; 
+
+   return (det >= EPS && 
+           t >= zero && 
+           u >= zero && 
+           v >= zero && 
+           u + v <= one);
+}
+
+
+// Determines if a segment intersects a triangle in 3D.
+// Finds out if a segment given by its endpoints \p p1 and \p p2  
+// intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
+// Accepted answer at
+// https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+template<std::floating_point real> 
+bool Geometric<real>::
+segment_intersects_triangle(
+    const A3r& p1,
+    const A3r& p2,
+    const A3r& v1,
+    const A3r& v2,
+    const A3r& v3
+) noexcept
+{
+    // Tetrahedron signed volume.
+    auto sv = [](const A3r& a, 
+                 const A3r& b,
+                 const A3r& c,
+                 const A3r& d) 
+    {
+        return A3r::dotptpr(A3r::crosspr(b - a, c - a), d - a)/six;
+    };
+
+    return std::signbit(sv(p1, v1, v2, v3)) != 
+           std::signbit(sv(p2, v1, v2, v3)) &&
+           std::signbit(sv(p1, p2, v1, v2)) == 
+           std::signbit(sv(p1, p2, v2, v3)) == 
+           std::signbit(sv(p1, p2, v3, v1));
+}
+
+
+// Determines if a point lies inside a tetrahedron.
+// Finds out if a 3D point \p p is inside a tetrahedron 
+// given by its vertexes \p v1, \p v2, \p v3 and \p v4.
+// \see https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+// -------- This algorithm is very slow !!!! -----------------------------------
+// -------- Use 'point_in_tetrahedron' wt underscore instead -------------------
+template<std::floating_point real> 
+bool Geometric<real>::
+_point_in_tetrahedron(
+    const A3r& p, 
+    const A3r& v1, 
+    const A3r& v2, 
+    const A3r& v3, 
+    const A3r& v4
+) noexcept
+{
+    auto same_side = [&]() 
+    {
+        const auto normal = A3r::crosspr(v2 - v1, v3 - v1);
+        const auto dotV4 = normal.dotpr(v4 - v1);
+        const auto dotP = normal.dotpr(p - v1);
+
+        return std::signbit(dotV4) == std::signbit(dotP);
+    };
+
+    return same_side(v1, v2, v3, v4, p) &&
+           same_side(v2, v3, v4, v1, p) &&
+           same_side(v3, v4, v1, v2, p) &&
+           same_side(v4, v1, v2, v3, p);               
+}
+
+
+// Determines if a point lies inside a tetrahedron.
+// Finds out if a 3D point \p p is inside a tetrahedron 
+// given by its vertexes \p v1, \p v2, \p v3 and \p v4.
+// see https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
+// -------- This is the preferred algorithm for a non-vectorized calculation ---
+template<std::floating_point real> 
+bool Geometric<real>::
+point_in_tetrahedron(
+    const A3r& p, 
+    const A3r& v1, 
+    const A3r& v2, 
+    const A3r& v3, 
+    const A3r& v4
+) noexcept
+{
+    auto det3 = [](const A3r& b, 
+                   const A3r& c, 
+                   const A3r& d) 
+    {
+        return b[0]*c[1]*d[2] + c[0]*d[1]*b[2] + d[0]*b[1]*c[2] -
+               d[0]*c[1]*b[2] - c[0]*b[1]*d[2] - b[0]*d[1]*c[2];
+    };
+    
+    const auto a = v1 - p;
+    const auto b = v2 - p;
+    const auto c = v3 - p;
+    const auto d = v4 - p;
+
+    const auto detA = det3(b, c, d);
+    const auto detB = det3(a, c, d);
+    const auto detC = det3(a, b, d);
+    const auto detD = det3(a, b, c);
+
+    const auto ret0 = detA > zero && detB < zero && detC > zero && detD < zero;
+    const auto ret1 = detA < zero && detB > zero && detC < zero && detD > zero;
+    
+    return ret0 || ret1;
+}
+
+
 }  // namespace utils::common
 
-#endif     // UTILS_COMMON_GEOMETRIC_FUNCTIONS
+#endif  // UTILS_COMMON_GEOMETRIC_FUNCTIONS
