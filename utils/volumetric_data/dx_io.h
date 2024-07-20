@@ -46,6 +46,7 @@
 /// Volume data io.
 namespace utils::volumetric {
 
+using namespace constants;
 
 /**
  * \brief Writes 3d matrix to a file using .DX format.
@@ -64,7 +65,7 @@ template<std::floating_point K,
          arithmetic T>
 void save_as_DX(
     const std::string& filename,
-    const common::vec3<K>& v,
+    const vec3<K>& v,
     arrays::A3<T> origin,        // by value
     arrays::A3<T> delta,         // by value
     const std::string& units,
@@ -72,8 +73,8 @@ void save_as_DX(
 )
 {
     if (units == "nm") {
-        delta *= common::ten<T>;
-        origin *= common::ten<T>;
+        delta *= ten<T>;
+        origin *= ten<T>;
     }
     else if (units != "A")
         msgr.exit("Error while saving volume map: length units not supported");
@@ -144,11 +145,11 @@ template<arithmetic K,
          std::floating_point T>
 void read_as_DX(
     const std::string& filename,
-    common::vec3<K>& v,
+    vec3<K>& v,
     arrays::A3<T>& origin,
     arrays::A3<T>& delta,
-    arrays::A3<common::szt>& ms,
-    const std::vector<common::uint>& bin,
+    arrays::A3<szt>& ms,
+    const std::vector<uint>& bin,
     const std::string& units,
     Msgr &msgr
 )
@@ -167,9 +168,9 @@ void read_as_DX(
     msgr.print("Started reading " + filename);
 
     std::string line {};
-    common::szt xdim = 0;
-    common::szt ydim = 0;
-    common::szt zdim = 0;
+    szt xdim = 0;
+    szt ydim = 0;
+    szt zdim = 0;
     // % object 1 class gridpositions counts 30 30 30:
     std::getline(fin, line);
     sscanf(line.c_str(),
@@ -180,14 +181,14 @@ void read_as_DX(
     ms[2] = zdim;
     v = common::Vec3::make<K>(xdim, ydim, zdim);
     auto npoints {xdim * ydim * zdim};
-    common::szt numlines;
+    szt numlines;
     auto lastlinenumelements = npoints % 3;
     if (lastlinenumelements == 0) {
         lastlinenumelements = 3;
         numlines = npoints / 3;
     }
     else
-        numlines = static_cast<common::szt>(npoints / 3) + 1;
+        numlines = static_cast<szt>(npoints / 3) + 1;
 
     // origin:
     std::getline(fin, line);
@@ -214,8 +215,8 @@ void read_as_DX(
     // Convert to float for writing:
     std::vector<float> templine(npoints);
 
-    common::szt count {};
-    for (common::szt n=0; n<numlines-1; n++) {
+    szt count {};
+    for (szt n=0; n<numlines-1; n++) {
         std::getline(fin, line);
         sscanf(line.c_str(),
                "%f %f %f",
@@ -245,16 +246,16 @@ void read_as_DX(
     }
 
     count = 0;
-    for (common::szt i=0; i<v.size(); i++)
-        for (common::szt j=0; j<v[i].size(); j++)
-            for (common::szt k=0; k<v[i][j].size(); k++)
+    for (szt i=0; i<v.size(); i++)
+        for (szt j=0; j<v[i].size(); j++)
+            for (szt k=0; k<v[i][j].size(); k++)
                 v[i][j][k] = static_cast<K>(templine[count++]);
     if (units == "nm") {
-        delta /= common::ten<T>;
-        origin /= common::ten<T>;
+        delta /= ten<T>;
+        origin /= ten<T>;
     }
     else if (units != "A")
-        msgr.exit("Error while reading volume map: length units not supported  ");
+        msgr.exit("Error while reading volume map: length units not supported ");
 
     msgr.print("Finished reading " + filename);
 }
