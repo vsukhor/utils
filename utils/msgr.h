@@ -188,9 +188,19 @@ public:
     template<typename... T>
     void exit(T... values);
 
+    /**
+     * \brief ostream operator with the same functionaluty as the print method.
+     * \note The oputput is not terminated by a \a newline .
+     */
     template<typename... T>
     Msgr& operator<<(T... values);
     
+    /**
+     * \brief Packs \p values into an output stringstream.
+     */
+    template<typename... T>
+    auto oss(T... values) const -> std::ostringstream;
+
 private:
 
     /**
@@ -323,15 +333,25 @@ print_vector(
 }
 
 
-template<bool endline,
-         typename... T>
-void Msgr::
-print(T... values) const
+template<typename... T>
+auto Msgr::
+oss(T... values) const -> std::ostringstream
 {
     std::ostringstream s;
 
     (s << ... << values);
     s.flush();
+
+    return s;
+}
+
+
+template<bool endline,
+         typename... T>
+void Msgr::
+print(T... values) const
+{
+    const auto s = oss(values...);
 
 	if (sl) prn(sl, s.str(), endline);
 	if (so) prn(so, s.str(), endline);
@@ -342,13 +362,7 @@ template<typename... T>
 void Msgr::
 exit(T... values)
 {
-    std::ostringstream s;
-
-    (s << ... << values);
-    s.flush();
-
-	if (sl) prn(sl, s.str(), true);
-	if (so) prn(so, s.str(), true);
+    print(values...);
 
     ::exit(EXIT_FAILURE);
 }
