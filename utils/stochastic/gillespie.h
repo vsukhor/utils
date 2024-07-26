@@ -132,6 +132,11 @@ public :
      */
     void check_propensities();
 
+    /**
+     * \brief For each reaction, prints number of times this reaction was fired.
+     */
+    void print_event_counts(std::ostream& os) const;
+
 private:
 
     vup<Reaction>      rc;         ///< Vector of unique pointers to reactions.
@@ -169,17 +174,19 @@ private:
 template<typename RF,
          typename Reaction>
 Gillespie<RF, Reaction>::
-Gillespie( RF& rnd ) noexcept
+Gillespie(RF& rnd) noexcept
     : rnd {rnd}
 {}
+
 
 template<typename RF,
          typename Reaction>
 void Gillespie<RF, Reaction>::
-add_reaction( std::unique_ptr<Reaction> rup )
+add_reaction(std::unique_ptr<Reaction> rup)
 {
     rc.push_back(std::move(rup));
 }
+
 
 template<typename RF,
          typename Reaction>
@@ -202,10 +209,11 @@ initialize() noexcept
     rinds.resize(nreact);
 }
 
+
 template<typename RF,
          typename Reaction>
 Reaction* Gillespie<RF, Reaction>::
-get_reaction( const std::string& name ) const
+get_reaction(const std::string& name) const
 {
     for (const auto& o : rc)
         if (o->shortName == name)
@@ -213,6 +221,7 @@ get_reaction( const std::string& name ) const
 
     return nullptr;
 }
+
 
 template<typename RF,
          typename Reaction>
@@ -223,6 +232,7 @@ set_asum() noexcept
     
     return asum != zero<real>;
 }
+
 
 template<typename RF,
          typename Reaction>
@@ -245,6 +255,7 @@ set_rind() noexcept
                              rinds.begin() + static_cast<long>(rindnum));
 }
 
+
 template<typename RF,
          typename Reaction>
 void Gillespie<RF, Reaction>::
@@ -258,10 +269,11 @@ set_tau() noexcept
     XASSERT(!std::isnan(tau_), "Tau is nan");
 }
 
+
 template<typename RF,
          typename Reaction>
 void Gillespie<RF, Reaction>::
-fire( double& time ) noexcept
+fire(double& time) noexcept
 {
     set_rind();
     set_tau();
@@ -269,6 +281,7 @@ fire( double& time ) noexcept
 //    (*currRc())();
     currRc()->fire();
 }
+
 
 template<typename RF,
          typename Reaction> constexpr
@@ -279,6 +292,7 @@ currRc() const noexcept
                             : nullptr;
 }
 
+
 template<typename RF,
          typename Reaction> constexpr
 auto Gillespie<RF, Reaction>::
@@ -287,18 +301,20 @@ num_reactions() const noexcept -> szt
     return rc.size();
 }
 
+
 template<typename RF,
          typename Reaction>
 std::string Gillespie<RF, Reaction>::
-short_name( const szt i ) const noexcept
+short_name(const szt i) const noexcept
 {
     return rc[i]->shortName;
 }
 
+
 template<typename RF,
          typename Reaction>
 void Gillespie<RF ,Reaction>::
-log_data( std::ostream& os ) const
+log_data(std::ostream& os) const
 {
     auto pad_zeros = [](auto n) {
         constexpr int MIN2 = 10;
@@ -315,10 +331,11 @@ log_data( std::ostream& os ) const
         os << " " << currRc()->shortName;
 }
 
+
 template<typename RF,
          typename Reaction>
 void Gillespie<RF, Reaction>::
-print_scores( std::ostream& os ) const
+print_scores(std::ostream& os) const
 {
     for (szt i=0; i<nreact; i++)
         rc[i]->set_score();
@@ -329,6 +346,20 @@ print_scores( std::ostream& os ) const
            << rc[i]->get_score() << " ";
 }
 
+
+template<typename RF,
+         typename Reaction>
+void Gillespie<RF, Reaction>::
+print_event_counts(std::ostream& os) const
+{
+    os << " Event counts: \n";
+    for (szt i=0; i<nreact; i++)
+        os << "    "
+           << rc[i]->shortName << " "
+           << rc[i]->event_count() << "\n";
+}
+
+
 template<typename RF,
          typename Reaction>
 void Gillespie<RF, Reaction>::
@@ -337,6 +368,7 @@ print_dependents() const
     for (const auto& r: rc)
         r->print_dependents();
 }
+
 
 template<typename RF,
          typename Reaction>
