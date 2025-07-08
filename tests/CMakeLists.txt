@@ -19,7 +19,7 @@ if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-add_definitions(-DUSE_UTILS_XASSERT)
+add_definitions(-DUSE_UTILS_ASSERT)
 
 add_executable(unittests
 	test_matrix33.cpp

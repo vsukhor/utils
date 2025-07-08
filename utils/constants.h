@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -44,10 +44,10 @@
 /// Library namespace.
 namespace utils {
 
-template<typename T> 
-concept arithmetic = std::integral<T> || 
+template<typename T>
+concept arithmetic = std::integral<T> ||
                      std::floating_point<T>;
-                     
+
 
 /// Make these definitions available to the whole library by defaule.
 inline namespace constants {
@@ -158,13 +158,13 @@ T INF {std::numeric_limits<T>::infinity()};
  * \return std::array initialized to \p val.
  */
 template<typename T,
-         auto N> 
+         auto N>
 constexpr
 auto filled_array(const T val)
 {
     std::array<T, N> a {};
-    a.fill(val);       
-         
+    a.fill(val);
+
     return a;
 }
 

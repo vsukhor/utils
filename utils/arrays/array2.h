@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ class array<2, T> {
 static constexpr int len {2};
 
 T n[len] = {};
- 
+
 public:
 
 array() noexcept = default;
@@ -410,7 +410,7 @@ bool operator>=( T p ) const noexcept
 constexpr
 T operator[]( const int i ) const noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index ", i, " out of bounds");
 
     return n[i];
 }
@@ -418,7 +418,7 @@ T operator[]( const int i ) const noexcept
 constexpr
 T& operator[]( const int i ) noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index ", i, " out of bounds");
 
     return n[i];
 }

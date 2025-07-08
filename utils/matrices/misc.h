@@ -1,5 +1,5 @@
 /* =============================================================================
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,16 +38,16 @@ namespace utils::matrices {
 
 
 template<std::floating_point real, int M>
-class Matrix 
+class Matrix
 {};
 
 /*
 Layout:
 
-00 01 02 03    
-10 11 12 13    
-20 21 22 23     
-30 31 32 33    
+00 01 02 03
+10 11 12 13
+20 21 22 23
+30 31 32 33
 */
 
 

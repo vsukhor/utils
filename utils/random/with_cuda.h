@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ namespace utils::random {
 
 /// \brief Random number factory based on Cuda rng library.
 /// \tparam real Floating point type.
-template<std::floating_point real> 
+template<std::floating_point real>
 class Cuda
     : public Core<real> {
 
@@ -86,7 +86,7 @@ public:
 
     /// Initializes CUDA rng machinery.
     void initialize_CUDA_rng();
-    
+
     /// A pseudo-random number with uniform distribution over [0,1).
     real r01u();
 
@@ -102,9 +102,9 @@ private:
 
     real* rU01;    ///< Buffer array for storing random numbers (host).
     real* d_Rand;  ///< Buffer array for storing random numbers (device).
-    
+
     int rU01_ind;   ///< Index of the current random number in \a rU01.
-                                                
+
     std::mt19937      gCPU; ///< Random number generator using CPU.
     curandGenerator_t gGPU; ///< Random number generator using GPU.
 
@@ -145,11 +145,11 @@ Cuda(
     Msgr& msgr)
     : Core<real> {runInd, msgr}
 {
-    
+
     gCPU.seed(this->seed);
-    
+
     initialize_CUDA_rng();
-    
+
     rU01_ind = -1;
     prepare_uniform_real01();
 }
@@ -165,7 +165,7 @@ Cuda<real>::
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 void Cuda<real>::
 initialize_CUDA_rng()
 {
@@ -177,7 +177,7 @@ initialize_CUDA_rng()
 
 
 // Generates real random numbers with uniform distribution over (0,1]   (!!!)
-template<> 
+template<>
 void Cuda<float>::
 prepare_uniform_real01()
 {
@@ -188,7 +188,7 @@ prepare_uniform_real01()
 }
 
 
-template<> 
+template<>
 void Cuda<double>::
 prepare_uniform_real01()
 {
@@ -201,12 +201,12 @@ prepare_uniform_real01()
 
 
 // returns int in the range [0,max-1]
-template<std::floating_point real> 
+template<std::floating_point real>
 uint Cuda<real>::
 uniformInt0(
     const uint& max
 )
-{            
+{
     auto ir {static_cast<uint>(r01u() * max)};
     while (ir >= max)
         ir = static_cast<uint>(r01u() * max);
@@ -218,7 +218,7 @@ uniformInt0(
 // returns a random number with uniform distribution over [0,1)
 template<std::floating_point real>
 real Cuda<real>::r01u()
-{    
+{
     if (++rU01_ind == buffersize) {
         prepare_uniform_real01();
         rU01_ind = 0;

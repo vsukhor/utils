@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -71,8 +71,8 @@ class Par<std::vector<T>,
     Q p_;  ///< The parameter value.
 
     szt expectedSize_ {undefined<szt>};   ///< Expected size of the vector.
-    
-public:    
+
+public:
 
     using str = std::string;
 
@@ -90,7 +90,7 @@ public:
      */
     explicit Par(const str& name,
                  szt expectedSize);
-                 
+
     /**
      * Constructor.
      * \param name Name of the parameter.
@@ -127,20 +127,20 @@ public:
         const std::filesystem::path& file,
         Msgr* msgr=nullptr
     );
-    
+
     /**
      * \brief Print the the parameter to std::cout and logfile.
      * \param msgr \a Msgr used for the output.
      * \see Msgr
      */
     void print( Msgr* msgr=nullptr ) final;
-    
+
     /**
      * \brief The parameter values.
      * \return Parameter values (the whole vector).
      */
     Q operator()() const;
-    
+
     /**
      * \brief Accesses a specific component of the parameter vector.
      * \param i Index in the vector.
@@ -149,13 +149,13 @@ public:
     T operator[]( szt i ) const;
 
 private:
-    
+
     /**
      * \brief Initialize the parameter from the config file.
      * \param value Value to search for.
      */
     void initialize( str value ) final;
-};    
+};
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -222,8 +222,8 @@ check_range(
 {
     if (!r.size()) return;   // use this case to omit string checkups
 
-    XASSERT(r.size() == p_.size(),
-            "Size of range vector must be to the size of imported vector.");
+    ASSERT(r.size() == p_.size(),
+           "Size of range vector must be to the size of imported vector.");
 
     for (szt i=0; i<r.size(); i++)
         if (p_[i] < r[i][0] || p_[i] > r[i][1])
@@ -270,7 +270,7 @@ std::vector<T> Par<std::vector<T>,
                    std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
-    XASSERT(true, get_name());
+    ASSERT(true, get_name());
     return p_;
 }
 
@@ -282,8 +282,8 @@ T Par<std::vector<T>,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator[](const szt i) const
 {
-    XASSERT(isLoaded_, get_name());
-    XASSERT(i<p_.size(), get_name());
+    ASSERT(isLoaded_, get_name());
+    ASSERT(i<p_.size(), get_name());
     return p_[i];
 }
 

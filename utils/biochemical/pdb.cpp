@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 ================================================================================
 */
 
-/** 
+/**
  * \file pdb.h
  * \brief Implements class PDB.
  * \author Valerii Sukhorukov
@@ -156,7 +156,7 @@ Pdb::Pdb(
     const std::string& record,
     const unsigned long segm
 ) noexcept
-    : pdbsegment(segm) 
+    : pdbsegment(segm)
 {
     format_as_pdb(record);
 }
@@ -349,14 +349,14 @@ irecn(
 {
     return s == "ATOM  " ? 1
                          : (s == "HETATM" ? 2 : -1);
-} 
+}
 
 std::string Pdb::
 recname() const noexcept
 {
     return irecname == 1 ? "ATOM  "
                          : "HETATM";
-} 
+}
 
 std::string Pdb::
 irecname2str(

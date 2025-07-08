@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+ Copyright (C) 2009-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -87,7 +87,7 @@ public:
     /**
      * \brief Computes paths connecting a vertex in the graph
      * \details Computes paths starting at vertex \p source to other vertexes
-     * in the connected component of the graph specified 
+     * in the connected component of the graph specified
      * by the djacency list \p ajl .
      * Implements Dijkstra's algorithm
      * \ref https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm.
@@ -105,7 +105,7 @@ public:
 
     /**
      * \brief The shortest path between two graph vertexes.
-     * \details Calculates the shortest path between graph vertexes \p v1 
+     * \details Calculates the shortest path between graph vertexes \p v1
      * and \p v2 using \ref compute_paths(vertex_t, const adjLT&) .
      * \param[in] v1 First vertex.
      * \param[in] v2 Second vertex.
@@ -120,7 +120,7 @@ public:
 
     /**
      * \brief Resets adjacency list of the graph.
-     * \details Resets components of adjacency list \p al 
+     * \details Resets components of adjacency list \p al
      * to weight values \p w .
      * \param[out] al Adjacency list of the graph.
      * \param[in]  w Desired edge weights.
@@ -129,7 +129,7 @@ public:
         adjLT& al,        // by reference
         weight_t w
     );
-    
+
     /**
      * \brief Converts list to a std::vector.
      * \param[in] l Input list.
@@ -157,10 +157,10 @@ public:
         const vec2int& agm,
         vec2int& lm
     );
-    
+
     /**
      * \brief Prints adjacency list of the graph.
-     * \details Prints full adjacency list of the graph \p ajl 
+     * \details Prints full adjacency list of the graph \p ajl
      * to output stream \p os .
      * \note Please use cautiosly with large graphs.
      * \param ajl Adjacency list of the graph.
@@ -173,7 +173,7 @@ public:
 
     /**
      * \brief Prints adjacency list of the graph.
-     * \details Prints neighbours of the graph vertex \p v 
+     * \details Prints neighbours of the graph vertex \p v
      * to output stream \p os .
      * \param[in] v Vertex, which neighbours are printed.
      * \param[in] ajl Adjacency list of the graph.
@@ -233,15 +233,15 @@ compute_paths(
 
     previous.resize(n);
     std::fill(previous.begin(), previous.end(), huge<vertex_t>);
-    
+
     std::set<std::pair<weight_t, vertex_t>> vertex_queue;
     vertex_queue.insert(std::make_pair(min_distance[source], source));
- 
+
     while (!vertex_queue.empty())    {
         const auto dist = vertex_queue.begin()->first;
         const auto u = vertex_queue.begin()->second;
         vertex_queue.erase(vertex_queue.begin());
-        
+
         // Visit each edge exiting u
         const auto& neighbours = ajl[u];
         for (auto iter = neighbours.begin();
@@ -253,11 +253,11 @@ compute_paths(
 
             if (distance_through_u < min_distance[v]) {
                 vertex_queue.erase(std::make_pair(min_distance[v], v));
-                
+
                 min_distance[v] = distance_through_u;
                 previous[v] = u;
                 vertex_queue.insert(std::make_pair(min_distance[v], v));
-            }            
+            }
         }
     }
 }
@@ -328,7 +328,7 @@ adjacency_matrix(
     const adjLT& ajl,
     vec2int &agm
 ) const
-{    
+{
     agm.resize(ajl.size());
     for (auto& o : agm)
         o.resize(ajl.size(), 0);
@@ -353,7 +353,7 @@ laplacian_matrix(
         int d {};
         for (szt i=0; i<s; i++) d += agm[j][i];       // j-th node degree
         for (szt i=0; i<s; i++) lm[j][i] = -agm[j][i];
-        lm[j][j] = d;                                                
+        lm[j][j] = d;
     }
 }
 

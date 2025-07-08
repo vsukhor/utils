@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ namespace utils::arrays {
 inline constexpr unsigned MAX_LENGTH_SPECIALIZED = 4;
 
 
-/** 
+/**
  * \brief Arbitrary-size arrays.
  * \details This class specializes array template for N-element array of
  * arithmetic types. Implements convenient arithmetics as well as some
@@ -439,14 +439,14 @@ constexpr bool operator>=( const T p ) const noexcept
 
 constexpr T operator[]( const int i ) const noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index out of bounds: ", i);
 
     return n[i];
 }
 
 T& operator[]( const int i ) noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index out of bounds: ", i);
 
     return n[i];
 }
@@ -544,7 +544,7 @@ static constexpr T sum(
 ) noexcept
 {
     T res {};
-    for (size_t i=i1; i<=i2; i++) 
+    for (size_t i=i1; i<=i2; i++)
         res += a[i];
 
     return res;
@@ -573,7 +573,7 @@ void read( std::ifstream& ist ) noexcept
 
 void write( std::ofstream& ost ) const noexcept
 {
-    for (const auto i : ii) 
+    for (const auto i : ii)
         ost.write(reinterpret_cast<const char*>(&n[i]), sizeof(T));
 }
 

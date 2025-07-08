@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -65,12 +65,12 @@ constexpr auto make_iota_array(T const offset) noexcept
 
 //==============================================================================
 
-/** 
+/**
  * \brief Generic array template.
  * \tparam N Array length.
  * \tparam T Type of the elements. Must be arithmetic.
  */
-template<unsigned N, 
+template<unsigned N,
          arithmetic T>
 class array {};
 

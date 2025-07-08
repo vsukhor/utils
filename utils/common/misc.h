@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -41,24 +41,29 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <source_location>
 #include <string>
-#include <sys/stat.h>
 #include <vector>
 
 #include "../constants.h"
 #include "../msgr.h"
 
-#ifdef USE_UTILS_XASSERT
-    #define XASSERT(EX, msg) \
-        (void)((EX) || (utils::common::assert_fun<__LINE__>(#EX, __FILE__, msg), 0))
+#ifdef USE_UTILS_ASSERT
+    #undef ASSERT
+    #define ASSERT(EX, ...) \
+        (void)((EX) || (utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0))
 #else
-    #define XASSERT(EX, msg)
+    #define ASSERT(EX, ...)
 #endif
+
+#undef ENSURE
+#define ENSURE(EX, ...) \
+    (void)((EX) || (utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0))
 
 /// General stuff.
 namespace utils::common {
 
-/// Assertion function called from XASSERT macro.
+/// Assertion function called from ASSERT macro.
 template<int L>
 long long assert_fun(
     const char* EX,
@@ -66,9 +71,8 @@ long long assert_fun(
     const std::string& msg
 )
 {
-    std::cerr << "Assertion (" << EX << ") failed! \n"
-              << "File " << file << ", Line " << L << "\n"
-              << "Reason: " + msg << std::endl;
+    std::cerr << "'ASSERT' macro is obsolete. Should be upgraded to 'ENSURE' \n";
+
     std::exit(EXIT_FAILURE);
 }
 
@@ -372,7 +376,7 @@ void remove_vector_element( std::vector<T>& v,
             v.erase(i);
             return;
         }
-    XASSERT(false, "Error in remove_vector_element: element not found");
+    ASSERT(false, "element not found");
 }
 
 

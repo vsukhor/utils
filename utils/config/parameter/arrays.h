@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -69,7 +69,7 @@ class Par<std::array<T, W>, false,
     using Base<T>::isLoaded_;
 
     Q p_;  ///< The parameter value.
-    
+
 public:
 
     using str = std::string;
@@ -129,13 +129,13 @@ public:
     T operator[](szt i) const;
 
 private:
-    
+
     /**
      * \brief Initializes the parameter from the config file.
      * \param value Value to search for.
      */
     void initialize(str value) final;
-};    
+};
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -212,7 +212,7 @@ std::array<T, W> Par<std::array<T, W>, false,
                     std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
-    XASSERT(true, get_name());
+    ASSERT(true, get_name());
     return p_;
 }
 
@@ -223,8 +223,8 @@ T Par<std::array<T, W>, false,
       std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator[](const szt i) const
 {
-    XASSERT(isLoaded_, get_name());
-    XASSERT(i<W, get_name());
+    ASSERT(isLoaded_, get_name());
+    ASSERT(i < W, get_name());
     return p_[i];
 }
 

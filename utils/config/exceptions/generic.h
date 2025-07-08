@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -42,8 +42,8 @@ namespace utils::config::exceptions {
  * \tparam isDiscrete Specifies if the parameter takes discrete values only.
  * \tparam Enabler SFINAE enabler.
  */
-template<typename Q, 
-         bool isDiscrete, 
+template<typename Q,
+         bool isDiscrete,
          typename Enabler = void>
 class ParOutOfRange
     : public std::exception

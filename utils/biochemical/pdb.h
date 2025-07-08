@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -174,7 +174,7 @@ public:
         Msgr& msgr
     ) const;
 
-    /** 
+    /**
      * \brief Produce an atom-specific formatted record for a pdb file.
      * \param a Atom-specific record.
      * \param msgr Output message processor.
@@ -197,13 +197,13 @@ public:
         float tempf,
         const std::string& elt,
         const std::string& chge,
-        Msgr& msgr 
+        Msgr& msgr
     );
 
     /// Determines if the atom is part of an aminoacid.
     bool is_in_aminoacid() const noexcept;
 
-    /** 
+    /**
      * \brief Reads from a pdb file.
      * \param file The file to read from.
      * \param a Atom-specific records.
@@ -230,7 +230,7 @@ public:
         const std::vector<std::vector<std::string>>& other,
         Msgr& msgr
     );
-       
+
 private:
 
     /**
@@ -243,14 +243,14 @@ private:
      * \brief Gets record name.
      * \return "HETATM" or "ATOM  ".
      */
-    std::string recname() const noexcept; 
+    std::string recname() const noexcept;
 
     /**
      * \brief Converts record name index to string.
      * \return "HETATM" or "ATOM  ".
      */
     static std::string irecname2str(int irecname) noexcept;
-    
+
     /// Determines van Der Waals radius based on the atom data.
     float set_vdW() const noexcept;
 };

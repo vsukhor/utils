@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@ class array<3, T> {
 static constexpr int len {3};
 
 T n[len] = {};
- 
+
 public:
 
 array() noexcept = default;
@@ -131,9 +131,9 @@ array<2,T> operator()(
     const int i2
 ) const noexcept
 {
-    XASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds.");
-    XASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds.");
-    
+    ASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds.");
+    ASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds.");
+
     return {n[i1], n[i2]};
 }
 
@@ -182,7 +182,7 @@ array& operator=( const T p ) noexcept
     n[0] = p;
     n[1] = p;
     n[2] = p;
-    
+
     return *this;
 }
 
@@ -490,21 +490,21 @@ bool operator>=( const T p ) const noexcept
 constexpr
 T operator[]( const int i ) const noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index ", i, " out of bounds");
 
     return n[i];
 }
 
 T& operator[]( const int i ) noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index ", i, " out of bounds");
 
     return n[i];
 }
 
 const T* at( const int i ) const noexcept
 {
-    XASSERT(i >= 0 && i < len, "Index out of bounds.");
+    ASSERT(i >= 0 && i < len, "Index ", i, " out of bounds");
 
     return &n[i];
 }

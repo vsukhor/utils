@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -60,7 +60,7 @@ public:
 
     /// Size of the buffer for storing random numbers.
     static constexpr int bufferSize {1'000'000};
-    
+
     /// Master seed.
     static constexpr int mainSeed {1'234'567'890};
 
@@ -71,7 +71,7 @@ public:
      * \param runInd Run index to choose a seed.
      */
     static uint make_seed(
-        uint runInd      
+        uint runInd
     ) noexcept;
 
     /// Seed getter.
@@ -86,9 +86,9 @@ protected:
      * \param msgr    Output message processor.
      */
     explicit Core(
-        unsigned seed,                
-        const std::string& runName,   
-        Msgr& msgr                    
+        unsigned seed,
+        const std::string& runName,
+        Msgr& msgr
     ) noexcept;
 
     /**
@@ -97,8 +97,8 @@ protected:
      * \param msgr   Output message processor.
      */
     explicit Core(
-        unsigned runInd,    
-        Msgr& msgr        
+        unsigned runInd,
+        Msgr& msgr
     ) noexcept;
 
 private:
@@ -111,7 +111,7 @@ private:
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-template<std::floating_point real> 
+template<std::floating_point real>
 Core<real>::
 Core(
     const unsigned seed,
@@ -126,7 +126,7 @@ Core(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 Core<real>::
 Core(
     const unsigned runInd,
@@ -140,7 +140,7 @@ Core(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 uint Core<real>::
 make_seed(
     const uint runInd

@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -76,7 +76,6 @@ public:  // Only constant parameters are public.
      * \param [in] fullName Reaction name abbreviated.
      */
     explicit Reaction(
-        Msgr& msgr,
         szt ind,
         real rate,
         std::string shortName,  // value + move
@@ -131,12 +130,12 @@ public:  // Only constant parameters are public.
      * \brief Prints the parameters common to all reactions.
      * \param le True if new line after the output.
      */
-    virtual void print(bool le) const;
+    virtual void print(bool le) const = 0;
 
     /**
      * Lits names of the reactions which need an update in case of *this firing.
      */
-    void print_dependents() const;
+    virtual void print_dependents() const = 0;
 
     /**
      * Checks that the propensities are consistent among all active reactions.
@@ -144,8 +143,6 @@ public:  // Only constant parameters are public.
     virtual void check_propensities() {};
 
 protected:
-
-    Msgr& msgr;  ///< ref: Output message processor.
 
     /// Number of reaction events fired.
     unsigned long eventCount {};
@@ -195,8 +192,7 @@ is_active(
 
 template<typename RF>
 Reaction<RF>::
-Reaction( Msgr& msgr,
-          const szt ind,
+Reaction( const szt ind,
           const real rate,
           const std::string shortName,  // value + move
           const std::string fullName    // value + move
@@ -204,30 +200,8 @@ Reaction( Msgr& msgr,
     : ind {ind}
     , shortName {std::move(shortName)}
     , fullName {std::move(fullName)}
-    , msgr {msgr}
     , rate {rate}
 {}
-
-template<typename RF>
-void Reaction<RF>::
-print(const bool le) const
-{
-    msgr.print<false>("Reaction:");
-    msgr.print<false>(" shortName ", shortName);
-    msgr.print<false>(" rate ", rate);
-    msgr.print<false>(" score ", *score);
-    msgr.print<false>(" eventCount ", eventCount);
-    if (le) msgr.print("\n");
-}
-
-template<typename RF>
-void Reaction<RF>::
-print_dependents() const
-{
-    msgr.print(shortName, " dependents :");
-    for (const auto d : dependents)
-        msgr.print("    ", d->shortName);
-}
 
 
 }  // namespace utils::stochastic

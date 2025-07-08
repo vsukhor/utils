@@ -1,4 +1,4 @@
-   Copyright (C) 2009-2023 Valerii Sukhorukov
+   Copyright (C) 2009-2025 Valerii Sukhorukov
    All Rights Reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining a copy

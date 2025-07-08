@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ public:
     auto get_name() const noexcept -> str;
 
 protected:
-    
+
     bool isLoaded_ {};  ///< Flag indicating if the parameter is loaded.
 
     /**
@@ -116,7 +116,7 @@ private:
      * \param ifs Input file stream to load the parameter.
      * \param[out] value str containig value(s) of the parameter searched.
      * \return Bool corresponding to the success/failure of the search.
-     *  If the line contains a valid parname-value combination, returns true 
+     *  If the line contains a valid parname-value combination, returns true
      *  and the value, otherwise retruns false.
      */
     bool detect_by_name(
@@ -140,17 +140,17 @@ detect_by_name(
     std::ifstream& ifs,
     str& value
 ) const
-{    
+{
     const str emp {" "};
     const str tab {"\t"};
-    
+
     str line;
     getline(ifs, line);
-    
+
     unsigned long commentpos = line.find_first_of('#');
     if (commentpos != str::npos)
         line.erase(commentpos);
-    
+
     if (!line.length())
         return false;
     while (!line.substr(line.length()-1, 1).compare(emp) ||
@@ -158,7 +158,7 @@ detect_by_name(
         line.erase(line.length()-1);
     if (!line.length())
         return false;
-    
+
     int parnameend = -1;
     if (     line.find_first_of(emp) == str::npos &&
              line.find_first_of(tab) != str::npos)
@@ -171,10 +171,10 @@ detect_by_name(
         parnameend = std::min(static_cast<int>(line.find_first_of(emp)),
                               static_cast<int>(line.find_first_of(tab)));
     const auto parname = line.substr(0, static_cast<size_t>(parnameend));
-    
+
     if (parname != name)
-        return false; 
-    
+        return false;
+
     value = line.substr(line.find_last_of("=") + 1);
     while (!value.substr(0, 1).compare(emp) ||
            !value.substr(0, 1).compare(tab))
@@ -204,8 +204,8 @@ template<typename Q>
 void Base<Q>::
 load(std::ifstream& ifs)
 {
-    XASSERT(!isLoaded_, "Repeated load of " + name);
-    
+    ASSERT(!isLoaded_, "Repeated load of ", name);
+
     ifs.clear();
     ifs.seekg(0, std::ios::beg);
     while (ifs.good()) {

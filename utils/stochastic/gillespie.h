@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -202,7 +202,7 @@ initialize() noexcept
         rc[rtype[i]]->attach_score_pointer(&a[i]);
         rc[rtype[i]]->initialize_dependencies(rc);
     }
-    
+
     auxf.resize(nreact);
     csums.resize(nreact);
     auxi.resize(nreact);
@@ -229,7 +229,7 @@ bool Gillespie<RF, Reaction>::
 set_asum() noexcept
 {
     asum = std::accumulate(a.begin(), a.end(), zero<real>);
-    
+
     return asum != zero<real>;
 }
 
@@ -244,7 +244,7 @@ set_rind() noexcept
     std::partial_sum(auxf.begin(), auxf.end(), csums.begin());
 
     real ran {};
-    do ran = rnd.r01u(); 
+    do ran = rnd.r01u();
     while (ran >= csums[nreact-1]);
 
     for (szt i=0; i<nreact; i++)
@@ -262,11 +262,11 @@ void Gillespie<RF, Reaction>::
 set_tau() noexcept
 {
     real ran {};
-    do ran = rnd.r01u(); 
+    do ran = rnd.r01u();
     while (ran <= zero<real> || ran >= one<real>);
 
     tau_ = std::log(one<real> / ran) / asum;
-    XASSERT(!std::isnan(tau_), "Tau is nan");
+    ASSERT(!std::isnan(tau_), "Tau is nan");
 }
 
 

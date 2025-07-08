@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -101,7 +101,7 @@ public:
 
     /// A pseudo-random number with uniform distribution over [0,1).
     real r01u();
-    
+
     /**
      * \brief A pseudo-random signed int from the range [0, max-1].
      * \param max Max boundary of the sampled range.
@@ -125,7 +125,7 @@ public:
      * \param max Max boundary of the sampled range.
      */
     constexpr real uniform0(real max);
-    
+
     /**
      * \brief A pseudo-random integer from the range [1, max].
      * \tparam intT Integer fundamental type.
@@ -133,12 +133,12 @@ public:
      */
     template<std::unsigned_integral intT>
     constexpr intT uniform1(intT max);
-    
+
     /**
      * \brief Direction sampled from a uniform distribution in 3D.
      * \param[in] solidAngle Constraining solid angle.
-     * \return Coordinates of a point on the surface of a unit sphere and 
-     * sampled from uinformly distributed directions within \p solidAngle of the 
+     * \return Coordinates of a point on the surface of a unit sphere and
+     * sampled from uinformly distributed directions within \p solidAngle of the
      * sphere pole.
      */
     constexpr auto uniform_direction(
@@ -147,8 +147,8 @@ public:
 
     /**
      * \brief Direction sampled from a uniform distribution in 3D.
-     * \details Calculates position of a point uinformly distributed within 
-     * boundaries on the surface of a unit sphere. 
+     * \details Calculates position of a point uinformly distributed within
+     * boundaries on the surface of a unit sphere.
      * Inclination is limited by \p inclMinMax [0, pi) around +z axis
      * direction (i.e. \p phPole == 0).
      * Azimuth is limited by \p azimMinMax [-pi, pi) around +x axis
@@ -184,7 +184,7 @@ public:
         real r,  //=one,
         int poleDir    //=2
     ) noexcept -> A3r;
-    
+
     /**
      * \brief A point uinformly distributed within boundaries on a spheroid surface.
      * \details Implements trigonometric method.
@@ -230,7 +230,7 @@ public:
     ) noexcept -> A2r;
 
 //  /**
-//     * \brief Uniformly distributed posiiton within ellipse 
+//     * \brief Uniformly distributed posiiton within ellipse
 //     * \details A shifted point within the ellipse boundary having uinform
 //     * distribution over the ellipse area.
 //     * \param r1 Semi-axes dimensions of the ellipse: r1 = {a, b}.
@@ -238,7 +238,7 @@ public:
 //     * \param shift Shift.
 //     */
 //    A2<real> uniform_in_ellipse(const A2r& r1,
-//                                const A2r& r0, 
+//                                const A2r& r0,
 //                                const A2r& shift=zero) noexcept;
 
     /**
@@ -247,16 +247,16 @@ public:
      * \return A pseudo-random number sampled from Exponential distribution.
      */
     constexpr real exponential_number(
-        real mi      
+        real mi
     ) noexcept;
 
-    /** 
+    /**
      * \brief Poisson distributed random numbers.
      * \param lambda Rate parameter of the poissonian distribution.
      * \return A pseudo-random number sampled from Poisson distribution.
      */
     uint poisson_number(
-        real lambda  
+        real lambda
     ) noexcept;
 
     /**
@@ -266,8 +266,8 @@ public:
      * \return A pseudo-random number sampled from Weibull distribution.
      */
     constexpr real weibull_number(
-        real lambda,  
-        real k        
+        real lambda,
+        real k
     )  noexcept;
 
     /**
@@ -277,8 +277,8 @@ public:
      * \return A pseudo-random number sampled from Logistic distribution.
      */
     constexpr real logistic_number(
-        real mi,      
-        real s       
+        real mi,
+        real s
     )  noexcept;
 
     /**
@@ -288,8 +288,8 @@ public:
      * \return A pseudo-random number sampled from binomial distribution.
      */
     uint binomial_number(
-        uint n,   
-        real p    
+        uint n,
+        real p
     )  noexcept;
 
     /**
@@ -302,8 +302,8 @@ public:
      * \return A vector of multinomially distributed deviates.
      */
     std::vector<uint> multinomial_number(
-        uint n,   
-        uint k  
+        uint n,
+        uint k
     )  noexcept;
 
     /**
@@ -315,8 +315,8 @@ public:
      * \return A vector of multinomially distributed deviates.
      */
     std::vector<uint> multinomial_number(
-        uint n,               
-        std::vector<real> p  
+        uint n,
+        std::vector<real> p
     ) noexcept;
 
     /**
@@ -326,8 +326,8 @@ public:
      * \return Normally distributed deviate N(mi, sigma^2).
      */
     constexpr real gaussian_number(
-        real mi,     
-        real sigma   
+        real mi,
+        real sigma
     ) noexcept;
 
     /**
@@ -341,22 +341,22 @@ public:
      * \return Normally distributed deviate N(mi, sigma^2).
      */
     constexpr real gaussian_number_constrained(
-        real mi,     
-        real sigma,  
-        real cmin,   
-        real cmax    
+        real mi,
+        real sigma,
+        real cmin,
+        real cmax
     ) noexcept;
-    
+
 private:
 
     using Core<real>::bufferSize;
 
     /// Uniform 0 to 1 float.
     boost::random::uniform_01<float>  flt01_unifromDistr;
-    
+
     /// Uniform 0 to 1 double.
     boost::random::uniform_01<double> dbl01_unifromDistr;
-    
+
     /// Standard normal distribution.
     boost::random::normal_distribution<real> normalDistr;
 
@@ -377,10 +377,10 @@ private:
 
 template<std::floating_point real>
 Boost<real>::
-Boost( 
+Boost(
     const unsigned seed,
     const std::string& runName,
-    Msgr& msgr 
+    Msgr& msgr
 )
     : Core<real> {seed, runName, msgr}
     , rU01_ind {bufferSize}
@@ -393,7 +393,7 @@ template<std::floating_point real>
 Boost<real>::
 Boost(
     const unsigned runIndex,
-    Msgr& msgr 
+    Msgr& msgr
 )
     : Core<real> {runIndex, msgr}
     , rU01_ind {bufferSize}
@@ -407,8 +407,8 @@ template<> inline
 void Boost<float>::
 prepare_uniform_real01()
 {
-    for (auto& o : rU01) 
-        o = flt01_unifromDistr(g);    
+    for (auto& o : rU01)
+        o = flt01_unifromDistr(g);
 }
 
 
@@ -416,8 +416,8 @@ template<> inline
 void Boost<double>::
 prepare_uniform_real01()
 {
-    for (auto& o : rU01) 
-        o = dbl01_unifromDistr(g);    
+    for (auto& o : rU01)
+        o = dbl01_unifromDistr(g);
 }
 
 
@@ -438,87 +438,87 @@ r01u()
 
 
 // Returns int in the range [0, max-1]
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 int Boost<real>::
 uniform0( const int max )
-{            
-    XASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
+{
+    ASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
 
     auto ir {static_cast<int>(r01u() * max)};
-    
-    while (ir >= max) 
+
+    while (ir >= max)
         ir = static_cast<int>(r01u() * max);
-    
-    return ir;    
+
+    return ir;
 }
 
 
 // Returns uint in the range [0, max-1].
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 uint Boost<real>::
 uniform0( const uint max )
-{            
-    XASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
+{
+    ASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
 
     auto ir = static_cast<uint>(r01u() * max);
-    
-    while (ir >= max) 
+
+    while (ir >= max)
         ir = static_cast<uint>(r01u() * max);
-    
-    return ir;    
+
+    return ir;
 }
 
 
 // Returns szt in the range [0, max-1].
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 szt Boost<real>::
 uniform0(const szt max)
-{            
-    XASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
+{
+    ASSERT(max > 0, "Boost<real>::uniform0 requires max > 0");
 
     auto ir = static_cast<szt>(r01u() * max);
-    
-    while (ir >= max) 
+
+    while (ir >= max)
         ir = static_cast<szt>(r01u() * max);
-    
-    return ir;    
+
+    return ir;
 }
 
 
 // Returns outT in the range [1, max].
 template<std::floating_point real>
-template<std::unsigned_integral intT> 
+template<std::unsigned_integral intT>
 constexpr
 intT Boost<real>::
 uniform1( const intT max )
-{            
-    
-    XASSERT(max > 0, "Boost<real>::uniform1 requires max > 0 ");
-    
+{
+
+    ASSERT(max > 0, "Boost<real>::uniform1 requires max > 0 ");
+
     return uniform0(max) + 1;
 }
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 uniform0(const real max)
-{            
-    XASSERT(max > zero, "Boost<real>::uniform0 requires max > 0 ");
+{
+    ASSERT(max > zero, "Boost<real>::uniform0 requires max > 0 ");
 
-    auto ir = r01u() * max;    
-    
-    while (ir >= max) 
+    auto ir = r01u() * max;
+
+    while (ir >= max)
         ir = r01u() * max;
-    
-    return ir;    
+
+    return ir;
 }
 
 
 // Returns a point uinformly distributed within solidAngle on a shpere.
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Boost<real>::
 uniform_direction( const real solidAngle ) noexcept -> A3r
@@ -527,22 +527,22 @@ uniform_direction( const real solidAngle ) noexcept -> A3r
         // Inclination of the candidate point on a sphere surface.
         const auto ph = pi * (r01u() - half);
         if (ph > solidAngle) continue;
-        
+
         // Azimuth of the candidate point on a sphere surface.
         auto th = twopi * (r01u() - half);
-        
+
         // If upper altitude paralleles are shorter, reject some
         // points positioned outside their length:
         if (std::abs(th) < pi * std::cos(ph)) {
             // Spread the remaining points over the length of the parallele:
             th /= std::cos(ph);
-            
+
             return { std::cos(ph) * std::cos(th),
                      std::cos(ph) * std::sin(th),
                      std::sin(ph) };
         }
     } while (true);
-    
+
     return {};
 }
 
@@ -551,7 +551,7 @@ uniform_direction( const real solidAngle ) noexcept -> A3r
 // and azimMinMax. Inclination is limited by inclMinMax [0, pi) around +z
 // axis direction (i.e. phPole == 0). Azimuth is limited by azimMinMax [-pi, pi)
 //  around +x axis direction  (i.e. th == 0).
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Boost<real>::
 uniform_direction(
@@ -601,22 +601,22 @@ uniform_direction(
 // 'solidAngle' surface patch where the random point may belong to; set it
 //      to pi for the whole surface.
 // 'poleDir' [0,1,2] is the direction of the solidAngle axis.
-template<std::floating_point real> 
+template<std::floating_point real>
 auto Boost<real>::
 uniform_on_sphere(
     const real solidAngle,
     const real r,
     const int poleDir
 ) noexcept -> A3r
-{    
-    XASSERT(solidAngle > zero &&
-            solidAngle <= pi,
+{
+    ASSERT(solidAngle > zero &&
+           solidAngle <= pi,
             "Error in Random::uniform_on_sphere: incorrect solidAngle");
-    XASSERT(r > zero,
-            "Error in Random::uniform_on_sphere: incorrect r");
-    XASSERT(poleDir >= 0 &&
-            poleDir <= 2,
-            "Error in Random::uniform_on_sphere: incorrect poleDir");
+    ASSERT(r > zero,
+           "Error in Random::uniform_on_sphere: incorrect r ", r);
+    ASSERT(poleDir >= 0 &&
+           poleDir <= 2,
+           "Error in Random::uniform_on_sphere: incorrect poleDir ", poleDir);
 
     while (true) {
         const auto u = two * r01u() - one;
@@ -624,7 +624,7 @@ uniform_on_sphere(
             // reject the points outside the cap set by solidAngle,
             // i.e one with hieght h = r * (1 - std::cos(solidAngle))
             continue;
-        
+
         const auto v = std::sqrt(one - u*u);
         // Inclination of the candidate point on a sphere surface:
         const auto ph = twopi * r01u();
@@ -648,7 +648,7 @@ uniform_on_sphere(
 // 'r' is spheroid dimensions: r[0] = a = b, r[1] = c
 // 'poleDir' [0,1,2] is the direction of the solidAngle axis
 // 'bias' [-1,0,1]: -1 to poles; 1 to equator, 0 none
-template<std::floating_point real> 
+template<std::floating_point real>
 auto Boost<real>::
 uniform_on_spheriod(
     const real solidAngle,
@@ -659,16 +659,16 @@ uniform_on_spheriod(
 ) noexcept -> A3r
 {
     // Check that the pole direction is along one of the major axes: 0, 1, 2:
-    XASSERT(solidAngle > zero &&
-            solidAngle <= pi,
-            "Error in Random::uniform_on_spheriod: incorrect solidAngle");
-    XASSERT(r > zero,
-            "Error in Random::uniform_on_spheriod: incorrect r");
-    XASSERT(poleDir >= 0 &&
-            poleDir <= 2,
+    ASSERT(solidAngle > zero &&
+           solidAngle <= pi,
+           "Error in Random::uniform_on_spheriod: incorrect solidAngle");
+    ASSERT(r > zero,
+           "Error in Random::uniform_on_spheriod: incorrect r");
+    ASSERT(poleDir >= 0 &&
+           poleDir <= 2,
             "Error in Random::uniform_on_spheriod: incorrect poleDir");
-    XASSERT(!bias || bias == -1 || bias == 1,
-            "Error in Random::uniform_on_spheriod: incorrect bias");
+    ASSERT(!bias || bias == -1 || bias == 1,
+           "Error in Random::uniform_on_spheriod: incorrect bias");
 
     while (true) {
         // Inclination of the candidate point on a sphere surface:
@@ -688,7 +688,7 @@ uniform_on_spheriod(
             (poleDir == 1 && y < r[0] * sathr) ||
             (poleDir == 0 && x < r[0] * sathr))
             continue;
-        
+
         const auto s0 = std::sqrt(
             (x*x + y*y) / r[0]*r[0]*r[0]*r[0] +
                     z*z / r[1]*r[1]*r[1]*r[1]
@@ -709,14 +709,14 @@ uniform_on_spheriod(
             if (std::acos(std::sqrt(x*x + y*y) / res.norm()) >
                  gaussian_number_constrained(zero, biasPar, zero, halfpi))
                 continue;
-        
+
         // No bias.
         return res;
-    } 
+    }
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Boost<real>::
 uniform_on_ellipse(
@@ -732,7 +732,7 @@ uniform_on_ellipse(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Boost<real>::
 uniform_in_ellipse(
@@ -742,40 +742,40 @@ uniform_in_ellipse(
     const auto rho = r01u();
     // Inclination of the candidate point:
     const auto phi = twopi * r01u();
-    
+
     // (x, y) is a random point inside a circle of radius 1
     const auto x = std::sqrt(rho) * std::cos(phi);
     const auto y = std::sqrt(rho) * std::sin(phi);
-    
+
     return {x * r[0],
             y * r[1]};
 }
 /*
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Boost<real>::
 uniform_in_ellipse( const A2<real>& r1,
                     const A2<real>& r0,
                     const A2<real>& shift ) noexcept -> A2r
-{    
+{
     do
         if (const auto p = uniform_in_ellipse(r1);
             p[0] >= shift[0] + r0[0] ||
-            p[1] >= shift[1] + r0[1]) 
+            p[1] >= shift[1] + r0[1])
             return p;
     while (true);
 }
 */
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 exponential_number(
     const real mi
 ) noexcept
 {
-    XASSERT(mi >= zero, "Boost<real>::exponentialNum requires mi >= 0");
+    ASSERT(mi >= zero, "Boost<real>::exponentialNum requires mi >= 0");
 
     return - mi * std::log(r01u());
 }
@@ -819,7 +819,7 @@ multinomial_number(
 )  noexcept
 {
     std::vector<real> p (k - 1, one / k);
-    
+
     return multinomial_number(n, p);
 }
 
@@ -849,7 +849,7 @@ multinomial_number(
 
 
 // Weibull distribution
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 weibull_number(
@@ -863,7 +863,7 @@ weibull_number(
 
 
 // Logistic distribution.
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 logistic_number(
@@ -877,7 +877,7 @@ logistic_number(
 
 
 // Returns a normally distributed deviate N(mi, sigma^2).
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 gaussian_number(
@@ -889,7 +889,7 @@ gaussian_number(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Boost<real>::
 gaussian_number_constrained(
@@ -899,12 +899,12 @@ gaussian_number_constrained(
     const real cmax
 ) noexcept
 {
-    XASSERT(cmin < cmax, "Error in gaussianNumConstr: cmin >= cmax.");
-    
+    ASSERT(cmin < cmax, "Error in gaussianNumConstr: cmin >= cmax.");
+
     real res;
     do res = gaussian_number(mi, sigma);
     while (res < cmin || res > cmax);
-    
+
     return res;
 }
 

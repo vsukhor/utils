@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -85,12 +85,12 @@ public:
         unsigned long omittedBoundaries,
         unsigned long nThreads
     );
-    
+
     /**
      * \brief Joins the threads.
      */
     void join();
-    
+
     // Various weights for relative thread loads
     /**
      * \brief Sets weighting factors according to \a Weights::Equal.

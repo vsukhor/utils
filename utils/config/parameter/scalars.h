@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -61,10 +61,10 @@ class Par<T,isDiscrete,
     using Q = T;
     using Base<T>::check_name;
     using Base<T>::isLoaded_;
-    
+
     Q p_;  ///< The parameter value.
-    
-public:    
+
+public:
 
     using Base<T>::get_name;
 
@@ -152,7 +152,7 @@ public:
      * \return Parameter value.
      */
     Q operator()() const;
-    
+
 private:
 
     /**
@@ -160,7 +160,7 @@ private:
      * \param value Value to search for.
      */
     void initialize( std::string value ) final;
-};    
+};
 
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -239,7 +239,9 @@ check_range(
             throw exceptions::ParOutOfRange<T, isDiscrete>(get_name(), p_, r, msgr);
     }
     else {
-        XASSERT(r.size() == 2, "size of r must be 2 for continuous parameters");
+        ASSERT(r.size() == 2,
+               "size of r must be 2 for continuous parameters, instead, it is ",
+               r.size());
         if (p_ < r[0] || p_ > r[1])
             throw exceptions::ParOutOfRange<T, isDiscrete>(get_name(), p_, r, msgr);
     }
@@ -291,7 +293,7 @@ T Par<T, isDiscrete,
       typename std::enable_if_t<std::is_arithmetic_v<T>>>::
 operator()() const
 {
-    XASSERT(isLoaded_, get_name());
+    ASSERT(isLoaded_, get_name());
     return p_;
 }
 

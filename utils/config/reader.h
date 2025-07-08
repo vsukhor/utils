@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ public:
         const path& file,
         Msgr* msgr
     );
-    
+
     /**
      * \brief Value of the parameter read in from the configuration file.
      * \tparam T Parameter type.
@@ -93,7 +93,7 @@ public:
      * \param range Acceptable range of parameter values.
      * \return Value of the parameter read in.
      */
-    template<typename T, 
+    template<typename T,
              auto N>
     auto operator()(const std::string& s,
                     const std::vector<std::array<T, N>>& range) const;
@@ -107,7 +107,7 @@ public:
 
     /**
      * \brief Copies configuration file to a new destination.
-     * \details Copies \p compartment -specific configuration file to 
+     * \details Copies \p compartment -specific configuration file to
      * directory \p path .
      * \note The directory is expected to exist.
      * \param path Directory name to which file should be copied.
@@ -198,7 +198,7 @@ copy(const path& path,
         path / (std::string("cfgCopy_") + compartment + signature + ".txt")
     };
     msgr->print("Copying " + compartment + " config to " + cfgCopy.string());
-    
+
     if (std::filesystem::exists(cfgCopy)) {
         try {
             std::filesystem::remove(cfgCopy);

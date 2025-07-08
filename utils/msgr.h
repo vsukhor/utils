@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -19,7 +19,7 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
- 
+
 ================================================================================
 */
 
@@ -34,7 +34,9 @@
 
 #include <array>
 #include <fstream>
+#include <iostream>
 #include <ostream>
+#include <source_location>
 #include <sstream>
 #include <stdarg.h>
 #include <string>
@@ -51,50 +53,50 @@ struct Colorcodes {
 static constexpr const char* BOLD        {"\033[1m"};
 static constexpr const char* RESET       {"\033[0m"};
 static constexpr const char* BLACK       {"\033[30m"};          // Black
-static constexpr const char* RED         {"\033[31m"};          // Red 
-static constexpr const char* GREEN       {"\033[32m"};          // Green 
-static constexpr const char* YELLOW      {"\033[33m"};          // Yellow 
-static constexpr const char* BLUE        {"\033[34m"};          // Blue 
-static constexpr const char* MAGENTA     {"\033[35m"};          // Magenta 
-static constexpr const char* CYAN        {"\033[36m"};          // Cyan 
-static constexpr const char* WHITE       {"\033[37m"};          // White 
-static constexpr const char* BOLDBLACK   {"\033[1m\033[30m"};   // Bold Black 
-static constexpr const char* BOLDRED     {"\033[1m\033[31m"};   // Bold Red 
-static constexpr const char* BOLDGREEN   {"\033[1m\033[32m"};   // Bold Green 
-static constexpr const char* BOLDYELLOW  {"\033[1m\033[33m"};   // Bold Yellow 
-static constexpr const char* BOLDBLUE    {"\033[1m\033[34m"};   // Bold Blue 
-static constexpr const char* BOLDMAGENTA {"\033[1m\033[35m"};   // Bold Magenta 
-static constexpr const char* BOLDCYAN    {"\033[1m\033[36m"};   // Bold Cyan 
-static constexpr const char* BOLDWHITE   {"\033[1m\033[37m"};   // Bold White 
+static constexpr const char* RED         {"\033[31m"};          // Red
+static constexpr const char* GREEN       {"\033[32m"};          // Green
+static constexpr const char* YELLOW      {"\033[33m"};          // Yellow
+static constexpr const char* BLUE        {"\033[34m"};          // Blue
+static constexpr const char* MAGENTA     {"\033[35m"};          // Magenta
+static constexpr const char* CYAN        {"\033[36m"};          // Cyan
+static constexpr const char* WHITE       {"\033[37m"};          // White
+static constexpr const char* BOLDBLACK   {"\033[1m\033[30m"};   // Bold Black
+static constexpr const char* BOLDRED     {"\033[1m\033[31m"};   // Bold Red
+static constexpr const char* BOLDGREEN   {"\033[1m\033[32m"};   // Bold Green
+static constexpr const char* BOLDYELLOW  {"\033[1m\033[33m"};   // Bold Yellow
+static constexpr const char* BOLDBLUE    {"\033[1m\033[34m"};   // Bold Blue
+static constexpr const char* BOLDMAGENTA {"\033[1m\033[35m"};   // Bold Magenta
+static constexpr const char* BOLDCYAN    {"\033[1m\033[36m"};   // Bold Cyan
+static constexpr const char* BOLDWHITE   {"\033[1m\033[37m"};   // Bold White
 
 const std::string sBOLD        {BOLD};
 const std::string sRESET       {RESET};
-const std::string sBLACK       {BLACK};          
-const std::string sRED         {RED};         
-const std::string sGREEN       {GREEN};          
-const std::string sYELLOW      {YELLOW};         
-const std::string sBLUE        {BLUE};          
-const std::string sMAGENTA     {MAGENTA};         
-const std::string sCYAN        {CYAN};          
-const std::string sWHITE       {WHITE};          
-const std::string sBOLDBLACK   {BOLDBLACK};   
-const std::string sBOLDRED     {BOLDRED};   
-const std::string sBOLDGREEN   {BOLDGREEN};   
-const std::string sBOLDYELLOW  {BOLDYELLOW};   
-const std::string sBOLDBLUE    {BOLDBLUE};   
-const std::string sBOLDMAGENTA {BOLDMAGENTA};   
-const std::string sBOLDCYAN    {BOLDCYAN};   
-const std::string sBOLDWHITE   {BOLDWHITE};  
+const std::string sBLACK       {BLACK};
+const std::string sRED         {RED};
+const std::string sGREEN       {GREEN};
+const std::string sYELLOW      {YELLOW};
+const std::string sBLUE        {BLUE};
+const std::string sMAGENTA     {MAGENTA};
+const std::string sCYAN        {CYAN};
+const std::string sWHITE       {WHITE};
+const std::string sBOLDBLACK   {BOLDBLACK};
+const std::string sBOLDRED     {BOLDRED};
+const std::string sBOLDGREEN   {BOLDGREEN};
+const std::string sBOLDYELLOW  {BOLDYELLOW};
+const std::string sBOLDBLUE    {BOLDBLUE};
+const std::string sBOLDMAGENTA {BOLDMAGENTA};
+const std::string sBOLDCYAN    {BOLDCYAN};
+const std::string sBOLDWHITE   {BOLDWHITE};
 
 
 static constexpr std::array all {
-    BOLD, RESET, 
+    BOLD, RESET,
     BLACK,     RED,     GREEN,     YELLOW,     BLUE,     MAGENTA,     CYAN,     WHITE,
     BOLDBLACK, BOLDRED, BOLDGREEN, BOLDYELLOW, BOLDBLUE, BOLDMAGENTA, BOLDCYAN, BOLDWHITE
 };
 
 const std::array<std::string, all.size()> sall {
-    sBOLD, sRESET, 
+    sBOLD, sRESET,
     sBLACK,     sRED,     sGREEN,     sYELLOW,     sBLUE,     sMAGENTA,     sCYAN,     sWHITE,
     sBOLDBLACK, sBOLDRED, sBOLDGREEN, sBOLDYELLOW, sBOLDBLUE, sBOLDMAGENTA, sBOLDCYAN, sBOLDWHITE
 };
@@ -103,6 +105,36 @@ const std::array<std::string, all.size()> sall {
 
 constexpr Colorcodes colorcodes;
 
+
+// /////////////////////////////////////////////////////////////////////////////
+
+template<typename ...Args>
+constexpr
+void failure_message(
+    const char* CND,
+    const std::source_location location,
+    Args... msg
+)
+{
+    using cc = utils::Colorcodes;
+
+    std::cerr << cc::BOLDRED << "Assertion ( "
+              << cc::BOLDCYAN << CND << cc::BOLDRED
+              << " ) failed!" << cc::RESET << '\n'
+              << cc::YELLOW << "    file:     " << cc::RESET
+              << location.file_name() << '('
+              << location.line() << ':'
+              << location.column() << ")\n"
+              << cc::YELLOW << "    function: " << cc::RESET
+              << location.function_name() << "\n"
+              << cc::BOLDRED << "Reason: " << cc::RESET;
+
+    (std::cerr << ... << msg);
+
+    std::cerr << std::endl;
+
+    std::exit(EXIT_FAILURE);
+}
 
 // /////////////////////////////////////////////////////////////////////////////
 
@@ -127,7 +159,7 @@ public:
     Msgr() = default;
 
     /**
-     * \brief Constructor.
+     * \brief Constructs This object given streams to the screen and to file.
      * \param so Screen out stream.
      * \param sl File out stream.
      * \param precision Precision of real numbers.
@@ -137,7 +169,7 @@ public:
         logstream* sl,
         int precision
     );
-    
+
     /**
      * \brief Set formatting parameters.
      * \param precision Precision of real numbers
@@ -194,12 +226,12 @@ public:
      */
     template<typename... T>
     Msgr& operator<<(T... values);
-    
+
     /**
      * \brief Packs \p values into an output stringstream.
      */
     template<typename... T>
-    auto oss(T... values) const -> std::ostringstream;
+    static auto oss(T... values) -> std::ostringstream;
 
 private:
 
@@ -275,8 +307,8 @@ auto Msgr::
 rm_colorcode(std::string&& s) const noexcept -> std::string
 {
     for (const auto& p: colorcodes.sall) {
-        auto n = p.length(); 
-        for (auto i = s.find(p); i != std::string::npos; i = s.find(p)) 
+        auto n = p.length();
+        for (auto i = s.find(p); i != std::string::npos; i = s.find(p))
             s.erase(i, n);
     }
 
@@ -291,13 +323,13 @@ prn(
     std::string&& v,
     const bool endline
 ) const noexcept
-{ 
+{
     static_assert(is_valid_stream<IO>(),
                   "Stream type used in Msgr is not valid");
 
-    if constexpr (std::is_same_v<IO, logstream>) 
+    if constexpr (std::is_same_v<IO, logstream>)
         v = rm_colorcode(std::forward<std::string>(v));
-    
+
     *io << v << " ";
     if (endline)
         *io << std::endl;
@@ -335,7 +367,7 @@ print_vector(
 
 template<typename... T>
 auto Msgr::
-oss(T... values) const -> std::ostringstream
+oss(T... values) -> std::ostringstream  // static
 {
     std::ostringstream s;
 
@@ -373,7 +405,7 @@ Msgr& Msgr::
 operator<<(T... values)
 {
     print<false>(values...);
-    
+
     return *this;
 }
 

@@ -1,5 +1,5 @@
 /* =============================================================================
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
 
 /**
  * \file geometric_functions.h
- * \brief A collection of genetally useful geometric functions.
+ * \brief A collection of commonly useful geometric functions.
  * \author Valerii Sukhorukov
  */
 
@@ -79,8 +79,8 @@ struct Geometric {
      * \param ab    Dimensions of ellipse semi-major axes.
      */
     static A2r ellipse(
-        real alpha,     
-        const A2r& ab    
+        real alpha,
+        const A2r& ab
     ) noexcept;
 
     /**
@@ -94,14 +94,14 @@ struct Geometric {
         const A3r& p,
         const A3r& e
     ) noexcept;
-    
+
     /**
      * \brief Calculates area of an ellipse.
      * \param a Length of the semi-major axis.
      * \param b Length of the semi-major axis.
      */
     static constexpr real ellipse_area(
-        real a, 
+        real a,
         real b
     ) noexcept;
 
@@ -112,11 +112,11 @@ struct Geometric {
      * \param c Length of the semi-major axis.
      */
     static constexpr real ellipsoid_vol(
-        real a, 
-        real b, 
+        real a,
+        real b,
         real c
     ) noexcept;
-     
+
     /**
      * \brief Calculates volume of an elliptic cylinder.
      * \param a Length of the semi-major axis.
@@ -124,11 +124,11 @@ struct Geometric {
      * \param h Cylinder height.
      */
     static constexpr real elliptic_cylinder_vol(
-        real a, 
-        real b, 
+        real a,
+        real b,
         real h
     ) noexcept;
-    
+
     /**
      * \brief Calculates volume of an ellipsoidal cap.
      * \param a Length of the semi-major axis.
@@ -137,12 +137,12 @@ struct Geometric {
      * \param h The cap height (|h| < c).
      */
     static constexpr real ellipsoid_cap_vol(
-        real a, 
-        real b, 
-        real c, 
+        real a,
+        real b,
+        real c,
         real h
     ) noexcept;
-     
+
     /**
      * \brief Calculates base area of an ellipsoidal cap.
      * \param a Length of the semi-major axis.
@@ -151,12 +151,12 @@ struct Geometric {
      * \param h The cap height (|h| < c).
      */
     static constexpr real ellipsoid_cap_base_area(
-        real a, 
-        real b,  
-        real c, 
+        real a,
+        real b,
+        real c,
         real h
     ) noexcept;
-    
+
     /**
      * \brief Calculates surface area of a spheroid.
      * \details Spheroid is given by \p r .
@@ -165,11 +165,11 @@ struct Geometric {
      * \param msgr Output message processor.
      */
     static constexpr real spheroid_surf_area(
-        const A3r& r,    
-        Msgr& msgr       
+        const A3r& r,
+        Msgr& msgr
     );
 
-    /** 
+    /**
      * \brief Unit normal on the surface of an axis-aligned ellipsoid.
      * \details Calculates unit normal vector at point \a p on surface
      * of an axis-aligned ellipsoid (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
@@ -178,11 +178,11 @@ struct Geometric {
      * \param p Point on ellipsoid surface.
      */
     static constexpr auto unormal_on_ellipsoid(
-        const A3r& r,    
-        const A3r& p     
+        const A3r& r,
+        const A3r& p
         ) noexcept -> A3r;
 
-    /** 
+    /**
      * \brief Determines symmetry axes of a spheroid.
      * \details The spheroid should be axis-aligned.
      * \param r Dimensions of the spheroid semi-major axes.
@@ -205,8 +205,8 @@ struct Geometric {
      * \return Semi-axes of the ellipsoid cross-section.
      */
     static constexpr auto ellipsoid_horizontal_crosection0(
-        const A3r& e,   
-        real h           
+        const A3r& e,
+        real h
     ) noexcept -> A2r;
 
 
@@ -222,9 +222,9 @@ struct Geometric {
      * \param d Direction of the line.
      */
     static constexpr real intersection_line_ellipsoid(
-        const A3r& v,    
-        const A3r& e,    
-        const A3r& d     
+        const A3r& v,
+        const A3r& e,
+        const A3r& d
     ) noexcept;
 
     /**
@@ -238,9 +238,9 @@ struct Geometric {
      * \param d  Line direction vector.
      */
     static constexpr real intersection_line_ellipse(
-        const A2r& v,     
-        const A2r& ab,    
-        const A2r& d      
+        const A2r& v,
+        const A2r& ab,
+        const A2r& d
     ) noexcept;
 
     /**
@@ -255,9 +255,9 @@ struct Geometric {
      * \param ab Dimensions of the ellipse semi-major axes.
      */
     static constexpr real intersection_line_ellipse(
-        const A2r& v,    
-        const A2r& d,    
-        const A2r& ab,   
+        const A2r& v,
+        const A2r& d,
+        const A2r& ab,
         real alpha
     ) noexcept;
 
@@ -269,7 +269,7 @@ struct Geometric {
     // static constexpr bool intersection_segment_plane(
     //      const A3r& p1, const A3r& p2, const A3r& n,
     //      const A3r& o, A3r& intersP ) noexcept;
-    
+
     /**
      * \brief Finds intersection of a line and a plane.
      */
@@ -294,11 +294,11 @@ struct Geometric {
      * \return Distance in direction \p d from \p p to the intersection point.
      */
     static constexpr real intersection_line_plane(
-        const A3r& p,      
-        const A3r& d,        
-        const A3r& v1,       
-        const A3r& v2,       
-        const A3r& v3        
+        const A3r& p,
+        const A3r& d,
+        const A3r& v1,
+        const A3r& v2,
+        const A3r& v3
     ) noexcept;
 
     /**
@@ -312,10 +312,10 @@ struct Geometric {
      * \return Distance in direction \p d from \p p to the intersection point.
      */
     static constexpr real intersection_line_plane(
-        const A3r& p,       
-        const A3r& d,        
-        const A3r& v,        
-        const A3r& n       
+        const A3r& p,
+        const A3r& d,
+        const A3r& v,
+        const A3r& n
     ) noexcept;
 
     /**
@@ -330,10 +330,10 @@ struct Geometric {
      * antiparallel to the line -- depending on \p sign .
      */
     static constexpr real intersection_vertical_line_plane(
-        const A3r& p0,   
-        int sign,        
-        const A3r& v,   
-        const A3r& n    
+        const A3r& p0,
+        int sign,
+        const A3r& v,
+        const A3r& n
     ) noexcept;
 
     /**
@@ -375,7 +375,7 @@ struct Geometric {
         real rm[3][3]
     ) noexcept;
 
-    /** 
+    /**
      * \brief Rotation matrix around an axis parallel to 'y'.
      * \details Sets rotations over \p angle around an axis parallel to 'y'.
      * \param[in] angle Rotation angle.
@@ -402,20 +402,20 @@ struct Geometric {
 
     /**
      * \brief Determines if all sides of a 3D body are equal.
-     * \details Given the dimensions \p e of a 3D body, determines if all its 
+     * \details Given the dimensions \p e of a 3D body, determines if all its
      * sides are equal.
      * \param e Body dimensions.
      */
     static constexpr bool all_sides_are_equal(const A3r& e) noexcept;
-    
+
     /**
      * \brief Determines if two sides of a 3D body are equal.
-     * \details Given the dimensions \p e of a 3D body, determines if two of its 
+     * \details Given the dimensions \p e of a 3D body, determines if two of its
      * sides are equal.
      * \param e Body dimensions.
      */
     static constexpr bool two_sides_are_equal(const A3r& e) noexcept;
-    
+
 
     // Some conversions ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -427,9 +427,9 @@ struct Geometric {
      * \return (x, y, z).
      */
     static constexpr auto sph2cart(
-        real ph,            
-        real th,           
-        real rad=one     
+        real ph,
+        real th,
+        real rad=one
     ) -> A3r;
 
     /**
@@ -438,7 +438,7 @@ struct Geometric {
      * \return (x, y, z).
      */
     static constexpr auto sphere2cart(
-        real r,        
+        real r,
         real theta,
         real sinPhi,
         real cosPhi
@@ -451,8 +451,8 @@ struct Geometric {
      * \return (x, y).
      */
     static constexpr auto polar2cart(
-        real r,        
-        real theta     
+        real r,
+        real theta
     ) noexcept -> A2r;
 
     /**
@@ -461,7 +461,7 @@ struct Geometric {
      */
     static constexpr real grad2rad(real grad) noexcept;
 
-    /** 
+    /**
      * \brief Converts Rad to Grad.
      * \param rad Angle given in Rads.
      */
@@ -482,10 +482,10 @@ struct Geometric {
      * \return Point on the line closest to the origin.
      */
     static constexpr auto ptClosest2orgn(
-        const A3r& p,    
-        const A3r& d    
+        const A3r& p,
+        const A3r& d
     ) noexcept -> A3r;
-    
+
     /**
      * \brief Finds point on an ellipsoid closest to a line.
      * \details Finds point closest to line on an ellipsoid given by its
@@ -498,10 +498,10 @@ struct Geometric {
      * \return Point on an ellipsoid closest to line.
      */
     static constexpr auto ellipsoid_closest_point2Line(
-        const A3r& ptc2o,    
-        const A3r& e         
+        const A3r& ptc2o,
+        const A3r& e
     ) noexcept  -> A3r;
-    
+
 
     // Projections +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -517,7 +517,7 @@ struct Geometric {
         const A3r& v,
         const A3r& n
     ) noexcept -> A3r;
-    
+
 
     // Hexagonal lattice +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -566,7 +566,7 @@ struct Geometric {
         const A3r& p4
     ) noexcept;
 
-    /** 
+    /**
      * \brief Calculates squared distance between two line segments in 3D.
      * \details The segments are defined by pairs of points
      * [ \p S10, \p S11 ] and [ \p S20, \p S21 ].
@@ -606,7 +606,7 @@ struct Geometric {
 
     /**
      * \brief Determines intersection of a ray and a triangle in 3D.
-     * \details Finds out if a ray given by its origin \p p and direction \p d 
+     * \details Finds out if a ray given by its origin \p p and direction \p d
      * intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
      * If true, the intersection point is given by p + t * d
      * \see Accepted answer at
@@ -623,7 +623,7 @@ struct Geometric {
 
     /**
      * \brief Determines if a segment intersects a triangle in 3D.
-     * \details Finds out if a segment given by its endpoints \p p1 and \p p2  
+     * \details Finds out if a segment given by its endpoints \p p1 and \p p2
      * intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
      * \see Accepted answer at
      * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
@@ -638,7 +638,7 @@ struct Geometric {
 
     /**
      * \brief Determines if a point lies inside a tetrahedron.
-     * \details Finds out if a 3D point \p p is inside a tetrahedron 
+     * \details Finds out if a 3D point \p p is inside a tetrahedron
      * given by its vertexes \p v1, \p v2, \p v3 and \p v4.
      * \see Accepted answer at
      * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
@@ -646,26 +646,26 @@ struct Geometric {
      * -------- Use 'point_in_tetrahedron' wt underscore instead ---------------
      */
     static bool _point_in_tetrahedron(
-        const A3r& p, 
-        const A3r& v1, 
-        const A3r& v2, 
-        const A3r& v3, 
+        const A3r& p,
+        const A3r& v1,
+        const A3r& v2,
+        const A3r& v3,
         const A3r& v4
     ) noexcept;
 
     /**
      * \brief Determines if a point lies inside a tetrahedron.
-     * \details Finds out if a 3D point \p p is inside a tetrahedron 
+     * \details Finds out if a 3D point \p p is inside a tetrahedron
      * given by its vertexes \p v1, \p v2, \p v3 and \p v4.
      * \see Accepted answer at
      * https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
      * -------- This is the preferred algorithm for a non-vectorized version ---
      */
     static bool point_in_tetrahedron(
-        const A3r& p, 
-        const A3r& v1, 
-        const A3r& v2, 
-        const A3r& v3, 
+        const A3r& p,
+        const A3r& v1,
+        const A3r& v2,
+        const A3r& v3,
         const A3r& v4
     ) noexcept;
 
@@ -747,7 +747,7 @@ ellipsoid_cap_vol(
     const real c,
     const real h
 ) noexcept
-{    
+{
     return pi * a * b / (c*c) * h*h * (c - h / three);
 }
 
@@ -777,9 +777,9 @@ spheroid_surf_area(
 )
 {
     if (r[0] == r[1]) {
-        const auto a2 = r[0]*r[0]; 
+        const auto a2 = r[0]*r[0];
         const auto c2 = r[2]*r[2];
-        
+
         if (r[0] < r[2]) {            // prolate spheroid
             const auto e = std::sqrt(one - a2 / c2);
             return twopi * (a2 + std::asin(e) * r[0] * r[2] / e);
@@ -811,7 +811,7 @@ spheroid_axes_symmetry(
     if (r[0] == r[2]) return {0, 1, 1};    // pole is along 1
     if (r[1] == r[2]) return {0, 1, 0};    // pole is along 0
 
-    XASSERT(false, " Geometric::spheroid_axes_symmetry failed");
+    ASSERT(false, "function failed");
 
     return {};
 }
@@ -859,7 +859,7 @@ intersection_line_ellipsoid(
                     e[0]*e[0] * e[1]*e[1] * e[2]*e[2];
 
     const auto discr = u2 * u2 - four * u1 * u3;
-    
+
     if (discr >= zero) {    // an intersection is possible
 
         // Putative intersection points:
@@ -906,7 +906,7 @@ intersection_line_ellipse(
     const auto u3 = v[0] * v[0] * b2 +
                     v[1] * v[1] * a2 - a2 * b2;
     const auto discr = u2*u2 - four * u1 * u3;
-    
+
     if (discr >= zero) {       // an intersection is possible
         const auto sd = std::sqrt(discr);
         // Putative intersection points:
@@ -1059,13 +1059,13 @@ intersection_line_plane(
 {
     const auto den1 = p10[1]*p20[0] -
                       p20[1]*p10[0];
-    
+
     const auto kappa = (p20[1]*pab[0] - pab[1]*p20[0]) / den1;
     const auto lamda = (pa0[1]*p20[0] - p20[1]*pa0[0]) / den1;
-    
+
     const auto den2 = p20[0] * (pab[2] + p10[2]*kappa) -
                       p20[2] * (pab[0] + p10[0]*kappa);
-    
+
     if (!den1 || !den2)
         msgr.exit("Error: singularity in line-plane: filament");
 
@@ -1167,13 +1167,13 @@ intersection_line_cone(
                     two*(q[0]*q[1] * d[0]*d[1] +
                             q[0]*q[2] * d[0]*d[2] +
                             q[1]*q[2] * d[1]*d[2]);
-                                     
+
     const auto u2 = m.dotpr(d) +
                     two*(h.dotpr(d*p) +
                             q[0]*q[1] * (d[0]*p[1] + d[1]*p[0]) +
                             q[0]*q[2] * (d[0]*p[2] + d[2]*p[0]) +
                             q[1]*q[2] * (d[1]*p[2] + d[2]*p[1]));
-                                                    
+
     const auto u3 = m.dotpr(p) +
                     h.dotpr(p*p + w*w) +
                     two*(q[0]*q[1] * (p[0]*p[1] + w[0]*w[1]) +
@@ -1181,7 +1181,7 @@ intersection_line_cone(
                             q[1]*q[2] * (p[1]*p[2] + w[1]*w[2]));
 
     auto discr = u2*u2 - four * u1*u3;
-    
+
     if (discr >= zero) {
         // An intersection is possible.
         // Putative intersection points:
@@ -1231,7 +1231,7 @@ rotmat(
     const auto sia = std::sin(angle);
     const auto coa = std::cos(angle);
     const auto c = - n*n + one;
-    
+
     rm[0][0] = n[0]*n[0] + c[0] * coa;
     rm[0][1] = n[0]*n[1] * (one - coa) - n[2] * sia;
     rm[0][2] = n[0]*n[2] * (one - coa) + n[1] * sia;
@@ -1256,10 +1256,10 @@ rotmatx(
 ) noexcept
 {
     const A3r n {one, zero, zero};
-    
+
     const auto sia = std::sin(angle);
     const auto coa = std::cos(angle);
-    
+
     rm[0][0] = n[0]*n[0] + (one - n[0]*n[0]) * coa;
     rm[0][1] = zero;
     rm[0][2] = zero;
@@ -1284,10 +1284,10 @@ rotmaty(
 ) noexcept
 {
     const A3r n {zero, one, zero};
-    
+
     const auto sia = std::sin(angle);
     const auto coa = std::cos(angle);
-    
+
     rm[0][0] = zero;
     rm[0][1] = zero;
     rm[0][2] = n[1] * sia;
@@ -1312,10 +1312,10 @@ rotmatz(
 ) noexcept
 {
     const A3r n {zero, zero, one};
-    
+
     const auto sia = std::sin(angle);
     const auto coa = std::cos(angle);
-    
+
     rm[0][0] = zero;
     rm[0][1] = - n[2] * sia;
     rm[0][2] = zero;
@@ -1339,7 +1339,7 @@ unormal_on_ellipsoid(
     const A3r& r,
     const A3r& p
 ) noexcept -> A3r
-{    
+{
     const auto a2 = r[0] * r[0];
     const auto b2 = r[1] * r[1];
     const auto c2 = r[2] * r[2];
@@ -1454,7 +1454,7 @@ ellipsoid_closest_point2Line(
 ) noexcept -> A3r
 {
     // https://math.stackexchange.com/questions/895385/point-on-an-ellipsoid-closest-to-line?noredirect=1&lq=1
-    // ptc2o is a point on a 3D line closest to the origin; 
+    // ptc2o is a point on a 3D line closest to the origin;
     // center of the ellipsoid (x/a)^2 + (y/b)^2 + (z/c)^2 = 1
     // with dimensions elps = {a,b,c} is at the origin.
 
@@ -1499,7 +1499,7 @@ squared_dist3D_Segment_to_Segment(
     const auto D = a*c - b*b;                    // always >= 0
     real sc, sN, sD = D;   // sc = sN / sD, default sD = D >= 0
     real tc, tN, tD = D;   // tc = tN / tD, default tD = D >= 0
-    
+
     // Compute the line Config of the two closest points.
     if (D < SMALL_NUM) {
         // The lines are almost parallel.
@@ -1546,10 +1546,10 @@ squared_dist3D_Segment_to_Segment(
     // Finally do the division to get sc and tc:
     sc = std::abs(sN) < SMALL_NUM ? zero : sN / sD;
     tc = std::abs(tN) < SMALL_NUM ? zero : tN / tD;
-    
+
     // Get the difference of the two closest points:
     const auto dP = w + (u * sc) - (v * tc);  // =  S1(sc) - S2(tc)
-    
+
     return dP.dotpr();   // the closest distance
 }
 
@@ -1583,7 +1583,7 @@ hexagonal_lattice(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 auto Geometric<real>::
 numLayers_hexagonal_lattice (
@@ -1603,7 +1603,7 @@ numLayers_hexagonal_lattice (
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Geometric<real>::
 grad2rad(
@@ -1614,7 +1614,7 @@ grad2rad(
 }
 
 
-template<std::floating_point real> 
+template<std::floating_point real>
 constexpr
 real Geometric<real>::
 rad2grad(
@@ -1688,7 +1688,7 @@ point_in_triangle(
 
 // Determines if a point is inside a 2D triangle.
 // https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
-template<std::floating_point real> 
+template<std::floating_point real>
 bool Geometric<real>::
 point_in_triangle(
     const real* p,
@@ -1700,7 +1700,7 @@ point_in_triangle(
     auto sign = [](
         const real* p1,
         const real* p2,
-        const real* p3 
+        const real* p3
     ) noexcept
     {
         return (*p1 - *p3) * (*(p2+1) - *(p3+1)) -
@@ -1717,12 +1717,12 @@ point_in_triangle(
 
 
 // Determines intersection of a ray and a triangle in 3D.
-// Finds out if a ray given by its origin \p and direction \d 
+// Finds out if a ray given by its origin \p and direction \d
 // intersects a triangle given by its vertexes \p v1, \p v2 and \p v3.
 // If true, the intersection point is given by p + t * d
 // \see Accepted answer at
 // https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
-template<std::floating_point real> 
+template<std::floating_point real>
 bool Geometric<real>::
 ray_intersects_triangle(
 //    in Ray R, in vec3 A, in vec3 B, in vec3 C
@@ -1730,10 +1730,10 @@ ray_intersects_triangle(
     const A3r& d,
     const A3r& v1,
     const A3r& v2,
-    const A3r& v3,  
+    const A3r& v3,
     real& t          // ref
 ) noexcept
-{ 
+{
     const auto e1 = v2 - v1;
     const auto e2 = v3 - v1;
     const auto n = A3r::crosspr(e1, e2);
@@ -1743,22 +1743,22 @@ ray_intersects_triangle(
     const auto da0 = A3r::crosspr(a0, d);
     const auto u =  e2.dotpr(da0) * invdet;
     const auto v = -e1.dotpr(da0) * invdet;
-    t =  a0.dotpr(n) * invdet; 
+    t =  a0.dotpr(n) * invdet;
 
-   return (det >= EPS && 
-           t >= zero && 
-           u >= zero && 
-           v >= zero && 
+   return (det >= EPS &&
+           t >= zero &&
+           u >= zero &&
+           v >= zero &&
            u + v <= one);
 }
 
 
 // Determines if a segment intersects a triangle in 3D.
-// Finds out if a segment given by its endpoints \p p1 and \p p2  
+// Finds out if a segment given by its endpoints \p p1 and \p p2
 // intersects a triangle given by its vertexes \p v1, \p v2 and \p v3 in 3D.
 // Accepted answer at
 // https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
-template<std::floating_point real> 
+template<std::floating_point real>
 bool Geometric<real>::
 segment_intersects_triangle(
     const A3r& p1,
@@ -1769,39 +1769,39 @@ segment_intersects_triangle(
 ) noexcept
 {
     // Tetrahedron signed volume.
-    auto sv = [](const A3r& a, 
+    auto sv = [](const A3r& a,
                  const A3r& b,
                  const A3r& c,
-                 const A3r& d) 
+                 const A3r& d)
     {
         return A3r::dotptpr(A3r::crosspr(b - a, c - a), d - a)/six;
     };
 
-    return std::signbit(sv(p1, v1, v2, v3)) != 
+    return std::signbit(sv(p1, v1, v2, v3)) !=
            std::signbit(sv(p2, v1, v2, v3)) &&
-           std::signbit(sv(p1, p2, v1, v2)) == 
-           std::signbit(sv(p1, p2, v2, v3)) == 
+           std::signbit(sv(p1, p2, v1, v2)) ==
+           std::signbit(sv(p1, p2, v2, v3)) ==
            std::signbit(sv(p1, p2, v3, v1));
 }
 
 
 // Determines if a point lies inside a tetrahedron.
-// Finds out if a 3D point \p p is inside a tetrahedron 
+// Finds out if a 3D point \p p is inside a tetrahedron
 // given by its vertexes \p v1, \p v2, \p v3 and \p v4.
 // \see https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
 // -------- This algorithm is very slow !!!! -----------------------------------
 // -------- Use 'point_in_tetrahedron' wt underscore instead -------------------
-template<std::floating_point real> 
+template<std::floating_point real>
 bool Geometric<real>::
 _point_in_tetrahedron(
-    const A3r& p, 
-    const A3r& v1, 
-    const A3r& v2, 
-    const A3r& v3, 
+    const A3r& p,
+    const A3r& v1,
+    const A3r& v2,
+    const A3r& v3,
     const A3r& v4
 ) noexcept
 {
-    auto same_side = [&]() 
+    auto same_side = [&]()
     {
         const auto normal = A3r::crosspr(v2 - v1, v3 - v1);
         const auto dotV4 = normal.dotpr(v4 - v1);
@@ -1813,33 +1813,33 @@ _point_in_tetrahedron(
     return same_side(v1, v2, v3, v4, p) &&
            same_side(v2, v3, v4, v1, p) &&
            same_side(v3, v4, v1, v2, p) &&
-           same_side(v4, v1, v2, v3, p);               
+           same_side(v4, v1, v2, v3, p);
 }
 
 
 // Determines if a point lies inside a tetrahedron.
-// Finds out if a 3D point \p p is inside a tetrahedron 
+// Finds out if a 3D point \p p is inside a tetrahedron
 // given by its vertexes \p v1, \p v2, \p v3 and \p v4.
 // see https://stackoverflow.com/questions/42740765/intersection-between-line-and-triangle-in-3d
 // -------- This is the preferred algorithm for a non-vectorized calculation ---
-template<std::floating_point real> 
+template<std::floating_point real>
 bool Geometric<real>::
 point_in_tetrahedron(
-    const A3r& p, 
-    const A3r& v1, 
-    const A3r& v2, 
-    const A3r& v3, 
+    const A3r& p,
+    const A3r& v1,
+    const A3r& v2,
+    const A3r& v3,
     const A3r& v4
 ) noexcept
 {
-    auto det3 = [](const A3r& b, 
-                   const A3r& c, 
-                   const A3r& d) 
+    auto det3 = [](const A3r& b,
+                   const A3r& c,
+                   const A3r& d)
     {
         return b[0]*c[1]*d[2] + c[0]*d[1]*b[2] + d[0]*b[1]*c[2] -
                d[0]*c[1]*b[2] - c[0]*b[1]*d[2] - b[0]*d[1]*c[2];
     };
-    
+
     const auto a = v1 - p;
     const auto b = v2 - p;
     const auto c = v3 - p;
@@ -1852,7 +1852,7 @@ point_in_tetrahedron(
 
     const auto ret0 = detA > zero && detB < zero && detC > zero && detD < zero;
     const auto ret1 = detA < zero && detB > zero && detC < zero && detD > zero;
-    
+
     return ret0 || ret1;
 }
 

@@ -1,5 +1,5 @@
 /* =============================================================================
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,10 +54,10 @@ Layout:
 template<arithmetic ar>
 struct Matrix<ar, 3> {
 
-    using A3 = arrays::A3<ar>;  
+    using A3 = arrays::A3<ar>;
 
     static constexpr int order {3};
-    
+
     static constexpr Matrix<ar, order> I
         {{{one<ar>, zero<ar>, zero<ar>},
           {zero<ar>, one<ar>, zero<ar>},
@@ -95,7 +95,7 @@ struct Matrix<ar, 3> {
     constexpr bool is_singular() const noexcept;
     constexpr bool is_singular(ar det) const noexcept;
     constexpr bool is_orthogonal() const noexcept;
-    constexpr bool is_close_to(const Matrix& m, 
+    constexpr bool is_close_to(const Matrix& m,
                                ar tol=EPS<ar>) const noexcept;
     constexpr bool invert(Matrix& inv) const noexcept;
     constexpr Matrix t() const noexcept;
@@ -116,7 +116,7 @@ Matrix<ar, 3>::
 Matrix(
     const ar _u[order][order]
 ) noexcept
-{ 
+{
     std::copy(&_u[0][0], &_u[0][0] + order*order, &u[0][0]);
 }
 
@@ -207,16 +207,16 @@ Matrix<ar, 3> Matrix<ar, 3>::
 operator+(const Matrix& m) const noexcept
 {
     ar k[order][order]
-        {{u[0][0] + m.u[0][0], 
-          u[0][1] + m.u[0][1], 
-          u[0][2] + m.u[0][2]}, 
-         {u[1][0] + m.u[1][0], 
-          u[1][1] + m.u[1][1], 
-          u[1][2] + m.u[1][2]}, 
-         {u[2][0] + m.u[2][0], 
-          u[2][1] + m.u[2][1], 
+        {{u[0][0] + m.u[0][0],
+          u[0][1] + m.u[0][1],
+          u[0][2] + m.u[0][2]},
+         {u[1][0] + m.u[1][0],
+          u[1][1] + m.u[1][1],
+          u[1][2] + m.u[1][2]},
+         {u[2][0] + m.u[2][0],
+          u[2][1] + m.u[2][1],
           u[2][2] + m.u[2][2]}};
-              
+
     return Matrix {k};
 }
 
@@ -226,17 +226,17 @@ constexpr
 Matrix<ar, 3> Matrix<ar, 3>::
 operator-(const Matrix& m) const noexcept
 {
-    ar k[order][order] 
-        {{u[0][0] - m.u[0][0], 
-          u[0][1] - m.u[0][1], 
-          u[0][2] - m.u[0][2]}, 
-         {u[1][0] - m.u[1][0], 
-          u[1][1] - m.u[1][1], 
-          u[1][2] - m.u[1][2]}, 
-         {u[2][0] - m.u[2][0], 
-          u[2][1] - m.u[2][1], 
+    ar k[order][order]
+        {{u[0][0] - m.u[0][0],
+          u[0][1] - m.u[0][1],
+          u[0][2] - m.u[0][2]},
+         {u[1][0] - m.u[1][0],
+          u[1][1] - m.u[1][1],
+          u[1][2] - m.u[1][2]},
+         {u[2][0] - m.u[2][0],
+          u[2][1] - m.u[2][1],
           u[2][2] - m.u[2][2]}};
-    
+
     return Matrix {k};
 }
 
@@ -251,7 +251,7 @@ scale(const ar c) const noexcept
     for (int i=0; i<order; i++)
         for (int j=0; j<order; j++)
             k[i][j] *= c;
-    
+
     return Matrix {k};
 }
 
@@ -261,14 +261,14 @@ Matrix<ar, 3> Matrix<ar, 3>::
 ele_mul(const Matrix& m) const noexcept
 {
     ar k[order][order]
-        {{u[0][0] * m.u[0][0], 
-          u[0][1] * m.u[0][1], 
-          u[0][2] * m.u[0][2]}, 
-         {u[1][0] * m.u[1][0], 
-          u[1][1] * m.u[1][1], 
-          u[1][2] * m.u[1][2]}, 
-         {u[2][0] * m.u[2][0], 
-          u[2][1] * m.u[2][1], 
+        {{u[0][0] * m.u[0][0],
+          u[0][1] * m.u[0][1],
+          u[0][2] * m.u[0][2]},
+         {u[1][0] * m.u[1][0],
+          u[1][1] * m.u[1][1],
+          u[1][2] * m.u[1][2]},
+         {u[2][0] * m.u[2][0],
+          u[2][1] * m.u[2][1],
           u[2][2] * m.u[2][2]}};
 
     return Matrix {k};
@@ -281,16 +281,16 @@ Matrix<ar, 3> Matrix<ar, 3>::
 mat_mul(const Matrix& m) const noexcept
 {
     ar k[order][order] {
-        {u[0][0]*m.u[0][0] + u[0][1]*m.u[1][0] + u[0][2]*m.u[2][0], 
+        {u[0][0]*m.u[0][0] + u[0][1]*m.u[1][0] + u[0][2]*m.u[2][0],
          u[0][0]*m.u[0][1] + u[0][1]*m.u[1][1] + u[0][2]*m.u[2][1],
-         u[0][0]*m.u[0][2] + u[0][1]*m.u[1][2] + u[0][2]*m.u[2][2]}, 
+         u[0][0]*m.u[0][2] + u[0][1]*m.u[1][2] + u[0][2]*m.u[2][2]},
 
-        {u[1][0]*m.u[0][0] + u[1][1]*m.u[1][0] + u[1][2]*m.u[2][0], 
-         u[1][0]*m.u[0][1] + u[1][1]*m.u[1][1] + u[1][2]*m.u[2][1], 
-         u[1][0]*m.u[0][2] + u[1][1]*m.u[1][2] + u[1][2]*m.u[2][2]}, 
+        {u[1][0]*m.u[0][0] + u[1][1]*m.u[1][0] + u[1][2]*m.u[2][0],
+         u[1][0]*m.u[0][1] + u[1][1]*m.u[1][1] + u[1][2]*m.u[2][1],
+         u[1][0]*m.u[0][2] + u[1][1]*m.u[1][2] + u[1][2]*m.u[2][2]},
 
-        {u[2][0]*m.u[0][0] + u[2][1]*m.u[1][0] + u[2][2]*m.u[2][0], 
-         u[2][0]*m.u[0][1] + u[2][1]*m.u[1][1] + u[2][2]*m.u[2][1], 
+        {u[2][0]*m.u[0][0] + u[2][1]*m.u[1][0] + u[2][2]*m.u[2][0],
+         u[2][0]*m.u[0][1] + u[2][1]*m.u[1][1] + u[2][2]*m.u[2][1],
          u[2][0]*m.u[0][2] + u[2][1]*m.u[1][2] + u[2][2]*m.u[2][2]}
     };
 
@@ -333,7 +333,7 @@ det(
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
 is_singular() const noexcept
 {
@@ -342,7 +342,7 @@ is_singular() const noexcept
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
 is_singular(const ar det) const noexcept
 {
@@ -351,9 +351,9 @@ is_singular(const ar det) const noexcept
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
-is_close_to(const Matrix<ar, 3>& m, 
+is_close_to(const Matrix<ar, 3>& m,
             const ar tol) const noexcept
 {
     return (*this - m).all([&](const ar a){ return a <= tol; });
@@ -361,7 +361,7 @@ is_close_to(const Matrix<ar, 3>& m,
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
 is_orthogonal() const noexcept
 {
@@ -370,7 +370,7 @@ is_orthogonal() const noexcept
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
 all(std::predicate<ar> auto&& cond) const noexcept
 {
@@ -381,7 +381,7 @@ all(std::predicate<ar> auto&& cond) const noexcept
 
 
 template<arithmetic ar>
-constexpr 
+constexpr
 bool Matrix<ar, 3>::
 any(std::predicate<ar> auto&& cond) const noexcept
 {
@@ -394,7 +394,7 @@ template<arithmetic ar>
 constexpr
 bool Matrix<ar, 3>::
 invert(
-    Matrix<ar, 3>& inv 
+    Matrix<ar, 3>& inv
 ) const noexcept
 {
     const auto a00 =  (u[1][1]*u[2][2] - u[2][1]*u[1][2]);
@@ -405,7 +405,7 @@ invert(
 
     if (is_singular(de))
         return false;
-    
+
     const auto di = one<ar> / de;
 
     const auto a01 = -(u[0][1]*u[2][2] - u[2][1]*u[0][2]);
@@ -435,8 +435,8 @@ Matrix<ar, 3> Matrix<ar, 3>::
 t() const noexcept
 {
     ar k[order][order]
-        {{u[0][0], u[1][0], u[2][0]}, 
-         {u[0][1], u[1][1], u[2][1]}, 
+        {{u[0][0], u[1][0], u[2][0]},
+         {u[0][1], u[1][1], u[2][1]},
          {u[0][2], u[1][2], u[2][2]}};
 
     return Matrix {k};

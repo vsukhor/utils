@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov <vsukhorukov@yahoo.com>
+ Copyright (C) 2009-2025 Valerii Sukhorukov <vsukhorukov@yahoo.com>
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -110,7 +110,7 @@ struct EdgeType<fT, iT, EdgeMode::unweighted> {
 
     /// Maximal edge weight allowed.
     static constexpr auto max_weight = huge<weight_t>;
-    
+
     /// Weight of the connecting edge.
     static constexpr auto weight = one<weight_t>;
 

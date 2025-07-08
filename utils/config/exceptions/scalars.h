@@ -1,6 +1,6 @@
 /* =============================================================================
 
- Copyright (C) 2009-2023 Valerii Sukhorukov. All Rights Reserved.
+ Copyright (C) 2009-2025 Valerii Sukhorukov. All Rights Reserved.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -115,7 +115,7 @@ ParOutOfRange(
         msgr->print(message);
     else
         std::cout << message;
-        
+
     throw this;
 }
 
@@ -128,7 +128,8 @@ generate_message(
     const std::vector<Q>& r
 )
 {
-    XASSERT(r.size() == 2, "Incorrect r size in ParOutOfRangeException");
+    ASSERT(r.size() == 2,
+           "Incorrect r size in ParOutOfRangeException: ", r.size());
 
     auto print = [](const std::vector<Q>& a) {
         std::string w {"{ "};
@@ -138,7 +139,7 @@ generate_message(
     };
 
     return "Error in conf specification for parameter '" + name +
-           "' = " + std::to_string(p) + " :" + "\n\tthe value provided " +
+           "' = " + std::to_string(p) + " :" + "\n\tthe value provided ",
            " is outside thw acceptable range " +
            print(r);
 }
@@ -228,7 +229,7 @@ ParOutOfRange(
         msgr->print(message);
     else
         std::cerr << message;
-        
+
     throw *this;
 }
 
@@ -262,8 +263,9 @@ generate_message(
     const R& r
 )
 {
-    XASSERT(r.size() == 2, "Incorrect r size in ParOutOfRangeException");
-    
+    ASSERT(r.size() == 2,
+           "Incorrect r size in ParOutOfRangeException ", r.size());
+
     return "Error in conf specification for parameter '" + name +
            "' = " + std::to_string(p) + " :" + "\n\tthe value " +
            " is outside the acceptable range " +
