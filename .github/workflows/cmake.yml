@@ -58,14 +58,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install libboost-all-dev
         echo =============== Finished installing dependencies ================
-#        echo =============== Update ninja ====================================
-#        echo ninja version before
-#        ninja --version
-#        wget https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip
-#        sudo unzip ninja-linux.zip -d /usr/local/bin/
-#        sudo update-alternatives --install /usr/bin/ninja ninja /usr/local/bin/ninja 1 --force
-#        echo ninja version after
-#        ninja --version
 
     - name: Configure CMake
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
