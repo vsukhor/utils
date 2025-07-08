@@ -41,6 +41,7 @@
 #include <map>
 #include <memory>
 #include <numeric>
+#include <string>
 #include <sys/stat.h>
 #include <vector>
 
@@ -211,7 +212,7 @@ auto avg( const std::vector<T>& v )
 }
 
 /// Variance of the vector elements.
-template<typename T> 
+template<typename T>
 T var( const std::vector<T>& n )
 {
     T v {};
@@ -258,12 +259,12 @@ T sigmoid_decay( const T x,
 
 /// \brief Find non-zero vector elements.
 /// \return how many elements in b /= 0 putting their indices to j
-template<typename T> 
-szt find( const std::vector<T>& b, 
+template<typename T>
+szt find( const std::vector<T>& b,
           std::vector<szt>& j ) noexcept
 {
     j.clear();
-    for (szt i=0; i<b.size(); i++) 
+    for (szt i=0; i<b.size(); i++)
         if (b[i] != zero<T>)
             j.push_back(i);
 
