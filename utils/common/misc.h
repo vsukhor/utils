@@ -60,6 +60,10 @@
 #define ENSURE(EX, ...) \
     (void)((EX) || (utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0))
 
+#undef ABORT
+#define ABORT(EX, ...) \
+    (void)(utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0)
+
 /// General stuff.
 namespace utils::common {
 
