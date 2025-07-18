@@ -61,6 +61,7 @@
     (void)((EX) || (utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0))
 
 #undef ABORT
+/// @note Here, condition \p EX is only used for printing it as text.
 #define ABORT(EX, ...) \
     (void)(utils::failure_message(#EX, std::source_location::current()  __VA_OPT__(,) __VA_ARGS__), 0)
 
