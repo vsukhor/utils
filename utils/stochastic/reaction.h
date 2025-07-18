@@ -69,7 +69,6 @@ public:  // Only constant parameters are public.
 
     /**
      * \brief Constructor.
-     * \param [in,out] msgr Output message processor.
      * \param [in] ind Reaction id.
      * \param [in] rate Reaction rate constant.
      * \param [in] shortName Reaction name.

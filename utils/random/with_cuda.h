@@ -68,7 +68,6 @@ public:
 
     /**
      * \brief Constructor setting the seed depending on run index.
-     * \param seedFname Name of the file contining seeds.
      * \param runIndex Run index.
      * \param msgr Output message processor.
      */
