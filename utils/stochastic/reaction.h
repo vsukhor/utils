@@ -38,7 +38,6 @@
 
 #include "../common/misc.h"
 #include "../msgr.h"
-#include "gillespie.h"
 
 namespace utils::stochastic {
 
@@ -48,8 +47,6 @@ namespace utils::stochastic {
  */
 template<typename RF>
 class Reaction {
-
-	friend Gillespie<RF, Reaction<RF>>;
 
 public:  // Only constant parameters are public.
 
@@ -119,6 +116,13 @@ public:  // Only constant parameters are public.
     ) noexcept = 0;
 
     /**
+     * \brief Attaches this score to the Gillespie mechanism.
+     * \param [in] a Placeholder in the Gillespie object responsible for this
+     *  reaction score.
+     */
+    void attach_score_pointer(real* a) noexcept { score = a; };
+
+    /**
      * \brief The number of times this reaction was fired.
      * \details \a eventCount getter.
      * \result The number of times this reaction was fired.
@@ -160,15 +164,6 @@ protected:
      *  after the given reaction event was executed.
      */
     virtual void update_netw_stats() = 0;
-
-private:
-
-    /**
-     * \brief Attaches this score to the Gillespie mechanism.
-     * \param [in] a Placeholder in the Gillespie object responsible for this
-     *  reaction score.
-     */
-    void attach_score_pointer(real* a) noexcept { score = a; };
 };
 
 // IMPLEMENTATION ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
