@@ -22,7 +22,7 @@
 */
 
 /**
- * \file all.h
+ * \file misc.h
  * \brief Implementation of matrices.
  * \author Valerii Sukhorukov
  */
@@ -49,7 +49,6 @@ Layout:
 20 21 22 23
 30 31 32 33
 */
-
 
 
 }  // namespace utils::matrices

@@ -76,7 +76,19 @@ struct Matrix<ar, 4> {
     ~Matrix() = default;
 
 
-    ar& operator()(int i, int j) noexcept;
+    constexpr ar& operator()(int i, int j) noexcept;
+    constexpr ar operator()(int i, int j) const noexcept;
+    constexpr std::array<ar, order> row(int i) const noexcept;
+    constexpr void set_row_to(int i,
+                              const std::array<ar, order>& r) noexcept;
+    constexpr void set_row_to(int i,
+                              const ar r[order]) noexcept;
+    constexpr std::array<ar, order> col(int j) const noexcept;
+    constexpr void set_col_to(int j,
+                              const std::array<ar, order>& c) noexcept;
+    constexpr void set_col_to(int j,
+                              const ar c[order]) noexcept;
+
     constexpr bool operator==(const Matrix& m) const noexcept;
     constexpr Matrix operator+(const Matrix& m) const noexcept;
     constexpr Matrix operator-(const Matrix& m) const noexcept;
@@ -340,10 +352,88 @@ mat_mul(const Matrix& m) const noexcept
 
 
 template<arithmetic ar>
+constexpr
 ar& Matrix<ar, 4>::
 operator()(const int i, const int j) noexcept
 {
     return u[i][j];
+}
+
+
+template<arithmetic ar>
+constexpr
+ar Matrix<ar, 4>::
+operator()(const int i, const int j) const noexcept
+{
+    return u[i][j];
+}
+
+
+template<arithmetic ar>
+constexpr
+std::array<ar, 4> Matrix<ar, 4>::
+row(const int i) const noexcept
+{
+    return {{u[i][0], u[i][1], u[i][2], u[i][3]}};
+}
+
+
+template<arithmetic ar>
+constexpr
+void Matrix<ar, 4>::
+set_row_to(const int i,
+           const std::array<ar, order>& r) noexcept
+{
+    u[i][0] = r[0];
+    u[i][1] = r[1];
+    u[i][2] = r[2];
+    u[i][3] = r[3];
+}
+
+template<arithmetic ar>
+constexpr
+void Matrix<ar, 4>::
+set_row_to(const int i,
+           const ar r[order]) noexcept
+{
+    u[i][0] = r[0];
+    u[i][1] = r[1];
+    u[i][2] = r[2];
+    u[i][3] = r[3];
+}
+
+
+template<arithmetic ar>
+constexpr
+std::array<ar, 4> Matrix<ar, 4>::
+col(const int j) const noexcept
+{
+    return {{u[0][j], u[1][j], u[2][j], u[3][j]}};
+}
+
+
+template<arithmetic ar>
+constexpr
+void Matrix<ar, 4>::
+set_col_to(const int j,
+           const std::array<ar, order>& c) noexcept
+{
+    u[0][j] = c[0];
+    u[1][j] = c[1];
+    u[2][j] = c[2];
+    u[3][j] = c[3];
+}
+
+template<arithmetic ar>
+constexpr
+void Matrix<ar, 4>::
+set_col_to(const int j,
+           const ar c[order]) noexcept
+{
+    u[0][j] = c[0];
+    u[1][j] = c[1];
+    u[2][j] = c[2];
+    u[3][j] = c[3];
 }
 
 
@@ -403,7 +493,7 @@ is_singular(const ar det) const noexcept
 template<arithmetic ar>
 constexpr
 bool Matrix<ar, 4>::
-is_close_to(const Matrix<ar, 4>& m,
+is_close_to(const Matrix<ar, order>& m,
             const ar tol) const noexcept
 {
     return (*this - m).all([&](const ar a){ return a <= tol; });
@@ -447,7 +537,7 @@ template<arithmetic ar>
 constexpr
 bool Matrix<ar, 4>::
 invert(
-    Matrix<ar, 4>& inv
+    Matrix<ar, order>& inv
 ) const noexcept
 {
     const auto a0123 = u[2][0] * u[3][1] - u[2][1] * u[3][0];
