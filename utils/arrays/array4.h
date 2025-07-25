@@ -51,41 +51,40 @@ namespace utils::arrays {
  * \tparam T Type of the elements.
  */
 template<arithmetic T>
-class array<4, T> {
+struct array<4, T> {
 
-static constexpr int len {4};
+using value_type = T;
 
-T n[len] = {};
-
-public:
+static constexpr int size {4};
 
 array() noexcept = default;
 
-array( T m ) noexcept
+array(const T m) noexcept
     : n {m, m, m, m}
 {}
 
-array( T n0, T n1, T n2, T n3 ) noexcept
+/// Constructor from explicit values.
+array(const T n0, const T n1, const T n2, const T n3) noexcept
     : n {n0, n1, n2, n3}
 {}
 
-array( const array<2,T>& n1, const array<2,T>& n2 ) noexcept
+array(const array<2,T>& n1, const array<2,T>& n2) noexcept
     : n {n1[0], n1[1], n2[0], n2[1]}
 {}
 
-array( T n1, const array<3,T>& n2 ) noexcept
+array(const T n1, const array<3,T>& n2) noexcept
     : n {n1, n2[0], n2[1], n2[2]}
 {}
 
-array( const array<3,T>& n1, T n2 ) noexcept
+array(const array<3,T>& n1, T n2) noexcept
     : n {n1[0], n1[1], n1[2], n2}
 {}
 
-array( const array& p ) noexcept
+array(const array& p) noexcept
     : n {p[0], p[1], p[2], p[3]}
 {}
 
-array( const std::array<T,4>& p ) noexcept
+array(const std::array<T,4>& p) noexcept
     : n {p[0], p[1], p[2], p[3]}
 {}
 
@@ -98,11 +97,11 @@ constexpr array<4,Q> cast_static() const noexcept
             static_cast<Q>(n[3])};
 }
 
-array( array&& p ) noexcept = default;
-array& operator=( array&& p ) noexcept = default;
+array( array&& p) noexcept = default;
+array& operator=( array&& p) noexcept = default;
 ~array() = default;
 
-array& operator=( const array& p ) noexcept
+array& operator=(const array& p) noexcept
 {
     if (this != &p) {
         n[0] = p[0];
@@ -114,7 +113,7 @@ array& operator=( const array& p ) noexcept
     return *this;
 }
 
-constexpr array& operator=( const std::array<T,4>& p ) noexcept
+constexpr array& operator=(const std::array<T,4>& p) noexcept
 {
     if (*this != p) {
         n[0] = p[0];
@@ -125,7 +124,7 @@ constexpr array& operator=( const std::array<T,4>& p ) noexcept
     return *this;
 }
 
-constexpr array& operator=( const T p[] ) noexcept
+constexpr array& operator=(const T p[]) noexcept
 {
     if (n != p) {
         n[0] = p[0];
@@ -136,7 +135,7 @@ constexpr array& operator=( const T p[] ) noexcept
     return *this;
 }
 
-constexpr array& operator=( T p ) noexcept
+constexpr array& operator=(const T p) noexcept
 {
     n[0] = p;
     n[1] = p;
@@ -151,8 +150,8 @@ constexpr array<2,T> operator()(
     const int i2
 ) const noexcept
 {
-    ASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds: ", i1);
-    ASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds: ", i2);
+    ASSERT(i1 >= 0 && i1 < size, "Index 1 out of bounds: ", i1);
+    ASSERT(i2 >= 0 && i2 < size, "Index 2 out of bounds: ", i2);
 
     return {n[i1], n[i2]};
 }
@@ -163,14 +162,14 @@ constexpr array<3,T> operator()(
     const int i3
 ) const noexcept
 {
-    ASSERT(i1 >= 0 && i1 < len, "Index 1 out of bounds: ", i1);
-    ASSERT(i2 >= 0 && i2 < len, "Index 2 out of bounds: ", i2);
-    ASSERT(i3 >= 0 && i3 < len, "Index 3 out of bounds; ", i3);
+    ASSERT(i1 >= 0 && i1 < size, "Index 1 out of bounds: ", i1);
+    ASSERT(i2 >= 0 && i2 < size, "Index 2 out of bounds: ", i2);
+    ASSERT(i3 >= 0 && i3 < size, "Index 3 out of bounds; ", i3);
 
     return {n[i1], n[i2], n[i3]};
 }
 
-constexpr array operator+( const array& p ) const noexcept
+constexpr array operator+(const array& p) const noexcept
 {
     return { n[0] + p[0],
              n[1] + p[1],
@@ -178,7 +177,7 @@ constexpr array operator+( const array& p ) const noexcept
              n[3] + p[3] };
 }
 
-constexpr array operator+( const T p[] ) const noexcept
+constexpr array operator+(const T p[]) const noexcept
 {
     return { n[0] + p[0],
              n[1] + p[1],
@@ -186,7 +185,7 @@ constexpr array operator+( const T p[] ) const noexcept
              n[3] + p[3] };
 }
 
-constexpr array& operator+=( const array& p ) noexcept
+constexpr array& operator+=(const array& p) noexcept
 {
     n[0] += p[0];
     n[1] += p[1];
@@ -195,7 +194,7 @@ constexpr array& operator+=( const array& p ) noexcept
     return *this;
 }
 
-constexpr array& operator+=( const T p[] ) noexcept
+constexpr array& operator+=(const T p[]) noexcept
 {
     n[0] += p[0];
     n[1] += p[1];
@@ -204,7 +203,7 @@ constexpr array& operator+=( const T p[] ) noexcept
     return *this;
 }
 
-constexpr array operator+( T p ) const noexcept
+constexpr array operator+(const T p) const noexcept
 {
     return { n[0] + p,
              n[1] + p,
@@ -222,7 +221,7 @@ constexpr array operator-() const noexcept
     return q;
 }
 
-constexpr array operator-( const array& p ) const noexcept
+constexpr array operator-(const array& p) const noexcept
 {
     return { n[0] - p[0],
              n[1] - p[1],
@@ -230,7 +229,7 @@ constexpr array operator-( const array& p ) const noexcept
              n[3] - p[3] };
 }
 
-constexpr array operator-( const T p[] ) const noexcept
+constexpr array operator-(const T p[]) const noexcept
 {
     return { n[0] - p[0],
              n[1] - p[1],
@@ -238,7 +237,7 @@ constexpr array operator-( const T p[] ) const noexcept
              n[3] - p[3] };
 }
 
-constexpr array& operator-=( const array& p ) noexcept
+constexpr array& operator-=(const array& p) noexcept
 {
     n[0] -= p[0];
     n[1] -= p[1];
@@ -247,7 +246,7 @@ constexpr array& operator-=( const array& p ) noexcept
     return *this;
 }
 
-constexpr array& operator-=( const T p[] ) noexcept
+constexpr array& operator-=(const T p[]) noexcept
 {
     n[0] -= p[0];
     n[1] -= p[1];
@@ -256,7 +255,7 @@ constexpr array& operator-=( const T p[] ) noexcept
     return *this;
 }
 
-constexpr array operator-( T p ) const noexcept
+constexpr array operator-(const T p) const noexcept
 {
     return { n[0] - p,
              n[1] - p,
@@ -264,7 +263,7 @@ constexpr array operator-( T p ) const noexcept
              n[3] - p };
 }
 
-constexpr array operator*( const array& p ) const noexcept
+constexpr array operator*(const array& p) const noexcept
 {
     return { n[0] * p[0],
              n[1] * p[1],
@@ -272,14 +271,14 @@ constexpr array operator*( const array& p ) const noexcept
              n[3] * p[3] };
 }
 
-constexpr array operator*( const T p[] ) const noexcept
+constexpr array operator*(const T p[]) const noexcept
 {
     return { n[0] * p[0],
              n[1] * p[1],
              n[2] * p[2],
              n[3] * p[3] };
 }
-constexpr array& operator*=( const array& p ) noexcept
+constexpr array& operator*=(const array& p) noexcept
 {
     n[0] *= p[0];
     n[1] *= p[1];
@@ -288,7 +287,7 @@ constexpr array& operator*=( const array& p ) noexcept
     return *this;
 }
 
-constexpr array& operator*=( const T p[] ) noexcept
+constexpr array& operator*=(const T p[]) noexcept
 {
     n[0] *= p[0];
     n[1] *= p[1];
@@ -297,7 +296,7 @@ constexpr array& operator*=( const T p[] ) noexcept
     return *this;
 }
 
-constexpr array operator*( T p ) const noexcept
+constexpr array operator*(const T p) const noexcept
 {
     return { n[0] * p,
              n[1] * p,
@@ -305,7 +304,7 @@ constexpr array operator*( T p ) const noexcept
              n[3] * p };
 }
 
-constexpr array operator/( const array& p ) const noexcept
+constexpr array operator/(const array& p) const noexcept
 {
     return { n[0] / p[0],
              n[1] / p[1],
@@ -313,7 +312,7 @@ constexpr array operator/( const array& p ) const noexcept
              n[3] / p[3] };
 }
 
-constexpr array operator/( const T p[] ) const noexcept
+constexpr array operator/(const T p[]) const noexcept
 {
     return { n[0] / p[0],
              n[1] / p[1],
@@ -321,7 +320,7 @@ constexpr array operator/( const T p[] ) const noexcept
              n[3] / p[3] };
 }
 
-constexpr array& operator/=( const array& p ) noexcept
+constexpr array& operator/=(const array& p) noexcept
 {
     n[0] /= p[0];
     n[1] /= p[1];
@@ -330,7 +329,7 @@ constexpr array& operator/=( const array& p ) noexcept
     return *this;
 }
 
-constexpr array& operator/=( const T p[] ) noexcept
+constexpr array& operator/=(const T p[]) noexcept
 {
     n[0] /= p[0];
     n[1] /= p[1];
@@ -339,7 +338,7 @@ constexpr array& operator/=( const T p[] ) noexcept
     return *this;
 }
 
-constexpr array operator/( T p ) const noexcept
+constexpr array operator/(const T p) const noexcept
 {
     return { n[0] / p,
              n[1] / p,
@@ -347,7 +346,7 @@ constexpr array operator/( T p ) const noexcept
              n[3] / p };
 }
 
-constexpr bool operator==( const array& p ) const noexcept
+constexpr bool operator==(const array& p) const noexcept
 {
     return n[0] == p[0] &&
            n[1] == p[1] &&
@@ -355,7 +354,7 @@ constexpr bool operator==( const array& p ) const noexcept
            n[3] == p[3];
 }
 
-constexpr bool operator==( const std::array<T,4>& p ) const noexcept
+constexpr bool operator==(const std::array<T,4>& p) const noexcept
 {
     return n[0] == p[0] &&
            n[1] == p[1] &&
@@ -363,7 +362,7 @@ constexpr bool operator==( const std::array<T,4>& p ) const noexcept
            n[3] == p[3];
 }
 
-constexpr bool operator==( const T p[] ) const noexcept
+constexpr bool operator==(const T p[]) const noexcept
 {
     return n[0] == p[0] &&
            n[1] == p[1] &&
@@ -371,7 +370,7 @@ constexpr bool operator==( const T p[] ) const noexcept
            n[3] == p[3];
 }
 
-constexpr bool operator==( T p ) const noexcept
+constexpr bool operator==(const T p) const noexcept
 {
     return n[0] == p &&
            n[1] == p &&
@@ -379,7 +378,7 @@ constexpr bool operator==( T p ) const noexcept
            n[3] == p;
 }
 
-constexpr bool operator!=( const array& p ) const noexcept
+constexpr bool operator!=(const array& p) const noexcept
 {
     return n[0] != p[0] ||
            n[1] != p[1] ||
@@ -387,7 +386,7 @@ constexpr bool operator!=( const array& p ) const noexcept
            n[3] != p[3];
 }
 
-constexpr bool operator!=( const T p[] ) const noexcept
+constexpr bool operator!=(const T p[]) const noexcept
 {
     return n[0] != p[0] ||
            n[1] != p[1] ||
@@ -395,7 +394,7 @@ constexpr bool operator!=( const T p[] ) const noexcept
            n[3] != p[3];
 }
 
-constexpr bool operator!=( T p ) const noexcept
+constexpr bool operator!=(const T p) const noexcept
 {
     return n[0] != p ||
            n[1] != p ||
@@ -403,7 +402,7 @@ constexpr bool operator!=( T p ) const noexcept
            n[3] != p;
 }
 
-constexpr bool operator<( const array& p ) const noexcept
+constexpr bool operator<(const array& p) const noexcept
 {
     return n[0] < p[0] &&
            n[1] < p[1] &&
@@ -411,7 +410,7 @@ constexpr bool operator<( const array& p ) const noexcept
            n[3] < p[3];
 }
 
-constexpr bool operator<( T p ) const noexcept
+constexpr bool operator<(const T p) const noexcept
 {
     return n[0] < p &&
            n[1] < p &&
@@ -419,14 +418,14 @@ constexpr bool operator<( T p ) const noexcept
            n[3] < p;
 }
 
-constexpr bool operator<=( const array& p ) const noexcept
+constexpr bool operator<=(const array& p) const noexcept
 {
     return n[0] <= p[0] &&
            n[1] <= p[1] &&
            n[2] <= p[2] &&
            n[3] <= p[3];
 }
-constexpr bool operator<=( T p ) const noexcept
+constexpr bool operator<=(const T p) const noexcept
 {
     return n[0] <= p &&
            n[1] <= p &&
@@ -434,7 +433,7 @@ constexpr bool operator<=( T p ) const noexcept
            n[3] <= p;
 }
 
-constexpr bool operator>( const array& p ) const noexcept
+constexpr bool operator>(const array& p) const noexcept
 {
     return n[0] > p[0] &&
            n[1] > p[1] &&
@@ -442,7 +441,7 @@ constexpr bool operator>( const array& p ) const noexcept
            n[3] > p[3];
 }
 
-constexpr bool operator>( T p ) const noexcept
+constexpr bool operator>(const T p) const noexcept
 {
     return n[0] > p &&
            n[1] > p &&
@@ -450,7 +449,7 @@ constexpr bool operator>( T p ) const noexcept
            n[3] > p;
 }
 
-constexpr bool operator>=( const array& p ) const noexcept
+constexpr bool operator>=(const array& p) const noexcept
 {
     return n[0] >= p[0] &&
            n[1] >= p[1] &&
@@ -458,7 +457,7 @@ constexpr bool operator>=( const array& p ) const noexcept
            n[3] >= p[3];
 }
 
-constexpr bool operator>=( T p ) const noexcept
+constexpr bool operator>=(const T p) const noexcept
 {
     return n[0] >= p &&
            n[1] >= p &&
@@ -466,21 +465,21 @@ constexpr bool operator>=( T p ) const noexcept
            n[3] >= p;
 }
 
-constexpr T operator[]( const int i ) const noexcept
+constexpr T operator[](const int i) const noexcept
 {
-    ASSERT(i >= 0 && i < len, "Index out of bounds: ", i);
+    ASSERT(i >= 0 && i < size, "Index out of bounds: ", i);
 
     return n[i];
 }
 
-constexpr T& operator[]( const int i ) noexcept
+constexpr T& operator[](const int i) noexcept
 {
-    ASSERT(i >= 0 && i < len, "Index out of bounds: ", i);
+    ASSERT(i >= 0 && i < size, "Index out of bounds: ", i);
 
     return n[i];
 }
 
-constexpr bool contains( T p ) const noexcept
+constexpr bool contains(const T p) const noexcept
 {
     return n[0] == p ||
            n[1] == p ||
@@ -505,7 +504,7 @@ constexpr T dotpr() const noexcept
              n[3]*n[3] );
 }
 
-constexpr T dotpr( const array& a ) const noexcept
+constexpr T dotpr(const array& a) const noexcept
 {
     return ( n[0]*a.n[0] +
              n[1]*a.n[1] +
@@ -515,7 +514,7 @@ constexpr T dotpr( const array& a ) const noexcept
 
 static constexpr T dotpr(
     const array& a1,
-    const array& a2 ) noexcept
+    const array& a2) noexcept
 {
     return ( a1.n[0]*a2.n[0] +
              a1.n[1]*a2.n[1] +
@@ -548,7 +547,7 @@ constexpr array vecProjection(
     return b.unitv() * scaProjection(b);
 }
 
-constexpr int find( T p ) noexcept
+constexpr int find(const T p) noexcept
 {
     return p == n[0] ? 0 :
           (p == n[1] ? 1 :
@@ -691,8 +690,12 @@ void write(
     ost.write( reinterpret_cast<const char*>(&n[3]), sizeof(T));
 }
 
+private:
 
-};  // class array<4, T>
+T n[size] = {};
+
+};  // struct array<4, T>
+
 
 /// Input operator.
 template<arithmetic T>
@@ -705,6 +708,7 @@ std::istream& operator>>(
 
     return is;
 }
+
 
 /// Output operator.
 template<arithmetic T>
